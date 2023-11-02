@@ -62,12 +62,28 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
                 ApplicationArea = all;
             }
         }
+        modify(VariantMandatoryDefaultYes)
+        {
+            trigger OnAfterValidate()
+            var
+                myInt: Integer;
+            begin
+                Clear(ItemVarVisible);
+                if Rec."Variant Mandatory if Exists" = Rec."Variant Mandatory if Exists"::No then
+                    ItemVarVisible := false
+                else
+                    ItemVarVisible := true;
+            end;
+        }
     }
 
 
     actions
     {
-
+        modify("Va&riants")
+        {
+            Visible = ItemVarVisible;
+        }
     }
 
 
@@ -76,5 +92,6 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
 
     var
         myInt: Integer;
+        ItemVarVisible: Boolean;
 
 }

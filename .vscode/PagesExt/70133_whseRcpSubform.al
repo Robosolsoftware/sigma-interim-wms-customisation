@@ -21,6 +21,7 @@ pageextension 70133 WhseRcpSubformRbe extends "Whse. Receipt Subform"
                 Editable = false;
             }
 
+
         }
     }
 
