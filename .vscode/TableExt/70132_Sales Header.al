@@ -124,6 +124,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         {
             TableRelation = "Bank Account";
         }
+
     }
 
     var

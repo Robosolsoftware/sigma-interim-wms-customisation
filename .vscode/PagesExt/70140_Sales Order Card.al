@@ -90,6 +90,7 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
             }
 
         }
+
     }
 
 
@@ -305,4 +306,5 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
 
     var
         myInt: Integer;
+        cust: Record Customer;
 }

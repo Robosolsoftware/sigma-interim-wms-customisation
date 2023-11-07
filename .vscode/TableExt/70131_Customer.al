@@ -104,6 +104,7 @@ tableextension 70131 "SC Customer" extends Customer
             end;
         }
 
+
     }
 
     var

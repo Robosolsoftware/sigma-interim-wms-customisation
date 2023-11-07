@@ -219,4 +219,54 @@ codeunit 70103 "Import Sales Order"
             exit(10000);
     end;
 
+    procedure SampleSOTemplate()
+    var
+        //excelbuffer2: Record "Excel Buffer" temporary;
+        Excelbuffer: Record "Excel Buffer" temporary;
+        ins: InStream;
+        outs: OutStream;
+        TempBLOB: codeunit "Temp Blob";
+        filename: Text;
+    begin
+        Excelbuffer.Reset();
+        Excelbuffer.DeleteAll();
+        Excelbuffer.NewRow();
+        Excelbuffer.AddColumn('Sell to Customer No.', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Bill to Customer No', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Location Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Ship to Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Type', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('No.', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Description', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Quantity', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Unit Price', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Currency Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Document Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
+        Excelbuffer.AddColumn('Requested Delivery Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('External Document No.', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.CreateNewBook('Sample Template');
+        Excelbuffer.WriteSheet('Sample Template', CompanyName, UserId);
+        Excelbuffer.CloseBook();
+        //Excelbuffer.SetFriendlyFilename(StrSubstNo('Sample Template', CurrentDateTime, UserId));
+        //Excelbuffer.OpenExcel();
+
+        TempBLOB.CreateOutStream(outs);
+        Excelbuffer.SaveToStream(outs, false);
+        TempBLOB.CreateInStream(ins);
+        filename := 'SampleSSalesOrderTemplate.xlsx';
+        DownloadFromStream(
+            ins,  // InStream to save
+            '',   // Not used in cloud
+            '',   // Not used in cloud
+            '',   // Not used in cloud
+            filename); // Filename is browser download folder
+        // excelbuffer2.DeleteAll();
+        // excelbuffer2.AddColumn('Document Number' + DocumentNoD, false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        // excelbuffer2.CreateNewBook('Sample Template');
+        // excelbuffer2.WriteSheet('Sample Template', CompanyName, UserId);
+        // excelbuffer2.CloseBook();
+        // excelbuffer2.SetFriendlyFilename(StrSubstNo('Sample Template', CurrentDateTime, UserId));
+        // excelbuffer2.OpenExcel();
+    end;
+
 }

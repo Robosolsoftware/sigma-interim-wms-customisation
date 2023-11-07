@@ -75,6 +75,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
 
             }
         }
+
     }
 
     actions
