@@ -7,7 +7,7 @@ pageextension 70143 "SC Sales Order List" extends "Sales Order List"
 
     actions
     {
-        addafter("Create &Warehouse Shipment")
+        addafter("O&rder")
         {
 
             group("Import/Export SO")
@@ -15,13 +15,14 @@ pageextension 70143 "SC Sales Order List" extends "Sales Order List"
                 Caption = 'Import/Export SO';
                 //Image = Import;
                 //ShowAs = Standard;
+                //ShowAs = SplitButton;
 
                 action("Export Sales Order Template")
                 {
                     ApplicationArea = All;
                     Image = Export;
-                    PromotedCategory = Process;
-                    Promoted = true;
+                    //PromotedCategory = New;
+                    //Promoted = true;
                     Caption = 'Export Sales Order Template';
 
                     trigger OnAction()
@@ -35,8 +36,8 @@ pageextension 70143 "SC Sales Order List" extends "Sales Order List"
                 action("Upload Sales Order")
                 {
                     ApplicationArea = All;
-                    Promoted = true;
-                    PromotedCategory = Process;
+                    //Promoted = true;
+                    //PromotedCategory = New;
                     Image = Import;
 
                     trigger OnAction()

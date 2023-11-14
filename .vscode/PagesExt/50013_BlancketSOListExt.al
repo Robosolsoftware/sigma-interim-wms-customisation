@@ -20,8 +20,8 @@ pageextension 50013 BSOList extends "Blanket Sales Orders"
                 {
                     ApplicationArea = All;
                     Image = Export;
-                    PromotedCategory = Process;
-                    Promoted = true;
+                    //PromotedCategory = Process;
+                    //Promoted = true;
                     Caption = 'Export Blanket Sales Order Template';
 
                     trigger OnAction()
@@ -35,8 +35,8 @@ pageextension 50013 BSOList extends "Blanket Sales Orders"
                 action("Upload Blanket Sales Order")
                 {
                     ApplicationArea = All;
-                    Promoted = true;
-                    PromotedCategory = Process;
+                    // Promoted = true;
+                    //PromotedCategory = Process;
                     Image = Import;
 
                     trigger OnAction()
