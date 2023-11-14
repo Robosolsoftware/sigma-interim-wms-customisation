@@ -309,56 +309,56 @@ codeunit 70102 "SC Events & Subscriber"
     end;
 
 
-    [EventSubscriber(ObjectType::Codeunit, codeunit::"Purch.-Post", OnBeforePostPurchLine, '', false, false)]
-    local procedure VariantMandatory(var PurchHeader: Record "Purchase Header")
-    var
-        PLine: Record "Purchase Line";
-        item: Record Item;
-    //d: Codeunit 90;
-    begin
-        PLine.Reset();
-        PLine.SetRange("Document No.", PurchHeader."No.");
-        PLine.SetRange(Type, PLine.Type::Item);
-        if PLine.FindSet() then
-            repeat
-                item.Reset();
-                item.SetRange("No.", PLine."No.");
-                if item.FindFirst() then begin
-                    if item."Variant Mandatory if Exists" = item."Variant Mandatory if Exists"::Yes then begin
-                        if PLine."Variant Code" = '' then
-                            Error('Variant Code is mandatory for item No. %1', PLine."No.");
-                    end;
-                end;
-            until PLine.Next() = 0;
+    // [EventSubscriber(ObjectType::Codeunit, codeunit::"Purch.-Post", OnBeforePostPurchLine, '', false, false)]
+    // local procedure VariantMandatory(var PurchHeader: Record "Purchase Header")
+    // var
+    //     PLine: Record "Purchase Line";
+    //     item: Record Item;
+    // //d: Codeunit 90;
+    // begin
+    //     PLine.Reset();
+    //     PLine.SetRange("Document No.", PurchHeader."No.");
+    //     PLine.SetRange(Type, PLine.Type::Item);
+    //     if PLine.FindSet() then
+    //         repeat
+    //             item.Reset();
+    //             item.SetRange("No.", PLine."No.");
+    //             if item.FindFirst() then begin
+    //                 if item."Variant Mandatory if Exists" = item."Variant Mandatory if Exists"::Yes then begin
+    //                     if PLine."Variant Code" = '' then
+    //                         Error('Variant Code is mandatory for item No. %1', PLine."No.");
+    //                 end;
+    //             end;
+    //         until PLine.Next() = 0;
 
-    end;
+    // end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Purchase Document", 'OnBeforeMandatoryFields', '', false, false)]
-    local procedure OnBeforeMandatoryFields(PurchaseHeader: Record "Purchase Header")
-    var
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Purchase Document", 'OnBeforeMandatoryFields', '', false, false)]
+    // local procedure OnBeforeMandatoryFields(PurchaseHeader: Record "Purchase Header")
+    // var
 
-    begin
-        Clear(PurchHeaderNo);
-        PurchHeaderNo := PurchaseHeader."No.";
+    // begin
+    //     Clear(PurchHeaderNo);
+    //     PurchHeaderNo := PurchaseHeader."No.";
 
-    end;
+    // end;
 
-    [EventSubscriber(ObjectType::Table, Database::Item, 'OnBeforeIsVariantMandatory', '', false, false)]
-    local procedure OnBeforeIsVariantMandatory(var IsHandled: Boolean)
-    var
-        PHeader: Record "Purchase Header";
-        Location: Record Location;
-    begin
-        PHeader.Reset();
-        PHeader.SetRange("Document Type", PHeader."Document Type"::Order);
-        PHeader.SetRange("No.", PurchHeaderNo);
-        if PHeader.FindFirst() then begin
-            Location.Reset();
-            if Location.Get(PHeader."Location Code") then begin
-                if Location."Require Receive" = true then
-                    IsHandled := true;
-            end;
-        end;
-    end;
+    // [EventSubscriber(ObjectType::Table, Database::Item, 'OnBeforeIsVariantMandatory', '', false, false)]
+    // local procedure OnBeforeIsVariantMandatory(var IsHandled: Boolean)
+    // var
+    //     PHeader: Record "Purchase Header";
+    //     Location: Record Location;
+    // begin
+    //     PHeader.Reset();
+    //     PHeader.SetRange("Document Type", PHeader."Document Type"::Order);
+    //     PHeader.SetRange("No.", PurchHeaderNo);
+    //     if PHeader.FindFirst() then begin
+    //         Location.Reset();
+    //         if Location.Get(PHeader."Location Code") then begin
+    //             if Location."Require Receive" = true then
+    //                 IsHandled := true;
+    //         end;
+    //     end;
+    // end;
 
 }
