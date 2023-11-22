@@ -30,6 +30,7 @@ codeunit 70103 "Import Sales Order"
         G_UnitPrice: Decimal;
         ReleaseSalesHeader: Record "Sales Header";
         ReleaseSalesDoc: Codeunit "Release Sales Document";
+
         G_Type: Option Comment,"G/L Account","Item","Resource","Fixed Asset","Charge (Item)";
         G_Item: Record Item;
         G_ExpiryDate: Date;
@@ -85,29 +86,29 @@ codeunit 70103 "Import Sales Order"
                     InsertSalesHeader.Validate("Document Type", G_DocumentType);
                     InsertSalesHeader.Validate("No.", GetValueAtIndex(RowNo, 2));
                     InsertSalesHeader.Validate("Sell-to Customer No.", GetValueAtIndex(RowNo, 3));
+                    // if GetValueAtIndex(RowNo, 4) <> '' then
+                    //     InsertSalesHeader.Validate("Bill-to Customer No.", GetValueAtIndex(RowNo, 4));
                     if GetValueAtIndex(RowNo, 4) <> '' then
-                        InsertSalesHeader.Validate("Bill-to Customer No.", GetValueAtIndex(RowNo, 4));
-                    if GetValueAtIndex(RowNo, 6) <> '' then
-                        InsertSalesHeader.Validate("Ship-to Code", GetValueAtIndex(RowNo, 6));
+                        InsertSalesHeader.Validate("Ship-to Code", GetValueAtIndex(RowNo, 4));
 
-                    if GetValueAtIndex(RowNo, 12) <> '' then
-                        InsertSalesHeader.Validate("Currency Code", GetValueAtIndex(RowNo, 12));
+                    // if GetValueAtIndex(RowNo, 12) <> '' then
+                    //     InsertSalesHeader.Validate("Currency Code", GetValueAtIndex(RowNo, 12));
 
-                    if GetValueAtIndex(RowNo, 12) <> '' then begin
+                    if GetValueAtIndex(RowNo, 9) <> '' then begin
                         Clear(RequestDelivryDate);
-                        Evaluate(RequestDelivryDate, GetValueAtIndex(RowNo, 14));
+                        Evaluate(RequestDelivryDate, GetValueAtIndex(RowNo, 9));
                         InsertSalesHeader.Validate("Requested Delivery Date", RequestDelivryDate);
                     end;
-                    InsertSalesHeader.Validate("External Document No.", GetValueAtIndex(RowNo, 15));
+                    InsertSalesHeader.Validate("External Document No.", GetValueAtIndex(RowNo, 10));
 
-                    InsertSalesHeader.Validate("Location Code", GetValueAtIndex(RowNo, 5));
+                    // InsertSalesHeader.Validate("Location Code", GetValueAtIndex(RowNo, 5));
                     InsertSalesHeader."Sheet Name" := SheetName;
                     InsertSalesHeader."Import Date" := Today;
                     InsertSalesHeader.Insert(true);
 
-                    if GetValueAtIndex(RowNo, 13) <> '' then begin
+                    if GetValueAtIndex(RowNo, 8) <> '' then begin
                         Clear(G_DocumentDate);
-                        Evaluate(G_DocumentDate, GetValueAtIndex(RowNo, 13));
+                        Evaluate(G_DocumentDate, GetValueAtIndex(RowNo, 8));
                         //InsertSalesHeader.Validate("Posting Date", G_DocumentDate);
                         //InsertSalesHeader.Validate("Order Date", G_DocumentDate);
                         InsertSalesHeader.Validate("Document Date", G_DocumentDate);
@@ -122,28 +123,28 @@ codeunit 70103 "Import Sales Order"
                 InsertSalesLine.Validate("Document Type", G_DocumentType);
                 InsertSalesLine.Validate("Document No.", GetValueAtIndex(RowNo, 2));
                 InsertSalesLine.Validate("Line No.", GetLastLineNo(GetValueAtIndex(RowNo, 2)));
-                Clear(G_Type);
-                Evaluate(G_Type, GetValueAtIndex(RowNo, 7));
-                if G_Type = G_Type::Comment then
-                    InsertSalesLine.Validate(Type, InsertSalesLine.Type::" ")
-                else
-                    InsertSalesLine.Validate(Type, G_Type);
+                // Clear(G_Type);
+                // Evaluate(G_Type, GetValueAtIndex(RowNo, 7));
+                // if G_Type = G_Type::Comment then
+                //     InsertSalesLine.Validate(Type, InsertSalesLine.Type::" ")
+                // else
+                InsertSalesLine.Validate(Type, InsertSalesLine.Type::Item);
 
-                InsertSalesLine.Validate("No.", GetValueAtIndex(RowNo, 8));
-                if GetValueAtIndex(RowNo, 9) <> '' then
-                    InsertSalesLine.Validate(Description, GetValueAtIndex(RowNo, 9));
+                InsertSalesLine.Validate("No.", GetValueAtIndex(RowNo, 5));
+                // if GetValueAtIndex(RowNo, 9) <> '' then
+                //     InsertSalesLine.Validate(Description, GetValueAtIndex(RowNo, 9));
 
-                InsertSalesLine.Validate("Location Code", GetValueAtIndex(RowNo, 5));
-                if GetValueAtIndex(RowNo, 10) <> '' then begin
+                // InsertSalesLine.Validate("Location Code", GetValueAtIndex(RowNo, 5));
+                if GetValueAtIndex(RowNo, 6) <> '' then begin
                     Clear(G_Quantity);
-                    Evaluate(G_Quantity, GetValueAtIndex(RowNo, 10));
+                    Evaluate(G_Quantity, GetValueAtIndex(RowNo, 6));
                     InsertSalesLine.Validate(Quantity, G_Quantity);
                 end else
                     InsertSalesLine.Validate(Quantity, 0);
 
-                if GetValueAtIndex(RowNo, 11) <> '' then begin
+                if GetValueAtIndex(RowNo, 7) <> '' then begin
                     Clear(G_UnitPrice);
-                    Evaluate(G_UnitPrice, GetValueAtIndex(RowNo, 11));
+                    Evaluate(G_UnitPrice, GetValueAtIndex(RowNo, 7));
                     InsertSalesLine.Validate("Unit Price", G_UnitPrice);
                 end;
 
@@ -231,16 +232,18 @@ codeunit 70103 "Import Sales Order"
         Excelbuffer.Reset();
         Excelbuffer.DeleteAll();
         Excelbuffer.NewRow();
+        Excelbuffer.AddColumn('Document type', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Order No.', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Sell to Customer No.', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
-        Excelbuffer.AddColumn('Bill to Customer No', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
-        Excelbuffer.AddColumn('Location Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        //Excelbuffer.AddColumn('Bill to Customer No', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        //Excelbuffer.AddColumn('Location Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Ship to Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
-        Excelbuffer.AddColumn('Type', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        //Excelbuffer.AddColumn('Type', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('No.', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
-        Excelbuffer.AddColumn('Description', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        //Excelbuffer.AddColumn('Description', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Quantity', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Unit Price', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
-        Excelbuffer.AddColumn('Currency Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        //Excelbuffer.AddColumn('Currency Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Document Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
         Excelbuffer.AddColumn('Requested Delivery Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('External Document No.', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
