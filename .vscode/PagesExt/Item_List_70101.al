@@ -2,6 +2,14 @@ pageextension 70101 "Item Extended List" extends "Item List"
 {
     layout
     {
+        addafter(Description)
+        {
+            field("Variant Mandatory if Exists"; Rec."Variant Mandatory if Exists")
+            {
+                Editable = false;
+                ApplicationArea = All;
+            }
+        }
         addfirst(factboxes)
         {
 

@@ -4,15 +4,29 @@ pageextension 50003 WhsePickCardExt extends "Warehouse Pick"
     {
         addafter("Assignment Time")
         {
-            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Created At';
             }
-            field("System CreatedAt"; rec.SystemCreatedAt)
+            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
             {
                 ApplicationArea = all;
-                caption = 'System CreatedAt';
-
+                Editable = false;
+                Caption = 'System Created By';
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified At';
+            }
+            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified By';
             }
         }
     }
@@ -24,6 +38,7 @@ pageextension 50003 WhsePickCardExt extends "Warehouse Pick"
 
     var
         myInt: Integer;
+        G_Functions: Codeunit "SC Events & Subscriber";
 
     procedure GetUserName(UserSecurityId: Code[50]): Text[100]
     var

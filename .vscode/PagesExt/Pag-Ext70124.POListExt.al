@@ -14,9 +14,11 @@ pageextension 70124 POListExt extends "Purchase Order List"
             var
                 myInt: Integer;
             begin
-                Rec.CalcFields(Amount);
-                if Rec.Amount > Rec."Min Order Value" then
-                    Error('Min Order Value should be less than total order amount');
+                if Rec."Min Order Value" > 0 then begin
+                    Rec.CalcFields(Amount);
+                    if Rec.Amount < Rec."Min Order Value" then
+                        Error('Min Order Value is less than Total order amount');
+                end;
 
             end;
         }
@@ -26,10 +28,11 @@ pageextension 70124 POListExt extends "Purchase Order List"
             var
                 myInt: Integer;
             begin
-                Rec.CalcFields(Amount);
-                if Rec.Amount > Rec."Min Order Value" then
-                    Error('Min Order Value should be less than total order amount');
-
+                if Rec."Min Order Value" > 0 then begin
+                    Rec.CalcFields(Amount);
+                    if Rec.Amount < Rec."Min Order Value" then
+                        Error('Min Order Value is less than Total order amount');
+                end;
             end;
         }
         addafter("P&osting")

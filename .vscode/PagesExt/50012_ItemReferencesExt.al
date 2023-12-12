@@ -1,8 +1,8 @@
-pageextension 50012 ItemReferenceExt extends "Item References"
+pageextension 50012 "SC Item Reference Entries" extends "Item Reference Entries"
 {
     layout
     {
-        addafter("Unit of Measure")
+        addafter(Description)
         {
             field(Length; Rec.Length)
             {

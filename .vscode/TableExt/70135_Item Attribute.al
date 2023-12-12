@@ -3,6 +3,14 @@ tableextension 70135 "SC Item Attribute" extends "Item Attribute"
     fields
     {
         // Add changes to table fields here
+        field(70135; "CD Schedule"; Boolean)
+        {
+
+        }
+        field(70136; "Fridge"; Boolean)
+        {
+
+        }
         modify(Name)
         {
             trigger OnAfterValidate()

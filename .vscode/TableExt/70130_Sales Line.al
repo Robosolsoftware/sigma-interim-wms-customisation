@@ -38,7 +38,8 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                                                                             "Location Code" = FIELD("Location Code"),
                                                                             "Drop Shipment" = FIELD("Drop Shipment"),
                                                                             "Variant Code" = FIELD("Variant Code"),
-                                                                            "Unit of Measure Code" = FIELD("Unit of Measure Code")));
+                                                                            "Unit of Measure Code" = FIELD("Unit of Measure Code"),
+                                                                            "Outstanding Qty. (Base)" = filter(> 0)));
             Caption = 'Allocated';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -70,6 +71,14 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             //GHST Customization++
         }
+        field(70138; "Last Price"; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+        }
+        field(70139; "Shipper Qty"; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+        }
         // Add changes to table fields here
         modify("No.")
         {
@@ -79,25 +88,46 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 L_Item: Record Item;
                 _Codeunit: Codeunit "SC Events & Subscriber";
                 L_ItemVariant: Record "Item Variant";
+                CH_SShip: Record "Sales Shipment Line";
+                L_ItemUnitofMeasure: Record "Item Unit of Measure";
+                ShippingAgent: Record "Shipping Agent";
+                L_Function: Codeunit "SC Events & Subscriber";
             begin
-                if (Rec.Type = Rec.Type::Item) AND (Rec."Document Type" = Rec."Document Type"::Order) then begin
+                if (Rec.Type = Rec.Type::Item) then begin
                     L_SalesHeader.Reset();
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                     if L_SalesHeader.FindFirst() then begin
-                        if CheckOOHCustomer(L_SalesHeader) = true then begin
-                            if Rec."No." <> '' then begin
-                                CheckItemAttribute(Rec)
-                            end;
+                        //++Shipping Agent Restriction(18274)
+                        if L_SalesHeader."Shipping Agent Code" <> '' then begin
+                            L_Function.CheckShippingAgentRestriction(L_SalesHeader, Rec);
                         end;
-                    end;
 
+
+                        //++Sales Order warning message(15813)
+                        L_Function.SalesOrderWarningMessage(L_SalesHeader, Rec);
+                    end;
 
                     L_Item.Reset();
                     L_Item.SetRange("No.", Rec."No.");
                     if L_Item.FindFirst() then begin
                         Rec."Min Sell Price" := L_Item."Min Sell Price";
                     end;
+
+                    L_ItemUnitofMeasure.Reset();
+                    L_ItemUnitofMeasure.SetRange("Item No.", Rec."No.");
+                    L_ItemUnitofMeasure.SetFilter("Sales Order multiple", '>%1', 0);
+                    L_ItemUnitofMeasure.SetRange(Code, Rec."Unit of Measure Code");
+                    if L_ItemUnitofMeasure.FindFirst() then
+                        Rec."Shipper Qty" := L_ItemUnitofMeasure."Sales Order multiple";
+
+                    CH_SShip.Reset();
+                    CH_SShip.SetRange("Sell-to Customer No.", Rec."Sell-to Customer No.");
+                    CH_SShip.SetRange("No.", Rec."No.");
+                    CH_SShip.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    if CH_SShip.FindLast() then
+                        Rec."Last Price" := CH_SShip."Unit Price";
+
                 end;
             end;
         }
@@ -110,38 +140,40 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 L_NextMultipleNumber: Decimal;
                 L_SalesHeader: Record "Sales Header";
             begin
-                L_SalesHeader.Reset();
-                L_SalesHeader.SetRange("No.", Rec."Document No.");
-                L_SalesHeader.SetRange("Document Type", Rec."Document Type");
-                if L_SalesHeader.FindFirst() then begin
-                    if CheckWholesaleCustomer(L_SalesHeader) = true then begin
-                        Clear(L_NextMultipleNumber);
-                        Clear(L_CalculateNumber);
-                        if (Rec.Type = Rec.Type::Item) AND (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Quantity <> 0) then begin
-                            L_ItemUOM.Reset();
-                            L_ItemUOM.SetRange("Item No.", Rec."No.");
-                            L_ItemUOM.SetRange(Code, Rec."Unit of Measure Code");
-                            L_ItemUOM.SetRange("Sales Order multiple", true);
-                            if L_ItemUOM.FindFirst() then begin
-                                if Rec.Quantity MOD L_ItemUOM."Qty. per Unit of Measure" <> 0 then
-                                    if confirm(StrSubstNo('Quantity should be multiple of UOM "%1". Do you want to continue?', L_ItemUOM.Code), true) then begin
-                                        L_CalculateNumber := Round(Rec.Quantity / L_ItemUOM."Qty. per Unit of Measure", 1, '<') + 1;
-                                        L_NextMultipleNumber := L_ItemUOM."Qty. per Unit of Measure" * L_CalculateNumber;
-                                        Rec.Validate(Quantity, L_NextMultipleNumber);
-                                    end;
-                            end;
+                if CurrFieldNo = 15 then begin
+                    L_SalesHeader.Reset();
+                    L_SalesHeader.SetRange("No.", Rec."Document No.");
+                    L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+                    if L_SalesHeader.FindFirst() then begin
+                        if CheckWholesaleCustomer(L_SalesHeader) = true then begin
+                            Clear(L_NextMultipleNumber);
+                            Clear(L_CalculateNumber);
+                            if (Rec.Type = Rec.Type::Item) AND (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Quantity <> 0) then begin
+                                L_ItemUOM.Reset();
+                                L_ItemUOM.SetRange("Item No.", Rec."No.");
+                                L_ItemUOM.SetRange(Code, Rec."Unit of Measure Code");
+                                L_ItemUOM.SetFilter("Sales Order multiple", '>%1', 0);
+                                if L_ItemUOM.FindFirst() then begin
+                                    if Rec.Quantity MOD L_ItemUOM."Sales Order multiple" <> 0 then
+                                        if confirm(StrSubstNo('Quantity should be multiple of UOM "%1" quantity. Do you want to continue?', L_ItemUOM."Sales Order multiple"), true) then begin
+                                            L_CalculateNumber := Round(Rec.Quantity / L_ItemUOM."Sales Order multiple", 1, '<') + 1;
+                                            L_NextMultipleNumber := L_ItemUOM."Sales Order multiple" * L_CalculateNumber;
+                                            Rec.Validate(Quantity, L_NextMultipleNumber);
+                                        end;
+                                end;
 
+                            end;
                         end;
                     end;
-                end;
 
-                //GHST Customization++
-                if (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Type = Rec.Type::Item) then begin
-                    Rec.TestField("Quantity Shipped", 0);
-                    if Rec.Quantity <> xRec.Quantity then
-                        Rec.Validate("Variant Code", '');
-                end;
 
+                    //GHST Customization++
+                    if (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Type = Rec.Type::Item) then begin
+                        Rec.TestField("Quantity Shipped", 0);
+                        if Rec.Quantity <> xRec.Quantity then
+                            Rec.Validate("Variant Code", '');
+                    end;
+                end;
             end;
         }
 
@@ -150,9 +182,11 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
 
             trigger OnAfterValidate()
             begin
-                //GHST Customization++
-                if (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Type = Rec.Type::Item) then begin
-                    Rec.TestField("Quantity Shipped", 0);
+                if CurrFieldNo > 0 then begin
+                    //GHST Customization++
+                    if (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Type = Rec.Type::Item) then begin
+                        Rec.TestField("Quantity Shipped", 0);
+                    end;
                 end;
             end;
         }
@@ -166,28 +200,29 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 L_NextMultipleNumber: Decimal;
                 L_SalesHeader: Record "Sales Header";
             begin
-                if Rec."Unit of Measure Code" <> '' then begin
-                    L_SalesHeader.Reset();
-                    L_SalesHeader.SetRange("No.", Rec."Document No.");
-                    L_SalesHeader.SetRange("Document Type", Rec."Document Type");
-                    if L_SalesHeader.FindFirst() then begin
-                        if CheckWholesaleCustomer(L_SalesHeader) = true then begin
-                            Clear(L_NextMultipleNumber);
-                            Clear(L_CalculateNumber);
-                            if (Rec.Type = Rec.Type::Item) AND (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Quantity <> 0) then begin
-                                L_ItemUOM.Reset();
-                                L_ItemUOM.SetRange("Item No.", Rec."No.");
-                                L_ItemUOM.SetRange(Code, Rec."Unit of Measure Code");
-                                L_ItemUOM.SetRange("Sales Order multiple", true);
-                                if L_ItemUOM.FindFirst() then begin
-                                    if Rec.Quantity MOD L_ItemUOM."Qty. per Unit of Measure" <> 0 then
-                                        if confirm(StrSubstNo('Quantity should be multiple of UOM "%1". Do you want to continue?', L_ItemUOM.Code), true) then begin
-                                            L_CalculateNumber := Round(Rec.Quantity / L_ItemUOM."Qty. per Unit of Measure", 1, '<') + 1;
-                                            L_NextMultipleNumber := L_ItemUOM."Qty. per Unit of Measure" * L_CalculateNumber;
-                                            Rec.Validate(Quantity, L_NextMultipleNumber);
-                                        end;
+                if CurrFieldNo > 0 then begin
+                    if Rec."Unit of Measure Code" <> '' then begin
+                        L_SalesHeader.Reset();
+                        L_SalesHeader.SetRange("No.", Rec."Document No.");
+                        L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+                        if L_SalesHeader.FindFirst() then begin
+                            if CheckWholesaleCustomer(L_SalesHeader) = true then begin
+                                Clear(L_NextMultipleNumber);
+                                Clear(L_CalculateNumber);
+                                if (Rec.Type = Rec.Type::Item) AND (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Quantity <> 0) then begin
+                                    L_ItemUOM.Reset();
+                                    L_ItemUOM.SetRange("Item No.", Rec."No.");
+                                    L_ItemUOM.SetRange(Code, Rec."Unit of Measure Code");
+                                    L_ItemUOM.SetFilter("Sales Order multiple", '>%1', 0);
+                                    if L_ItemUOM.FindFirst() then begin
+                                        if Rec.Quantity MOD L_ItemUOM."Sales Order multiple" <> 0 then
+                                            if confirm(StrSubstNo('Quantity should be multiple of UOM "%1" quantity. Do you want to continue?', L_ItemUOM."Sales Order multiple"), true) then begin
+                                                L_CalculateNumber := Round(Rec.Quantity / L_ItemUOM."Sales Order multiple", 1, '<') + 1;
+                                                L_NextMultipleNumber := L_ItemUOM."Sales Order multiple" * L_CalculateNumber;
+                                                Rec.Validate(Quantity, L_NextMultipleNumber);
+                                            end;
+                                    end;
                                 end;
-
                             end;
                         end;
                     end;
@@ -199,7 +234,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
 
     var
         myInt: Integer;
-        tes: Record Item;
+        tes: Record "Item Reference";
 
     local procedure CheckWholesaleCustomer(L_SalesHeader: Record "Sales Header"): Boolean
     var
@@ -212,52 +247,4 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         if L_DimensionSetEntry.FindFirst() then
             exit(true);
     end;
-
-    local procedure CheckOOHCustomer(_SalesHeader: Record "Sales Header"): Boolean
-    var
-        L_DimensionSetEntry: Record "Dimension Set Entry";
-    begin
-        L_DimensionSetEntry.SetRange("Dimension Set ID", _SalesHeader."Dimension Set ID");
-        L_DimensionSetEntry.SetRange("Dimension Code", 'CUSTOMER TYPE');
-        L_DimensionSetEntry.SetRange("Dimension Value Code", 'OOH');
-        if L_DimensionSetEntry.FindFirst() then
-            exit(true);
-
-    end;
-
-    local procedure CheckItemAttribute(_SalesLine: Record "Sales Line")
-    var
-        RecItemAttValMap: Record "Item Attribute Value Mapping";
-        ItemAttribute: Record "Item Attribute";
-        ItemAttributeValue: Record "Item Attribute Value";
-        L_SalesOrderwarningMngSetup: Record "Sales Order warning Mng. Setup";
-    begin
-        RecItemAttValMap.Reset();
-        RecItemAttValMap.SetRange("Table ID", 27);
-        RecItemAttValMap.SetRange("No.", _SalesLine."No.");
-        if RecItemAttValMap.FindSet() then begin
-            repeat
-                ItemAttribute.Reset();
-                ItemAttribute.SetRange(ID, RecItemAttValMap."Item Attribute ID");
-                if ItemAttribute.FindFirst() then begin
-                    ItemAttributeValue.SetRange("Attribute ID", ItemAttribute.ID);
-                    ItemAttributeValue.SetRange(ID, RecItemAttValMap."Item Attribute Value ID");
-                    if ItemAttributeValue.FindFirst() then begin
-                        if (UpperCase(ItemAttributeValue.Value) = UpperCase('CD-3')) OR (UpperCase(ItemAttributeValue.Value) = UpperCase('CD-2')) then begin
-                            L_SalesOrderwarningMngSetup.Reset();
-                            L_SalesOrderwarningMngSetup.SetRange("Dimension Code", 'CUSTOMER TYPE');
-                            L_SalesOrderwarningMngSetup.SetRange("Dimension Value", 'OOH');
-                            L_SalesOrderwarningMngSetup.SetRange("Attribute Value", ItemAttributeValue.Value);
-                            L_SalesOrderwarningMngSetup.SetRange("Attribute value ID", ItemAttributeValue.ID);
-                            L_SalesOrderwarningMngSetup.SetRange("Attribute ID", ItemAttributeValue."Attribute ID");
-                            if L_SalesOrderwarningMngSetup.FindFirst() then
-                                Message('CD Requestion form is required for the item %1', _SalesLine."No.");
-
-                        end;
-                    end;
-                end;
-            until RecItemAttValMap.Next() = 0;
-        end;
-    end;
-
 }

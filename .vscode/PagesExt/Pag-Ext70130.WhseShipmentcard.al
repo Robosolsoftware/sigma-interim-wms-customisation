@@ -2,6 +2,33 @@ pageextension 70130 whseShipmentCardRBE extends "Warehouse Shipment"
 {
     layout
     {
+        addlast(General)
+        {
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Created At';
+            }
+            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Created By';
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified At';
+            }
+            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified By';
+            }
+        }
         addbefore(Shipping)
         {
             group("Print on Despatch")
@@ -99,6 +126,11 @@ pageextension 70130 whseShipmentCardRBE extends "Warehouse Shipment"
                 ApplicationArea = all;
 
             }
+            field("Work Description"; Rec."Work Description")
+            {
+                ApplicationArea = All;
+                MultiLine = true;
+            }
 
         }
 
@@ -107,4 +139,6 @@ pageextension 70130 whseShipmentCardRBE extends "Warehouse Shipment"
             Visible = true;
         }
     }
+    var
+        G_Functions: Codeunit "SC Events & Subscriber";
 }

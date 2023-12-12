@@ -72,6 +72,10 @@ tableextension 70122 WHSESHpHeaderExt extends "Warehouse Shipment Header"
         {
             DataClassification = ToBeClassified;
         }
+        field(70139; "Work Description"; Text[2048])
+        {
+            Caption = 'Work Description';
+        }
     }
 
     var

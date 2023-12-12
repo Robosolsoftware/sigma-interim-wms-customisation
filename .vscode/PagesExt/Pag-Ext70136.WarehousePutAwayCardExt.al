@@ -5,16 +5,29 @@ pageextension 70136 WarehousePutAwayCardExt extends "Warehouse Put-away"
         addafter("Sorting Method")
         {
 
-            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
-
+                Editable = false;
+                Caption = 'System Created At';
             }
-            field("System CreatedAt"; rec.SystemCreatedAt)
+            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
             {
                 ApplicationArea = all;
-                caption = 'System CreatedAt';
-
+                Editable = false;
+                Caption = 'System Created By';
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified At';
+            }
+            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified By';
             }
 
         }
@@ -37,4 +50,5 @@ pageextension 70136 WarehousePutAwayCardExt extends "Warehouse Put-away"
 
     var
         myInt: Integer;
+        G_Functions: Codeunit "SC Events & Subscriber";
 }

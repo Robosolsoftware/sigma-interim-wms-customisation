@@ -17,6 +17,30 @@ pageextension 70141 "SC Posted Sales Invoice" extends "Posted Sales Invoice"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Created At';
+            }
+            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Created By';
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified At';
+            }
+            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified By';
+            }
         }
         addafter("Foreign Trade")
         {
@@ -75,4 +99,5 @@ pageextension 70141 "SC Posted Sales Invoice" extends "Posted Sales Invoice"
 
     var
         myInt: Integer;
+        G_Functions: Codeunit "SC Events & Subscriber";
 }

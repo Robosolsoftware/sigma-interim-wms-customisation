@@ -6,13 +6,22 @@ tableextension 70138 "SC Vendor" extends Vendor
         field(70138; "PO Approval required"; Option)
         {
             DataClassification = ToBeClassified;
-            OptionMembers = Yes,No;
+            OptionMembers = No,Yes;
         }
         field(70139; "Min Order Value"; Decimal)
         {
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
+        field(70140; "Concerto Vendor No."; Code[50])
+        {
+
+        }
+        // field(70140; "PO Approval Value"; Decimal)
+        // {
+        //     DataClassification = ToBeClassified;
+        //     DecimalPlaces = 0 : 5;
+        // }
     }
 
     var

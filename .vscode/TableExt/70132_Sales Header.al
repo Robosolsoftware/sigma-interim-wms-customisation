@@ -13,6 +13,9 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                     L_Customer.Reset();
                     L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                     if L_Customer.FindFirst() then begin
+                        L_Customer.TestField("QAU Approved");
+
+
                         Rec.Validate("Delivery Note", L_Customer."Delivery Note");
                         Rec.Validate("Collection Note", L_Customer."Collection Note");
                         Rec.Validate(_Invoice, L_Customer.Invoice);
@@ -22,6 +25,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec.Validate(Labels, L_Customer.Labels);
                         Rec.Validate("Custom Documents", L_Customer."Custom Documents");
                         Rec."Send By" := L_Customer."Send By";
+                        Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
                     end;
 
@@ -46,6 +50,8 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                     L_Customer.Reset();
                     L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                     if L_Customer.FindFirst() then begin
+                        L_Customer.TestField("QAU Approved");
+
                         Rec.Validate("Delivery Note", L_Customer."Delivery Note");
                         Rec.Validate("Collection Note", L_Customer."Collection Note");
                         Rec.Validate(_Invoice, L_Customer.Invoice);
@@ -55,6 +61,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec.Validate(Labels, L_Customer.Labels);
                         Rec.Validate("Custom Documents", L_Customer."Custom Documents");
                         Rec."Send By" := L_Customer."Send By";
+                        Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
                     end;
 
@@ -123,6 +130,10 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         field(70144; "Default Bank"; Code[20])
         {
             TableRelation = "Bank Account";
+        }
+        field(70145; "QAU Approved"; Boolean)
+        {
+
         }
 
     }

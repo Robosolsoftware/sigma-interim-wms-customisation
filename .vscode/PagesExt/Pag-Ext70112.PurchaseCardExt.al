@@ -2,12 +2,47 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
 {
     layout
     {
+
         addlast(General)
         {
+            field("PO Approval required"; Rec."PO Approval required")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            // field("PO Approval Value"; Rec."PO Approval Value")
+            // {
+            //     ApplicationArea = All;
+            //     Editable = false;
+            // }
             field("Min Order Value"; Rec."Min Order Value")
             {
                 ApplicationArea = All;
                 Editable = false;
+            }
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Created At';
+            }
+            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Created By';
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified At';
+            }
+            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified By';
             }
         }
 
@@ -33,26 +68,11 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
                 PLine: Record "Purchase Line";
                 Bin: Record Bin;
             begin
-                Rec.CalcFields(Amount);
-                if Rec.Amount > Rec."Min Order Value" then
-                    Error('Min Order Value should be less than total order amount');
-
-                // PLine.Reset();
-                // PLine.SetRange("Document Type", Rec."Document Type");
-                // PLine.SetRange("Document No.", Rec."No.");
-                // PLine.SetRange(Type, PLine.Type::Item);
-                // if PLine.FindSet() then
-                //     repeat
-                //         Bin.Reset();
-                //         Bin.SetRange("Warehouse Class Code", PLine."Warehouse Class Code");
-                //         if Bin.FindFirst() then begin
-                //             if Bin."Location Code" <> Rec."Location Code" then
-                //                 Error('Warehouse class Code: %1 missmatch for Location: %2', PLine."Warehouse Class Code", Rec."Location Code");
-                //         end else
-                //             Error('Warehouse class Code: %1 missmatch for Location: %2', PLine."Warehouse Class Code", Rec."Location Code");
-
-                //     until PLine.Next() = 0
-
+                if Rec."Min Order Value" > 0 then begin
+                    Rec.CalcFields(Amount);
+                    if Rec.Amount < Rec."Min Order Value" then
+                        Error('Min Order Value is less than Total order amount');
+                end;
             end;
         }
         modify(SendApprovalRequest)
@@ -61,13 +81,17 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
             var
                 myInt: Integer;
             begin
-                Rec.CalcFields(Amount);
-                if Rec.Amount > Rec."Min Order Value" then
-                    Error('Min Order Value should be less than total order amount');
-
+                if Rec."Min Order Value" > 0 then begin
+                    Rec.CalcFields(Amount);
+                    if Rec.Amount < Rec."Min Order Value" then
+                        Error('Min Order Value is less than Total order amount');
+                end;
             end;
         }
     }
+
+    var
+        G_Functions: Codeunit "SC Events & Subscriber";
 
 
 

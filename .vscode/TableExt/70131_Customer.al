@@ -69,6 +69,12 @@ tableextension 70131 "SC Customer" extends Customer
 
                     if Rec."Customer Price Group 3" = Rec."Customer Price Group 2" then
                         Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 4" = Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 5" = Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
                 end;
             end;
         }
@@ -85,8 +91,18 @@ tableextension 70131 "SC Customer" extends Customer
 
                     if Rec."Customer Price Group 2" = Rec."Customer Price Group 3" then
                         Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 4" = Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 5" = Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
                 end;
             end;
+        }
+        field(70145; "Concerto Customer No."; Code[50])
+        {
+
         }
         modify("Customer Price Group")
         {
@@ -100,11 +116,79 @@ tableextension 70131 "SC Customer" extends Customer
 
                     if Rec."Customer Price Group 3" = Rec."Customer Price Group" then
                         Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 4" = Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 5" = Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+                end;
+            end;
+        }
+        field(70146; "QAU Approved"; Boolean)
+        {
+
+        }
+        field(70147; "Customer Price Group 4"; Code[10])
+        {
+            Caption = 'Customer Price Group 4';
+            TableRelation = "Customer Price Group";
+
+            trigger OnValidate()
+            begin
+                if Rec."Customer Price Group 4" <> '' then begin
+                    if Rec."Customer Price Group" = Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 2" = Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 3" = Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 5" = Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+                end;
+            end;
+        }
+        field(70148; "Customer Price Group 5"; Code[10])
+        {
+            Caption = 'Customer Price Group 5';
+            TableRelation = "Customer Price Group";
+
+            trigger OnValidate()
+            begin
+                if Rec."Customer Price Group 4" <> '' then begin
+                    if Rec."Customer Price Group" = Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 2" = Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 3" = Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if Rec."Customer Price Group 4" = Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
                 end;
             end;
         }
 
 
+
+
+    }
+
+    fieldgroups
+    {
+        addlast(DropDown; "Name 2")
+        {
+
+        }
+        addlast(Brick; "Name 2")
+        {
+
+        }
     }
 
     var

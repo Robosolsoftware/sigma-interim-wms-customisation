@@ -1,0 +1,25 @@
+tableextension 70143 "SC Item Journal Line" extends "Item Journal Line"
+{
+    fields
+    {
+        // Add changes to table fields here
+        field(70141; "Custom Variant Code"; Code[10])
+        {
+            Caption = 'Variant Code';
+            TableRelation = "Item Variant".Code WHERE("Item No." = FIELD("Item No."));
+        }
+    }
+
+    keys
+    {
+        // Add changes to keys here
+    }
+
+    fieldgroups
+    {
+        // Add changes to field groups here
+    }
+
+    var
+        myInt: Integer;
+}

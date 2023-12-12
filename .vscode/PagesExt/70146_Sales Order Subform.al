@@ -5,11 +5,16 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
         // Add changes to page layout here
         addafter(Quantity)
         {
+            field("Shipper Qty"; Rec."Shipper Qty")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
             field(Inventory; Rec.Inventory)
             {
                 Editable = false;
                 ApplicationArea = All;
-                ToolTip = 'Total Invetory';
+                ToolTip = 'Total Inventory';
             }
             field("Variant Code mandatory"; Rec."Variant Code mandatory")
             {
@@ -32,9 +37,14 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 ApplicationArea = All;
                 Editable = false;
                 DecimalPlaces = 0 : 5;
-                ToolTip = 'Free Quantity = Invetory - Allocated';
+                ToolTip = 'Free Quantity = Inventory - Allocated';
             }
             field("Min Sell Price"; Rec."Min Sell Price")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Last Price"; Rec."Last Price")
             {
                 ApplicationArea = All;
                 Editable = false;

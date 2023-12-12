@@ -2,6 +2,30 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
 {
     layout
     {
+        addafter("Unit Price")
+        {
+            field(RRP; Rec.RRP)
+            {
+                ApplicationArea = All;
+            }
+        }
+        modify("Item Category Code")
+        {
+            Caption = 'Sub-Child Category';
+        }
+
+        addbefore("Item Category Code")
+        {
+            field("Parent Category"; Rec."Parent Category")
+            {
+                ApplicationArea = All;
+            }
+            field("Child Category"; Rec."Child Category")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
 
         addlast(Item)
         {
@@ -62,29 +86,48 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
                 ApplicationArea = all;
             }
         }
-        modify(VariantMandatoryDefaultYes)
-        {
-            trigger OnAfterValidate()
-            var
-                myInt: Integer;
-            begin
-                Clear(ItemVarVisible);
-                if Rec."Variant Mandatory if Exists" = Rec."Variant Mandatory if Exists"::No then
-                    ItemVarVisible := false
-                else
-                    ItemVarVisible := true;
-            end;
-        }
+        // modify(VariantMandatoryDefaultYes)
+        // {
+        //     trigger OnAfterValidate()
+        //     var
+        //         myInt: Integer;
+        //     begin
+        //         Clear(ItemVarVisible);
+        //         if Rec."Variant Mandatory if Exists" = Rec."Variant Mandatory if Exists"::No then
+        //             ItemVarVisible := false
+        //         else
+        //             ItemVarVisible := true;
+        //     end;
+        // }
     }
 
 
-    actions
-    {
-        modify("Va&riants")
-        {
-            Visible = ItemVarVisible;
-        }
-    }
+    // actions
+    // {
+    //     modify("Va&riants")
+    //     {
+    //         Enabled = ItemVarVisible;
+    //     }
+    // }
+
+
+    // trigger OnOpenPage()
+    // begin
+    //     Clear(ItemVarVisible);
+    //     if Rec."Variant Mandatory if Exists" = Rec."Variant Mandatory if Exists"::No then
+    //         ItemVarVisible := false
+    //     else
+    //         ItemVarVisible := true;
+    // end;
+
+    // trigger OnAfterGetRecord()
+    // begin
+    //     Clear(ItemVarVisible);
+    //     if Rec."Variant Mandatory if Exists" = Rec."Variant Mandatory if Exists"::No then
+    //         ItemVarVisible := false
+    //     else
+    //         ItemVarVisible := true;
+    // end;
 
 
 

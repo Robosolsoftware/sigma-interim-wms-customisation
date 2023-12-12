@@ -10,5 +10,10 @@ tableextension 70107 ILE extends "Item Ledger Entry"
         {
             DataClassification = ToBeClassified;
         }
+        field(70141; "Custom Variant Code"; Code[10])
+        {
+            Caption = 'Variant Code';
+            TableRelation = "Item Variant".Code WHERE("Item No." = FIELD("Item No."));
+        }
     }
 }

@@ -6,7 +6,7 @@ pageextension 50010 WareRcptHeaderExt extends "Warehouse Receipt"
         {
             group("Transport Details")
             {
-                group("Purchase Order Details:")
+                group("Purchase Order Details")
                 {
                     field("Purchase Order No."; Rec."Purchase Order No.")
                     {
@@ -61,7 +61,7 @@ pageextension 50010 WareRcptHeaderExt extends "Warehouse Receipt"
                     {
                         ApplicationArea = all;
                     }
-                    field("Booking Requested Date"; Rec."Booking Requested Date")
+                    field("Requested Delivery Date"; Rec."Requested Delivery Date")
                     {
                         ApplicationArea = all;
                     }

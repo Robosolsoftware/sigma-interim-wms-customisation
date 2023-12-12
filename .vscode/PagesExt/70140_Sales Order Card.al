@@ -32,6 +32,30 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Created At';
+            }
+            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Created By';
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified At';
+            }
+            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'System Modified By';
+            }
         }
         addafter(SalesLines)
         {
@@ -307,4 +331,5 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
     var
         myInt: Integer;
         cust: Record Customer;
+        G_Functions: Codeunit "SC Events & Subscriber";
 }

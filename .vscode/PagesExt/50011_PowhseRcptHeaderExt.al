@@ -63,7 +63,7 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                     {
                         ApplicationArea = all;
                     }
-                    field("Booking Requested Date"; Rec."Booking Requested Date")
+                    field("Requested Delivery Date"; Rec."Requested Delivery Date")
                     {
                         ApplicationArea = all;
                     }

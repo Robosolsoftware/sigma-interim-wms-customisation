@@ -13,6 +13,15 @@ page 70105 "Lot-Number-by-Item"
         {
             repeater(Group)
             {
+                field("Lot No."; Rec."Lot No.")
+                {
+                    ApplicationArea = all;
+                }
+                field("Expiry Date"; Rec."Expiry Date")
+                {
+                    ApplicationArea = all;
+                    Visible = false;
+                }
                 field("Variant Code"; Rec."Variant Code")
                 {
                     ApplicationArea = All;
@@ -24,22 +33,16 @@ page 70105 "Lot-Number-by-Item"
                     StyleExpr = Color;
 
                 }
-                field("Zone Code"; rec."Zone Code")
-                {
-                    ApplicationArea = all;
-                }
-                field("Lot No."; Rec."Lot No.")
-                {
-                    ApplicationArea = all;
-                    Visible = false;
-                }
-
                 field("Bin Code"; Rec."Bin Code")
                 {
                     ApplicationArea = All;
                     Visible = false;
                 }
-
+                field("Zone Code"; rec."Zone Code")
+                {
+                    ApplicationArea = all;
+                    Visible = false;
+                }
                 field("Qty. (Base)"; Rec."Qty. (Base)")
                 {
                     StyleExpr = Color;
@@ -50,13 +53,6 @@ page 70105 "Lot-Number-by-Item"
                     ApplicationArea = all;
                     DecimalPlaces = 0 : 5;
                 }
-                field("Expiry Date"; Rec."Expiry Date")
-                {
-                    ApplicationArea = all;
-                    Visible = false;
-
-                }
-
             }
         }
     }

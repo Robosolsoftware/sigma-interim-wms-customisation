@@ -2,6 +2,11 @@ tableextension 70101 "Item_Extension" extends Item
 {
     fields
     {
+        modify("Item Category Code")
+        {
+            Caption = 'Sub-Child Category';
+        }
+
         // modify("Unit List Price")
         // {
         //     trigger OnAfterValidate()
@@ -178,6 +183,20 @@ tableextension 70101 "Item_Extension" extends Item
         {
             FieldClass = FlowField;
             CalcFormula = exist("Item Variant" where("Item No." = field("No.")));
+        }
+        field(70103; "Child Category"; Code[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Item Category"."Parent Category" where(Code = field("Item Category Code")));
+        }
+        field(70104; "Parent Category"; Code[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Item Category"."Parent Category" where(Code = field("Child Category")));
+        }
+        field(70105; RRP; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
         }
     }
 

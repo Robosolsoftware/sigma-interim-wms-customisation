@@ -59,7 +59,6 @@ codeunit 70101 "Purchase Events"
     var
         Recitem: Record Item;
     begin
-
         Recitem.Reset();
         Recitem.SetRange("No.", Rec."No.");
         if Recitem.FindFirst() then begin
@@ -89,8 +88,6 @@ codeunit 70101 "Purchase Events"
         TransferLineLine1: Record "Transfer Line";
         PurchaseLine: Record "Purchase Line";
     begin
-
-
         RecWhseShpLine.Reset();
         RecWhseShpLine.SetRange("No.", WhseShipmentHeader."No.");
         if RecWhseShpLine.FindFirst() then begin

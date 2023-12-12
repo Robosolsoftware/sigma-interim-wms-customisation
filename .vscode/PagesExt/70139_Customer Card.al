@@ -3,6 +3,18 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
     layout
     {
         // Add changes to page layout here
+
+        modify("Customer Price Group")
+        {
+            Caption = 'Customer Price Group 1';
+        }
+        addafter("No.")
+        {
+            field("Concerto Customer No."; Rec."Concerto Customer No.")
+            {
+                ApplicationArea = All;
+            }
+        }
         addafter("Customer Price Group")
         {
             field("Customer Price Group 2"; Rec."Customer Price Group 2")
@@ -10,6 +22,14 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
             }
             field("Customer Price Group 3"; Rec."Customer Price Group 3")
+            {
+                ApplicationArea = All;
+            }
+            field("Customer Price Group 4"; Rec."Customer Price Group 4")
+            {
+                ApplicationArea = All;
+            }
+            field("Customer Price Group 5"; Rec."Customer Price Group 5")
             {
                 ApplicationArea = All;
             }
@@ -23,6 +43,10 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         }
         addlast(General)
         {
+            field("QAU Approved"; Rec."QAU Approved")
+            {
+                ApplicationArea = All;
+            }
             field("Send By"; Rec."Send By")
             {
                 ApplicationArea = All;

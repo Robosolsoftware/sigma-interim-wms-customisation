@@ -10,7 +10,7 @@ tableextension 50002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(50003; "Supplier Name"; Code[20])
+        field(50003; "Supplier Name"; Code[100])
         {
             DataClassification = ToBeClassified;
         }
@@ -38,7 +38,7 @@ tableextension 50002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(50010; "Booking Requested Date"; Date)
+        field(50010; "Requested Delivery Date"; Date)
         {
             DataClassification = ToBeClassified;
         }

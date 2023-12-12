@@ -10,7 +10,8 @@ codeunit 70102 "SC Events & Subscriber"
 
     var
         myInt: Integer;
-        PurchHeaderNo: Code[20];
+        G_LocationCode: Code[20];
+    //G_FromPOScreen: Boolean;
 
     [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", 'OnAfterCreateShptHeader', '', false, false)]
     local procedure OnAfterCreateShptHeader(var WarehouseShipmentHeader: Record "Warehouse Shipment Header"; SalesLine: Record "Sales Line")
@@ -232,8 +233,58 @@ codeunit 70102 "SC Events & Subscriber"
     //     WhseRcptHeader.Modify();
     // end;
 
+    [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", 'OnAfterPostReport', '', false, false)]
+    local procedure OnAfterPostReport(var WhseShptHeader: Record "Warehouse Shipment Header"; RequestType: Option; var WhseHeaderCreated: Boolean)
+    var
+        L_WareShipmentLine: Record "Warehouse Shipment Line";
+        L_RepeatOrderNo: Code[20];
+        L_SalesHeader: Record "Sales Header";
+        L_WareshouseShipmentHeader: Record "Warehouse Shipment Header";
+    begin
+        //Abdul++
+        if RequestType = 1 then begin
+            L_WareshouseShipmentHeader.Reset();
+            L_WareshouseShipmentHeader.SetRange("No.", WhseShptHeader."No.");
+            if L_WareshouseShipmentHeader.FindFirst() then begin
+                Clear(L_RepeatOrderNo);
+                L_WareShipmentLine.Reset();
+                L_WareShipmentLine.SetRange("No.", L_WareshouseShipmentHeader."No.");
+                L_WareShipmentLine.SetRange("Source Document", L_WareShipmentLine."Source Document"::"Sales Order");
+                L_WareShipmentLine.SetCurrentKey("Source No.");
+                L_WareShipmentLine.Ascending(true);
+                if L_WareShipmentLine.FindSet() then begin
+                    repeat
+                        if L_RepeatOrderNo <> L_WareShipmentLine."Source No." then begin
+                            L_SalesHeader.Reset();
+                            L_SalesHeader.SetRange("Document Type", L_SalesHeader."Document Type"::Order);
+                            L_SalesHeader.SetRange("No.", L_WareShipmentLine."Source No.");
+                            if L_SalesHeader.FindFirst() then begin
+                                if L_WareshouseShipmentHeader."Work Description" <> '' then
+                                    L_WareshouseShipmentHeader."Work Description" := L_WareshouseShipmentHeader."Work Description" + CRLFSeparator() + L_SalesHeader.GetWorkDescription()
+                                else
+                                    L_WareshouseShipmentHeader."Work Description" := L_WareshouseShipmentHeader."Work Description" + L_SalesHeader.GetWorkDescription()
+                            end;
+                        end;
+                        L_RepeatOrderNo := L_WareShipmentLine."Source No.";
+                    until L_WareShipmentLine.Next() = 0;
+                    L_WareshouseShipmentHeader.Modify();
+                end;
+            end;
+        end;
+    end;
+
+    procedure CRLFSeparator(): Text[2]
+    var
+        CRLF: Text[2];
+    begin
+        CRLF[1] := 13; // Carriage return, '\r'
+        CRLF[2] := 10; // Line feed, '\n'
+        exit(CRLF);
+    end;
+
+
     [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", 'OnAfterProcessDocumentLine', '', true, true)]
-    local procedure MyProcedure(WarehouseReceiptHeader: Record "Warehouse Receipt Header")
+    local procedure OnAfterProcessDocumentLine(WarehouseReceiptHeader: Record "Warehouse Receipt Header"; var WarehouseShipmentHeader: Record "Warehouse Shipment Header")
     var
         //WhseRcptHeader: Record "Warehouse Receipt Header";
         WhseRcptLine: Record "Warehouse Receipt Line";
@@ -275,90 +326,257 @@ codeunit 70102 "SC Events & Subscriber"
         end;
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Receipt", 'OnCodeOnAfterWhseRcptHeaderModify', '', true, true)]
-    local procedure CopyWhseRcptHeaderField(WhseReceiptHeader: Record "Warehouse Receipt Header")
-    var
-        POWhseRcptHeader: Record "Posted Whse. Receipt Header";
-    begin
-        POWhseRcptHeader.Reset();
-        POWhseRcptHeader.SetRange("Whse. Receipt No.", WhseReceiptHeader."No.");
-        if POWhseRcptHeader.FindFirst() then
-            POWhseRcptHeader.Reset();
-        POWhseRcptHeader.Init();
-        POWhseRcptHeader.Validate("Purchase Order No.", WhseReceiptHeader."Purchase Order No.");
-        POWhseRcptHeader.Validate("Purchase Order Date", WhseReceiptHeader."Purchase Order Date");
-        POWhseRcptHeader.Validate("Supplier Name", WhseReceiptHeader."Supplier Name");
-        POWhseRcptHeader.Validate("Warehouse Class Code", WhseReceiptHeader."Warehouse Class Code");
-        POWhseRcptHeader.Validate(Locationcode, WhseReceiptHeader.Locationcode);
-        POWhseRcptHeader.Validate("Item Category Code", WhseReceiptHeader."Item Category Code");
-        POWhseRcptHeader.Validate("No. of Items", WhseReceiptHeader."No. of Items");
-        POWhseRcptHeader.Validate("Total Order Qty", WhseReceiptHeader."Total Order Qty");
-        POWhseRcptHeader.Validate(Carrier, WhseReceiptHeader.Carrier);
-        POWhseRcptHeader.Validate("Booking Requested Date", WhseReceiptHeader."Booking Requested Date");
-        POWhseRcptHeader.Validate("Expected Delivery Date", WhseReceiptHeader."Expected Delivery Date");
-        POWhseRcptHeader.Validate("Expected Delivery Time", WhseReceiptHeader."Expected Delivery Time");
-        POWhseRcptHeader.Validate("Booked Pallets", WhseReceiptHeader."Booked Pallets");
-        POWhseRcptHeader.Validate(Lifts, WhseReceiptHeader.Lifts);
-        POWhseRcptHeader.Validate("Loose Boxes", WhseReceiptHeader."Loose Boxes");
-        POWhseRcptHeader.Validate("Curtain Side", WhseReceiptHeader."Curtain Side");
-        POWhseRcptHeader.Validate(Comments, WhseReceiptHeader.Comments);
-        POWhseRcptHeader.Validate("Receipt Status", WhseReceiptHeader."Receipt Status");
-        POWhseRcptHeader.Validate("Actual Receipt Date", WhseReceiptHeader."Actual Receipt Date");
-        POWhseRcptHeader.Validate("Actual Receipt Time", WhseReceiptHeader."Actual Receipt Time");
-        POWhseRcptHeader.Insert();
-    end;
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Receipt", 'OnCodeOnAfterWhseRcptHeaderModify', '', true, true)]
+    // local procedure CopyWhseRcptHeaderField(WhseReceiptHeader: Record "Warehouse Receipt Header")
+    // var
+    //     POWhseRcptHeader: Record "Posted Whse. Receipt Header";
+    // begin
+    //     POWhseRcptHeader.Reset();
+    //     POWhseRcptHeader.SetRange("Whse. Receipt No.", WhseReceiptHeader."No.");
+    //     if POWhseRcptHeader.FindFirst() then
+    //         POWhseRcptHeader.Reset();
+    //     POWhseRcptHeader.Init();
+    //     POWhseRcptHeader.Validate("Purchase Order No.", WhseReceiptHeader."Purchase Order No.");
+    //     POWhseRcptHeader.Validate("Purchase Order Date", WhseReceiptHeader."Purchase Order Date");
+    //     POWhseRcptHeader.Validate("Supplier Name", WhseReceiptHeader."Supplier Name");
+    //     POWhseRcptHeader.Validate("Warehouse Class Code", WhseReceiptHeader."Warehouse Class Code");
+    //     POWhseRcptHeader.Validate(Locationcode, WhseReceiptHeader.Locationcode);
+    //     POWhseRcptHeader.Validate("Item Category Code", WhseReceiptHeader."Item Category Code");
+    //     POWhseRcptHeader.Validate("No. of Items", WhseReceiptHeader."No. of Items");
+    //     POWhseRcptHeader.Validate("Total Order Qty", WhseReceiptHeader."Total Order Qty");
+    //     POWhseRcptHeader.Validate(Carrier, WhseReceiptHeader.Carrier);
+    //     POWhseRcptHeader.Validate("Booking Requested Date", WhseReceiptHeader."Booking Requested Date");
+    //     POWhseRcptHeader.Validate("Expected Delivery Date", WhseReceiptHeader."Expected Delivery Date");
+    //     POWhseRcptHeader.Validate("Expected Delivery Time", WhseReceiptHeader."Expected Delivery Time");
+    //     POWhseRcptHeader.Validate("Booked Pallets", WhseReceiptHeader."Booked Pallets");
+    //     POWhseRcptHeader.Validate(Lifts, WhseReceiptHeader.Lifts);
+    //     POWhseRcptHeader.Validate("Loose Boxes", WhseReceiptHeader."Loose Boxes");
+    //     POWhseRcptHeader.Validate("Curtain Side", WhseReceiptHeader."Curtain Side");
+    //     POWhseRcptHeader.Validate(Comments, WhseReceiptHeader.Comments);
+    //     POWhseRcptHeader.Validate("Receipt Status", WhseReceiptHeader."Receipt Status");
+    //     POWhseRcptHeader.Validate("Actual Receipt Date", WhseReceiptHeader."Actual Receipt Date");
+    //     POWhseRcptHeader.Validate("Actual Receipt Time", WhseReceiptHeader."Actual Receipt Time");
+    //     POWhseRcptHeader.Insert();
+    // end;
 
 
-    [EventSubscriber(ObjectType::Codeunit, codeunit::"Purch.-Post", OnBeforePostPurchLine, '', false, false)]
-    local procedure VariantMandatory(var PurchHeader: Record "Purchase Header")
-    var
-        PLine: Record "Purchase Line";
-        item: Record Item;
-    //d: Codeunit 90;
-    begin
-        PLine.Reset();
-        PLine.SetRange("Document No.", PurchHeader."No.");
-        PLine.SetRange(Type, PLine.Type::Item);
-        if PLine.FindSet() then
-            repeat
-                item.Reset();
-                item.SetRange("No.", PLine."No.");
-                if item.FindFirst() then begin
-                    if item."Variant Mandatory if Exists" = item."Variant Mandatory if Exists"::Yes then begin
-                        if PLine."Variant Code" = '' then
-                            Error('Variant Code is mandatory for item No. %1', PLine."No.");
-                    end;
-                end;
-            until PLine.Next() = 0;
-
-    end;
-
+    //+++++++++++++++++++++++++++++++++++++++++//++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //Step1+++ Purchase Line Location Code not mandatory++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Purchase Document", 'OnBeforeMandatoryFields', '', false, false)]
     local procedure OnBeforeMandatoryFields(PurchaseHeader: Record "Purchase Header")
     var
-
+        InvtSetup: Record "Inventory Setup";
     begin
-        Clear(PurchHeaderNo);
-        PurchHeaderNo := PurchaseHeader."No.";
+        // Check Header location if line location is not mandatory++
+        // This is code for skip default error meesage for Variant code++
+        Clear(G_LocationCode);
+        //Clear(G_FromPOScreen);
+        InvtSetup.Get();
+        if not InvtSetup."Location Mandatory" then begin
+            if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
+                G_LocationCode := PurchaseHeader."Location Code";
+                //G_FromPOScreen := true;
 
-    end;
 
-    [EventSubscriber(ObjectType::Table, Database::Item, 'OnBeforeIsVariantMandatory', '', false, false)]
-    local procedure OnBeforeIsVariantMandatory(var IsHandled: Boolean)
-    var
-        PHeader: Record "Purchase Header";
-        Location: Record Location;
-    begin
-        PHeader.Reset();
-        PHeader.SetRange("Document Type", PHeader."Document Type"::Order);
-        PHeader.SetRange("No.", PurchHeaderNo);
-        if PHeader.FindFirst() then begin
-            Location.Reset();
-            if Location.Get(PHeader."Location Code") then begin
-                if Location."Require Receive" = true then
-                    IsHandled := true;
+                //Check Warehouse class code missmatch+++
+                // Check Header location if line location is not mandatory++
+                CheckWarehouseClassCodePOHeaderlevel(PurchaseHeader);
+
             end;
         end;
     end;
 
+    //Step1+++ Purchase Line Location Code mandatory++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Purchase Document", 'OnCodeOnCheckPurchLineLocationCode', '', false, false)]
+    local procedure OnCodeOnCheckPurchLineLocationCode(var PurchaseLine: Record "Purchase Line")
+    var
+        InvtSetup: Record "Inventory Setup";
+    begin
+        // Check Line location if line location is mandatory++
+        // This is code for skip default error meesage for Variant code++
+        Clear(G_LocationCode);
+        //Clear(G_FromPOScreen);
+        InvtSetup.Get();
+        if InvtSetup."Location Mandatory" then begin
+            if PurchaseLine."Document Type" = PurchaseLine."Document Type"::Order then begin
+                G_LocationCode := PurchaseLine."Location Code";
+                //G_FromPOScreen := true;
+
+                //Check Warehouse class code missmatch+++
+                // Check Line location if line location is mandatory++
+                CheckWarehouseClassCodePOLinelevel(PurchaseLine);
+
+            end;
+        end;
+    end;
+
+    //Step2++
+    [EventSubscriber(ObjectType::Table, Database::Item, 'OnBeforeIsVariantMandatory', '', false, false)]
+    local procedure OnBeforeIsVariantMandatory(var IsHandled: Boolean; var Result: Boolean)
+    var
+        L_Location: Record Location;
+    begin
+        //This is code for skip default error meesage for Variant code + +
+        //if G_FromPOScreen = true then begin
+        if G_LocationCode <> '' then begin
+            L_Location.Reset();
+            if L_Location.Get(G_LocationCode) then begin
+                if L_Location."Require Receive" = true then begin
+                    IsHandled := true;
+                    Result := false;
+                end;
+            end;
+        end;
+        Clear(G_LocationCode);
+        //end;
+    end;
+
+
+    local procedure CheckWarehouseClassCodePOHeaderlevel(_PurchaseHeader: Record "Purchase Header")
+    var
+        Bin: Record Bin;
+        L_PurchaseLine: Record "Purchase Line";
+    begin
+        L_PurchaseLine.Reset();
+        L_PurchaseLine.SetRange("Document No.", _PurchaseHeader."No.");
+        L_PurchaseLine.SetRange("Document Type", _PurchaseHeader."Document Type");
+        L_PurchaseLine.SetRange(Type, L_PurchaseLine.Type::Item);
+        if L_PurchaseLine.FindSet() then begin
+            repeat
+                Bin.Reset();
+                Bin.SetRange("Location Code", _PurchaseHeader."Location Code");
+                Bin.SetRange("Warehouse Class Code", L_PurchaseLine."Warehouse Class Code");
+                if not Bin.FindFirst() then
+                    Error('Warehouse class Code: %1 missmatch for Location: %2. Puchase Line No. %3', L_PurchaseLine."Warehouse Class Code", _PurchaseHeader."Location Code", L_PurchaseLine."Line No.");
+            until L_PurchaseLine.Next() = 0;
+        end;
+
+    end;
+
+    procedure CheckWarehouseClassCodePOLinelevel(_PurchaseLine: Record "Purchase Line")
+    var
+        Bin: Record Bin;
+    begin
+        Bin.Reset();
+        Bin.SetRange("Location Code", _PurchaseLine."Location Code");
+        Bin.SetRange("Warehouse Class Code", _PurchaseLine."Warehouse Class Code");
+        if not Bin.FindFirst() then
+            Error('Warehouse class Code: %1 missmatch for Location: %2. Puchase Line No. %3', _PurchaseLine."Warehouse Class Code", _PurchaseLine."Location Code", _PurchaseLine."Line No.");
+    end;
+    //+++++++++++++++++++++++++++++++++++++++++//++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    procedure GetUserName(UserSecurityId: Code[50]): Text[100]
+    var
+        Users: Record User;
+    begin
+        Users.Reset();
+        Users.SetRange("User Security ID", UserSecurityId);
+        if Users.FindFirst() then
+            exit(Users."User Name");
+    end;
+
+    procedure CheckShippingAgentRestriction(_SalesHeader: Record "Sales Header"; _SalesLine: Record "Sales Line")
+    var
+        L_ShippingAgent: Record "Shipping Agent";
+        L_RecItemAttValMap: Record "Item Attribute Value Mapping";
+        L_ItemAttribute: Record "Item Attribute";
+        L_ItemAttributeValue: Record "Item Attribute Value";
+    begin
+        L_ShippingAgent.Reset();
+        L_ShippingAgent.SetRange(Code, _SalesHeader."Shipping Agent Code");
+        if L_ShippingAgent.FindFirst() then begin
+            if L_ShippingAgent."Restrict CD & Fridge" = true then begin
+                L_RecItemAttValMap.Reset();
+                L_RecItemAttValMap.SetRange("Table ID", 27);
+                L_RecItemAttValMap.SetRange("No.", _SalesLine."No.");
+                if L_RecItemAttValMap.FindSet() then begin
+                    repeat
+                        L_ItemAttribute.Reset();
+                        L_ItemAttribute.SetRange(ID, L_RecItemAttValMap."Item Attribute ID");
+                        if L_ItemAttribute.FindFirst() then begin
+                            if (L_ItemAttribute."CD Schedule" = true) OR (L_ItemAttribute.Fridge = true) then begin
+                                L_ItemAttributeValue.SetRange("Attribute ID", L_ItemAttribute.ID);
+                                L_ItemAttributeValue.SetRange(ID, L_RecItemAttValMap."Item Attribute Value ID");
+                                if not L_ItemAttributeValue.IsEmpty() then begin
+                                    Error('CD and Fridge items are not allowed');
+                                end;
+                            end;
+                        end;
+                    until L_RecItemAttValMap.Next() = 0;
+                end;
+            end;
+        end;
+    end;
+
+
+    procedure SalesOrderWarningMessage(_SalesHeader: Record "Sales Header"; _SalesLine: Record "Sales Line")
+    var
+        L_RecItemAttValMap: Record "Item Attribute Value Mapping";
+        L_ItemAttribute: Record "Item Attribute";
+        L_ItemAttributeValue: Record "Item Attribute Value";
+        L_SalesOrderwarningMngSetup: Record "Sales Order warning Mng. Setup";
+        WareningMessage: Text[250];
+        L_Dimension: Record Dimension;
+        L_DimensionEntry: Record "Dimension Set Entry";
+    begin
+        L_DimensionEntry.Reset();
+        L_DimensionEntry.SetRange("Dimension Set ID", _SalesHeader."Dimension Set ID");
+        if L_DimensionEntry.FindSet() then begin
+            repeat
+                L_Dimension.Reset();
+                L_Dimension.SetRange(Code, L_DimensionEntry."Dimension Code");
+                if L_Dimension.FindFirst() then begin
+                    if L_Dimension."Sales warning" = true then begin
+                        //Validate for All attributes if Attibute is blank in sales warning management Setup++
+                        ValidateforAllAttribute(L_Dimension.Code);
+
+                        //Validate for Specific Attribut if Attribute is defined in sales warning management Setup++
+                        L_RecItemAttValMap.Reset();
+                        L_RecItemAttValMap.SetRange("Table ID", 27);
+                        L_RecItemAttValMap.SetRange("No.", _SalesLine."No.");
+                        if L_RecItemAttValMap.FindSet() then begin
+                            repeat
+                                L_ItemAttribute.Reset();
+                                L_ItemAttribute.SetRange(ID, L_RecItemAttValMap."Item Attribute ID");
+                                if L_ItemAttribute.FindFirst() then begin
+                                    L_ItemAttributeValue.SetRange("Attribute ID", L_ItemAttribute.ID);
+                                    L_ItemAttributeValue.SetRange(ID, L_RecItemAttValMap."Item Attribute Value ID");
+                                    if L_ItemAttributeValue.FindFirst() then begin
+                                        L_SalesOrderwarningMngSetup.Reset();
+                                        L_SalesOrderwarningMngSetup.SetRange("Dimension Code", L_Dimension.Code);
+                                        L_SalesOrderwarningMngSetup.SetFilter("Dimension Value", '<>%1', '');
+                                        //L_SalesOrderwarningMngSetup.SetRange("Attribute Value", L_ItemAttributeValue.Value);
+                                        L_SalesOrderwarningMngSetup.SetRange("Attribute value ID", L_ItemAttributeValue.ID);
+                                        L_SalesOrderwarningMngSetup.SetRange("Attribute ID", L_ItemAttributeValue."Attribute ID");
+                                        if L_SalesOrderwarningMngSetup.FindFirst() then begin
+                                            if L_SalesOrderwarningMngSetup."Warning message" <> '' then
+                                                Error(L_SalesOrderwarningMngSetup."Warning message")
+                                            else
+                                                Error('Requestion form is required');
+                                        end;
+                                    end;
+                                end;
+                            until L_RecItemAttValMap.Next() = 0;
+                        end;
+                    end;
+                end;
+            until L_DimensionEntry.Next() = 0;
+        end;
+    end;
+
+    local procedure ValidateforAllAttribute(_DimensionCode: Code[20])
+    var
+        L_SalesOrderwarningMngSetup: Record "Sales Order warning Mng. Setup";
+    begin
+        L_SalesOrderwarningMngSetup.Reset();
+        L_SalesOrderwarningMngSetup.SetRange("Dimension Code", _DimensionCode);
+        L_SalesOrderwarningMngSetup.SetFilter("Dimension Value", '<>%1', '');
+        L_SalesOrderwarningMngSetup.SetFilter("Attribute Name", '%1', '');
+        if L_SalesOrderwarningMngSetup.FindFirst() then begin
+            if L_SalesOrderwarningMngSetup."Warning message" <> '' then
+                Error(L_SalesOrderwarningMngSetup."Warning message")
+            else
+                Error('Requestion form is required');
+        end;
+    end;
 }
