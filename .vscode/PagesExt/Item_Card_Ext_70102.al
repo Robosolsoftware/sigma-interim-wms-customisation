@@ -54,6 +54,14 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             {
                 ApplicationArea = all;
             }
+            field(Storage; Rec.Storage)
+            {
+                ApplicationArea = All;
+            }
+            field(Status; Rec.Status)
+            {
+                ApplicationArea = All;
+            }
         }
 
         addafter(Item)

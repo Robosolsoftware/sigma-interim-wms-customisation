@@ -198,8 +198,22 @@ tableextension 70101 "Item_Extension" extends Item
         {
             DecimalPlaces = 0 : 5;
         }
+        field(70106; "Status"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Open,"Pending Approval",Released;
+        }
+        field(70107; Storage; Code[20])
+        {
+            TableRelation = "Temperature Range";
+        }
     }
-
+    fieldgroups
+    {
+        addlast(DropDown; "Parent Category")
+        {
+        }
+    }
     var
         myInt: Integer;
 

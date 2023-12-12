@@ -9,6 +9,10 @@ pageextension 70160 "SC Shipping Agents" extends "Shipping Agents"
             {
                 ApplicationArea = All;
             }
+            field(Status; Rec.Status)
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

@@ -50,15 +50,21 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 Editable = false;
             }
         }
+        addafter("Unit of Measure Code")
+        {
+            field("Parent Category"; Rec."Parent Category")
+            {
+                ApplicationArea = All;
+            }
+        }
+        modify("Unit Price")
+        {
+            Editable = FieldEditable;
+        }
     }
 
-    actions
-    {
-        // Add changes to page actions here
-    }
 
     var
-        myInt: Integer;
         G_FreeQuantity: Decimal;
 
     trigger OnAfterGetRecord()

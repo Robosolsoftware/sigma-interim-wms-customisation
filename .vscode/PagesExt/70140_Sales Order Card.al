@@ -3,6 +3,25 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
     layout
     {
         // Add changes to page layout here
+        modify("Sell-to Customer No.")
+        {
+            trigger OnLookup(var Text: Text): Boolean
+            var
+                L_Customer: Record Customer;
+                L_CUstomerLookup: page "Customer Lookup";
+            begin
+                Clear(L_CUstomerLookup);
+                L_Customer.Reset();
+                L_Customer.SetRange("QAU Approved", true);
+                L_Customer.SetRange(Status, L_Customer.Status::Released);
+                L_CUstomerLookup.LookupMode(true);
+                L_CUstomerLookup.SetTableView(L_Customer);
+                if L_CUstomerLookup.RunModal() = Action::LookupOK then begin
+                    L_CUstomerLookup.GetRecord(L_Customer);
+                    Rec.Validate("Sell-to Customer No.", L_Customer."No.");
+                end;
+            end;
+        }
         addfirst(factboxes)
         {
             part("Item Variants Details"; "Item Variants Details")
@@ -325,9 +344,7 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
 
             end;
         }
-
     }
-
     var
         myInt: Integer;
         cust: Record Customer;

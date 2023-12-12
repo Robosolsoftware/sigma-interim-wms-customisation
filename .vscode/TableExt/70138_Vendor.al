@@ -17,6 +17,11 @@ tableextension 70138 "SC Vendor" extends Vendor
         {
 
         }
+        field(70141; "Status"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Open,"Pending Approval",Released;
+        }
         // field(70140; "PO Approval Value"; Decimal)
         // {
         //     DataClassification = ToBeClassified;

@@ -37,6 +37,13 @@ pageextension 70150 "SC Vendor Card" extends "Vendor Card"
             //     Enabled = G_EnableMinOrderValue;
             // }
         }
+        addafter("Purchaser Code")
+        {
+            field(Status; Rec.Status)
+            {
+                ApplicationArea = All;
+            }
+        }
     }
 
     actions

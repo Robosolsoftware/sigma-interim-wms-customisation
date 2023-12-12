@@ -79,6 +79,9 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             DecimalPlaces = 0 : 5;
         }
+        field(70140; "Parent Category"; Code[20])
+        {
+        }
         // Add changes to table fields here
         modify("No.")
         {
@@ -112,6 +115,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     L_Item.SetRange("No.", Rec."No.");
                     if L_Item.FindFirst() then begin
                         Rec."Min Sell Price" := L_Item."Min Sell Price";
+                        Rec."Parent Category" := L_Item."Parent Category";
                     end;
 
                     L_ItemUnitofMeasure.Reset();

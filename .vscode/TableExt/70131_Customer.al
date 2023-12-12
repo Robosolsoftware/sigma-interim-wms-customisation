@@ -173,9 +173,11 @@ tableextension 70131 "SC Customer" extends Customer
                 end;
             end;
         }
-
-
-
+        field(70149; "Status"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Open,"Pending Approval",Released;
+        }
 
     }
 

@@ -14,6 +14,10 @@ tableextension 70121 LocationExt extends Location
         {
             DataClassification = ToBeClassified;
         }
+        field(70120; "GLN Number"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
 

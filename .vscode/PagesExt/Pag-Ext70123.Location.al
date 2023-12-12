@@ -2,6 +2,13 @@ pageextension 70123 LocationExt extends "Location Card"
 {
     layout
     {
+        addafter("Fax No.")
+        {
+            field("GLN Number"; Rec."GLN Number")
+            {
+                ApplicationArea = All;
+            }
+        }
         addbefore("Home Page")
         {
             field(Deliveryadd; rec.Deliveryadd)

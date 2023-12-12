@@ -34,6 +34,13 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
             }
         }
+        addafter("Salesperson Code")
+        {
+            field(Status; Rec.Status)
+            {
+                ApplicationArea = All;
+            }
+        }
         addlast(Payments)
         {
             field("Default Bank"; Rec."Default Bank")
