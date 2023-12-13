@@ -42,7 +42,7 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
             field("Min Sell Price"; Rec."Min Sell Price")
             {
                 ApplicationArea = All;
-                Editable = false;
+                //Editable = false;
             }
             field("Last Price"; Rec."Last Price")
             {
@@ -59,13 +59,30 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
         }
         modify("Unit Price")
         {
-            Editable = FieldEditable;
+            trigger OnAfterValidate()
+            var
+                UserSetup: Record "User Setup";
+            begin
+                UserSetup.Reset();
+                if UserSetup.Get(UserId) then begin
+                    if UserSetup."Min Sell Price" then begin
+                        if Rec."Unit Price" < Rec."Min Sell Price" then begin
+                            Error('Unit price should not be less than Min Sell Price');
+                        end;
+                        if Rec."Min Sell Price" = 0 then begin
+                            DisUnitPrice := xRec."Unit Price" * 0.1;
+                            if Rec."Unit Price" < xRec."Unit Price" - DisUnitPrice then
+                                Error('Discount should be only 10% of original Unit Price');
+                        end;
+                    end;
+                end;
+            end;
         }
     }
 
-
     var
         G_FreeQuantity: Decimal;
+        DisUnitPrice: Decimal;
 
     trigger OnAfterGetRecord()
     begin
