@@ -5,7 +5,15 @@ pageextension 70138 "SC Item Units of Measure" extends "Item Units of Measure"
         // Add changes to page layout here
         addlast(Control1)
         {
-            field("Sales Order multiple"; Rec."Sales Order multiple")
+            field("Outer Qty."; Rec."Outer Qty.")
+            {
+                ApplicationArea = All;
+            }
+            field("Shipper Qty."; Rec."Shipper Qty.")
+            {
+                ApplicationArea = All;
+            }
+            field("Pallet Qty."; Rec."Pallet Qty.")
             {
                 ApplicationArea = All;
             }

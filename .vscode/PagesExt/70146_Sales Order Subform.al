@@ -5,7 +5,17 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
         // Add changes to page layout here
         addafter(Quantity)
         {
-            field("Shipper Qty"; Rec."Shipper Qty")
+            field("Shipper Qty."; Rec."Shipper Qty.")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+            field("Outer Qty."; Rec."Outer Qty.")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+            field("Pallet Qty."; Rec."Pallet Qty.")
             {
                 ApplicationArea = all;
                 Editable = false;

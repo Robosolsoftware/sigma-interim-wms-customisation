@@ -579,4 +579,143 @@ codeunit 70102 "SC Events & Subscriber"
                 Error('Requestion form is required');
         end;
     end;
+
+
+
+    //Multiple Customer Price Group++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Line - Price", 'OnAfterSetPrice', '', false, false)]
+    local procedure OnAfterSetPrice(AmountType: Enum "Price Amount Type"; PriceListLine: Record "Price List Line"; var SalesLine: Record "Sales Line")
+    var
+        L_PriceListLine: Record "Price List Line";
+        L_Customer: Record Customer;
+        L_SalesHeader: Record "Sales Header";
+        i: Integer;
+        Loop: Integer;
+        L_Item: Record Item;
+    begin
+        If L_SalesHeader.Get(SalesLine."Document Type", SalesLine."Document No.") then;
+
+        if PriceListLine."Source Type" = PriceListLine."Source Type"::Customer then
+            exit;
+
+        Clear(i);
+        Clear(Loop);
+        If L_Customer.Get(L_SalesHeader."Bill-to Customer No.") then begin
+            I := 1;
+            Loop := 5;
+            for I := 1 to Loop do begin
+                case I of
+                    1:
+                        begin
+                            if L_Customer."Customer Posting Group" <> '' then begin
+                                L_PriceListLine.Reset();
+                                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                                L_PriceListLine.SetRange("Asset No.", SalesLine."No.");
+                                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group");
+                                L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                                L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
+                                L_PriceListLine.SetFilter("Ending Date", '>%1', WorkDate());
+                                if L_PriceListLine.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price")
+                                else begin
+                                    IF L_Item.Get(SalesLine."No.") then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end;
+                                exit
+                            end;
+                        end;
+
+                    2:
+                        begin
+                            if L_Customer."Customer Price Group 2" <> '' then begin
+                                L_PriceListLine.Reset();
+                                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                                L_PriceListLine.SetRange("Asset No.", SalesLine."No.");
+                                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 2");
+                                L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                                L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
+                                L_PriceListLine.SetFilter("Ending Date", '>%1', WorkDate());
+                                if L_PriceListLine.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price")
+                                else begin
+                                    IF L_Item.Get(SalesLine."No.") then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end;
+                                exit;
+                            end;
+                        end;
+                    3:
+                        begin
+                            if L_Customer."Customer Price Group 3" <> '' then begin
+                                L_PriceListLine.Reset();
+                                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                                L_PriceListLine.SetRange("Asset No.", SalesLine."No.");
+                                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 3");
+                                L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                                L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
+                                L_PriceListLine.SetFilter("Ending Date", '>%1', WorkDate());
+                                if L_PriceListLine.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price")
+                                else begin
+                                    IF L_Item.Get(SalesLine."No.") then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end;
+                                exit;
+
+                            end;
+                        end;
+                    4:
+                        begin
+                            if L_Customer."Customer Price Group 4" <> '' then begin
+                                L_PriceListLine.Reset();
+                                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                                L_PriceListLine.SetRange("Asset No.", SalesLine."No.");
+                                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 4");
+                                L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                                L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
+                                L_PriceListLine.SetFilter("Ending Date", '>%1', WorkDate());
+                                if L_PriceListLine.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price")
+                                else begin
+                                    IF L_Item.Get(SalesLine."No.") then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end;
+                                exit;
+
+                            end;
+                        end;
+                    5:
+                        begin
+                            if L_Customer."Customer Price Group 5" <> '' then begin
+                                L_PriceListLine.Reset();
+                                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                                L_PriceListLine.SetRange("Asset No.", SalesLine."No.");
+                                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 5");
+                                L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
+                                L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
+                                L_PriceListLine.SetFilter("Ending Date", '>%1', WorkDate());
+                                if L_PriceListLine.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price")
+                                else begin
+                                    IF L_Item.Get(SalesLine."No.") then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end;
+                                exit;
+                            end;
+                        end;
+                end;
+                //I := I + 1;
+            end;
+        end;
+    end;
 }
