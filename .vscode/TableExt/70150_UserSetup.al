@@ -10,7 +10,7 @@ tableextension 70150 UserSetupExt extends "User Setup"
         {
             DataClassification = ToBeClassified;
         }
-        field(50005; "Min Sell Price"; Boolean)
+        field(50005; "Allow to change unit price"; Boolean)
         {
             DataClassification = ToBeClassified;
         }

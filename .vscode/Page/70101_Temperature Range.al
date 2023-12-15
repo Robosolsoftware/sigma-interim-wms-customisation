@@ -1,4 +1,4 @@
-page 70101 Storage
+page 70101 "Temperature Category"
 {
     PageType = List;
     SourceTable = "Temperature Range";

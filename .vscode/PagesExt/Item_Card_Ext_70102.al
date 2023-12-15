@@ -61,6 +61,18 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;
+
+                trigger OnValidate()
+                var
+                    L_UserSetup: Record "User Setup";
+                begin
+                    L_UserSetup.Reset();
+                    L_UserSetup.SetRange("User ID", UserId);
+                    L_UserSetup.SetRange("Edit Master Data", true);
+                    if not L_UserSetup.FindFirst() then
+                        Error('You do not have permission to edit')
+
+                end;
             }
         }
 
@@ -144,5 +156,19 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
     var
         myInt: Integer;
         ItemVarVisible: Boolean;
+
+
+    trigger OnOpenPage()
+    var
+        L_UserSetup: Record "User Setup";
+    begin
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        L_UserSetup.SetRange("Edit Master Data", true);
+        if not L_UserSetup.FindFirst() then begin
+            if Rec.Status <> Rec.Status::Open then
+                CurrPage.Editable(false);
+        end;
+    end;
 
 }

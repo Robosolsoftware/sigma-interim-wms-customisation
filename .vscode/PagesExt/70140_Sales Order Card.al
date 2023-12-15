@@ -3,6 +3,10 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
     layout
     {
         // Add changes to page layout here
+        modify("Sell-to Customer Name")
+        {
+            Editable = false;
+        }
         modify("Sell-to Customer No.")
         {
             trigger OnLookup(var Text: Text): Boolean

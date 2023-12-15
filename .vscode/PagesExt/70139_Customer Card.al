@@ -34,13 +34,6 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
             }
         }
-        addafter("Salesperson Code")
-        {
-            field(Status; Rec.Status)
-            {
-                ApplicationArea = All;
-            }
-        }
         addlast(Payments)
         {
             field("Default Bank"; Rec."Default Bank")
@@ -50,6 +43,22 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         }
         addlast(General)
         {
+            field(Status; Rec.Status)
+            {
+                ApplicationArea = All;
+
+                trigger OnValidate()
+                var
+                    L_UserSetup: Record "User Setup";
+                begin
+                    L_UserSetup.Reset();
+                    L_UserSetup.SetRange("User ID", UserId);
+                    L_UserSetup.SetRange("Edit Master Data", true);
+                    if not L_UserSetup.FindFirst() then
+                        Error('You do not have permission to edit')
+
+                end;
+            }
             field("QAU Approved"; Rec."QAU Approved")
             {
                 ApplicationArea = All;
@@ -116,4 +125,18 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
 
     var
         myInt: Integer;
+
+    trigger OnOpenPage()
+    var
+        L_UserSetup: Record "User Setup";
+    begin
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        L_UserSetup.SetRange("Edit Master Data", true);
+        if not L_UserSetup.FindFirst() then begin
+            if Rec.Status <> Rec.Status::Open then
+                CurrPage.Editable(false);
+        end;
+    end;
+
 }

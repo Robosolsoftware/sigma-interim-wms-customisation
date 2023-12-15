@@ -2,6 +2,10 @@ pageextension 70157 "SC Sales Quote" extends "Sales Quote"
 {
     layout
     {
+        modify("Sell-to Customer Name")
+        {
+            Editable = false;
+        }
         // Add changes to page layout here
         modify("Sell-to Customer No.")
         {

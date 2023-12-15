@@ -8,9 +8,10 @@ pageextension 70164 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
-            field("Min Sell Price"; Rec."Min Sell Price")
+            field("Allow to change unit price"; Rec."Allow to change unit price")
             {
                 ApplicationArea = All;
+                ToolTip = 'Selected user can change unit price below Min Sell Price';
             }
             field("Edit Master Data"; Rec."Edit Master Data")
             {

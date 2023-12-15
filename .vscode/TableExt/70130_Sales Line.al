@@ -90,6 +90,62 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             DataClassification = ToBeClassified;
         }
+
+        // modify("Unit Price")
+        // {
+        //     trigger OnAfterValidate()
+        //     var
+        //         UserSetup: Record "User Setup";
+        //         DisUnitPrice: Decimal;
+        //     begin
+        //         if Rec."Unit Price" > 0 then begin
+        //             Clear(DisUnitPrice);
+        //             UserSetup.Reset();
+        //             UserSetup.SetRange("User ID", UserId);
+        //             UserSetup.SetRange("Allow to change unit price", true);
+        //             if not UserSetup.FindFirst() then begin
+        //                 if Rec."Min Sell Price" > 0 then begin
+        //                     if Rec."Unit Price" < Rec."Min Sell Price" then begin
+        //                         Error('Unit price should not be less than Min Sell Price');
+        //                     end;
+        //                 end else begin
+        //                     DisUnitPrice := (xRec."Unit Price" / 100) * 10;
+        //                     if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
+        //                         Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
+        //                 end;
+        //             end;
+        //         end;
+        //     end;
+        // }
+
+        modify("Unit Price")
+        {
+            trigger OnAfterValidate()
+            var
+                UserSetup: Record "User Setup";
+                DisUnitPrice: Decimal;
+            begin
+                if Rec."Unit Price" > 0 then begin
+                    Clear(DisUnitPrice);
+                    UserSetup.Reset();
+                    UserSetup.SetRange("User ID", UserId);
+                    UserSetup.SetRange("Allow to change unit price", true);
+                    if not UserSetup.FindFirst() then begin
+                        if Rec."Min Sell Price" > 0 then begin
+                            if Rec."Unit Price" < Rec."Min Sell Price" then begin
+                                Error('Unit price should not be less than Min Sell Price');
+                            end;
+                        end else begin
+                            DisUnitPrice := (xRec."Unit Price" / 100) * 10;
+                            if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
+                                Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
+                        end;
+                    end;
+                end;
+            end;
+        }
+
+
         // Add changes to table fields here
         modify("No.")
         {

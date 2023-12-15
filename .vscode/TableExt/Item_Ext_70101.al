@@ -213,6 +213,10 @@ tableextension 70101 "Item_Extension" extends Item
         addlast(DropDown; "Parent Category")
         {
         }
+        addlast(Brick; "Parent Category")
+        {
+
+        }
     }
     var
         myInt: Integer;

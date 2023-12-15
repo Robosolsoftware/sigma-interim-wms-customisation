@@ -5,6 +5,11 @@ pageextension 70153 "SC Vendor List" extends "Vendor List"
         // Add changes to page layout here
         addafter("Location Code")
         {
+            field(Status; Rec.Status)
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("PO Approval required"; Rec."PO Approval required")
             {
                 ApplicationArea = All;

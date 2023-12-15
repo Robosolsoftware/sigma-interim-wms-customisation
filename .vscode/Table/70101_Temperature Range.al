@@ -1,7 +1,7 @@
 table 70101 "Temperature Range"
 {
     DataClassification = ToBeClassified;
-    LookupPageId = Storage;
+    LookupPageId = "Temperature Category";
 
     fields
     {

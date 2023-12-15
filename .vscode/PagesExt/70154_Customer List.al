@@ -15,6 +15,11 @@ pageextension 70154 "SC Customer List" extends "Customer List"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field(Status; Rec.Status)
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
     }
 

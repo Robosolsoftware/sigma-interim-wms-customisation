@@ -4,6 +4,11 @@ pageextension 70101 "Item Extended List" extends "Item List"
     {
         addafter(Description)
         {
+            field(Status; Rec.Status)
+            {
+                Editable = false;
+                ApplicationArea = All;
+            }
             field("Variant Mandatory if Exists"; Rec."Variant Mandatory if Exists")
             {
                 Editable = false;

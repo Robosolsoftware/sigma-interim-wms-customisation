@@ -2,7 +2,7 @@ pageextension 70123 LocationExt extends "Location Card"
 {
     layout
     {
-        addafter("Fax No.")
+        addlast(General)
         {
             field("GLN Number"; Rec."GLN Number")
             {
