@@ -121,7 +121,7 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                     ApplicationArea = All;
 
                 }
-                field("Custom Documents"; Rec."Custom Documents")
+                field("Extra Documents"; Rec."Extra Documents")
                 {
                     ApplicationArea = All;
 

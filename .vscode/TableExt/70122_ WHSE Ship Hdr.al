@@ -68,7 +68,7 @@ tableextension 70122 WHSESHpHeaderExt extends "Warehouse Shipment Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(70138; "Custom Documents"; Boolean)
+        field(70138; "Extra Documents"; text[100])
         {
             DataClassification = ToBeClassified;
         }

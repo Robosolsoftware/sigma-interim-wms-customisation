@@ -29,7 +29,7 @@ codeunit 70102 "SC Events & Subscriber"
             WarehouseShipmentHeader.Validate("Export Checklist", L_SalesHeader."Export Checklist");
             WarehouseShipmentHeader.Validate("Data logger", L_SalesHeader."Data logger");
             WarehouseShipmentHeader.Validate(Labels, L_SalesHeader.Labels);
-            WarehouseShipmentHeader.Validate("Custom Documents", L_SalesHeader."Custom Documents");
+            WarehouseShipmentHeader.Validate("Custom Documents", L_SalesHeader."Extra Documents");
             WarehouseShipmentHeader.Modify();
         end;
 
@@ -46,7 +46,7 @@ codeunit 70102 "SC Events & Subscriber"
         PostedWhseShptHeader.Validate("Export Checklist", WarehouseShipmentHeader."Export Checklist");
         PostedWhseShptHeader.Validate("Data logger", WarehouseShipmentHeader."Data logger");
         PostedWhseShptHeader.Validate(Labels, WarehouseShipmentHeader.Labels);
-        PostedWhseShptHeader.Validate("Custom Documents", WarehouseShipmentHeader."Custom Documents");
+        PostedWhseShptHeader.Validate("Custom Documents", WarehouseShipmentHeader."Extra Documents");
         PostedWhseShptHeader.Modify();
     end;
 

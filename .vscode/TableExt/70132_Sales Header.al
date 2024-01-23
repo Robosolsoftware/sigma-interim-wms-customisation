@@ -22,9 +22,9 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec.Validate(_Invoice, L_Customer.Invoice);
                         Rec.Validate("Packing list", L_Customer."Packing list");
                         Rec.Validate("Export Checklist", L_Customer."Export Checklist");
-                        Rec.Validate("Data logger", L_Customer."Data logger");
+                        Rec.Validate("Data logger", L_Customer."Data Logger Sheet");
                         Rec.Validate(Labels, L_Customer.Labels);
-                        Rec.Validate("Custom Documents", L_Customer."Custom Documents");
+                        Rec.Validate("Extra Documents", L_Customer."Extra Documents");
                         Rec."Send By" := L_Customer."Send By";
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
@@ -60,9 +60,9 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec.Validate(_Invoice, L_Customer.Invoice);
                         Rec.Validate("Packing list", L_Customer."Packing list");
                         Rec.Validate("Export Checklist", L_Customer."Export Checklist");
-                        Rec.Validate("Data logger", L_Customer."Data logger");
+                        Rec.Validate("Data logger", L_Customer."Data Logger Sheet");
                         Rec.Validate(Labels, L_Customer.Labels);
-                        Rec.Validate("Custom Documents", L_Customer."Custom Documents");
+                        Rec.Validate("Extra Documents", L_Customer."Extra Documents");
                         Rec."Send By" := L_Customer."Send By";
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
@@ -109,7 +109,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(70138; "Custom Documents"; Boolean)
+        field(70138; "Extra Documents"; Text[100])
         {
             DataClassification = ToBeClassified;
         }
