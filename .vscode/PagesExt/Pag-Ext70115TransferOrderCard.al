@@ -116,6 +116,40 @@ pageextension 70115 TransferOrderCardExt extends "Transfer Order"
         // {
         //     Editable = true;
         // }
+
+    }
+    actions
+    {
+        modify("Re&lease")
+        {
+            trigger OnBeforeAction()
+            var
+                L_TransferLine: Record "Transfer Line";
+            begin
+                L_TransferLine.Reset();
+                L_TransferLine.SetRange("Document No.", Rec."No.");
+                if L_TransferLine.FindSet() then
+                    repeat
+                        L_TransferLine.TestField("Transfer-from Bin Code");
+                    until L_TransferLine.Next() = 0;
+
+            end;
+        }
+        modify("Create Whse. S&hipment")
+        {
+            trigger OnBeforeAction()
+            var
+                L_TransferLine: Record "Transfer Line";
+            begin
+                L_TransferLine.Reset();
+                L_TransferLine.SetRange("Document No.", Rec."No.");
+                if L_TransferLine.FindSet() then
+                    repeat
+                        L_TransferLine.TestField("Transfer-from Bin Code");
+                    until L_TransferLine.Next() = 0;
+
+            end;
+        }
     }
     trigger OnOpenPage()
     var

@@ -1,3 +1,4 @@
+//Dont Use this codeunit for any customization++
 codeunit 70105 "Purchase Variant Management"
 {
     Permissions = tabledata 7312 = m, tabledata 5767 = m;

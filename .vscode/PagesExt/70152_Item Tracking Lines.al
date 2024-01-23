@@ -48,6 +48,14 @@ pageextension 70152 "SC Item Tracking Lines" extends "Item Tracking Lines"
         IsVariantMandatory: Boolean;
         IsVariantVisible: Boolean;
 
+
+    trigger OnOpenPage()
+    begin
+        Clear(IsVariantVisible);
+        if (Rec."Source Type" = 39) AND (Rec."Source Subtype" = 1) then
+            IsVariantVisible := true;
+    end;
+
     trigger OnAfterGetRecord()
     var
         L_Item: Record Item;

@@ -18,6 +18,18 @@ tableextension 70121 LocationExt extends Location
         {
             DataClassification = ToBeClassified;
         }
+        field(70121; "Saleable Location"; Boolean)
+        {
+
+        }
+        field(70122; "KNAPP Location"; Boolean)
+        {
+
+        }
+        field(70123; "Manual Picking"; Boolean)
+        {
+
+        }
 
     }
 

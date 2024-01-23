@@ -1,24 +1,20 @@
-tableextension 70149 "SC Dimension" extends Dimension
-{
-    fields
-    {
-        // Add changes to table fields here
-        field(70149; "Sales warning"; Boolean)
-        {
+// tableextension 70149 "SC Dimension" extends Dimension
+// {
+//     fields
+//     {
+//         // Add changes to table fields here
+//     }
 
-        }
-    }
+//     keys
+//     {
+//         // Add changes to keys here
+//     }
 
-    keys
-    {
-        // Add changes to keys here
-    }
+//     fieldgroups
+//     {
+//         // Add changes to field groups here
+//     }
 
-    fieldgroups
-    {
-        // Add changes to field groups here
-    }
-
-    var
-        myInt: Integer;
-}
+//     var
+//         myInt: Integer;
+// }

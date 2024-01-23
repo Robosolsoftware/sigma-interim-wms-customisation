@@ -14,6 +14,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                     L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                     if L_Customer.FindFirst() then begin
                         L_Customer.TestField("QAU Approved");
+                        L_Customer.TestField(Status, L_Customer.Status::Released);
 
 
                         Rec.Validate("Delivery Note", L_Customer."Delivery Note");
@@ -27,6 +28,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec."Send By" := L_Customer."Send By";
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
+                        Rec."KNAPP Customer" := L_Customer."KNAPP Customer";
                     end;
 
 
@@ -51,6 +53,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                     L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                     if L_Customer.FindFirst() then begin
                         L_Customer.TestField("QAU Approved");
+                        L_Customer.TestField(Status, L_Customer.Status::Released);
 
                         Rec.Validate("Delivery Note", L_Customer."Delivery Note");
                         Rec.Validate("Collection Note", L_Customer."Collection Note");
@@ -63,6 +66,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec."Send By" := L_Customer."Send By";
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
+                        Rec."KNAPP Customer" := L_Customer."KNAPP Customer";
                     end;
 
 
@@ -134,6 +138,26 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         field(70145; "QAU Approved"; Boolean)
         {
 
+        }
+        field(70146; "Pick Registered"; Boolean)
+        {
+            //DataClassification = ToBeClassified;
+            FieldClass = FlowField;
+            CalcFormula = exist("Warehouse Shipment Line" where("Source No." = field("No."), "Source Document" = const("Sales Order"), "Qty. Picked" = filter(> 0)));
+        }
+        field(70147; "KNAPP Customer"; Boolean)
+        {
+
+        }
+        field(70148; "Shortcut Dimension 3 Code"; Code[20])
+        {
+            Caption = 'Shortcut Dimension 3 Code';
+            CaptionClass = '50000,83';
+        }
+        field(70149; "Warehouse Shipment Exist"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Warehouse Shipment Line" where("Source Document" = filter("Sales Order"), "Source No." = field("No.")));
         }
 
     }

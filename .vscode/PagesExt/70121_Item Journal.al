@@ -14,16 +14,13 @@ pageextension 70121 "TDU Item Journal" extends "Item Journal"
         // Add changes to page actions here
         addafter("P&osting")
         {
-            group("Adjustment Upload")
+            group("Import/Export Adjustment")
             {
-                Caption = 'Adjustment Upload';
-                Image = Import;
+                Caption = 'Import/Export Adjustment';
                 action("Export Excel Template")
                 {
                     ApplicationArea = All;
-                    Image = Journal;
-                    //PromotedCategory = Process;
-                    //Promoted = true;
+                    Image = Export;
                     Caption = 'Export Excel Template';
 
                     trigger OnAction()
@@ -31,15 +28,12 @@ pageextension 70121 "TDU Item Journal" extends "Item Journal"
                         OpningStock: XmlPort "Opning Stock_To Use";
                     begin
                         OpningStock.SampleTemplate();
-
                     end;
                 }
                 action("Import Adjst. Excel")
                 {
                     ApplicationArea = All;
-                    Image = Journal;
-                    //PromotedCategory = Process;
-                    //Promoted = true;
+                    Image = Import;
                     Caption = 'Import Adjst. Excel';
 
                     trigger OnAction()
@@ -47,19 +41,18 @@ pageextension 70121 "TDU Item Journal" extends "Item Journal"
                         OpningStock: XmlPort "Opning Stock_To Use";
                     begin
                         OpningStock.Run();
+                        Message('Completed..');
                     end;
                 }
 
             }
 
         }
-        addbefore(Category_Category5)
+        addbefore(Category_Category4)
         {
             group(Category_Category77)
             {
-                Caption = 'Adjustment Upload';
-                //ShowAs = SplitButton;
-
+                Caption = 'Import/Export Adjustment';
                 actionref(ExportExcelTemplate; "Export Excel Template")
                 {
                 }

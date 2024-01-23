@@ -8,6 +8,44 @@ pageextension 70123 LocationExt extends "Location Card"
             {
                 ApplicationArea = All;
             }
+            field("Saleable Location"; Rec."Saleable Location")
+            {
+                ApplicationArea = All;
+            }
+            field("Manual Picking"; Rec."Manual Picking")
+            {
+                ApplicationArea = All;
+
+                trigger OnValidate()
+                var
+                    L_Location: Record Location;
+                begin
+                    L_Location.Reset();
+                    L_Location.SetFilter(Code, '<>%1', Rec.Code);
+                    L_Location.SetRange("Manual Picking", true);
+                    if L_Location.FindFirst() then
+                        Error('Manual Picking Location Should not be more than one');
+
+                end;
+
+            }
+            field("KNAPP Location"; Rec."KNAPP Location")
+            {
+                ApplicationArea = All;
+
+                trigger OnValidate()
+                var
+                    L_Location: Record Location;
+                begin
+                    L_Location.Reset();
+                    L_Location.SetFilter(Code, '<>%1', Rec.Code);
+                    L_Location.SetRange("KNAPP Location", true);
+                    if L_Location.FindFirst() then
+                        Error('KNAPP Location Should not be more than one');
+
+                end;
+
+            }
         }
         addbefore("Home Page")
         {

@@ -70,6 +70,39 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         }
         addafter(Statistics)
         {
+            group("KNAPP Details")
+            {
+                field("KNAPP Customer"; Rec."KNAPP Customer")
+                {
+                    ApplicationArea = All;
+
+                }
+                field("KNAPP Special Check"; Rec."KNAPP Special Check")
+                {
+                    ApplicationArea = All;
+
+                }
+                field("KNAPP Final Check"; Rec."KNAPP Final Check")
+                {
+                    ApplicationArea = All;
+
+                }
+                field("KNAPP Inventory Station"; Rec."KNAPP Inventory Station")
+                {
+                    ApplicationArea = All;
+
+                }
+                field("KNAPP Repack"; Rec."KNAPP Repack")
+                {
+                    ApplicationArea = All;
+
+                }
+                field("KNAPP Lid"; Rec."KNAPP Lid")
+                {
+                    ApplicationArea = All;
+
+                }
+            }
             group("Print on Despatch")
             {
                 field("Delivery Note"; Rec."Delivery Note")

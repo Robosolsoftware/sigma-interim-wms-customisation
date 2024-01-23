@@ -81,5 +81,23 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
                 Editable = false;
             }
         }
+        addafter(Quantity)
+        {
+            field("Shipper Qty."; Rec."Shipper Qty.")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Pallet Qty."; Rec."Pallet Qty.")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Outer Qty."; Rec."Outer Qty.")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
     }
 }

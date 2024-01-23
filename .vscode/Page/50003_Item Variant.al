@@ -27,10 +27,20 @@ page 50003 "Item Variants Details"
                 {
                     ApplicationArea = All;
                 }
-                field("Total Requested Quantity"; Rec."Total Requested Quantity")
+                field("Qty on SO"; Rec."Qty on SO")
                 {
                     ApplicationArea = All;
-                    Visible = false;
+                    Editable = false;
+                }
+                field("Saleable Inventory"; Rec."Saleable Inventory")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Qty on SO(Saleable)"; Rec."Qty on SO(Saleable)")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Total Available Quantity"; TotalAvailableQty(Rec))
                 {
@@ -50,9 +60,12 @@ page 50003 "Item Variants Details"
 
     local procedure TotalAvailableQty(_Rec: Record "Item Variant"): Decimal
     begin
-        _Rec.CalcFields(Inventory, "Total Requested Quantity");
-        if _Rec.Inventory > 0 then
-            exit(_Rec.Inventory - _Rec."Total Requested Quantity")
+        _Rec.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
+        if _Rec."Saleable Inventory" > 0 then
+            if (_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)") > 0 then
+                exit(_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)")
+            else
+                exit(0)
         else
             exit(0);
     end;

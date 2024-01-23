@@ -60,34 +60,34 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
 
     actions
     {
-        modify(Release)
-        {
-            trigger OnBeforeAction()
-            var
-                myInt: Integer;
-                PLine: Record "Purchase Line";
-                Bin: Record Bin;
-            begin
-                if Rec."Min Order Value" > 0 then begin
-                    Rec.CalcFields(Amount);
-                    if Rec.Amount < Rec."Min Order Value" then
-                        Error('Min Order Value is less than Total order amount');
-                end;
-            end;
-        }
-        modify(SendApprovalRequest)
-        {
-            trigger OnBeforeAction()
-            var
-                myInt: Integer;
-            begin
-                if Rec."Min Order Value" > 0 then begin
-                    Rec.CalcFields(Amount);
-                    if Rec.Amount < Rec."Min Order Value" then
-                        Error('Min Order Value is less than Total order amount');
-                end;
-            end;
-        }
+        // modify(Release)
+        // {
+        //     trigger OnBeforeAction()
+        //     var
+        //         myInt: Integer;
+        //         PLine: Record "Purchase Line";
+        //         Bin: Record Bin;
+        //     begin
+        //         if Rec."Min Order Value" > 0 then begin
+        //             Rec.CalcFields(Amount);
+        //             if Rec.Amount < Rec."Min Order Value" then
+        //                 Error('Total order amount is less than Min Order Value');
+        //         end;
+        //     end;
+        // }
+        // modify(SendApprovalRequest)
+        // {
+        //     trigger OnBeforeAction()
+        //     var
+        //         myInt: Integer;
+        //     begin
+        //         if Rec."Min Order Value" > 0 then begin
+        //             Rec.CalcFields(Amount);
+        //             if Rec.Amount < Rec."Min Order Value" then
+        //                 Error('Total order amount is less than Min Order Value');
+        //         end;
+        //     end;
+        // }
     }
 
     var

@@ -4,6 +4,10 @@ pageextension 70101 "Item Extended List" extends "Item List"
     {
         addafter(Description)
         {
+            field("KNAPP Item"; Rec."KNAPP Item")
+            {
+                ApplicationArea = All;
+            }
             field(Status; Rec.Status)
             {
                 Editable = false;
@@ -30,10 +34,10 @@ pageextension 70101 "Item Extended List" extends "Item List"
         addbefore("Vendor No.")
         {
 
-            field("Pallet Quantity"; Rec."Pallet Quantity")
-            {
-                ApplicationArea = all;
-            }
+            // field("Pallet Quantity"; Rec."Pallet Quantity")
+            // {
+            //     ApplicationArea = all;
+            // }
             field("Manufacturer Code"; Rec."Manufacturer Code")
             {
                 ApplicationArea = All;
@@ -73,5 +77,12 @@ pageextension 70101 "Item Extended List" extends "Item List"
 
         }
 
+    }
+    actions
+    {
+        modify(PrintLabel)
+        {
+            Visible = false;
+        }
     }
 }

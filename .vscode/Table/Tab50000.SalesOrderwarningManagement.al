@@ -69,6 +69,11 @@ table 50000 "Sales Order warning Mng. Setup"
         {
             Caption = 'Warning message';
         }
+        field(9; "Warning Type"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Warning,Error;
+        }
     }
     keys
     {

@@ -2,6 +2,14 @@ pageextension 70149 "SC Posted Sales Invoices" extends "Posted Sales Invoices"
 {
     layout
     {
+        addafter("Sell-to Customer Name")
+        {
+            field("KNAPP Customer"; Rec."KNAPP Customer")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
         // Add changes to page layout here
         addafter("Location Code")
         {

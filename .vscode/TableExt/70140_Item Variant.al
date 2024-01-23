@@ -29,18 +29,19 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
         }
         field(70141; Inventory; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Variant Code" = FIELD(Code)));
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Variant Code" = FIELD(Code), "Location Code" = field("Location Filter")));
             Caption = 'Inventory';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
             //GHST Customization++
         }
-        field(70142; "Total Requested Quantity"; Decimal)
+        field(70142; "Qty on SO(Saleable)"; Decimal)
         {
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Variant Code" = field(Code), "Outstanding Quantity" = filter(> 0)));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Variant Code" = field(Code), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Location Code" = field("Location Filter")));
             DecimalPlaces = 0 : 5;
+            Caption = 'Qty on Sales Order (Saleable)';
             //GHST Customization++
         }
         field(70143; Quantity; Decimal)
@@ -49,7 +50,28 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
             //Dont Use this field any other purpose++
         }
 
-
+        field(70144; "Saleable Inventory"; Decimal)
+        {
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Variant Code" = FIELD(Code), "Saleable Location" = const(true), "Location Code" = field("Location Filter")));
+            Caption = 'Saleable Inventory';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
+            //GHST Customization++
+        }
+        field(70145; "Location Filter"; Code[20])
+        {
+            FieldClass = FlowFilter;
+            TableRelation = Location;
+        }
+        field(70146; "Qty on SO"; Decimal)
+        {
+            FieldClass = FlowField;
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Variant Code" = field(Code), "Outstanding Quantity" = filter(> 0), "Location Code" = field("Location Filter")));
+            DecimalPlaces = 0 : 5;
+            Caption = 'Qty on Sales Order';
+            //GHST Customization++
+        }
     }
 
     var
@@ -57,9 +79,12 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
 
     local procedure TotalAvailableQty(_Rec: Record "Item Variant"): Decimal
     begin
-        _Rec.CalcFields(Inventory, "Total Requested Quantity");
-        if _Rec.Inventory > 0 then
-            exit(_Rec.Inventory - _Rec."Total Requested Quantity")
+        _Rec.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
+        if _Rec."Saleable Inventory" > 0 then
+            if (_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)") > 0 then
+                exit(_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)")
+            else
+                exit(0)
         else
             exit(0);
     end;

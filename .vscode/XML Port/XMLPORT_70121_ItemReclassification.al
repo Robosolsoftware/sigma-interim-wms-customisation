@@ -15,11 +15,11 @@ xmlport 70121 "Item Reclassification"
                 SourceTableView = SORTING(Number)
                                   WHERE(Number = CONST(1));
                 UseTemporary = false;
-                textelement(EntryType)
+                textelement(ItemNo)
                 {
 
                 }
-                textelement(ItemNo)
+                textelement(VariantCode)
                 {
 
                 }
@@ -59,7 +59,10 @@ xmlport 70121 "Item Reclassification"
                 {
                     XmlName = 'NewLotNo';
                 }
-
+                textelement(quantityt)
+                {
+                    XmlName = 'Quantity';
+                }
                 textelement(expirationdatet)
                 {
                     XmlName = 'ExpirationDate';
@@ -68,11 +71,6 @@ xmlport 70121 "Item Reclassification"
                 {
                     XmlName = 'NewExpirationDate';
                 }
-                textelement(quantityt)
-                {
-                    XmlName = 'Quantity';
-                }
-
                 // textelement(ReasonCode)
                 // {
                 //     XmlName = 'ReasonCode';
@@ -129,8 +127,7 @@ xmlport 70121 "Item Reclassification"
                     ItemJnlLine.VALIDATE("Posting Date", PostingDateD);
                     ItemJnlLine.VALIDATE("Document Date", Document_Date);
                     //ItemJnlLine.VALIDATE("Salespers./Purch. Code", Salesperson_code);
-                    Evaluate(Entry_Type, EntryType);
-                    ItemJnlLine.VALIDATE("Entry Type", Entry_Type);
+                    ItemJnlLine.VALIDATE("Entry Type", ItemJnlLine."Entry Type"::Transfer);
 
                     ItemJnlLine2.Reset();
                     ItemJnlLine2.SetFilter("Journal Template Name", 'TRANSFER');
@@ -143,6 +140,8 @@ xmlport 70121 "Item Reclassification"
 
                     ItemJnlLine.VALIDATE("Item No.", ItemNo);
                     Item.GET(ItemJnlLine."Item No.");
+                    if VariantCode <> '' then
+                        ItemJnlLine.Validate("Variant Code", VariantCode);
 
                     // if QtyD > 0 then begin
                     //     ItemJnlLine."Entry Type" := ItemJnlLine."Entry Type"::"Positive Adjmt.";
@@ -177,38 +176,40 @@ xmlport 70121 "Item Reclassification"
 
 
                     //Insert Tracking Lines++
-                    ItemTrackingLines.INIT;
-                    CLEAR(ItemTrackingLines."Entry No.");
-                    IF LotNo <> '' THEN BEGIN
-                        ItemTrackingLines.VALIDATE("Item No.", ItemJnlLine."Item No.");
-                        ItemTrackingLines."Reservation Status" := ItemTrackingLines."Reservation Status"::Prospect;
-                        ItemTrackingLines."Source Batch Name" := ItemJnlLine."Journal Batch Name";
-                        ItemTrackingLines."Source ID" := 'TRANSFER';
-                        ItemTrackingLines."Source Ref. No." := ItemJnlLine."Line No.";
-                        ItemTrackingLines."Source Type" := 83;
+                    if Item."Item Tracking Code" <> '' then begin
+                        ItemTrackingLines.INIT;
+                        CLEAR(ItemTrackingLines."Entry No.");
+                        IF LotNo <> '' THEN BEGIN
+                            ItemTrackingLines.VALIDATE("Item No.", ItemJnlLine."Item No.");
+                            ItemTrackingLines."Reservation Status" := ItemTrackingLines."Reservation Status"::Prospect;
+                            ItemTrackingLines."Source Batch Name" := ItemJnlLine."Journal Batch Name";
+                            ItemTrackingLines."Source ID" := 'TRANSFER';
+                            ItemTrackingLines."Source Ref. No." := ItemJnlLine."Line No.";
+                            ItemTrackingLines."Source Type" := 83;
 
-                        ItemTrackingLines."Location Code" := ItemJnlLine."Location Code";
-                        ItemTrackingLines."Item Tracking" := ItemTrackingLines."Item Tracking"::"Lot No.";
-                        ItemTrackingLines.VALIDATE("Lot No.", LotNo);
-                        ItemTrackingLines.VALIDATE("New Lot No.", NewBatchNo);
-                        IF ItemJnlLine."Entry Type" = ItemJnlLine."Entry Type"::Transfer THEN BEGIN
-                            ItemTrackingLines.VALIDATE("Quantity (Base)", -QtyD);
-                            ItemTrackingLines."Source Subtype" := 4;
-                            ItemTrackingLines."Expected Receipt Date" := ItemJnlLine."Posting Date";
-                            //ItemTrackingLines.Positive := TRUE;
-                            ItemTrackingLines.VALIDATE("Expiration Date", ExpirationDateD);
-                            ItemTrackingLines.VALIDATE("New Expiration Date", NExpirationDateD);
-                            // END ELSE BEGIN
-                            //     ItemTrackingLines.VALIDATE("Quantity (Base)", -ItemJnlLine.Quantity);
-                            //     ItemTrackingLines."Source Subtype" := 3;
-                            //     ItemTrackingLines."Shipment Date" := ItemJnlLine."Posting Date";
+                            ItemTrackingLines."Location Code" := ItemJnlLine."Location Code";
+                            ItemTrackingLines."Item Tracking" := ItemTrackingLines."Item Tracking"::"Lot No.";
+                            ItemTrackingLines.VALIDATE("Lot No.", LotNo);
+                            ItemTrackingLines.VALIDATE("New Lot No.", NewBatchNo);
+                            IF ItemJnlLine."Entry Type" = ItemJnlLine."Entry Type"::Transfer THEN BEGIN
+                                ItemTrackingLines.VALIDATE("Quantity (Base)", -QtyD);
+                                ItemTrackingLines."Source Subtype" := 4;
+                                ItemTrackingLines."Expected Receipt Date" := ItemJnlLine."Posting Date";
+                                //ItemTrackingLines.Positive := TRUE;
+                                ItemTrackingLines.VALIDATE("Expiration Date", ExpirationDateD);
+                                ItemTrackingLines.VALIDATE("New Expiration Date", NExpirationDateD);
+                                // END ELSE BEGIN
+                                //     ItemTrackingLines.VALIDATE("Quantity (Base)", -ItemJnlLine.Quantity);
+                                //     ItemTrackingLines."Source Subtype" := 3;
+                                //     ItemTrackingLines."Shipment Date" := ItemJnlLine."Posting Date";
+                            END;
+                            ItemTrackingLines.VALIDATE("Variant Code", ItemJnlLine."Variant Code");
+
+                            ItemTrackingLines."Creation Date" := ItemJnlLine."Posting Date";
+                            ItemTrackingLines."Created By" := USERID;
+                            ItemTrackingLines.INSERT(TRUE);
                         END;
-                        ItemTrackingLines.VALIDATE("Variant Code", ItemJnlLine."Variant Code");
-
-                        ItemTrackingLines."Creation Date" := ItemJnlLine."Posting Date";
-                        ItemTrackingLines."Created By" := USERID;
-                        ItemTrackingLines.INSERT(TRUE);
-                    END;
+                    end;
                 end;
             }
         }
@@ -242,39 +243,32 @@ xmlport 70121 "Item Reclassification"
         filename: Text;
     begin
         Csvbuffer.DeleteAll();
-        Csvbuffer.InsertEntry(1, 1, 'EntryType');
         Csvbuffer.InsertEntry(1, 2, 'Item Number');
-        Csvbuffer.InsertEntry(1, 3, 'Posting Date');
-        Csvbuffer.InsertEntry(1, 4, 'Document Date');
-        Csvbuffer.InsertEntry(1, 5, 'Document Number');
-        Csvbuffer.InsertEntry(1, 6, 'Location');
-        Csvbuffer.InsertEntry(1, 7, 'New Location');
-        Csvbuffer.InsertEntry(1, 8, 'Bin');
-        Csvbuffer.InsertEntry(1, 9, 'New Bin');
-        Csvbuffer.InsertEntry(1, 10, 'Lot Number');
-        Csvbuffer.InsertEntry(1, 11, 'New Lot Number');
-        Csvbuffer.InsertEntry(1, 12, 'Expiration Date');
-        Csvbuffer.InsertEntry(1, 13, 'New Expiration Date');
-        Csvbuffer.InsertEntry(1, 14, 'Qty');
-        //Csvbuffer.InsertEntry(1, 15, 'Reason Code');
+        Csvbuffer.InsertEntry(1, 3, 'Variant Code');
+        Csvbuffer.InsertEntry(1, 4, 'Posting Date');
+        Csvbuffer.InsertEntry(1, 5, 'Document Date');
+        Csvbuffer.InsertEntry(1, 6, 'Document Number');
+        Csvbuffer.InsertEntry(1, 7, 'Location');
+        Csvbuffer.InsertEntry(1, 8, 'New Location');
+        Csvbuffer.InsertEntry(1, 9, 'Bin');
+        Csvbuffer.InsertEntry(1, 10, 'New Bin');
+        Csvbuffer.InsertEntry(1, 11, 'Lot Number');
+        Csvbuffer.InsertEntry(1, 12, 'New Lot Number');
+        Csvbuffer.InsertEntry(1, 13, 'Qty');
+        Csvbuffer.InsertEntry(1, 14, 'Expiration Date');
+        Csvbuffer.InsertEntry(1, 15, 'New Expiration Date');
+        //Csvbuffer.InsertEntry(1, 16, 'Reason Code');
 
         Csvbuffer.SaveDataToBlob(TempBLOB, ',');
         TempBLOB.CreateOutStream(outs);
         TempBLOB.CreateInStream(ins);
-        filename := 'SampleReclTemplate.csv';
+        filename := 'SampleReclTemplate_' + Format(CurrentDateTime) + '.csv';
         DownloadFromStream(
             ins,  // InStream to save
             '',   // Not used in cloud
             '',   // Not used in cloud
             '',   // Not used in cloud
             filename); // Filename is browser download folder
-        // excelbuffer2.DeleteAll();
-        // excelbuffer2.AddColumn('Document Number' + DocumentNoD, false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
-        // excelbuffer2.CreateNewBook('Sample Template');
-        // excelbuffer2.WriteSheet('Sample Template', CompanyName, UserId);
-        // excelbuffer2.CloseBook();
-        // excelbuffer2.SetFriendlyFilename(StrSubstNo('Sample Template', CurrentDateTime, UserId));
-        // excelbuffer2.OpenExcel();
     end;
 
     var
@@ -299,9 +293,6 @@ xmlport 70121 "Item Reclassification"
         ExternalDocNoD: Code[20];
         DocumentNoT: Code[20];
         LotNo: Code[20];
-        Entry_Type: Enum "Item Ledger Entry Type";
-
-
         NoSeriesManagement: Codeunit NoSeriesManagement;
         Salesreceivalsetup: Record "Sales & Receivables Setup";
         Headerfound: Boolean;

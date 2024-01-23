@@ -10,6 +10,11 @@ pageextension 70154 "SC Customer List" extends "Customer List"
                 Editable = false;
                 ApplicationArea = All;
             }
+            field("KNAPP Customer"; Rec."KNAPP Customer")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("QAU Approved"; Rec."QAU Approved")
             {
                 ApplicationArea = All;

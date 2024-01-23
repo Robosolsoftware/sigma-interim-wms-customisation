@@ -12,6 +12,30 @@ codeunit 70101 "Purchase Events"
     //     end;
 
     // end;
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Purchase Document", 'OnPerformManualReleaseOnBeforeTestPurchasePrepayment', '', false, false)]
+    local procedure OnPerformManualReleaseOnBeforeTestPurchasePrepayment(var PurchaseHeader: Record "Purchase Header")
+    begin
+        if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
+            if PurchaseHeader."Min Order Value" > 0 then begin
+                PurchaseHeader.CalcFields(Amount);
+                if PurchaseHeader.Amount < PurchaseHeader."Min Order Value" then
+                    Error('Total order amount %1 is less than Min Order Value %2', PurchaseHeader.Amount, PurchaseHeader."Min Order Value");
+            end;
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnAfterCheckPurchaseApprovalPossible', '', false, false)]
+    local procedure OnAfterCheckPurchaseApprovalPossible(var PurchaseHeader: Record "Purchase Header")
+    begin
+        if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
+            if PurchaseHeader."Min Order Value" > 0 then begin
+                PurchaseHeader.CalcFields(Amount);
+                if PurchaseHeader.Amount < PurchaseHeader."Min Order Value" then
+                    Error('Total order amount %1 is less than Min Order Value %2', PurchaseHeader.Amount, PurchaseHeader."Min Order Value");
+            end;
+        end;
+    end;
+
     [EventSubscriber(ObjectType::Page, Page::"Item Journal", 'OnBeforeActionEvent', 'Post', false, false)]
     local procedure CheckingReason(var Rec: Record "Item Journal Line")
     var
@@ -54,23 +78,6 @@ codeunit 70101 "Purchase Events"
         end;
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::"Purchase Line", 'OnAfterValidateEvent', 'No.', false, false)]
-    local procedure clearFiledsPOl(var Rec: Record "Purchase Line")
-    var
-        Recitem: Record Item;
-    begin
-        Recitem.Reset();
-        Recitem.SetRange("No.", Rec."No.");
-        if Recitem.FindFirst() then begin
-            Rec.Validate("Warehouse Class Code", Recitem."Warehouse Class Code");
-            Rec.Validate("Pack Size", Recitem."Pack Size");
-            Rec.Validate(Brand, Recitem.Brand);
-        end else begin
-            Rec.Validate("Warehouse Class Code", '');
-            Rec.Validate("Pack Size", '');
-            Rec.Validate(Brand, '');
-        end;
-    end;
 
     [EventSubscriber(ObjectType::Table, Database::"Transfer Line", 'OnAfterValidateEvent', 'Transfer-from Bin Code', false, false)]
     local procedure clearFiledsFrmQty(CurrFieldNo: Integer; var Rec: Record "Transfer Line")

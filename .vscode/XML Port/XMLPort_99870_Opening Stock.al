@@ -23,6 +23,10 @@ xmlport 70120 "Opning Stock_To Use"
                 {
 
                 }
+                textelement(VariantCode)
+                {
+
+                }
                 textelement(PostingDate)
                 {
 
@@ -43,14 +47,14 @@ xmlport 70120 "Opning Stock_To Use"
                 // {
 
                 // }
+                textelement(quantityt)
+                {
+                    XmlName = 'Quantity';
+                }
 
                 textelement(expirationdatet)
                 {
                     XmlName = 'ExpirationDate';
-                }
-                textelement(quantityt)
-                {
-                    XmlName = 'Quantity';
                 }
                 textelement(locationt)
                 {
@@ -126,7 +130,10 @@ xmlport 70120 "Opning Stock_To Use"
 
 
                     ItemJnlLine.VALIDATE("Item No.", ItemNo);
+                    if VariantCode <> '' then
+                        ItemJnlLine.Validate("Variant Code", VariantCode);
                     Item.GET(ItemJnlLine."Item No.");
+
 
                     // if QtyD > 0 then begin
                     //     ItemJnlLine."Entry Type" := ItemJnlLine."Entry Type"::"Positive Adjmt.";
@@ -159,36 +166,38 @@ xmlport 70120 "Opning Stock_To Use"
 
 
                     //Insert Tracking Lines++
-                    ItemTrackingLines.INIT;
-                    CLEAR(ItemTrackingLines."Entry No.");
-                    IF LotNo <> '' THEN BEGIN
-                        ItemTrackingLines.VALIDATE("Item No.", ItemJnlLine."Item No.");
-                        ItemTrackingLines."Reservation Status" := ItemTrackingLines."Reservation Status"::Prospect;
-                        ItemTrackingLines."Source Batch Name" := ItemJnlLine."Journal Batch Name";
-                        ItemTrackingLines."Source ID" := 'ITEM';
-                        ItemTrackingLines."Source Ref. No." := ItemJnlLine."Line No.";
-                        ItemTrackingLines."Source Type" := 83;
+                    if Item."Item Tracking Code" <> '' then begin
+                        ItemTrackingLines.INIT;
+                        CLEAR(ItemTrackingLines."Entry No.");
+                        IF LotNo <> '' THEN BEGIN
+                            ItemTrackingLines.VALIDATE("Item No.", ItemJnlLine."Item No.");
+                            ItemTrackingLines."Reservation Status" := ItemTrackingLines."Reservation Status"::Prospect;
+                            ItemTrackingLines."Source Batch Name" := ItemJnlLine."Journal Batch Name";
+                            ItemTrackingLines."Source ID" := 'ITEM';
+                            ItemTrackingLines."Source Ref. No." := ItemJnlLine."Line No.";
+                            ItemTrackingLines."Source Type" := 83;
 
-                        ItemTrackingLines."Location Code" := ItemJnlLine."Location Code";
-                        ItemTrackingLines."Item Tracking" := ItemTrackingLines."Item Tracking"::"Lot No.";
-                        ItemTrackingLines.VALIDATE("Lot No.", LotNo);
-                        IF ItemJnlLine."Entry Type" = ItemJnlLine."Entry Type"::"Positive Adjmt." THEN BEGIN
-                            ItemTrackingLines.VALIDATE("Quantity (Base)", ItemJnlLine.Quantity);
-                            ItemTrackingLines."Source Subtype" := 2;
-                            ItemTrackingLines."Expected Receipt Date" := ItemJnlLine."Posting Date";
-                            ItemTrackingLines.Positive := TRUE;
-                            ItemTrackingLines.VALIDATE("Expiration Date", ExpirationDateD);
-                        END ELSE BEGIN
-                            ItemTrackingLines.VALIDATE("Quantity (Base)", -ItemJnlLine.Quantity);
-                            ItemTrackingLines."Source Subtype" := 3;
-                            ItemTrackingLines."Shipment Date" := ItemJnlLine."Posting Date";
+                            ItemTrackingLines."Location Code" := ItemJnlLine."Location Code";
+                            ItemTrackingLines."Item Tracking" := ItemTrackingLines."Item Tracking"::"Lot No.";
+                            ItemTrackingLines.VALIDATE("Lot No.", LotNo);
+                            IF ItemJnlLine."Entry Type" = ItemJnlLine."Entry Type"::"Positive Adjmt." THEN BEGIN
+                                ItemTrackingLines.VALIDATE("Quantity (Base)", ItemJnlLine.Quantity);
+                                ItemTrackingLines."Source Subtype" := 2;
+                                ItemTrackingLines."Expected Receipt Date" := ItemJnlLine."Posting Date";
+                                ItemTrackingLines.Positive := TRUE;
+                                ItemTrackingLines.VALIDATE("Expiration Date", ExpirationDateD);
+                            END ELSE BEGIN
+                                ItemTrackingLines.VALIDATE("Quantity (Base)", -ItemJnlLine.Quantity);
+                                ItemTrackingLines."Source Subtype" := 3;
+                                ItemTrackingLines."Shipment Date" := ItemJnlLine."Posting Date";
+                            END;
+                            ItemTrackingLines.VALIDATE("Variant Code", ItemJnlLine."Variant Code");
+
+                            ItemTrackingLines."Creation Date" := ItemJnlLine."Posting Date";
+                            ItemTrackingLines."Created By" := USERID;
+                            ItemTrackingLines.INSERT(TRUE);
                         END;
-                        ItemTrackingLines.VALIDATE("Variant Code", ItemJnlLine."Variant Code");
-
-                        ItemTrackingLines."Creation Date" := ItemJnlLine."Posting Date";
-                        ItemTrackingLines."Created By" := USERID;
-                        ItemTrackingLines.INSERT(TRUE);
-                    END;
+                    end;
                 end;
             }
         }
@@ -224,20 +233,21 @@ xmlport 70120 "Opning Stock_To Use"
         Csvbuffer.DeleteAll();
         Csvbuffer.InsertEntry(1, 1, 'EntryType');
         Csvbuffer.InsertEntry(1, 2, 'Item Number');
-        Csvbuffer.InsertEntry(1, 3, 'Posting Date');
-        Csvbuffer.InsertEntry(1, 4, 'Document Date');
-        Csvbuffer.InsertEntry(1, 5, 'Document Number');
-        Csvbuffer.InsertEntry(1, 6, 'Lot Number');
-        Csvbuffer.InsertEntry(1, 7, 'Expiration Date');
+        Csvbuffer.InsertEntry(1, 3, 'Variant Code');
+        Csvbuffer.InsertEntry(1, 4, 'Posting Date');
+        Csvbuffer.InsertEntry(1, 5, 'Document Date');
+        Csvbuffer.InsertEntry(1, 6, 'Document Number');
+        Csvbuffer.InsertEntry(1, 7, 'Lot Number');
         Csvbuffer.InsertEntry(1, 8, 'Qty');
-        Csvbuffer.InsertEntry(1, 9, 'Location');
-        Csvbuffer.InsertEntry(1, 10, 'Bin');
-        Csvbuffer.InsertEntry(1, 11, 'Reason Code');
+        Csvbuffer.InsertEntry(1, 9, 'Expiration Date');
+        Csvbuffer.InsertEntry(1, 10, 'Location');
+        Csvbuffer.InsertEntry(1, 11, 'Bin');
+        Csvbuffer.InsertEntry(1, 12, 'Reason Code');
 
         Csvbuffer.SaveDataToBlob(TempBLOB, ',');
         TempBLOB.CreateOutStream(outs);
         TempBLOB.CreateInStream(ins);
-        filename := 'SampleAdjsTemplate.csv';
+        filename := 'SampleAdjsTemplate_' + Format(CurrentDateTime) + '.csv';
         DownloadFromStream(
             ins,  // InStream to save
             '',   // Not used in cloud

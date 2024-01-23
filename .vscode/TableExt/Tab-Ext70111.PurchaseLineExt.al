@@ -35,7 +35,47 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
             Caption = 'Warehouse Class Code';
             TableRelation = "Warehouse Class";
         }
+        field(70003; "Outer Qty."; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70004; "Shipper Qty."; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70005; "Pallet Qty."; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+
+        modify("No.")
+        {
+            trigger OnAfterValidate()
+            var
+                L_ItemUnitofMeasure: Record "Item Unit of Measure";
+                Recitem: Record Item;
+            begin
+                if Rec.Type = Rec.Type::Item then begin
+                    L_ItemUnitofMeasure.Reset();
+                    L_ItemUnitofMeasure.SetRange("Item No.", Rec."No.");
+                    L_ItemUnitofMeasure.SetRange(Code, Rec."Unit of Measure Code");
+                    if L_ItemUnitofMeasure.FindFirst() then begin
+                        Rec."Shipper Qty." := L_ItemUnitofMeasure."Shipper Qty.";
+                        Rec."Outer Qty." := L_ItemUnitofMeasure."Outer Qty.";
+                        Rec."Pallet Qty." := L_ItemUnitofMeasure."Pallet Qty.";
+                    end;
+
+                    Recitem.Reset();
+                    Recitem.SetRange("No.", Rec."No.");
+                    if Recitem.FindFirst() then begin
+                        Rec.Validate("Warehouse Class Code", Recitem."Warehouse Class Code");
+                        Rec.Validate("Pack Size", Recitem."Pack Size");
+                        Rec.Validate(Brand, Recitem.Brand);
+                    end;
 
 
+                end;
+            end;
+        }
     }
 }

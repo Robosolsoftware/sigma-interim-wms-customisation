@@ -8,33 +8,33 @@ pageextension 70124 POListExt extends "Purchase Order List"
     actions
     {
         // Add changes to page actions here
-        modify(Release)
-        {
-            trigger OnBeforeAction()
-            var
-                myInt: Integer;
-            begin
-                if Rec."Min Order Value" > 0 then begin
-                    Rec.CalcFields(Amount);
-                    if Rec.Amount < Rec."Min Order Value" then
-                        Error('Min Order Value is less than Total order amount');
-                end;
+        // modify(Release)
+        // {
+        //     trigger OnBeforeAction()
+        //     var
+        //         myInt: Integer;
+        //     begin
+        //         if Rec."Min Order Value" > 0 then begin
+        //             Rec.CalcFields(Amount);
+        //             if Rec.Amount < Rec."Min Order Value" then
+        //                 Error('Min Order Value is less than Total order amount');
+        //         end;
 
-            end;
-        }
-        modify(SendApprovalRequest)
-        {
-            trigger OnBeforeAction()
-            var
-                myInt: Integer;
-            begin
-                if Rec."Min Order Value" > 0 then begin
-                    Rec.CalcFields(Amount);
-                    if Rec.Amount < Rec."Min Order Value" then
-                        Error('Min Order Value is less than Total order amount');
-                end;
-            end;
-        }
+        //     end;
+        // }
+        // modify(SendApprovalRequest)
+        // {
+        //     trigger OnBeforeAction()
+        //     var
+        //         myInt: Integer;
+        //     begin
+        //         if Rec."Min Order Value" > 0 then begin
+        //             Rec.CalcFields(Amount);
+        //             if Rec.Amount < Rec."Min Order Value" then
+        //                 Error('Min Order Value is less than Total order amount');
+        //         end;
+        //     end;
+        // }
         addafter("P&osting")
         {
             group("PO upload")

@@ -3,29 +3,6 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
     layout
     {
         // Add changes to page layout here
-        modify("Sell-to Customer Name")
-        {
-            Editable = false;
-        }
-        modify("Sell-to Customer No.")
-        {
-            trigger OnLookup(var Text: Text): Boolean
-            var
-                L_Customer: Record Customer;
-                L_CUstomerLookup: page "Customer Lookup";
-            begin
-                Clear(L_CUstomerLookup);
-                L_Customer.Reset();
-                L_Customer.SetRange("QAU Approved", true);
-                L_Customer.SetRange(Status, L_Customer.Status::Released);
-                L_CUstomerLookup.LookupMode(true);
-                L_CUstomerLookup.SetTableView(L_Customer);
-                if L_CUstomerLookup.RunModal() = Action::LookupOK then begin
-                    L_CUstomerLookup.GetRecord(L_Customer);
-                    Rec.Validate("Sell-to Customer No.", L_Customer."No.");
-                end;
-            end;
-        }
         addfirst(factboxes)
         {
             part("Item Variants Details"; "Item Variants Details")
@@ -50,6 +27,17 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
         }
         addlast(General)
         {
+            field("Warehouse Shipment Exist"; Rec."Warehouse Shipment Exist")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Shortcut Dimension 3 Code"; Rec."Shortcut Dimension 3 Code")
+            {
+                ApplicationArea = All;
+                Visible = G_DimensionVisibility;
+                Editable = false;
+            }
             field("Send By"; Rec."Send By")
             {
                 ApplicationArea = All;
@@ -78,6 +66,11 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = all;
                 Editable = false;
                 Caption = 'System Modified By';
+            }
+            field("KNAPP Customer"; Rec."KNAPP Customer")
+            {
+                ApplicationArea = All;
+                Editable = false;
             }
         }
         addafter(SalesLines)
@@ -176,6 +169,8 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                     L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
                     L_SalesLine.SetFilter("Variant Code", '%1', '');
                     L_SalesLine.SetRange("Variant Code mandatory", true);
+                    L_SalesLine.SetFilter(Quantity, '>%1', 0);
+                    L_SalesLine.SetFilter("Location Code", '<>%1', '');
                     if L_SalesLine.FindSet() then begin
                         NoOfRecords := L_SalesLine.Count;
                         Window.OPEN(Text005 + Text006 + ' @1@@@@@@@@@@@@@\' + L_SalesLine.FIELDCAPTION("No.") + ' #3##########');
@@ -307,7 +302,6 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                                 if not Confirm(StrSubstNo('Inventory does not exist for item number %1 line number. Click Yes to continue without variant code ', L_SalesLine."No.", L_SalesLine."Line No."), false) then
                                     Error('')
                         until L_SalesLine.Next() = 0;
-
                         Window.CLOSE;
                     end;
                 end;
@@ -348,9 +342,25 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
 
             end;
         }
+
+
     }
+
+    trigger OnOpenPage()
+    var
+        GenLedgerSetup: Record "General Ledger Setup";
+    begin
+        Clear(G_DimensionVisibility);
+        if GenLedgerSetup.Get() then begin
+            if GenLedgerSetup."Shortcut Dimension 3 Code" <> '' then
+                G_DimensionVisibility := true;
+        end;
+
+    end;
+
     var
         myInt: Integer;
         cust: Record Customer;
         G_Functions: Codeunit "SC Events & Subscriber";
+        G_DimensionVisibility: Boolean;
 }

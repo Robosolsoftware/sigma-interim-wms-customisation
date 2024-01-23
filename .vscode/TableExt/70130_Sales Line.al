@@ -90,6 +90,15 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(70143; "Saleable Location"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Location."Saleable Location" where(Code = field("Location Code")));
+        }
+        field(70144; "KNAPP Item"; Boolean)
+        {
+
+        }
 
         // modify("Unit Price")
         // {
@@ -125,17 +134,17 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 UserSetup: Record "User Setup";
                 DisUnitPrice: Decimal;
             begin
-                if Rec."Unit Price" > 0 then begin
-                    Clear(DisUnitPrice);
-                    UserSetup.Reset();
-                    UserSetup.SetRange("User ID", UserId);
-                    UserSetup.SetRange("Allow to change unit price", true);
-                    if not UserSetup.FindFirst() then begin
-                        if Rec."Min Sell Price" > 0 then begin
-                            if Rec."Unit Price" < Rec."Min Sell Price" then begin
-                                Error('Unit price should not be less than Min Sell Price');
-                            end;
-                        end else begin
+                Clear(DisUnitPrice);
+                UserSetup.Reset();
+                UserSetup.SetRange("User ID", UserId);
+                UserSetup.SetRange("Allow to change unit price", true);
+                if not UserSetup.FindFirst() then begin
+                    if Rec."Min Sell Price" > 0 then begin
+                        if Rec."Unit Price" < Rec."Min Sell Price" then begin
+                            Error('Unit price should not be less than Min Sell Price');
+                        end;
+                    end else begin
+                        if CurrFieldNo = 22 then begin
                             DisUnitPrice := (xRec."Unit Price" / 100) * 10;
                             if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
                                 Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
@@ -159,8 +168,52 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 L_ItemUnitofMeasure: Record "Item Unit of Measure";
                 ShippingAgent: Record "Shipping Agent";
                 L_Function: Codeunit "SC Events & Subscriber";
+
+                UserSetup: Record "User Setup";
+                DisUnitPrice: Decimal;
+                L_Location: Record Location;
+                ConsolidateWarehouseShipment: Codeunit "Consolidate Warehouse Shipment";
             begin
                 if (Rec.Type = Rec.Type::Item) then begin
+                    //KNAPP Customer++
+                    if ConsolidateWarehouseShipment.CheckkNAPCustomer(Rec."Sell-to Customer No.") = true then begin
+                        if ConsolidateWarehouseShipment.CheckkNAPItem(Rec."No.") = false then begin
+                            L_Location.Reset();
+                            L_Location.SetRange("Manual Picking", true);
+                            if L_Location.FindFirst() then begin
+                                Rec.Validate("Location Code", L_Location.Code);
+                            end;
+                        end;
+                        if ConsolidateWarehouseShipment.CheckkNAPItem(Rec."No.") = true then begin
+                            L_Location.Reset();
+                            L_Location.SetRange("KNAPP Location", true);
+                            if L_Location.FindFirst() then begin
+                                Rec.Validate("Location Code", L_Location.Code);
+                            end;
+                        end;
+                    end;
+
+                    //Manual Customer++
+                    if ConsolidateWarehouseShipment.CheckkNAPCustomer(Rec."Sell-to Customer No.") = false then begin
+                        if ConsolidateWarehouseShipment.CheckkNAPItem(Rec."No.") = true then begin
+                            L_Location.Reset();
+                            L_Location.SetRange("Manual Picking", true);
+                            if L_Location.FindFirst() then begin
+                                Rec.Validate("Location Code", L_Location.Code);
+                            end;
+                        end;
+
+                        if ConsolidateWarehouseShipment.CheckkNAPItem(Rec."No.") = false then begin
+                            L_Location.Reset();
+                            L_Location.SetRange("Manual Picking", true);
+                            if L_Location.FindFirst() then begin
+                                Rec.Validate("Location Code", L_Location.Code);
+                            end;
+                        end;
+                    end;
+
+
+
                     L_SalesHeader.Reset();
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
@@ -180,6 +233,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     if L_Item.FindFirst() then begin
                         Rec."Min Sell Price" := L_Item."Min Sell Price";
                         Rec."Parent Category" := L_Item."Parent Category";
+                        Rec."KNAPP Item" := L_Item."KNAPP Item";
                     end;
 
                     L_ItemUnitofMeasure.Reset();
@@ -197,6 +251,22 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     CH_SShip.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
                     if CH_SShip.FindLast() then
                         Rec."Last Price" := CH_SShip."Unit Price";
+
+                    Clear(DisUnitPrice);
+                    UserSetup.Reset();
+                    UserSetup.SetRange("User ID", UserId);
+                    UserSetup.SetRange("Allow to change unit price", true);
+                    if not UserSetup.FindFirst() then begin
+                        if Rec."Min Sell Price" > 0 then begin
+                            if Rec."Unit Price" < Rec."Min Sell Price" then begin
+                                Error('Unit price should not be less than Min Sell Price');
+                            end;
+                        end else begin
+                            DisUnitPrice := (xRec."Unit Price" / 100) * 10;
+                            if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
+                                Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
+                        end;
+                    end;
 
                 end;
             end;

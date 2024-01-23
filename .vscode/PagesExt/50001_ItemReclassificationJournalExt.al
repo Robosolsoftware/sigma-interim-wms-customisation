@@ -11,16 +11,13 @@ pageextension 50001 "Item Reclassification Journal" extends "Item Reclass. Journ
         // Add changes to page actions here
         addafter("P&osting")
         {
-            group("Reclassification Upload")
+            group("Import/Export Reclassification")
             {
-                Caption = 'Reclassification Upload';
-                Image = Import;
+                Caption = 'Import/Export Reclassification';
                 action("Export Excel Template")
                 {
                     ApplicationArea = All;
-                    Image = Journal;
-                    //PromotedCategory = Process;
-                    //Promoted = true;
+                    Image = Export;
                     Caption = 'Export Excel Template';
 
                     trigger OnAction()
@@ -28,22 +25,19 @@ pageextension 50001 "Item Reclassification Journal" extends "Item Reclass. Journ
                         ItemReclassJ: XmlPort "Item Reclassification";
                     begin
                         ItemReclassJ.SampleTemplate();
-
                     end;
                 }
                 action("Import Reclass. Excel")
                 {
                     ApplicationArea = All;
-                    Image = Journal;
-                    //PromotedCategory = Process;
-                    //Promoted = true;
+                    Image = Import;
                     Caption = 'Import Reclass. Excel';
-
                     trigger OnAction()
                     var
                         ItemReclassJ: XmlPort "Item Reclassification";
                     begin
                         ItemReclassJ.Run();
+                        Message('Completed..');
                     end;
                 }
 
@@ -55,8 +49,7 @@ pageextension 50001 "Item Reclassification Journal" extends "Item Reclass. Journ
         {
             group(Category_Category77)
             {
-                Caption = 'Reclass Upload';
-                //ShowAs = SplitButton;
+                Caption = 'Import/Export Reclassification';
 
                 actionref(ExportExcelTemplate; "Export Excel Template")
                 {

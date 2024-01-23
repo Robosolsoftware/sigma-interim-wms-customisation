@@ -38,6 +38,10 @@ page 50000 "Sales Order warning Mng. Setup"
                     ToolTip = 'Specifies the value of the item attribute.';
                 }
 
+                field("Warning Type"; Rec."Warning Type")
+                {
+                    ApplicationArea = All;
+                }
                 field("warning message"; Rec."warning message")
                 {
                     ApplicationArea = All;

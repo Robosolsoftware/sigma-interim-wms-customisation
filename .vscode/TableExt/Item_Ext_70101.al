@@ -207,6 +207,10 @@ tableextension 70101 "Item_Extension" extends Item
         {
             TableRelation = "Temperature Range";
         }
+        field(70108; "KNAPP Item"; Boolean)
+        {
+
+        }
     }
     fieldgroups
     {

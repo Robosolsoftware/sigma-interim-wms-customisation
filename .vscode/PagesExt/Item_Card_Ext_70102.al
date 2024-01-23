@@ -33,6 +33,10 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             {
                 ApplicationArea = All;
             }
+            field("KNAPP Item"; Rec."KNAPP Item")
+            {
+                ApplicationArea = All;
+            }
         }
 
         addafter("Reverse Charge Applies")
@@ -76,18 +80,18 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             }
         }
 
-        addafter(Item)
-        {
-            group("Item Details")
-            {
+        // addafter(Item)
+        // {
+        //     group("Item Details")
+        //     {
 
-                field("Pallet Quantity"; Rec."Pallet Quantity")
-                {
-                    ApplicationArea = all;
-                }
-            }
+        //         field("Pallet Quantity"; Rec."Pallet Quantity")
+        //         {
+        //             ApplicationArea = all;
+        //         }
+        //     }
 
-        }
+        // }
 
         addfirst(factboxes)
         {
@@ -122,35 +126,13 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
     }
 
 
-    // actions
-    // {
-    //     modify("Va&riants")
-    //     {
-    //         Enabled = ItemVarVisible;
-    //     }
-    // }
-
-
-    // trigger OnOpenPage()
-    // begin
-    //     Clear(ItemVarVisible);
-    //     if Rec."Variant Mandatory if Exists" = Rec."Variant Mandatory if Exists"::No then
-    //         ItemVarVisible := false
-    //     else
-    //         ItemVarVisible := true;
-    // end;
-
-    // trigger OnAfterGetRecord()
-    // begin
-    //     Clear(ItemVarVisible);
-    //     if Rec."Variant Mandatory if Exists" = Rec."Variant Mandatory if Exists"::No then
-    //         ItemVarVisible := false
-    //     else
-    //         ItemVarVisible := true;
-    // end;
-
-
-
+    actions
+    {
+        modify(PrintLabel)
+        {
+            Visible = false;
+        }
+    }
 
 
     var

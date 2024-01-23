@@ -13,19 +13,6 @@ page 70105 "Lot-Number-by-Item"
         {
             repeater(Group)
             {
-                field("Lot No."; Rec."Lot No.")
-                {
-                    ApplicationArea = all;
-                }
-                field("Expiry Date"; Rec."Expiry Date")
-                {
-                    ApplicationArea = all;
-                    Visible = false;
-                }
-                field("Variant Code"; Rec."Variant Code")
-                {
-                    ApplicationArea = All;
-                }
 
                 field("Location Code"; Rec."Location Code")
                 {
@@ -36,12 +23,20 @@ page 70105 "Lot-Number-by-Item"
                 field("Bin Code"; Rec."Bin Code")
                 {
                     ApplicationArea = All;
-                    Visible = false;
                 }
-                field("Zone Code"; rec."Zone Code")
+                field("Variant Code"; Rec."Variant Code")
+                {
+                    ApplicationArea = All;
+                }
+                field("Lot No."; Rec."Lot No.")
                 {
                     ApplicationArea = all;
-                    Visible = false;
+
+                }
+                field("Expiry Date"; Rec."Expiry Date")
+                {
+                    ApplicationArea = all;
+
                 }
                 field("Qty. (Base)"; Rec."Qty. (Base)")
                 {
@@ -116,20 +111,24 @@ page 70105 "Lot-Number-by-Item"
             Rec."Expiry Date" := ItemTrackingManagement.ExistingExpirationDate(LotNosByBinCode.Item_No, LotNosByBinCode.Variant_Code, ItemTrackingSetup, FALSE, EntriesExist);
             Rec."Qty. (Base)" := LotNosByBinCode.Sum_Quantity;
 
-            BinContent.Reset();
-            BinContent.SetRange("Item No.", Rec."Item No.");
-            if Rec."Location Code" <> '' then
-                BinContent.SetRange("Location Code", Rec."Location Code");
-            if Rec."Bin Code" <> '' then
-                BinContent.SetRange("Bin Code", Rec."Bin Code");
-            if Rec."Lot No." <> '' then
-                BinContent.SetFilter("Lot No. Filter", Rec."Lot No.");
-            if rec."Zone Code" <> '' then
-                BinContent.SetRange("Zone Code", Rec."Zone Code");
-
-            if BinContent.FindFirst() then begin
-                Rec."Qty (Available)" := BinContent.CalcQtyAvailToTakeUOM;
+            if LotNosByBinCode.Sum_Quantity > 0 then begin
+                BinContent.Reset();
+                BinContent.SetRange("Item No.", Rec."Item No.");
+                if Rec."Location Code" <> '' then
+                    BinContent.SetRange("Location Code", Rec."Location Code");
+                if Rec."Bin Code" <> '' then
+                    BinContent.SetRange("Bin Code", Rec."Bin Code");
+                if Rec."Lot No." <> '' then
+                    BinContent.SetFilter("Lot No. Filter", Rec."Lot No.");
+                if rec."Zone Code" <> '' then
+                    BinContent.SetRange("Zone Code", Rec."Zone Code");
+                if Rec."Variant Code" <> '' then
+                    BinContent.SetRange("Variant Code", Rec."Variant Code");
+                if BinContent.FindFirst() then begin
+                    Rec."Qty (Available)" := BinContent.CalcQtyAvailToTakeUOM;
+                end;
             end;
+
             bin.Reset();
             bin.SetRange("Location Code", LotNosByBinCode.Location_Code);
             bin.SetRange(Code, LotNosByBinCode.Bin_Code);

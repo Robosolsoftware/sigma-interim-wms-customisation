@@ -15,5 +15,10 @@ tableextension 70107 ILE extends "Item Ledger Entry"
             Caption = 'Variant Code';
             TableRelation = "Item Variant".Code WHERE("Item No." = FIELD("Item No."));
         }
+        field(70142; "Saleable Location"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Location."Saleable Location" where(Code = field("Location Code")));
+        }
     }
 }

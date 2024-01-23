@@ -10,42 +10,49 @@ pageextension 50013 BSOList extends "Blanket Sales Orders"
         addafter("O&rder")
         {
 
-            group("Import/Export SO")
+            group("Import/Export Blanket Sales Order")
             {
-                Caption = 'Import/Export SO';
-                //Image = Import;
-                //ShowAs = Standard;
-
+                Caption = 'Import/Export Blanket Sales Order';
                 action("Export Blanket Sales Order Template")
                 {
                     ApplicationArea = All;
                     Image = Export;
-                    //PromotedCategory = Process;
-                    //Promoted = true;
                     Caption = 'Export Blanket Sales Order Template';
 
                     trigger OnAction()
                     var
-                        OpningStock: Codeunit "Import Sales Order";
+                        OpningStock: Codeunit "Export & Import Blanket SO";
                     begin
-                        OpningStock.SampleSOTemplate();
+                        OpningStock.SampleBlanketSOTemplate();
 
                     end;
                 }
-                action("Upload Blanket Sales Order")
+                action("Import Blanket Sales Order")
                 {
                     ApplicationArea = All;
-                    // Promoted = true;
-                    //PromotedCategory = Process;
                     Image = Import;
 
                     trigger OnAction()
                     var
-                        ImportSO: codeunit "Import Sales Order";
+                        ImportSO: codeunit "Export & Import Blanket SO";
                     begin
                         ImportSO.Run();
                         Message('Completed..');
                     end;
+                }
+
+            }
+        }
+        addbefore(Category_Category6)
+        {
+            group(Category_Category77)
+            {
+                Caption = 'Import/Export Blanket Sales Order';
+                actionref(ExportBlanketSalesOrderTemplate; "Export Blanket Sales Order Template")
+                {
+                }
+                actionref(ImportBlanketSalesOrder; "Import Blanket Sales Order")
+                {
                 }
 
             }

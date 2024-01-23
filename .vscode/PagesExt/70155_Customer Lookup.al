@@ -9,6 +9,14 @@ pageextension 70155 "SC Customer Lookup" extends "Customer Lookup"
             {
                 ApplicationArea = All;
             }
+            field("QAU Approved"; Rec."QAU Approved")
+            {
+                ApplicationArea = All;
+            }
+            field(Status; Rec.Status)
+            {
+                ApplicationArea = All;
+            }
         }
         modify("Responsibility Center")
         {

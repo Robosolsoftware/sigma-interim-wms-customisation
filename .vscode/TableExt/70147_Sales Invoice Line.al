@@ -19,6 +19,10 @@ tableextension 70147 "SC Sales Invoice Line" extends "Sales Invoice Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(70144; "KNAPP Item"; Boolean)
+        {
+
+        }
 
     }
 
