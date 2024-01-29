@@ -55,6 +55,13 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
                 ApplicationArea = all;
                 Provider = PurchLines;
             }
+            part(ItemAttributecustomFactbox; ItemAttributecustomFactbox)
+            {
+                SubPageLink = "Item No." = field("No.");
+                ApplicationArea = all;
+                Provider = PurchLines;
+                Caption = 'Item Attribute';
+            }
 
             // part(ItemAttributesFactbox; "Item Attributes Factbox")
             // {

@@ -26,6 +26,10 @@ tableextension 70138 "SC Vendor" extends Vendor
         {
 
         }
+        field(70147; EDI; Boolean)
+        {
+
+        }
 
         // field(70140; "PO Approval Value"; Decimal)
         // {

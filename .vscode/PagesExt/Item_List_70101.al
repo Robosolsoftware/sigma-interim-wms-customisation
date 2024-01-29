@@ -13,6 +13,10 @@ pageextension 70101 "Item Extended List" extends "Item List"
                 Editable = false;
                 ApplicationArea = All;
             }
+            field("QAU Approved"; Rec."QAU Approved")
+            {
+                ApplicationArea = all;
+            }
             field("Variant Mandatory if Exists"; Rec."Variant Mandatory if Exists")
             {
                 Editable = false;
@@ -55,6 +59,10 @@ pageextension 70101 "Item Extended List" extends "Item List"
                 ApplicationArea = all;
             }
             field("Qty. on Purch. Order"; Rec."Qty. on Purch. Order")
+            {
+                ApplicationArea = all;
+            }
+            field("Saleable Inventory"; Rec."Saleable Inventory")
             {
                 ApplicationArea = all;
             }

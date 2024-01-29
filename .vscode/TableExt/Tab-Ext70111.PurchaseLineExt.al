@@ -56,6 +56,16 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
                 Recitem: Record Item;
             begin
                 if Rec.Type = Rec.Type::Item then begin
+                    Recitem.Reset();
+                    Recitem.SetRange("No.", Rec."No.");
+                    if Recitem.FindFirst() then begin
+                        Recitem.TestField("QAU Approved");
+                        Recitem.TestField(Status, Recitem.Status::Released);
+                        if Recitem."Vendor No." <> '' then
+                            if Recitem."Vendor No." <> Rec."Buy-from Vendor No." then
+                                Message('This is not your default Supplier');
+                    end;
+
                     L_ItemUnitofMeasure.Reset();
                     L_ItemUnitofMeasure.SetRange("Item No.", Rec."No.");
                     L_ItemUnitofMeasure.SetRange(Code, Rec."Unit of Measure Code");

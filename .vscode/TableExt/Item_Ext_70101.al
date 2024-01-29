@@ -163,7 +163,7 @@ tableextension 70101 "Item_Extension" extends Item
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."),
                                                                   "Global Dimension 1 Code" = FIELD("Global Dimension 1 Filter"),
                                                                   "Global Dimension 2 Code" = FIELD("Global Dimension 2 Filter"),
-                                                                  "Location Code" = filter('IP3|IP4|PSP|SH|SS'),
+                                                                  //"Location Code" = filter('IP3|IP4|PSP|SH|SS'),
                                                                   "Drop Shipment" = FIELD("Drop Shipment Filter"),
                                                                   "Variant Code" = FIELD("Variant Filter"),
                                                                   "Lot No." = FIELD("Lot No. Filter"),
@@ -210,6 +210,19 @@ tableextension 70101 "Item_Extension" extends Item
         field(70108; "KNAPP Item"; Boolean)
         {
 
+        }
+        field(70109; "QAU Approved"; Boolean)
+        {
+
+        }
+        field(70110; "Saleable Inventory"; Decimal)
+        {
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Saleable Location" = const(true), "Location Code" = field("Location Filter")));
+            Caption = 'Saleable Inventory';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
+            //GHST Customization++
         }
     }
     fieldgroups

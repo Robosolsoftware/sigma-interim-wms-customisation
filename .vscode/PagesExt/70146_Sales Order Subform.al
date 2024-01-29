@@ -86,6 +86,7 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
             {
                 ApplicationArea = All;
                 Editable = false;
+                ToolTip = 'If Min Sell is 0, then system will not allow to change the unit price less than 10%';
             }
             field("Last Price"; Rec."Last Price")
             {

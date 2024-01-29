@@ -175,6 +175,12 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 ConsolidateWarehouseShipment: Codeunit "Consolidate Warehouse Shipment";
             begin
                 if (Rec.Type = Rec.Type::Item) then begin
+                    L_Item.Reset();
+                    L_Item.SetRange("No.", Rec."No.");
+                    if L_Item.FindFirst() then begin
+                        L_Item.TestField("QAU Approved");
+                        L_Item.TestField(Status, L_Item.Status::Released);
+                    end;
                     //KNAPP Customer++
                     if ConsolidateWarehouseShipment.CheckkNAPCustomer(Rec."Sell-to Customer No.") = true then begin
                         if ConsolidateWarehouseShipment.CheckkNAPItem(Rec."No.") = false then begin
