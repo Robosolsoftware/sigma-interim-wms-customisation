@@ -60,7 +60,7 @@ tableextension 70123 POWHSESHpHeaderExt extends "Posted Whse. Shipment Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(70136; "Data logger"; Boolean)
+        field(70136; "Data Logger Sheet"; Boolean)
         {
             DataClassification = ToBeClassified;
         }
@@ -68,7 +68,7 @@ tableextension 70123 POWHSESHpHeaderExt extends "Posted Whse. Shipment Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(70138; "Custom Documents"; Boolean)
+        field(70138; "Extra Documents"; Text[100])
         {
             DataClassification = ToBeClassified;
         }

@@ -3,17 +3,160 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
     layout
     {
         // Add changes to page layout here
+        //Editable Condition++
+        modify("No.")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify(Name)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Name 2")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Search Name")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("IC Partner Code")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Balance (LCY)")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify(BalanceAsVendor)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Balance Due (LCY)")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Credit Limit (LCY)")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify(Blocked)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Privacy Blocked")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Salesperson Code")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Responsibility Center")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Service Zone Code")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Document Sending Profile")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify(TotalSales2)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("CustSalesLCY - CustProfit - AdjmtCostLCY")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify(AdjCustProfit)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify(AdjProfitPct)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify("Last Date Modified")
+        {
+            Editable = L_CurrPageEditable;
+
+
+        }
+        modify("Disable Search by Name")
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify(Priority)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+
+
+        //Group++
+        modify("Address & Contact")
+        {
+
+            Editable = L_CurrPageEditable;
+        }
+        modify(Invoicing)
+        {
+
+            Editable = L_CurrPageEditable;
+        }
+        modify(Payments)
+        {
+
+            Editable = L_CurrPageEditable;
+        }
+        modify(Shipping)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify(Statistics)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        modify(Intrastat)
+        {
+            Editable = L_CurrPageEditable;
+
+        }
+        //Editable Condition++
+
+
+
+
 
         modify("Customer Price Group")
         {
             Caption = 'Customer Price Group 1';
-        }
-        addafter("No.")
-        {
-            field("Concerto Customer No."; Rec."Concerto Customer No.")
-            {
-                ApplicationArea = All;
-            }
         }
         addafter("Customer Price Group")
         {
@@ -46,7 +189,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;
-
+                Editable = L_CurrPageEditable;
                 trigger OnValidate()
                 var
                     L_UserSetup: Record "User Setup";
@@ -62,16 +205,29 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
             field("QAU Approved"; Rec."QAU Approved")
             {
                 ApplicationArea = All;
+                Editable = L_EditableQUAApproved;
             }
             field("Send By"; Rec."Send By")
             {
                 ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
+            field(Funded; Rec.Funded)
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
+            field("Min Order Value"; Rec."Min Order Value")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
             }
         }
         addafter(Statistics)
         {
             group("KNAPP Details")
             {
+                Editable = L_CurrPageEditable;
                 field("KNAPP Customer"; Rec."KNAPP Customer")
                 {
                     ApplicationArea = All;
@@ -105,6 +261,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
             }
             group("Print on Despatch")
             {
+                Editable = L_CurrPageEditable;
                 field("Delivery Note"; Rec."Delivery Note")
                 {
                     ApplicationArea = All;
@@ -130,7 +287,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                     ApplicationArea = All;
 
                 }
-                field("Data logger"; Rec."Data logger")
+                field("Data Logger Sheet"; Rec."Data Logger Sheet")
                 {
                     ApplicationArea = All;
 
@@ -140,7 +297,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                     ApplicationArea = All;
 
                 }
-                field("Custom Documents"; Rec."Custom Documents")
+                field("Extra Documents"; Rec."Extra Documents")
                 {
                     ApplicationArea = All;
 
@@ -158,17 +315,74 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
 
     var
         myInt: Integer;
+        L_CurrPageEditable: Boolean;
+        L_EditableQUAApproved: Boolean;
+
+    trigger OnAfterGetRecord()
+    var
+        L_UserSetup: Record "User Setup";
+
+    begin
+        Clear(L_CurrPageEditable);
+        Clear(L_EditableQUAApproved);
+        if Rec.Status = Rec.Status::Open then begin
+            L_CurrPageEditable := true;
+            L_EditableQUAApproved := true;
+        end else begin
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then
+                    L_CurrPageEditable := true
+                else
+                    L_CurrPageEditable := false;
+            end else
+                L_CurrPageEditable := false;
+
+
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data QAU Approved" = true then
+                    L_EditableQUAApproved := true
+                else
+                    L_EditableQUAApproved := false;
+            end else
+                L_EditableQUAApproved := false;
+        end;
+    end;
 
     trigger OnOpenPage()
     var
         L_UserSetup: Record "User Setup";
+
     begin
-        L_UserSetup.Reset();
-        L_UserSetup.SetRange("User ID", UserId);
-        L_UserSetup.SetRange("Edit Master Data", true);
-        if not L_UserSetup.FindFirst() then begin
-            if Rec.Status <> Rec.Status::Open then
-                CurrPage.Editable(false);
+        Clear(L_CurrPageEditable);
+        Clear(L_EditableQUAApproved);
+        if Rec.Status = Rec.Status::Open then begin
+            L_CurrPageEditable := true;
+            L_EditableQUAApproved := true;
+        end else begin
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then
+                    L_CurrPageEditable := true
+                else
+                    L_CurrPageEditable := false;
+            end else
+                L_CurrPageEditable := false;
+
+
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data QAU Approved" = true then
+                    L_EditableQUAApproved := true
+                else
+                    L_EditableQUAApproved := false;
+            end else
+                L_EditableQUAApproved := false;
         end;
     end;
 

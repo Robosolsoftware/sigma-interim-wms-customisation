@@ -27,9 +27,9 @@ codeunit 70102 "SC Events & Subscriber"
             WarehouseShipmentHeader.Validate(_Invoice, L_SalesHeader._Invoice);
             WarehouseShipmentHeader.Validate("Packing list", L_SalesHeader."Packing list");
             WarehouseShipmentHeader.Validate("Export Checklist", L_SalesHeader."Export Checklist");
-            WarehouseShipmentHeader.Validate("Data logger", L_SalesHeader."Data logger");
+            WarehouseShipmentHeader.Validate("Data Logger Sheet", L_SalesHeader."Data Logger Sheet");
             WarehouseShipmentHeader.Validate(Labels, L_SalesHeader.Labels);
-            WarehouseShipmentHeader.Validate("Custom Documents", L_SalesHeader."Extra Documents");
+            WarehouseShipmentHeader.Validate("Extra Documents", L_SalesHeader."Extra Documents");
             WarehouseShipmentHeader.Modify();
         end;
 
@@ -44,9 +44,9 @@ codeunit 70102 "SC Events & Subscriber"
         PostedWhseShptHeader.Validate(_Invoice, WarehouseShipmentHeader._Invoice);
         PostedWhseShptHeader.Validate("Packing list", WarehouseShipmentHeader."Packing list");
         PostedWhseShptHeader.Validate("Export Checklist", WarehouseShipmentHeader."Export Checklist");
-        PostedWhseShptHeader.Validate("Data logger", WarehouseShipmentHeader."Data logger");
+        PostedWhseShptHeader.Validate("Data Logger Sheet", WarehouseShipmentHeader."Data Logger Sheet");
         PostedWhseShptHeader.Validate(Labels, WarehouseShipmentHeader.Labels);
-        PostedWhseShptHeader.Validate("Custom Documents", WarehouseShipmentHeader."Extra Documents");
+        PostedWhseShptHeader.Validate("Extra Documents", WarehouseShipmentHeader."Extra Documents");
         PostedWhseShptHeader.Modify();
     end;
 
@@ -890,6 +890,32 @@ codeunit 70102 "SC Events & Subscriber"
             //     end;
             //     //I := I + 1;
             // end;
+        end;
+    end;
+
+
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", 'OnBeforePerformManualReleaseProcedure', '', false, false)]
+    local procedure OnBeforePerformManualReleaseProcedure(var SalesHeader: Record "Sales Header")
+    begin
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+            if SalesHeader."Min Order Value" > 0 then begin
+                SalesHeader.CalcFields(Amount);
+                if SalesHeader.Amount < SalesHeader."Min Order Value" then
+                    Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
+            end;
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnBeforeCheckSalesApprovalPossible', '', false, false)]
+    local procedure OnBeforeCheckSalesApprovalPossible(var SalesHeader: Record "Sales Header")
+    begin
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+            if SalesHeader."Min Order Value" > 0 then begin
+                SalesHeader.CalcFields(Amount);
+                if SalesHeader.Amount < SalesHeader."Min Order Value" then
+                    Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
+            end;
         end;
     end;
 }

@@ -23,7 +23,7 @@ tableextension 70131 "SC Customer" extends Customer
         {
             DataClassification = ToBeClassified;
         }
-        field(70136; "Data logger"; Boolean)
+        field(70136; "Data Logger Sheet"; Boolean)
         {
             DataClassification = ToBeClassified;
         }
@@ -31,7 +31,7 @@ tableextension 70131 "SC Customer" extends Customer
         {
             DataClassification = ToBeClassified;
         }
-        field(70138; "Custom Documents"; Boolean)
+        field(70138; "Extra Documents"; Text[100])
         {
             DataClassification = ToBeClassified;
         }
@@ -201,6 +201,15 @@ tableextension 70131 "SC Customer" extends Customer
         field(70155; "KNAPP Lid"; Boolean)
         {
 
+        }
+        field(70156; Funded; Boolean)
+        {
+
+        }
+        field(70157; "Min Order Value"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 5;
         }
 
     }

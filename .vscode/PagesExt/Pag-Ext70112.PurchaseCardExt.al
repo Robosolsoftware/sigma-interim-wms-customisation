@@ -55,6 +55,12 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
                 ApplicationArea = all;
                 Provider = PurchLines;
             }
+
+            // part(ItemAttributesFactbox; "Item Attributes Factbox")
+            // {
+            //     ApplicationArea = all;
+            //     Provider = PurchLines;
+            // }
         }
     }
 
@@ -92,6 +98,7 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
 
     var
         G_Functions: Codeunit "SC Events & Subscriber";
+        tes: Page "Item Card";
 
 
 

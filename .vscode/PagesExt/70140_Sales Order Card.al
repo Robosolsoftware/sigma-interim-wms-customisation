@@ -72,6 +72,11 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Min Order Value"; Rec."Min Order Value")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
         addafter(SalesLines)
         {
@@ -111,7 +116,7 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                     ApplicationArea = All;
 
                 }
-                field("Data logger"; Rec."Data logger")
+                field("Data Logger Sheet"; Rec."Data Logger Sheet")
                 {
                     ApplicationArea = All;
 

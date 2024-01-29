@@ -33,7 +33,7 @@ pageextension 70129 PostedwhseShipmentCard extends "Posted Whse. Shipment"
                     ApplicationArea = All;
 
                 }
-                field("Data logger"; Rec."Data logger")
+                field("Data Logger Sheet"; Rec."Data Logger Sheet")
                 {
                     ApplicationArea = All;
 
@@ -43,7 +43,7 @@ pageextension 70129 PostedwhseShipmentCard extends "Posted Whse. Shipment"
                     ApplicationArea = All;
 
                 }
-                field("Custom Documents"; Rec."Custom Documents")
+                field("Extra Documents"; Rec."Extra Documents")
                 {
                     ApplicationArea = All;
 

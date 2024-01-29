@@ -11,6 +11,12 @@
   "url": "",
   "logo": "",
   "dependencies": [
+    {
+      "id": "70912191-3c4c-49fc-a1de-bc6ea1ac9da6",
+      "name": "Intrastat Core",
+      "publisher": "Microsoft",
+      "version": "23.2.14098.14562"
+    }
     
   ],
   "screenshots": [],

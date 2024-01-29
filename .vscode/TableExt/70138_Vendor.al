@@ -22,11 +22,28 @@ tableextension 70138 "SC Vendor" extends Vendor
             DataClassification = ToBeClassified;
             OptionMembers = Open,"Pending Approval",Released;
         }
+        field(70146; "QAU Approved"; Boolean)
+        {
+
+        }
+
         // field(70140; "PO Approval Value"; Decimal)
         // {
         //     DataClassification = ToBeClassified;
         //     DecimalPlaces = 0 : 5;
         // }
+    }
+
+    fieldgroups
+    {
+        addlast(DropDown; "QAU Approved", Status)
+        {
+
+        }
+        addlast(Brick; "QAU Approved", Status)
+        {
+
+        }
     }
 
     var

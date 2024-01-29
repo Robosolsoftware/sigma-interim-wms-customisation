@@ -24,7 +24,7 @@ tableextension 70134 "SC Sales Invoice Header" extends "Sales Invoice Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(70136; "Data logger"; Boolean)
+        field(70136; "Data Logger Sheet"; Boolean)
         {
             DataClassification = ToBeClassified;
         }
@@ -32,7 +32,7 @@ tableextension 70134 "SC Sales Invoice Header" extends "Sales Invoice Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(70138; "Custom Documents"; Boolean)
+        field(70138; "Extra Documents"; Text[100])
         {
             DataClassification = ToBeClassified;
         }
@@ -61,6 +61,11 @@ tableextension 70134 "SC Sales Invoice Header" extends "Sales Invoice Header"
         field(70147; "KNAPP Customer"; Boolean)
         {
 
+        }
+        field(70150; "Min Order Value"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 5;
         }
     }
 

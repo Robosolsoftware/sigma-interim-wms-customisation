@@ -22,13 +22,14 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec.Validate(_Invoice, L_Customer.Invoice);
                         Rec.Validate("Packing list", L_Customer."Packing list");
                         Rec.Validate("Export Checklist", L_Customer."Export Checklist");
-                        Rec.Validate("Data logger", L_Customer."Data Logger Sheet");
+                        Rec.Validate("Data Logger Sheet", L_Customer."Data Logger Sheet");
                         Rec.Validate(Labels, L_Customer.Labels);
                         Rec.Validate("Extra Documents", L_Customer."Extra Documents");
                         Rec."Send By" := L_Customer."Send By";
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
                         Rec."KNAPP Customer" := L_Customer."KNAPP Customer";
+                        Rec."Min Order Value" := L_Customer."Min Order Value";
                     end;
 
 
@@ -60,13 +61,14 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec.Validate(_Invoice, L_Customer.Invoice);
                         Rec.Validate("Packing list", L_Customer."Packing list");
                         Rec.Validate("Export Checklist", L_Customer."Export Checklist");
-                        Rec.Validate("Data logger", L_Customer."Data Logger Sheet");
+                        Rec.Validate("Data Logger Sheet", L_Customer."Data Logger Sheet");
                         Rec.Validate(Labels, L_Customer.Labels);
                         Rec.Validate("Extra Documents", L_Customer."Extra Documents");
                         Rec."Send By" := L_Customer."Send By";
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
                         Rec."KNAPP Customer" := L_Customer."KNAPP Customer";
+                        Rec."Min Order Value" := L_Customer."Min Order Value";
                     end;
 
 
@@ -101,7 +103,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(70136; "Data logger"; Boolean)
+        field(70136; "Data Logger Sheet"; Boolean)
         {
             DataClassification = ToBeClassified;
         }
@@ -158,6 +160,11 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         {
             FieldClass = FlowField;
             CalcFormula = exist("Warehouse Shipment Line" where("Source Document" = filter("Sales Order"), "Source No." = field("No.")));
+        }
+        field(70150; "Min Order Value"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 5;
         }
 
     }

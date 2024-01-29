@@ -91,7 +91,7 @@ pageextension 70141 "SC Posted Sales Invoice" extends "Posted Sales Invoice"
                     ApplicationArea = All;
 
                 }
-                field("Data logger"; Rec."Data logger")
+                field("Data Logger Sheet"; Rec."Data Logger Sheet")
                 {
                     ApplicationArea = All;
 
@@ -101,7 +101,7 @@ pageextension 70141 "SC Posted Sales Invoice" extends "Posted Sales Invoice"
                     ApplicationArea = All;
 
                 }
-                field("Custom Documents"; Rec."Custom Documents")
+                field("Extra Documents"; Rec."Extra Documents")
                 {
                     ApplicationArea = All;
 

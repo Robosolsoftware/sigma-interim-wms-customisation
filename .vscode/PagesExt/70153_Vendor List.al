@@ -10,6 +10,11 @@ pageextension 70153 "SC Vendor List" extends "Vendor List"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("QAU Approved"; Rec."QAU Approved")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("PO Approval required"; Rec."PO Approval required")
             {
                 ApplicationArea = All;

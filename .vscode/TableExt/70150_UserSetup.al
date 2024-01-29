@@ -14,6 +14,10 @@ tableextension 70150 "SC User Setup" extends "User Setup"
         {
             DataClassification = ToBeClassified;
         }
+        field(50006; "Edit Master Data QAU Approved"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys
