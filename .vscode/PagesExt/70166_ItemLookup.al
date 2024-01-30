@@ -7,11 +7,20 @@ pageextension 70166 ItemLookup extends "Item Lookup"
             field("Parent Category"; Rec."Parent Category")
             {
                 ApplicationArea = All;
+                Width = 20;
             }
         }
         modify("Unit Price")
         {
             Visible = false;
+        }
+        modify("Base Unit of Measure")
+        {
+            Visible = false;
+        }
+        modify(Description)
+        {
+            Width = 50;
         }
     }
 
