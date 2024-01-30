@@ -231,10 +231,10 @@ tableextension 70101 "Item_Extension" extends Item
     }
     fieldgroups
     {
-        addlast(DropDown; "Parent Category")
+        addlast(DropDown; "Top Category", "Parent Category")
         {
         }
-        addlast(Brick; "Parent Category")
+        addlast(Brick; "Top Category", "Parent Category")
         {
 
         }

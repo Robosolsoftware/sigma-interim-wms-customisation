@@ -1,9 +1,14 @@
 pageextension 70166 ItemLookup extends "Item Lookup"
 {
+    
     layout
     {
         addafter("Base Unit of Measure")
         {
+            field("Top Category"; Rec."Top Category")
+            {
+                ApplicationArea = all;
+            }
             field("Parent Category"; Rec."Parent Category")
             {
                 ApplicationArea = All;
