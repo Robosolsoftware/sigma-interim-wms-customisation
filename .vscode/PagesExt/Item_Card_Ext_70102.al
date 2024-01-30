@@ -48,6 +48,11 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
                 ApplicationArea = all;
                 Editable = L_EditableQUAApproved;
             }
+            field("Top Category"; Rec."Top Category")
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
         }
 
         addafter("Reverse Charge Applies")

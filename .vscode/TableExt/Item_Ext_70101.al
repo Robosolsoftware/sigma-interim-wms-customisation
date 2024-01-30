@@ -224,6 +224,10 @@ tableextension 70101 "Item_Extension" extends Item
             FieldClass = FlowField;
             //GHST Customization++
         }
+        field(70111; "Top Category"; Boolean)
+        {
+
+        }
     }
     fieldgroups
     {
