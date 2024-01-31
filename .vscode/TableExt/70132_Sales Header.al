@@ -80,6 +80,34 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                 end;
             end;
         }
+        modify("Shipping Agent Code")
+        {
+            trigger OnBeforeValidate()
+            var
+                ShippingAgent: Record "Shipping Agent";
+            begin
+                if Rec."Shipping Agent Code" <> '' then begin
+                    ShippingAgent.Reset();
+                    ShippingAgent.SetRange(code, Rec."Shipping Agent Code");
+                    if ShippingAgent.FindFirst() then
+                        ShippingAgent.TestField(Status, ShippingAgent.Status::Released);
+                end;
+            end;
+        }
+        modify("Shipping Agent Service Code")
+        {
+            trigger OnBeforeValidate()
+            var
+                ShippingAgentServices: Record "Shipping Agent Services";
+            begin
+                if Rec."Shipping Agent Service Code" <> '' then begin
+                    ShippingAgentServices.Reset();
+                    ShippingAgentServices.SetRange(code, Rec."Shipping Agent Service Code");
+                    if ShippingAgentServices.FindFirst() then
+                        ShippingAgentServices.TestField(Status, ShippingAgentServices.Status::Released);
+                end;
+            end;
+        }
 
         // Add changes to table fields here
         field(70131; "Delivery Note"; Boolean)
