@@ -1,6 +1,6 @@
 pageextension 70166 ItemLookup extends "Item Lookup"
 {
-    
+
     layout
     {
         addafter("Base Unit of Measure")
@@ -36,4 +36,10 @@ pageextension 70166 ItemLookup extends "Item Lookup"
 
     var
         myInt: Integer;
+
+    trigger OnOpenPage()
+    begin
+        Rec.SetCurrentKey("Top Category");
+        Rec.Ascending := false;
+    end;
 }
