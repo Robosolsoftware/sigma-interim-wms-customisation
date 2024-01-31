@@ -97,6 +97,7 @@ codeunit 70109 "Export Import Sales Return"
                     InsertSalesHeader.Init();
                     InsertSalesHeader.Validate("Document Type", InsertSalesHeader."Document Type"::"Return Order");
                     InsertSalesHeader.Validate("No.", NoSeriesManagement.GetNextNo(L_SalesandRecSetup."Return Order Nos.", WORKDATE, TRUE));
+                    InsertSalesHeader.Insert(true);
                     InsertSalesHeader.Validate("Sell-to Customer No.", GetValueAtIndex(RowNo, 1));
                     if GetValueAtIndex(RowNo, 2) <> '' then
                         InsertSalesHeader.Validate("Ship-to Code", GetValueAtIndex(RowNo, 2));
@@ -108,7 +109,7 @@ codeunit 70109 "Export Import Sales Return"
                     InsertSalesHeader.Validate("External Document No.", GetValueAtIndex(RowNo, 9));
                     InsertSalesHeader."Sheet Name" := FileName;
                     InsertSalesHeader."Import Date" := Today;
-                    InsertSalesHeader.Insert(true);
+                    InsertSalesHeader.Modify(true);
 
                     if GetValueAtIndex(RowNo, 7) <> '' then begin
                         Clear(G_DocumentDate);

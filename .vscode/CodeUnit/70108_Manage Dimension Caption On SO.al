@@ -66,7 +66,7 @@ codeunit 70108 "Manage Dimension Caption"
             L_DimensionSetEntry.CalcFields("Dimension Value Name");
             if SalesHeader."Shortcut Dimension 3 Code" <> L_DimensionSetEntry."Dimension Value Name" then begin
                 SalesHeader."Shortcut Dimension 3 Code" := L_DimensionSetEntry."Dimension Value Name";
-                SalesHeader.Modify();
+                //SalesHeader.Modify();
             end;
         end;
     end;

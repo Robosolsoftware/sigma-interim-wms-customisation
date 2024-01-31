@@ -211,6 +211,47 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
         modify(Inventory)
         {
             ToolTip = 'Inventory from all Locations';
+            Editable = L_CurrPageEditable;
+        }
+        modify("Automatic Ext. Texts")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Common Item No.")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Purchasing Code")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify(VariantMandatoryDefaultNo)
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify(VariantMandatoryDefaultYes)
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Application Wksh. User ID")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Inventory Value Zero")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Manufacturer Code")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Trans. Ord. Receipt (Qty.)")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Trans. Ord. Shipment (Qty.)")
+        {
+            Editable = L_CurrPageEditable;
         }
     }
 
