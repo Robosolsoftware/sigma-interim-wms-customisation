@@ -2,6 +2,14 @@ pageextension 70150 "SC Vendor Card" extends "Vendor Card"
 {
     layout
     {
+        addafter("No.")
+        {
+            field("Concerto Vendor No."; Rec."Concerto Vendor No.")
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
+        }
         // Add changes to page layout here
         //Editable Condition++
         modify("No.")

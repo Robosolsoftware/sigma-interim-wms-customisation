@@ -25,6 +25,10 @@ pageextension 70154 "SC Customer List" extends "Customer List"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Concerto Customer No."; Rec."Concerto Customer No.")
+            {
+                ApplicationArea = all;
+            }
         }
     }
 

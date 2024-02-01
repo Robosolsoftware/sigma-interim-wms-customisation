@@ -20,6 +20,10 @@ pageextension 70153 "SC Vendor List" extends "Vendor List"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Concerto Vendor No."; Rec."Concerto Vendor No.")
+            {
+                ApplicationArea = all;
+            }
         }
     }
 
