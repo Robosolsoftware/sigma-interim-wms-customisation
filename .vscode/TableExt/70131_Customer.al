@@ -212,6 +212,39 @@ tableextension 70131 "SC Customer" extends Customer
             DecimalPlaces = 0 : 5;
         }
 
+        modify("Shipping Agent Code")
+        {
+            trigger OnBeforeValidate()
+            var
+                ShippingAgent: Record "Shipping Agent";
+            begin
+                if Rec."Shipping Agent Code" <> '' then begin
+                    ShippingAgent.Reset();
+                    ShippingAgent.SetRange(code, Rec."Shipping Agent Code");
+                    ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
+                    if Not ShippingAgent.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent Services');
+                    //ShippingAgent.TestField(ShippingAgent.Status, ShippingAgent.Status::Released);
+                end;
+            end;
+        }
+        modify("Shipping Agent Service Code")
+        {
+            trigger OnBeforeValidate()
+            var
+                ShippingAgentServices: Record "Shipping Agent Services";
+            begin
+                if Rec."Shipping Agent Service Code" <> '' then begin
+                    ShippingAgentServices.Reset();
+                    ShippingAgentServices.SetRange(code, Rec."Shipping Agent Service Code");
+                    ShippingAgentServices.SetRange(Status, ShippingAgentServices.Status::Released);
+                    if Not ShippingAgentServices.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent Services');
+                    //ShippingAgentServices.TestField(ShippingAgentServices.Status, ShippingAgentServices.Status::Released);
+                end;
+            end;
+        }
+
     }
 
     fieldgroups

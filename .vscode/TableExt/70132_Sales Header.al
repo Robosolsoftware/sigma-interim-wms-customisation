@@ -89,8 +89,10 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                 if Rec."Shipping Agent Code" <> '' then begin
                     ShippingAgent.Reset();
                     ShippingAgent.SetRange(code, Rec."Shipping Agent Code");
-                    if ShippingAgent.FindFirst() then
-                        ShippingAgent.TestField(Status, ShippingAgent.Status::Released);
+                    ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
+                    if Not ShippingAgent.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent');
+                    //ShippingAgent.TestField(ShippingAgent.Status, ShippingAgent.Status::Released);
                 end;
             end;
         }
@@ -103,8 +105,10 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                 if Rec."Shipping Agent Service Code" <> '' then begin
                     ShippingAgentServices.Reset();
                     ShippingAgentServices.SetRange(code, Rec."Shipping Agent Service Code");
-                    if ShippingAgentServices.FindFirst() then
-                        ShippingAgentServices.TestField(Status, ShippingAgentServices.Status::Released);
+                    ShippingAgentServices.SetRange(Status, ShippingAgentServices.Status::Released);
+                    if Not ShippingAgentServices.FindFirst() then
+                        //ShippingAgentServices.TestField(ShippingAgentServices.Status, ShippingAgentServices.Status::Released);
+                        Error('Status must be equal to Released in Shipping Agent Services');
                 end;
             end;
         }
