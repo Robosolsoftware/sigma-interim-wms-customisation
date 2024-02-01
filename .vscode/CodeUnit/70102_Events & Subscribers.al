@@ -579,13 +579,30 @@ codeunit 70102 "SC Events & Subscriber"
                     L_WarehouseClassCode.Reset();
                     L_WarehouseClassCode.SetRange(Code, L_Item."Warehouse Class Code");
                     if L_WarehouseClassCode.FindFirst() then begin
-                        if (L_WarehouseClassCode."CD Schedule" = true) OR (L_WarehouseClassCode.Fridge = true) then begin
+                        if (L_WarehouseClassCode."Restrict CD 2,3" = true) OR (L_WarehouseClassCode."Restrict CD 4,5" = true) OR (L_WarehouseClassCode."Restrict Fridge" = true) then begin
                             Error('CD and Fridge items are not allowed');
                         end;
                     end;
                 end;
             end;
         end;
+        // L_ShippingAgent.Reset();
+        // L_ShippingAgent.SetRange(Code, _SalesHeader."Shipping Agent Code");
+        // if L_ShippingAgent.FindFirst() then begin
+        //     if L_ShippingAgent."Restrict CD & Fridge" = true then begin
+        //         L_Item.Reset();
+        //         L_Item.SetRange("No.", _SalesLine."No.");
+        //         if L_Item.FindFirst() then begin
+        //             L_WarehouseClassCode.Reset();
+        //             L_WarehouseClassCode.SetRange(Code, L_Item."Warehouse Class Code");
+        //             if L_WarehouseClassCode.FindFirst() then begin
+        //                 if (L_WarehouseClassCode."CD Schedule" = true) OR (L_WarehouseClassCode.Fridge = true) then begin
+        //                     Error('CD and Fridge items are not allowed');
+        //                 end;
+        //             end;
+        //         end;
+        //     end;
+        // end;
         // L_ShippingAgent.Reset();
         // L_ShippingAgent.SetRange(Code, _SalesHeader."Shipping Agent Code");
         // if L_ShippingAgent.FindFirst() then begin
