@@ -95,15 +95,6 @@ pageextension 70150 "SC Vendor Card" extends "Vendor Card"
         //Editable Condition++
 
 
-
-        addafter("No.")
-        {
-            field("Concerto Vendor No."; Rec."Concerto Vendor No.")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
-        }
         addlast(General)
         {
             field("PO Approval required"; Rec."PO Approval required")
