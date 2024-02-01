@@ -679,10 +679,12 @@ codeunit 70102 "SC Events & Subscriber"
         L_SalesOrderwarningMngSetup.SetFilter("Dimension Value", '<>%1', '');
         L_SalesOrderwarningMngSetup.SetFilter("Attribute Name", '%1', '');
         if L_SalesOrderwarningMngSetup.FindFirst() then begin
-            if L_SalesOrderwarningMngSetup."Warning message" <> '' then
-                Error(L_SalesOrderwarningMngSetup."Warning message")
-            else
-                Error('Requestion form is required');
+            if L_SalesOrderwarningMngSetup."Warning message" <> '' then begin
+                if L_SalesOrderwarningMngSetup."Warning Type" = L_SalesOrderwarningMngSetup."Warning Type"::Error then
+                    Error(L_SalesOrderwarningMngSetup."Warning message")
+                else
+                    Message(L_SalesOrderwarningMngSetup."Warning message");
+            end;
         end;
     end;
 

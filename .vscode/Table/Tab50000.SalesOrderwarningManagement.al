@@ -7,12 +7,14 @@ table 50000 "Sales Order warning Mng. Setup"
     {
         field(1; "Dimension Code"; Code[20])
         {
-            Caption = 'Dimension Code';
+            //Caption = 'Dimension Code';
+            Caption = 'Bill-to Customer Dimension Code';
             TableRelation = Dimension;
         }
         field(2; "Dimension Value"; Code[20])
         {
-            Caption = 'Dimension Value';
+            //Caption = 'Dimension Value';
+            Caption = 'Bill-to Customer Dimension Value';
             TableRelation = "Dimension Value".Code where("Dimension Code" = field("Dimension Code"));
         }
 

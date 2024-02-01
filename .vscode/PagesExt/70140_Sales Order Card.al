@@ -3,6 +3,18 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
     layout
     {
         // Add changes to page layout here
+        modify("Ship-to Code")
+        {
+            Editable = G_EditShipping;
+        }
+        modify("Shipping Agent Code")
+        {
+            Editable = G_EditShipping;
+        }
+        modify("Shipping Agent Service Code")
+        {
+            Editable = G_EditShipping;
+        }
         addfirst(factboxes)
         {
             part("Item Variants Details"; "Item Variants Details")
@@ -360,12 +372,28 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
             if GenLedgerSetup."Shortcut Dimension 3 Code" <> '' then
                 G_DimensionVisibility := true;
         end;
-
     end;
+
+    trigger OnAfterGetRecord()
+    var
+        L_SalesLine: Record "Sales Line";
+    begin
+        Clear(G_EditShipping);
+        L_SalesLine.Reset();
+        L_SalesLine.SetRange("Document No.", Rec."No.");
+        L_SalesLine.SetRange("Document Type", Rec."Document Type");
+        if not L_SalesLine.IsEmpty then
+            G_EditShipping := false
+        else
+            G_EditShipping := true;
+    end;
+
+
 
     var
         myInt: Integer;
         cust: Record Customer;
         G_Functions: Codeunit "SC Events & Subscriber";
         G_DimensionVisibility: Boolean;
+        G_EditShipping: Boolean;
 }

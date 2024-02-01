@@ -97,4 +97,6 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
 
     var
         myInt: Integer;
+        Test: Record Contact;
+        ttt: Page "Customer Card";
 }
