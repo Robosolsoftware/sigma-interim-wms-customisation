@@ -227,7 +227,7 @@ codeunit 70104 "Export & Import Sales Quote"
         TempBLOB.CreateOutStream(outs);
         Excelbuffer.SaveToStream(outs, false);
         TempBLOB.CreateInStream(ins);
-        filename := 'SampleSalesQuoteTemplate_' + Format(CurrentDateTime) + '.xlsx';
+        filename := 'SalesQuoteTemplate_' + Format(CurrentDateTime) + '.xlsx';
         DownloadFromStream(
             ins,  // InStream to save
             '',   // Not used in cloud

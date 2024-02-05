@@ -28,16 +28,16 @@ page 70105 "Lot-Number-by-Item"
                 {
                     ApplicationArea = All;
                 }
-                field("Lot No."; Rec."Lot No.")
-                {
-                    ApplicationArea = all;
+                // field("Lot No."; Rec."Lot No.")
+                // {
+                //     ApplicationArea = all;
 
-                }
-                field("Expiry Date"; Rec."Expiry Date")
-                {
-                    ApplicationArea = all;
+                // }
+                // field("Expiry Date"; Rec."Expiry Date")
+                // {
+                //     ApplicationArea = all;
 
-                }
+                // }
                 field("Qty. (Base)"; Rec."Qty. (Base)")
                 {
                     StyleExpr = Color;
@@ -80,7 +80,8 @@ page 70105 "Lot-Number-by-Item"
 
     local procedure FillTempTable()
     var
-        LotNosByBinCode: Query "LotNumber WarehouseEntry New";
+        //LotNosByBinCode: Query "LotNumber WarehouseEntry New";
+        LotNosByBinCode: Query "Without LotNumber Whs Entry";
         Reclocation: Record Location;
         BinContent: Record "Bin Content";
         bin: Record Bin;
@@ -105,10 +106,10 @@ page 70105 "Lot-Number-by-Item"
             Rec."Variant Code" := LotNosByBinCode.Variant_Code;
             Rec."Location Code" := LotNosByBinCode.Location_Code;
             Rec."Zone Code" := LotNosByBinCode.Zone_Code;
-            Rec."Lot No." := LotNosByBinCode.Lot_No;
+            //Rec."Lot No." := LotNosByBinCode.Lot_No;
             Rec."Bin Code" := LotNosByBinCode.Bin_Code;
-            ItemTrackingSetup."Lot No." := LotNosByBinCode.Lot_No;
-            Rec."Expiry Date" := ItemTrackingManagement.ExistingExpirationDate(LotNosByBinCode.Item_No, LotNosByBinCode.Variant_Code, ItemTrackingSetup, FALSE, EntriesExist);
+            // ItemTrackingSetup."Lot No." := LotNosByBinCode.Lot_No;
+            // Rec."Expiry Date" := ItemTrackingManagement.ExistingExpirationDate(LotNosByBinCode.Item_No, LotNosByBinCode.Variant_Code, ItemTrackingSetup, FALSE, EntriesExist);
             Rec."Qty. (Base)" := LotNosByBinCode.Sum_Quantity;
 
             if LotNosByBinCode.Sum_Quantity > 0 then begin

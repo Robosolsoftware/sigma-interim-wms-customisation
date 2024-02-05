@@ -32,7 +32,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         field(70132; "Allocated"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
-            CalcFormula = Sum("Sales Line"."Outstanding Qty. (Base)" WHERE("Document Type" = CONST(Order),
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order),
                                                                             Type = CONST(Item),
                                                                             "No." = FIELD("No."),
                                                                             "Location Code" = FIELD("Location Code"),
@@ -98,6 +98,38 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         field(70144; "KNAPP Item"; Boolean)
         {
 
+        }
+        field(70145; "Qty on SO(Saleable)"; Decimal)
+        {
+            AccessByPermission = TableData "Sales Shipment Header" = R;
+            FieldClass = FlowField;
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Variant Code" = field("Variant Code"), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Location Code" = field("Location Code"), "Drop Shipment" = FIELD("Drop Shipment"), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
+            DecimalPlaces = 0 : 5;
+            Caption = 'Qty on Sales Order (Saleable)';
+        }
+        field(70146; "Saleable Inventory"; Decimal)
+        {
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Variant Code" = FIELD("Variant Code"), "Saleable Location" = const(true), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Drop Shipment" = FIELD("Drop Shipment")));
+            Caption = 'Saleable Inventory';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
+        }
+        field(70147; "UnShipped Qty."; Decimal)
+        {
+            AccessByPermission = TableData "Sales Shipment Header" = R;
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order),
+                                                                            Type = CONST(Item),
+                                                                            "No." = FIELD("No."),
+                                                                            "Location Code" = FIELD("Location Code"),
+                                                                            "Drop Shipment" = FIELD("Drop Shipment"),
+                                                                            "Variant Code" = FIELD("Variant Code"),
+                                                                            "Unit of Measure Code" = FIELD("Unit of Measure Code"),
+                                                                            "Outstanding Qty. (Base)" = filter(> 0)));
+            Caption = 'UnShipped Qty.';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
         }
 
         // modify("Unit Price")

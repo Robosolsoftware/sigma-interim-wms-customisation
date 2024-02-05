@@ -20,12 +20,13 @@ pageextension 70151 "SC Item Variants" extends "Item Variants"
             {
                 ApplicationArea = All;
                 Editable = false;
-                ToolTip = 'Total invenotry of saleable location';
+                ToolTip = 'Qty available in HD and SH';
             }
             field("Qty on SO(Saleable)"; Rec."Qty on SO(Saleable)")
             {
                 ApplicationArea = All;
                 Editable = false;
+                ToolTip = 'Sum of Outstanding Qty in HD and SH';
                 //GHST Customization++
             }
             field("Total Available Quantity"; TotalAvailableQty(Rec))
@@ -33,7 +34,7 @@ pageextension 70151 "SC Item Variants" extends "Item Variants"
                 ApplicationArea = All;
                 Editable = false;
                 DecimalPlaces = 0 : 5;
-                ToolTip = 'Total Available Qty (Saleable Inventory – Qty on SO(Saleable)';
+                ToolTip = 'Saleable Inventory – Sum of Outstanding Qty on SO (Saleable)';
                 Caption = 'Total Available Quantity(Saleable)';
                 //GHST Customization++
             }
@@ -52,6 +53,7 @@ pageextension 70151 "SC Item Variants" extends "Item Variants"
 
     var
         myInt: Integer;
+        L_CurrpageEdit: Boolean;
 
     local procedure TotalAvailableQty(_Rec: Record "Item Variant"): Decimal
     var

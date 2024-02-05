@@ -211,6 +211,33 @@ tableextension 70131 "SC Customer" extends Customer
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
+        field(70158; "Weekend Ship. Agnt. Serv. Code"; Code[10])
+        {
+            Caption = 'Weekend Shipping Agent Service Code';
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+
+            trigger OnValidate()
+            var
+                ShippingAgentService: Record "Shipping Agent Services";
+            begin
+                if Rec."Weekend Ship. Agnt. Serv. Code" <> '' then begin
+                    ShippingAgentService.Reset();
+                    ShippingAgentService.SetRange(code, Rec."Weekend Ship. Agnt. Serv. Code");
+                    ShippingAgentService.SetRange(Status, ShippingAgentService.Status::Released);
+                    if Not ShippingAgentService.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent Services');
+                end;
+
+                ShippingAgentService.Reset();
+                if ("Shipping Agent Code" <> '') and
+                   ("Weekend Ship. Agnt. Serv. Code" <> '')
+                then
+                    if ShippingAgentService.Get("Shipping Agent Code", "Weekend Ship. Agnt. Serv. Code") then
+                        "Shipping Time" := ShippingAgentService."Shipping Time"
+                    else
+                        Evaluate("Shipping Time", '<>');
+            end;
+        }
 
         modify("Shipping Agent Code")
         {

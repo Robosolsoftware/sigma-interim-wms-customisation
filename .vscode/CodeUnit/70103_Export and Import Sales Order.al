@@ -227,7 +227,7 @@ codeunit 70103 "Export & Import Sales Order"
         TempBLOB.CreateOutStream(outs);
         Excelbuffer.SaveToStream(outs, false);
         TempBLOB.CreateInStream(ins);
-        filename := 'SampleSSalesOrderTemplate_' + Format(CurrentDateTime) + '.xlsx';
+        filename := 'SalesOrderTemplate_' + Format(CurrentDateTime) + '.xlsx';
         DownloadFromStream(
             ins,  // InStream to save
             '',   // Not used in cloud

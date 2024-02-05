@@ -148,6 +148,15 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
 
         }
 
+
+        addafter("Shipping Agent Service Code")
+        {
+            field("Weekend Ship. Agnt. Serv. Code"; Rec."Weekend Ship. Agnt. Serv. Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
     }
 
 

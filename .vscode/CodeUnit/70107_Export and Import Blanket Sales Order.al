@@ -227,7 +227,7 @@ codeunit 70107 "Export & Import Blanket SO"
         TempBLOB.CreateOutStream(outs);
         Excelbuffer.SaveToStream(outs, false);
         TempBLOB.CreateInStream(ins);
-        filename := 'SampleBlanketSalesOrderTemplate_' + Format(CurrentDateTime) + '.xlsx';
+        filename := 'BlanketSalesOrderTemplate_' + Format(CurrentDateTime) + '.xlsx';
         DownloadFromStream(
             ins,  // InStream to save
             '',   // Not used in cloud

@@ -2,14 +2,6 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
 {
     layout
     {
-        addafter("No.")
-        {
-            field("Concerto Customer No."; Rec."Concerto Customer No.")
-            {
-                ApplicationArea = all;
-                Editable = L_CurrPageEditable;
-            }
-        }
         // Add changes to page layout here
         //Editable Condition++
         modify("No.")
@@ -159,7 +151,13 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         //Editable Condition++
 
 
-
+        addafter("Shipping Agent Service Code")
+        {
+            field("Weekend Ship. Agnt. Serv. Code"; Rec."Weekend Ship. Agnt. Serv. Code")
+            {
+                ApplicationArea = All;
+            }
+        }
 
 
         modify("Customer Price Group")

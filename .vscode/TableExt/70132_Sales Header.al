@@ -8,6 +8,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
             var
                 L_Customer: Record Customer;
                 L_SalesPriceHeader: Record "Price List Header";
+                L_Date: Record Date;
             begin
                 if Rec."Sell-to Customer No." <> '' then begin
                     L_Customer.Reset();
@@ -30,6 +31,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec."Default Bank" := L_Customer."Default Bank";
                         Rec."KNAPP Customer" := L_Customer."KNAPP Customer";
                         Rec."Min Order Value" := L_Customer."Min Order Value";
+                        Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
                     end;
 
 
@@ -39,6 +41,22 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                     if L_SalesPriceHeader.FindFirst() then
                         Rec."Sales Price List Code" := L_SalesPriceHeader.Code;
                 end;
+
+
+                //Update Shipment Date++if 
+                L_Date.Reset();
+                L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
+                L_Date.SetRange(L_Date."Period Start", Today);
+                if L_Date.FindFirst() then
+                    if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
+                        if Rec."Weekend Ship. Agnt. Serv. Code" <> '' then
+                            //Update Saturday++
+                            Rec.Validate("Shipment Date", CalcDate('<+1D>', Today))
+                        else begin
+                            //Update Monday
+                            Rec.Validate("Shipment Date", CalcDate('<+3D>', Today))
+                        end;
+                    end;
 
             end;
         }
@@ -197,6 +215,12 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         {
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
+        }
+        field(70151; "Weekend Ship. Agnt. Serv. Code"; Code[10])
+        {
+            Caption = 'Weekend Shipping Agent Service Code';
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+            Editable = false;
         }
 
     }

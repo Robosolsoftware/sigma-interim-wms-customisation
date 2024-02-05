@@ -228,7 +228,7 @@ codeunit 70109 "Export Import Sales Return"
         TempBLOB.CreateOutStream(outs);
         Excelbuffer.SaveToStream(outs, false);
         TempBLOB.CreateInStream(ins);
-        filename := 'SampleSalesReturnOrderTemplate_' + Format(CurrentDateTime) + '.xlsx';
+        filename := 'SalesReturnOrderTemplate_' + Format(CurrentDateTime) + '.xlsx';
         DownloadFromStream(
             ins,  // InStream to save
             '',   // Not used in cloud

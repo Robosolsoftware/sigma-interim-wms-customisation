@@ -67,6 +67,12 @@ tableextension 70134 "SC Sales Invoice Header" extends "Sales Invoice Header"
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
+        field(70151; "Weekend Ship. Agnt. Serv. Code"; Code[10])
+        {
+            Caption = 'Weekend Shipping Agent Service Code';
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+            Editable = false;
+        }
     }
 
     var
