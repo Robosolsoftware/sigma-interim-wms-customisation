@@ -60,6 +60,14 @@ tableextension 70139 "SC Purchase Header" extends "Purchase Header"
         //     DataClassification = ToBeClassified;
         //     DecimalPlaces = 0 : 5;
         // }
+        field(70141; "Sheet Name"; Text[100])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70142; "Import Date"; Date)
+        {
+
+        }
     }
 
     var

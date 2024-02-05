@@ -37,7 +37,7 @@ pageextension 70124 POListExt extends "Purchase Order List"
         // }
         addafter("P&osting")
         {
-            group("PO upload")
+            /*group("PO upload")
             {
                 Caption = 'PO upload';
                 Image = Import;
@@ -71,20 +71,66 @@ pageextension 70124 POListExt extends "Purchase Order List"
                         UploadPO.Run();
                     end;
                 }
+            }*/
+            group("Import/Export PO")
+            {
+                Caption = 'Import/Export Purchase Order';
+                action("Export Purchase Order Template")
+                {
+                    ApplicationArea = All;
+                    Image = Export;
+                    Caption = 'Export Purchase Order Template';
+
+                    trigger OnAction()
+                    var
+                        OpningStock: Codeunit "Export & Import Purchase Order";
+                    begin
+                        OpningStock.SamplePOTemplate();
+
+                    end;
+                }
+                action("Import Purchase Order")
+                {
+                    ApplicationArea = All;
+                    Image = Import;
+
+                    trigger OnAction()
+                    var
+                        ImportSO: codeunit "Export & Import Purchase Order";
+                    begin
+                        ImportSO.Run();
+                        Message('Completed..');
+                    end;
+                }
+
             }
         }
         addbefore(Category_Process)
         {
 
+            // group(Category_Category77)
+            // {
+            //     Caption = 'PO upload';
+            //     //ShowAs = SplitButton;
+
+            //     actionref(ExportPOTemplate; "Export PO Template")
+            //     {
+            //     }
+            //     actionref(Excel_Upload1; "Import PO")
+            //     {
+            //     }
+
+            // }
+
             group(Category_Category77)
             {
-                Caption = 'PO upload';
+                Caption = 'Import/Export Purchase Order';
                 //ShowAs = SplitButton;
 
-                actionref(ExportPOTemplate; "Export PO Template")
+                actionref(ExportPOTemplate; "Export Purchase Order Template")
                 {
                 }
-                actionref(Excel_Upload1; "Import PO")
+                actionref(Excel_Upload1; "Import Purchase Order")
                 {
                 }
 
