@@ -59,6 +59,7 @@ report 70544 "Create Warehouse Shipment V2"
                     field("Do Not Fill Qty. to Handle"; DoNotFillQtytoHandle)
                     {
                         Caption = 'Do not fill Qty. to Handle';
+                        ApplicationArea = All;
                         ToolTip = 'Specifies if the Quantity to Handle field in the warehouse document is prefilled according to the source document quantities.';
                     }
                     field("Reserved Stock Only"; ReservedFromStock)
@@ -66,6 +67,7 @@ report 70544 "Create Warehouse Shipment V2"
                         Caption = 'Reserved stock only';
                         ToolTip = 'Specifies if you want to include only source document lines that are fully or partially reserved from current stock.';
                         ValuesAllowed = " ", "Full and Partial", Full;
+                        ApplicationArea = All;
                     }
                     field(G_SkipBlockedItem; G_SkipBlockedItem)
                     {
