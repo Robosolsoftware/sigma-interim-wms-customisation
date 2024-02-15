@@ -11,4 +11,8 @@ tableextension 70159 "Purch. Rcpt. Header" extends "Purch. Rcpt. Header"
 
         }
     }
+
+
+    var
+        te: Page "Req. Worksheet";
 }

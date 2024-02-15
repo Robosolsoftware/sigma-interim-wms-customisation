@@ -2,6 +2,11 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
 {
     layout
     {
+        modify(InventoryNonFoundation)
+        {
+            Caption = 'Total Physical';
+            Visible = false;
+        }
         addafter("Unit Price")
         {
             field(RRP; Rec.RRP)
@@ -124,21 +129,23 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             }
 
         }
-        addafter(Inventory)
-        {
-            field("Net Inventory"; Rec."Net Inventory")
-            {
-                ApplicationArea = all;
-                Editable = L_CurrPageEditable;
-                ToolTip = 'Inventory - Sales Order';
-            }
-            field("Saleable Inventory"; Rec."Saleable Inventory")
-            {
-                ApplicationArea = all;
-                Editable = L_CurrPageEditable;
-                ToolTip = 'HD House and Sigma House';
-            }
-        }
+        // addafter(Inventory)
+        // {
+        //     field("Net Inventory"; Rec."Net Inventory")
+        //     {
+        //         ApplicationArea = all;
+        //         //Editable = L_CurrPageEditable;
+        //         Editable = false;
+        //         ToolTip = 'Inventory - Sales Order';
+        //     }
+        //     field("Saleable Inventory"; Rec."Saleable Inventory")
+        //     {
+        //         ApplicationArea = all;
+        //         //Editable = L_CurrPageEditable;
+        //         Editable = false;
+        //         ToolTip = 'HD House and Sigma House';
+        //     }
+        // }
         // modify(VariantMandatoryDefaultYes)
         // {
         //     trigger OnAfterValidate()
@@ -212,6 +219,8 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
         {
             ToolTip = 'Inventory from all Locations';
             Editable = L_CurrPageEditable;
+            Caption = 'Total Physical';
+            Visible = false;
         }
         modify("Automatic Ext. Texts")
         {

@@ -15,6 +15,10 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
         {
             Editable = G_EditShipping;
         }
+        modify("Location Code")
+        {
+            Editable = G_EditShipping;
+        }
         addfirst(factboxes)
         {
             part("Item Variants Details"; "Item Variants Details")
@@ -154,7 +158,7 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
             field("Weekend Ship. Agnt. Serv. Code"; Rec."Weekend Ship. Agnt. Serv. Code")
             {
                 ApplicationArea = All;
-                Editable = false;
+                Editable = G_EditShipping;
             }
         }
     }

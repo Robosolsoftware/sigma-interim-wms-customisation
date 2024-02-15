@@ -93,7 +93,7 @@ codeunit 70110 "Export & Import Purchase Order"
                     if GetValueAtIndex(RowNo, 6) <> '' then begin
                         Clear(G_DocumentDate);
                         Evaluate(G_DocumentDate, GetValueAtIndex(RowNo, 7));
-                        PurchHdr.Validate("Document Date", G_DocumentDate);
+                        PurchHdr.Validate("Order Date", G_DocumentDate);
                         PurchHdr.Modify(true);
                     end;
 
@@ -172,7 +172,7 @@ codeunit 70110 "Export & Import Purchase Order"
         Excelbuffer.AddColumn('Variant Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Quantity', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Unit Cost', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
-        Excelbuffer.AddColumn('Document Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
+        Excelbuffer.AddColumn('Order Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
         Excelbuffer.AddColumn('Requested Receipt Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Vendor Order No', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.CreateNewBook('Sample Template');

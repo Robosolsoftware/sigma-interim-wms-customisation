@@ -81,6 +81,7 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
             }
             field("Free Quantity"; G_FreeQuantity)
             {
+                Caption = 'Total Free';
                 ApplicationArea = All;
                 Editable = false;
                 DecimalPlaces = 0 : 5;
@@ -99,7 +100,8 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 Editable = false;
                 DecimalPlaces = 0 : 5;
                 ToolTip = 'Saleable Inventory – Sum of Outstanding Qty on SO (Saleable)';
-                Caption = 'Total Available Quantity(Saleable)';
+                //Caption = 'Total Available Quantity(Saleable)';
+                Caption = 'Free (Saleable)';
             }
             field("UnShipped Qty."; Rec."UnShipped Qty.")
             {

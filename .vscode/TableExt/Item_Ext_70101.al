@@ -2,6 +2,10 @@ tableextension 70101 "Item_Extension" extends Item
 {
     fields
     {
+        modify(Inventory)
+        {
+            Caption = 'Total Physical';
+        }
         modify("Item Category Code")
         {
             Caption = 'Sub-Child Category';
@@ -218,7 +222,8 @@ tableextension 70101 "Item_Extension" extends Item
         field(70110; "Saleable Inventory"; Decimal)
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Saleable Location" = const(true), "Location Code" = field("Location Filter")));
-            Caption = 'Saleable Inventory';
+            //Caption = 'Saleable Inventory';
+            Caption = 'Physical (Saleable)';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;

@@ -68,6 +68,11 @@ tableextension 70139 "SC Purchase Header" extends "Purchase Header"
         {
 
         }
+        field(70143; "Warehouse Receipt Exist"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Warehouse Receipt Line" where("Source Document" = filter("Purchase Order"), "Source No." = field("No.")));
+        }
     }
 
     var

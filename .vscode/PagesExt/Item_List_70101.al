@@ -2,6 +2,10 @@ pageextension 70101 "Item Extended List" extends "Item List"
 {
     layout
     {
+        modify(InventoryField)
+        {
+            Caption = 'Total Physical';
+        }
         addafter(Description)
         {
             field("KNAPP Item"; Rec."KNAPP Item")
@@ -54,6 +58,10 @@ pageextension 70101 "Item Extended List" extends "Item List"
             {
                 ApplicationArea = all;
             }
+            field("Saleable Inventory"; Rec."Saleable Inventory")
+            {
+                ApplicationArea = all;
+            }
             field("Qty. on Sales Order"; Rec."Qty. on Sales Order")
             {
                 ApplicationArea = all;
@@ -62,10 +70,7 @@ pageextension 70101 "Item Extended List" extends "Item List"
             {
                 ApplicationArea = all;
             }
-            field("Saleable Inventory"; Rec."Saleable Inventory")
-            {
-                ApplicationArea = all;
-            }
+
 
         }
         addafter(Description)

@@ -9,7 +9,8 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                                                                   "Drop Shipment" = FIELD("Drop Shipment"),
                                                                   "Variant Code" = FIELD("Variant Code"),
                                                                   "Unit of Measure Code" = FIELD("Unit of Measure Code")));
-            Caption = 'Inventory';
+            //Caption = 'Inventory';
+            Caption = 'Total Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
@@ -40,7 +41,8 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                                                                             "Variant Code" = FIELD("Variant Code"),
                                                                             "Unit of Measure Code" = FIELD("Unit of Measure Code"),
                                                                             "Outstanding Qty. (Base)" = filter(> 0)));
-            Caption = 'Allocated';
+            //Caption = 'Allocated';
+            Caption = 'Total Allocated';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
@@ -105,12 +107,14 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
             FieldClass = FlowField;
             CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Variant Code" = field("Variant Code"), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Location Code" = field("Location Code"), "Drop Shipment" = FIELD("Drop Shipment"), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
             DecimalPlaces = 0 : 5;
-            Caption = 'Qty on Sales Order (Saleable)';
+            //Caption = 'Qty on Sales Order (Saleable)';
+            Caption = 'Allocated (Saleable)';
         }
         field(70146; "Saleable Inventory"; Decimal)
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Variant Code" = FIELD("Variant Code"), "Saleable Location" = const(true), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Drop Shipment" = FIELD("Drop Shipment")));
-            Caption = 'Saleable Inventory';
+            //Caption = 'Saleable Inventory';
+            Caption = 'Physical (Saleable)';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;

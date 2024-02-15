@@ -46,15 +46,15 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                 //Update Shipment Date++if 
                 L_Date.Reset();
                 L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
-                L_Date.SetRange(L_Date."Period Start", Today);
+                L_Date.SetRange(L_Date."Period Start", WorkDate());
                 if L_Date.FindFirst() then
                     if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
                         if Rec."Weekend Ship. Agnt. Serv. Code" <> '' then
                             //Update Saturday++
-                            Rec.Validate("Shipment Date", CalcDate('<+1D>', Today))
+                            Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()))
                         else begin
                             //Update Monday
-                            Rec.Validate("Shipment Date", CalcDate('<+3D>', Today))
+                            Rec.Validate("Shipment Date", CalcDate('<+3D>', WorkDate()))
                         end;
                     end;
 

@@ -2,6 +2,10 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
 {
     layout
     {
+        modify("Location Code")
+        {
+            Editable = G_EditLocation;
+        }
 
         addlast(General)
         {
@@ -105,7 +109,22 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
 
     var
         G_Functions: Codeunit "SC Events & Subscriber";
-        tes: Page "Item Card";
+        G_EditLocation: Boolean;
+
+
+    trigger OnAfterGetRecord()
+    var
+        L_PurchaseLine: Record "Purchase Line";
+    begin
+        Clear(G_EditLocation);
+        L_PurchaseLine.Reset();
+        L_PurchaseLine.SetRange("Document No.", Rec."No.");
+        L_PurchaseLine.SetRange("Document Type", Rec."Document Type");
+        if not L_PurchaseLine.IsEmpty then
+            G_EditLocation := false
+        else
+            G_EditLocation := true;
+    end;
 
 
 
