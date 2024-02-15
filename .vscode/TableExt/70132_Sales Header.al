@@ -201,7 +201,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         {
 
         }
-        field(70148; "Shortcut Dimension 3 Code"; Code[20])
+        field(70148; "Shortcut Dimension 3 Code"; Code[50])
         {
             Caption = 'Shortcut Dimension 3 Code';
             CaptionClass = '50000,83';
