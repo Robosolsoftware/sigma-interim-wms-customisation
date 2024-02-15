@@ -78,25 +78,51 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(50020; "Receipt Status"; Option)
+        field(50020; "Transportation No."; Code[20])
         {
-            OptionMembers = " ","Transportation Booked","Goods Arrived","Goods Not Shownup","GRN In Progress";
-            OptionCaption = ' ,Transportation Booked,Goods Arrived,Goods Not Shownup,GRN In Progress';
+
         }
-    }
+        field(50021; "Receipt Status"; Option)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Transportation Receipt Status';
+            OptionMembers = " ","Transportation Booked","Goods Arrived","Goods Not Shownup","GRN In Progress",Closed;
+            OptionCaption = ' ,Transportation Booked,Goods Arrived,Goods Not Shownup,GRN In Progress,Closed';
 
-    keys
-    {
-        // Add changes to keys here
-    }
+        }
+        field(50022; "PO Expected Receipt Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50023; "No. of Products"; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
 
-    fieldgroups
-    {
-        // Add changes to field groups here
+        field(50024; CD; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Yes,No;
+        }
+        field(50025; "CD Qty"; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+
     }
+    trigger OnDelete()
+    var
+        myInt: Integer;
+    begin
+        if (rec."Transportation No." <> '') or (Rec."Receipt Status" <> Rec."Receipt Status"::Closed) then
+            Error('Cannot Delete the Record');
+    end;
+
+
+
 
     var
         myInt: Integer;
-        Test: Record Contact;
-        ttt: Page "Customer Card";
+        Test: Record "Posted Whse. Receipt Header";
+
 }

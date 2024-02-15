@@ -21,12 +21,22 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                         Caption = 'Purchase Order Date';
                         Editable = false;
                     }
+                    field("Transportation No."; Rec."Transportation No.")
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+                    }
+                    field("Receipt Status"; Rec."Receipt Status")
+                    {
+                        ApplicationArea = all;
+                    }
                     field("Supplier Name"; Rec."Supplier Name")
                     {
                         ApplicationArea = all;
                         Caption = 'Suplier Name.';
                         Editable = false;
                     }
+
                     field("Warehouse Class Code"; Rec."Warehouse Class Code")
                     {
                         ApplicationArea = all;
@@ -99,10 +109,7 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                 group(Status)
                 {
                     Editable = false;
-                    field("Receipt Status"; Rec."Receipt Status")
-                    {
-                        ApplicationArea = all;
-                    }
+
                     field("Actual Receipt Date"; Rec."Actual Receipt Date")
                     {
                         ApplicationArea = all;

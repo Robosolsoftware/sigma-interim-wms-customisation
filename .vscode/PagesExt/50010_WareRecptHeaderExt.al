@@ -55,61 +55,61 @@ pageextension 50010 WareRcptHeaderExt extends "Warehouse Receipt"
                         Editable = false;
                     }
                 }
-                group("Booking Details")
-                {
-                    field(Carrier; Rec.Carrier)
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Requested Delivery Date"; Rec."Requested Delivery Date")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Expected Delivery Date"; Rec."Expected Delivery Date")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Expected Delivery Time"; Rec."Expected Delivery Time")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Booked Pallets"; Rec."Booked Pallets")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field(Lifts; Rec.Lifts)
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Loose Boxes"; Rec."Loose Boxes")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Curtain Side"; Rec."Curtain Side")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field(Comments; Rec.Comments)
-                    {
-                        ApplicationArea = all;
-                    }
-                }
-                group(Status)
-                {
-                    field("Receipt Status"; Rec."Receipt Status")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Actual Receipt Date"; Rec."Actual Receipt Date")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Actual Receipt Time"; Rec."Actual Receipt Time")
-                    {
-                        ApplicationArea = all;
-                    }
+                // group("Booking Details")
+                // {
+                //     field(Carrier; Rec.Carrier)
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Requested Delivery Date"; Rec."Requested Delivery Date")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Expected Delivery Date"; Rec."Expected Delivery Date")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Expected Delivery Time"; Rec."Expected Delivery Time")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Booked Pallets"; Rec."Booked Pallets")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field(Lifts; Rec.Lifts)
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Loose Boxes"; Rec."Loose Boxes")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Curtain Side"; Rec."Curtain Side")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field(Comments; Rec.Comments)
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                // }
+                // group(Status)
+                // {
+                //     field("Receipt Status"; Rec."Receipt Status")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Actual Receipt Date"; Rec."Actual Receipt Date")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Actual Receipt Time"; Rec."Actual Receipt Time")
+                //     {
+                //         ApplicationArea = all;
+                //     }
 
-                }
+                // }
 
             }
             group("User Details:")

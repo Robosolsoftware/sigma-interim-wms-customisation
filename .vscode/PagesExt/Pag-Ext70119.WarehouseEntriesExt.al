@@ -4,7 +4,14 @@ pageextension 70119 WarehouseEntriesExt extends "Warehouse Entries"
     {
         addafter("Entry No.")
         {
-
+            // field("Transportation No."; Rec."Transportation No.")
+            // {
+            //     ApplicationArea = all;
+            // }
+            // field("Receipt Status"; Rec."Receipt Status")
+            // {
+            //     ApplicationArea = all;
+            // }
             field(SystemCreatedBy; GetUserName(rec.SystemCreatedBy))
             {
                 ApplicationArea = all;

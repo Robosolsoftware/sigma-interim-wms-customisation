@@ -78,10 +78,35 @@ tableextension 50002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(50020; "Receipt Status"; Option)
+        field(50020; "Transportation No."; Code[20])
         {
-            OptionMembers = " ","Transportation Booked","Goods Arrived","Goods Not Shownup","GRN In Progress";
-            OptionCaption = ' ,Transportation Booked,Goods Arrived,Goods Not Shownup,GRN In Progress';
+
+        }
+        field(50021; "Receipt Status"; Option)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Transportation Receipt Status';
+            OptionMembers = " ","Transportation Booked","Goods Arrived","Goods Not Shownup","GRN In Progress",Closed;
+            OptionCaption = ' ,Transportation Booked,Goods Arrived,Goods Not Shownup,GRN In Progress,Closed';
+
+        }
+        field(50022; "PO Expected Receipt Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50023; "No. of Products"; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+
+        field(50024; CD; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Yes,No;
+        }
+        field(50025; "CD Qty"; Integer)
+        {
+            DataClassification = ToBeClassified;
         }
     }
 
