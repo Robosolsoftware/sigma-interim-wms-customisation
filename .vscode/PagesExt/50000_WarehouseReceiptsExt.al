@@ -23,6 +23,26 @@ pageextension 50000 WarehouseReceiptsExt extends "Warehouse Receipts"
             {
                 ApplicationArea = all;
             }
+            field("Purchase Order Date"; Rec."Purchase Order Date")
+            {
+                ApplicationArea = all;
+            }
+            field("PO Expected Receipt Date"; Rec."PO Expected Receipt Date")
+            {
+                ApplicationArea = all;
+                Visible = false;
+            }
+            field("No. of Items"; Rec."No. of Items")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+            field("Total Order Qty"; Rec."Total Order Qty")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+
 
         }
         modify("Assigned User ID")

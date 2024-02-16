@@ -20,6 +20,12 @@ pageextension 50010 WareRcptHeaderExt extends "Warehouse Receipt"
                         Caption = 'Purchase Order Date';
                         Editable = false;
                     }
+                    field("PO Expected Receipt Date"; Rec."PO Expected Receipt Date")
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+
+                    }
                     field("Supplier Name"; Rec."Supplier Name")
                     {
                         ApplicationArea = all;
