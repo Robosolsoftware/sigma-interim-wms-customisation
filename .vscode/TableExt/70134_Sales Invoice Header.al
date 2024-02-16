@@ -58,10 +58,6 @@ tableextension 70134 "SC Sales Invoice Header" extends "Sales Invoice Header"
             TableRelation = "Bank Account";
             Editable = false;
         }
-        field(70147; "KNAPP Customer"; Boolean)
-        {
-
-        }
         field(70150; "Min Order Value"; Decimal)
         {
             DataClassification = ToBeClassified;

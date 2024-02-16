@@ -19,10 +19,6 @@ tableextension 70146 "SC Sales Shipment Line" extends "Sales Shipment Line"
         {
             DataClassification = ToBeClassified;
         }
-        field(70144; "KNAPP Item"; Boolean)
-        {
-
-        }
     }
 
     keys

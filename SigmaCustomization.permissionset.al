@@ -1,4 +1,4 @@
-permissionset 50000 WMSBCCustomization
+permissionset 50000 SigmaCustomization
 {
     Assignable = true;
     Permissions = tabledata "Custom Variant"=RIMD,
@@ -34,8 +34,5 @@ permissionset 50000 WMSBCCustomization
         page "Temperature Category"=X,
         page "Warehouse Pick Lines List"=X,
         query "LotNumber WarehouseEntry New"=X,
-        query PostedTransferReceiptsPowerBI=X,
-        query PostedTransferShipmentsPowerBI=X,
-        query TransferOrderPowerBI=X,
         query "Without LotNumber Whs Entry"=X;
 }

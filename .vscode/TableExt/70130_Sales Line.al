@@ -97,10 +97,6 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
             FieldClass = FlowField;
             CalcFormula = lookup(Location."Saleable Location" where(Code = field("Location Code")));
         }
-        field(70144; "KNAPP Item"; Boolean)
-        {
-
-        }
         field(70145; "Qty on SO(Saleable)"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
@@ -204,58 +200,12 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 L_ItemUnitofMeasure: Record "Item Unit of Measure";
                 ShippingAgent: Record "Shipping Agent";
                 L_Function: Codeunit "SC Events & Subscriber";
-
                 UserSetup: Record "User Setup";
                 DisUnitPrice: Decimal;
                 L_Location: Record Location;
                 ConsolidateWarehouseShipment: Codeunit "Consolidate Warehouse Shipment";
             begin
                 if (Rec.Type = Rec.Type::Item) then begin
-                    L_Item.Reset();
-                    L_Item.SetRange("No.", Rec."No.");
-                    if L_Item.FindFirst() then begin
-                        L_Item.TestField("QAU Approved");
-                        L_Item.TestField(Status, L_Item.Status::Released);
-                    end;
-                    //KNAPP Customer++
-                    if ConsolidateWarehouseShipment.CheckkNAPCustomer(Rec."Sell-to Customer No.") = true then begin
-                        if ConsolidateWarehouseShipment.CheckkNAPItem(Rec."No.") = false then begin
-                            L_Location.Reset();
-                            L_Location.SetRange("Manual Picking", true);
-                            if L_Location.FindFirst() then begin
-                                Rec.Validate("Location Code", L_Location.Code);
-                            end;
-                        end;
-                        if ConsolidateWarehouseShipment.CheckkNAPItem(Rec."No.") = true then begin
-                            L_Location.Reset();
-                            L_Location.SetRange("KNAPP Location", true);
-                            if L_Location.FindFirst() then begin
-                                Rec.Validate("Location Code", L_Location.Code);
-                            end;
-                        end;
-                    end;
-
-                    //Manual Customer++
-                    if ConsolidateWarehouseShipment.CheckkNAPCustomer(Rec."Sell-to Customer No.") = false then begin
-                        if ConsolidateWarehouseShipment.CheckkNAPItem(Rec."No.") = true then begin
-                            L_Location.Reset();
-                            L_Location.SetRange("Manual Picking", true);
-                            if L_Location.FindFirst() then begin
-                                Rec.Validate("Location Code", L_Location.Code);
-                            end;
-                        end;
-
-                        if ConsolidateWarehouseShipment.CheckkNAPItem(Rec."No.") = false then begin
-                            L_Location.Reset();
-                            L_Location.SetRange("Manual Picking", true);
-                            if L_Location.FindFirst() then begin
-                                Rec.Validate("Location Code", L_Location.Code);
-                            end;
-                        end;
-                    end;
-
-
-
                     L_SalesHeader.Reset();
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
@@ -264,7 +214,6 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                         if L_SalesHeader."Shipping Agent Code" <> '' then begin
                             L_Function.CheckShippingAgentRestriction(L_SalesHeader, Rec);
                         end;
-
 
                         //++Sales Order warning message(15813)
                         L_Function.SalesOrderWarningMessage(L_SalesHeader, Rec);
@@ -275,7 +224,6 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     if L_Item.FindFirst() then begin
                         Rec."Min Sell Price" := L_Item."Min Sell Price";
                         Rec."Parent Category" := L_Item."Parent Category";
-                        Rec."KNAPP Item" := L_Item."KNAPP Item";
                     end;
 
                     L_ItemUnitofMeasure.Reset();

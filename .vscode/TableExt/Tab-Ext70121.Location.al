@@ -22,10 +22,6 @@ tableextension 70121 LocationExt extends Location
         {
 
         }
-        field(70122; "KNAPP Location"; Boolean)
-        {
-
-        }
         field(70123; "Manual Picking"; Boolean)
         {
 

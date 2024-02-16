@@ -3,39 +3,6 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
     layout
     {
         // Add changes to page layout here
-        modify("Location Code")
-        {
-            trigger OnAfterValidate()
-            var
-                L_Customer: Record Customer;
-                L_Location: Record Location;
-            begin
-                if Rec."Location Code" <> '' then begin
-                    L_Customer.Reset();
-                    L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
-                    if L_Customer.FindFirst() then begin
-                        if L_Customer."KNAPP Customer" <> true then begin
-                            L_Location.Reset();
-                            L_Location.SetRange(Code, Rec."Location Code");
-                            if L_Location.FindFirst() then begin
-                                if L_Location."KNAPP Location" = true then
-                                    Error('You can not enter KNAPP location');
-                            end;
-                        end;
-                    end;
-                end;
-
-
-            end;
-        }
-        addafter(Description)
-        {
-            field("KNAPP Item"; Rec."KNAPP Item")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
-        }
         addafter(Quantity)
         {
             field("Shipper Qty."; Rec."Shipper Qty.")

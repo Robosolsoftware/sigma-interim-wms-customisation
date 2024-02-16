@@ -178,30 +178,6 @@ tableextension 70131 "SC Customer" extends Customer
             DataClassification = ToBeClassified;
             OptionMembers = Open,"Pending Approval",Released;
         }
-        field(70150; "KNAPP Customer"; Boolean)
-        {
-
-        }
-        field(70151; "KNAPP Special Check"; Boolean)
-        {
-
-        }
-        field(70152; "KNAPP Final Check"; Boolean)
-        {
-
-        }
-        field(70153; "KNAPP Inventory Station"; Boolean)
-        {
-
-        }
-        field(70154; "KNAPP Repack"; Boolean)
-        {
-
-        }
-        field(70155; "KNAPP Lid"; Boolean)
-        {
-
-        }
         field(70156; Funded; Boolean)
         {
 

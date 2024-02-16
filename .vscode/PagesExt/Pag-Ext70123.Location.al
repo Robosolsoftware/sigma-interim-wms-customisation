@@ -29,23 +29,6 @@ pageextension 70123 LocationExt extends "Location Card"
                 end;
 
             }
-            field("KNAPP Location"; Rec."KNAPP Location")
-            {
-                ApplicationArea = All;
-
-                trigger OnValidate()
-                var
-                    L_Location: Record Location;
-                begin
-                    L_Location.Reset();
-                    L_Location.SetFilter(Code, '<>%1', Rec.Code);
-                    L_Location.SetRange("KNAPP Location", true);
-                    if L_Location.FindFirst() then
-                        Error('KNAPP Location Should not be more than one');
-
-                end;
-
-            }
         }
         addbefore("Home Page")
         {

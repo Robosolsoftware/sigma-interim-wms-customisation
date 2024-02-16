@@ -83,11 +83,6 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                 Editable = false;
                 Caption = 'System Modified By';
             }
-            field("KNAPP Customer"; Rec."KNAPP Customer")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
             field("Min Order Value"; Rec."Min Order Value")
             {
                 ApplicationArea = All;

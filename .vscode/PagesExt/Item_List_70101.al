@@ -8,10 +8,6 @@ pageextension 70101 "Item Extended List" extends "Item List"
         }
         addafter(Description)
         {
-            field("KNAPP Item"; Rec."KNAPP Item")
-            {
-                ApplicationArea = All;
-            }
             field(Status; Rec.Status)
             {
                 Editable = false;

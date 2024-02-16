@@ -180,25 +180,4 @@ codeunit 70106 "Consolidate Warehouse Shipment"
             G_WhseHeaderCreated := WhseHeaderCreated;
         end;
     end;
-
-
-    procedure CheckkNAPCustomer(_CustomerNo: Code[20]): Boolean
-    var
-        L_Customer: Record Customer;
-    begin
-        if L_Customer.Get(_CustomerNo) then
-            if L_Customer."KNAPP Customer" = true then
-                exit(true);
-        exit(false);
-    end;
-
-    procedure CheckkNAPItem(_ItemNo: Code[20]): Boolean
-    var
-        L_Item: Record Item;
-    begin
-        if L_Item.Get(_ItemNo) then
-            if L_Item."KNAPP Item" = true then
-                exit(true);
-        exit(false);
-    end;
 }

@@ -2,7 +2,7 @@
   "id": "89b2d3ff-cff9-4506-9a14-597a5b6d370f",
   "name": "Interim WMS BC Customisation",
   "publisher": "Robosol",
-  "version": "22.0.0.2",
+  "version": "22.0.0.0",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -17,7 +17,6 @@
       "publisher": "Microsoft",
       "version": "23.2.14098.14562"
     }
-    
   ],
   "screenshots": [],
   "platform": "22.0.0.0",

@@ -43,11 +43,6 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
                 Editable = L_CurrPageEditable;
                 ToolTip = 'If Min Sell is 0, then system will not allow to change the unit price less than 10%';
             }
-            field("KNAPP Item"; Rec."KNAPP Item")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
             field("QAU Approved"; Rec."QAU Approved")
             {
                 ApplicationArea = all;

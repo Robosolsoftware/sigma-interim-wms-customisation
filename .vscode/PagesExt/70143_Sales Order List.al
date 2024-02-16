@@ -4,11 +4,6 @@ pageextension 70143 "SC Sales Order List" extends "Sales Order List"
     {
         addafter("Sell-to Customer Name")
         {
-            field("KNAPP Customer"; Rec."KNAPP Customer")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
             field("Shortcut Dimension 3 Code"; Rec."Shortcut Dimension 3 Code")
             {
                 ApplicationArea = All;

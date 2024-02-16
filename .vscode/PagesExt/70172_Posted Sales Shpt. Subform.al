@@ -3,15 +3,6 @@ pageextension 70172 "SC Posted Sales Shpt. Subform" extends "Posted Sales Shpt. 
     layout
     {
         // Add changes to page layout here
-        addafter(Description)
-        {
-            field("KNAPP Item"; Rec."KNAPP Item")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
-
-        }
     }
 
     actions

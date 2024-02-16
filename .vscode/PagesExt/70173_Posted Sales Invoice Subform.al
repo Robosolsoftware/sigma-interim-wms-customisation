@@ -3,15 +3,6 @@ pageextension 70173 "SC Posted SalesInvoice Subform" extends "Posted Sales Invoi
     layout
     {
         // Add changes to page layout here
-        addafter(Description)
-        {
-            field("KNAPP Item"; Rec."KNAPP Item")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
-
-        }
     }
 
     actions

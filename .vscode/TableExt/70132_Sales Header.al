@@ -29,7 +29,6 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec."Send By" := L_Customer."Send By";
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
-                        Rec."KNAPP Customer" := L_Customer."KNAPP Customer";
                         Rec."Min Order Value" := L_Customer."Min Order Value";
                         Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
                     end;
@@ -85,7 +84,6 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec."Send By" := L_Customer."Send By";
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
-                        Rec."KNAPP Customer" := L_Customer."KNAPP Customer";
                         Rec."Min Order Value" := L_Customer."Min Order Value";
                     end;
 
@@ -196,10 +194,6 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
             //DataClassification = ToBeClassified;
             FieldClass = FlowField;
             CalcFormula = exist("Warehouse Shipment Line" where("Source No." = field("No."), "Source Document" = const("Sales Order"), "Qty. Picked" = filter(> 0)));
-        }
-        field(70147; "KNAPP Customer"; Boolean)
-        {
-
         }
         field(70148; "Shortcut Dimension 3 Code"; Code[50])
         {
