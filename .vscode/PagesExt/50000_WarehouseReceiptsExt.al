@@ -27,6 +27,10 @@ pageextension 50000 WarehouseReceiptsExt extends "Warehouse Receipts"
             {
                 ApplicationArea = all;
             }
+            field("Requested Receipt Date"; Rec."Requested Receipt Date")
+            {
+                ApplicationArea = all;
+            }
             field("PO Expected Receipt Date"; Rec."PO Expected Receipt Date")
             {
                 ApplicationArea = all;

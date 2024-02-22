@@ -108,6 +108,10 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         {
             DataClassification = ToBeClassified;
         }
+        field(50026; "Requested Receipt Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
     trigger OnDelete()

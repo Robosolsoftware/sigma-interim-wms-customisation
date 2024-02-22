@@ -386,6 +386,8 @@ codeunit 70102 "SC Events & Subscriber"
                 WarehouseReceiptHeader."Purchase Order No." := PurchaseHeader."No.";
                 WarehouseReceiptHeader."Purchase Order Date" := PurchaseHeader."Order Date";
                 WarehouseReceiptHeader."Supplier Name" := PurchaseHeader."Buy-from Vendor Name";
+                WarehouseReceiptHeader."Requested Receipt Date" := PurchaseHeader."Requested Receipt Date";
+                PurchaseLine.Reset();
                 PurchaseLine.Reset();
                 PurchaseLine.SetRange("Document No.", PurchaseHeader."No.");
                 PurchaseLine.SetRange("Document Type", PurchaseHeader."Document Type");
