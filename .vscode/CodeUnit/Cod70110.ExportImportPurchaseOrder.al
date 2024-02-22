@@ -75,6 +75,11 @@ codeunit 70110 "Export & Import Purchase Order"
                 PurchHdr.SetRange("Buy-from Vendor No.", GetValueAtIndex(RowNo, 1));
                 PurchHdr.SetRange("Document Type", PurchHdr."Document Type"::Order);
                 PurchHdr.SetRange("Sheet Name", FileName);
+                if GetValueAtIndex(RowNo, 7) <> '' then begin
+                    Clear(RequestReceiptDate);
+                    Evaluate(RequestReceiptDate, GetValueAtIndex(RowNo, 7));
+                    PurchHdr.SetRange("Requested Receipt Date", RequestReceiptDate);
+                end;
                 if not PurchHdr.FindFirst() then begin
                     PurchHdr.Init();
                     PurchHdr.Validate("Document Type", PurchHdr."Document Type"::Order);
@@ -104,6 +109,11 @@ codeunit 70110 "Export & Import Purchase Order"
                 PurchHdr.SetRange("Document Type", PurchHdr."Document Type"::Order);
                 PurchHdr.SetRange("Buy-from Vendor No.", GetValueAtIndex(RowNo, 1));
                 PurchHdr.SetRange("Sheet Name", FileName);
+                if GetValueAtIndex(RowNo, 7) <> '' then begin
+                    Clear(RequestReceiptDate);
+                    Evaluate(RequestReceiptDate, GetValueAtIndex(RowNo, 7));
+                    PurchHdr.SetRange("Requested Receipt Date", RequestReceiptDate);
+                end;
                 if PurchHdr.FindFirst() then begin
                     PurchLn.Reset();
                     PurchLn.Init();

@@ -195,7 +195,8 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;
-                Editable = L_CurrPageEditable;
+                //Editable = L_CurrPageEditable;
+                Editable = L_EditableStatus;
                 trigger OnValidate()
                 var
                     L_UserSetup: Record "User Setup";
@@ -204,8 +205,9 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                     L_UserSetup.SetRange("User ID", UserId);
                     L_UserSetup.SetRange("Edit Master Data", true);
                     if not L_UserSetup.FindFirst() then
-                        Error('You do not have permission to edit')
+                        Error('You do not have permission to edit');
 
+                    CurrPage.Update();
                 end;
             }
             field("QAU Approved"; Rec."QAU Approved")
@@ -224,6 +226,11 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                 Editable = L_CurrPageEditable;
             }
             field("Min Order Value"; Rec."Min Order Value")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
+            field("Magazine Mailout"; Rec."Magazine Mailout")
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
@@ -289,6 +296,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         myInt: Integer;
         L_CurrPageEditable: Boolean;
         L_EditableQUAApproved: Boolean;
+        L_EditableStatus: Boolean;
 
     trigger OnAfterGetRecord()
     var
@@ -297,19 +305,35 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
     begin
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
+        Clear(L_EditableStatus);
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
-            L_EditableQUAApproved := true;
+            //L_EditableQUAApproved := true;
+            L_EditableStatus := true;
         end else begin
             L_UserSetup.Reset();
             L_UserSetup.SetRange("User ID", UserId);
             if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data" = true then
-                    L_CurrPageEditable := true
-                else
+                if L_UserSetup."Edit Master Data" = true then begin
+                    if Rec.Status = Rec.Status::Open then
+                        L_CurrPageEditable := true
+                    else
+                        L_CurrPageEditable := false;
+                end else
                     L_CurrPageEditable := false;
             end else
                 L_CurrPageEditable := false;
+
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then
+                    L_EditableStatus := true
+                else
+                    L_EditableStatus := false;
+            end else
+                L_EditableStatus := false;
+
 
 
             L_UserSetup.Reset();
@@ -331,19 +355,35 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
     begin
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
+        Clear(L_EditableStatus);
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
-            L_EditableQUAApproved := true;
+            //L_EditableQUAApproved := true;
+            L_EditableStatus := true;
         end else begin
             L_UserSetup.Reset();
             L_UserSetup.SetRange("User ID", UserId);
             if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data" = true then
-                    L_CurrPageEditable := true
-                else
+                if L_UserSetup."Edit Master Data" = true then begin
+                    if Rec.Status = Rec.Status::Open then
+                        L_CurrPageEditable := true
+                    else
+                        L_CurrPageEditable := false;
+                end else
                     L_CurrPageEditable := false;
             end else
                 L_CurrPageEditable := false;
+
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then
+                    L_EditableStatus := true
+                else
+                    L_EditableStatus := false;
+            end else
+                L_EditableStatus := false;
+
 
 
             L_UserSetup.Reset();

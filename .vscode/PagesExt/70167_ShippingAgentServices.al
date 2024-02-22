@@ -4,26 +4,26 @@ pageextension 70167 ShippingAgentServices extends "Shipping Agent Services"
     {
         modify(Code)
         {
-            Editable = G_Editable;
+            Editable = L_CurrPageEditable;
         }
         modify(Description)
         {
-            Editable = G_Editable;
+            Editable = L_CurrPageEditable;
 
         }
         modify("Shipping Time")
         {
-            Editable = G_Editable;
+            Editable = L_CurrPageEditable;
 
         }
         modify("Base Calendar Code")
         {
-            Editable = G_Editable;
+            Editable = L_CurrPageEditable;
 
         }
         modify(CustomizedCalendar)
         {
-            Editable = G_Editable;
+            Editable = L_CurrPageEditable;
 
         }
         addlast(Control1)
@@ -31,6 +31,7 @@ pageextension 70167 ShippingAgentServices extends "Shipping Agent Services"
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;
+                Editable = L_EditableStatus;
 
                 trigger OnValidate()
                 var
@@ -40,7 +41,9 @@ pageextension 70167 ShippingAgentServices extends "Shipping Agent Services"
                     L_UserSetup.SetRange("User ID", UserId);
                     L_UserSetup.SetRange("Edit Master Data", true);
                     if not L_UserSetup.FindFirst() then
-                        Error('You do not have permission to edit')
+                        Error('You do not have permission to edit');
+
+                    CurrPage.Update();
                 end;
 
             }
@@ -50,37 +53,92 @@ pageextension 70167 ShippingAgentServices extends "Shipping Agent Services"
     actions
     {
         // Add changes to page actions here
+        addfirst(Creation)
+        {
+            action("Restrict Item")
+            {
+                Promoted = true;
+                PromotedCategory = Process;
+                ApplicationArea = All;
+                RunObject = page "Shipping Agent Restrict Item";
+                RunPageLink = "Shipping Agent Code" = field("Shipping Agent Code"), "Shipping Agent Service Code" = field(Code);
+            }
+        }
     }
 
     var
         myInt: Integer;
-        G_Editable: Boolean;
+        L_CurrPageEditable: Boolean;
+        L_EditableStatus: Boolean;
+
+    trigger OnAfterGetRecord()
+    var
+        L_UserSetup: Record "User Setup";
+
+    begin
+        Clear(L_CurrPageEditable);
+        Clear(L_EditableStatus);
+        if Rec.Status = Rec.Status::Open then begin
+            L_CurrPageEditable := true;
+            L_EditableStatus := true;
+        end else begin
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then begin
+                    if Rec.Status = Rec.Status::Open then
+                        L_CurrPageEditable := true
+                    else
+                        L_CurrPageEditable := false;
+                end else
+                    L_CurrPageEditable := false;
+            end else
+                L_CurrPageEditable := false;
+
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then
+                    L_EditableStatus := true
+                else
+                    L_EditableStatus := false;
+            end else
+                L_EditableStatus := false;
+        end;
+    end;
 
     trigger OnOpenPage()
     var
         L_UserSetup: Record "User Setup";
     begin
-        G_Editable := true;
-        L_UserSetup.Reset();
-        L_UserSetup.SetRange("User ID", UserId);
-        L_UserSetup.SetRange("Edit Master Data", true);
-        if not L_UserSetup.FindFirst() then begin
-            if Rec.Status <> Rec.Status::Open then
-                G_Editable := false;
-        end;
-    end;
+        Clear(L_CurrPageEditable);
+        Clear(L_EditableStatus);
+        if Rec.Status = Rec.Status::Open then begin
+            L_CurrPageEditable := true;
+            L_EditableStatus := true;
+        end else begin
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then begin
+                    if Rec.Status = Rec.Status::Open then
+                        L_CurrPageEditable := true
+                    else
+                        L_CurrPageEditable := false;
+                end else
+                    L_CurrPageEditable := false;
+            end else
+                L_CurrPageEditable := false;
 
-    trigger OnAfterGetRecord()
-    var
-        L_UserSetup: Record "User Setup";
-    begin
-        G_Editable := true;
-        L_UserSetup.Reset();
-        L_UserSetup.SetRange("User ID", UserId);
-        L_UserSetup.SetRange("Edit Master Data", true);
-        if not L_UserSetup.FindFirst() then begin
-            if Rec.Status <> Rec.Status::Open then
-                G_Editable := false;
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then
+                    L_EditableStatus := true
+                else
+                    L_EditableStatus := false;
+            end else
+                L_EditableStatus := false;
         end;
     end;
 }

@@ -85,7 +85,8 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;
-                Editable = L_CurrPageEditable;
+                //Editable = L_CurrPageEditable;
+                Editable = L_EditableStatus;
 
                 trigger OnValidate()
                 var
@@ -95,8 +96,9 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
                     L_UserSetup.SetRange("User ID", UserId);
                     L_UserSetup.SetRange("Edit Master Data", true);
                     if not L_UserSetup.FindFirst() then
-                        Error('You do not have permission to edit')
+                        Error('You do not have permission to edit');
 
+                    CurrPage.Update();
                 end;
             }
         }
@@ -274,6 +276,7 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
         ItemVarVisible: Boolean;
         L_EditableQUAApproved: Boolean;
         L_CurrPageEditable: Boolean;
+        L_EditableStatus: Boolean;
 
 
     /*trigger OnOpenPage()
@@ -296,19 +299,35 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
     begin
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
+        Clear(L_EditableStatus);
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
-            L_EditableQUAApproved := true;
+            //L_EditableQUAApproved := true;
+            L_EditableStatus := true;
         end else begin
             L_UserSetup.Reset();
             L_UserSetup.SetRange("User ID", UserId);
             if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data" = true then
-                    L_CurrPageEditable := true
-                else
+                if L_UserSetup."Edit Master Data" = true then begin
+                    if Rec.Status = Rec.Status::Open then
+                        L_CurrPageEditable := true
+                    else
+                        L_CurrPageEditable := false;
+                end else
                     L_CurrPageEditable := false;
             end else
                 L_CurrPageEditable := false;
+
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then
+                    L_EditableStatus := true
+                else
+                    L_EditableStatus := false;
+            end else
+                L_EditableStatus := false;
+
 
 
             L_UserSetup.Reset();
@@ -330,19 +349,35 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
     begin
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
+        Clear(L_EditableStatus);
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
-            L_EditableQUAApproved := true;
+            //L_EditableQUAApproved := true;
+            L_EditableStatus := true;
         end else begin
             L_UserSetup.Reset();
             L_UserSetup.SetRange("User ID", UserId);
             if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data" = true then
-                    L_CurrPageEditable := true
-                else
+                if L_UserSetup."Edit Master Data" = true then begin
+                    if Rec.Status = Rec.Status::Open then
+                        L_CurrPageEditable := true
+                    else
+                        L_CurrPageEditable := false;
+                end else
                     L_CurrPageEditable := false;
             end else
                 L_CurrPageEditable := false;
+
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                if L_UserSetup."Edit Master Data" = true then
+                    L_EditableStatus := true
+                else
+                    L_EditableStatus := false;
+            end else
+                L_EditableStatus := false;
+
 
 
             L_UserSetup.Reset();

@@ -559,7 +559,7 @@ codeunit 70102 "SC Events & Subscriber"
             exit(Users."User Name");
     end;
 
-    procedure CheckShippingAgentRestriction(_SalesHeader: Record "Sales Header"; _SalesLine: Record "Sales Line")
+    procedure CheckShippingAgentServiceRestriction(_SalesHeader: Record "Sales Header"; _SalesLine: Record "Sales Line")
     var
         L_ShippingAgent: Record "Shipping Agent";
         L_RecItemAttValMap: Record "Item Attribute Value Mapping";
@@ -568,24 +568,8 @@ codeunit 70102 "SC Events & Subscriber"
 
         L_WarehouseClassCode: Record "Warehouse Class";
         L_Item: Record Item;
+        ShippingAgentRestrictItem: Record "Shipping Agent Restrict Item";
     begin
-        L_ShippingAgent.Reset();
-        L_ShippingAgent.SetRange(Code, _SalesHeader."Shipping Agent Code");
-        if L_ShippingAgent.FindFirst() then begin
-            if L_ShippingAgent."Restrict CD & Fridge" = true then begin
-                L_Item.Reset();
-                L_Item.SetRange("No.", _SalesLine."No.");
-                if L_Item.FindFirst() then begin
-                    L_WarehouseClassCode.Reset();
-                    L_WarehouseClassCode.SetRange(Code, L_Item."Warehouse Class Code");
-                    if L_WarehouseClassCode.FindFirst() then begin
-                        if (L_WarehouseClassCode."Restrict CD 2,3" = true) OR (L_WarehouseClassCode."Restrict CD 4,5" = true) OR (L_WarehouseClassCode."Restrict Fridge" = true) then begin
-                            Error('CD and Fridge items are not allowed');
-                        end;
-                    end;
-                end;
-            end;
-        end;
         // L_ShippingAgent.Reset();
         // L_ShippingAgent.SetRange(Code, _SalesHeader."Shipping Agent Code");
         // if L_ShippingAgent.FindFirst() then begin
@@ -596,13 +580,16 @@ codeunit 70102 "SC Events & Subscriber"
         //             L_WarehouseClassCode.Reset();
         //             L_WarehouseClassCode.SetRange(Code, L_Item."Warehouse Class Code");
         //             if L_WarehouseClassCode.FindFirst() then begin
-        //                 if (L_WarehouseClassCode."CD Schedule" = true) OR (L_WarehouseClassCode.Fridge = true) then begin
+        //                 if (L_WarehouseClassCode."Restrict CD 2,3" = true) OR (L_WarehouseClassCode."Restrict CD 4,5" = true) OR (L_WarehouseClassCode."Restrict Fridge" = true) then begin
         //                     Error('CD and Fridge items are not allowed');
         //                 end;
         //             end;
         //         end;
         //     end;
         // end;
+
+
+
         // L_ShippingAgent.Reset();
         // L_ShippingAgent.SetRange(Code, _SalesHeader."Shipping Agent Code");
         // if L_ShippingAgent.FindFirst() then begin
@@ -627,6 +614,32 @@ codeunit 70102 "SC Events & Subscriber"
         //         end;
         //     end;
         // end;
+
+        L_RecItemAttValMap.Reset();
+        L_RecItemAttValMap.SetRange("Table ID", 27);
+        L_RecItemAttValMap.SetRange("No.", _SalesLine."No.");
+        if L_RecItemAttValMap.FindSet() then begin
+            repeat
+                L_ItemAttribute.Reset();
+                L_ItemAttribute.SetRange(ID, L_RecItemAttValMap."Item Attribute ID");
+                if L_ItemAttribute.FindFirst() then begin
+                    L_ItemAttributeValue.SetRange("Attribute ID", L_ItemAttribute.ID);
+                    L_ItemAttributeValue.SetRange(ID, L_RecItemAttValMap."Item Attribute Value ID");
+                    if L_ItemAttributeValue.FindFirst() then begin
+                        if L_ItemAttributeValue.Value <> '' then begin
+                            ShippingAgentRestrictItem.Reset();
+                            ShippingAgentRestrictItem.SetRange("Shipping Agent Code", _SalesHeader."Shipping Agent Code");
+                            ShippingAgentRestrictItem.SetRange("Shipping Agent Service Code", _SalesHeader."Shipping Agent Service Code");
+                            ShippingAgentRestrictItem.SetRange("Attribute ID", L_ItemAttribute.ID);
+                            ShippingAgentRestrictItem.SetRange("Attribute value ID", L_RecItemAttValMap."Item Attribute Value ID");
+                            if ShippingAgentRestrictItem.FindFirst() then begin
+                                Error('CD and Fridge items are not allowed');
+                            end;
+                        end;
+                    end;
+                end;
+            until L_RecItemAttValMap.Next() = 0;
+        end;
     end;
 
 
@@ -637,63 +650,58 @@ codeunit 70102 "SC Events & Subscriber"
         L_ItemAttributeValue: Record "Item Attribute Value";
         L_SalesOrderwarningMngSetup: Record "Sales Order warning Mng. Setup";
         WareningMessage: Text[250];
-        L_Dimension: Record Dimension;
+        //L_Dimension: Record Dimension;
         L_DimensionEntry: Record "Dimension Set Entry";
     begin
         L_DimensionEntry.Reset();
         L_DimensionEntry.SetRange("Dimension Set ID", _SalesHeader."Dimension Set ID");
         if L_DimensionEntry.FindSet() then begin
             repeat
-                L_Dimension.Reset();
-                L_Dimension.SetRange(Code, L_DimensionEntry."Dimension Code");
-                if L_Dimension.FindFirst() then begin
-                    //if L_Dimension."Sales warning" = true then begin
-                    //Validate for All attributes if Attibute is blank in sales warning management Setup++
-                    ValidateforAllAttribute(L_Dimension.Code);
+                //if L_Dimension."Sales warning" = true then begin
+                //Validate for All attributes if Attibute is blank in sales warning management Setup++
+                ValidateforAllAttribute(L_DimensionEntry);
 
-                    //Validate for Specific Attribut if Attribute is defined in sales warning management Setup++
-                    L_RecItemAttValMap.Reset();
-                    L_RecItemAttValMap.SetRange("Table ID", 27);
-                    L_RecItemAttValMap.SetRange("No.", _SalesLine."No.");
-                    if L_RecItemAttValMap.FindSet() then begin
-                        repeat
-                            L_ItemAttribute.Reset();
-                            L_ItemAttribute.SetRange(ID, L_RecItemAttValMap."Item Attribute ID");
-                            if L_ItemAttribute.FindFirst() then begin
-                                L_ItemAttributeValue.SetRange("Attribute ID", L_ItemAttribute.ID);
-                                L_ItemAttributeValue.SetRange(ID, L_RecItemAttValMap."Item Attribute Value ID");
-                                if L_ItemAttributeValue.FindFirst() then begin
-                                    L_SalesOrderwarningMngSetup.Reset();
-                                    L_SalesOrderwarningMngSetup.SetRange("Dimension Code", L_Dimension.Code);
-                                    L_SalesOrderwarningMngSetup.SetFilter("Dimension Value", '<>%1', '');
-                                    //L_SalesOrderwarningMngSetup.SetRange("Attribute Value", L_ItemAttributeValue.Value);
-                                    L_SalesOrderwarningMngSetup.SetRange("Attribute value ID", L_ItemAttributeValue.ID);
-                                    L_SalesOrderwarningMngSetup.SetRange("Attribute ID", L_ItemAttributeValue."Attribute ID");
-                                    if L_SalesOrderwarningMngSetup.FindFirst() then begin
-                                        if L_SalesOrderwarningMngSetup."Warning message" <> '' then begin
-                                            if L_SalesOrderwarningMngSetup."Warning Type" = L_SalesOrderwarningMngSetup."Warning Type"::Error then
-                                                Error(L_SalesOrderwarningMngSetup."Warning message")
-                                            else
-                                                Message(L_SalesOrderwarningMngSetup."Warning message");
-                                        end;
+                //Validate for Specific Attribut if Attribute is defined in sales warning management Setup++
+                L_RecItemAttValMap.Reset();
+                L_RecItemAttValMap.SetRange("Table ID", 27);
+                L_RecItemAttValMap.SetRange("No.", _SalesLine."No.");
+                if L_RecItemAttValMap.FindSet() then begin
+                    repeat
+                        L_ItemAttribute.Reset();
+                        L_ItemAttribute.SetRange(ID, L_RecItemAttValMap."Item Attribute ID");
+                        if L_ItemAttribute.FindFirst() then begin
+                            L_ItemAttributeValue.SetRange("Attribute ID", L_ItemAttribute.ID);
+                            L_ItemAttributeValue.SetRange(ID, L_RecItemAttValMap."Item Attribute Value ID");
+                            if L_ItemAttributeValue.FindFirst() then begin
+                                L_SalesOrderwarningMngSetup.Reset();
+                                L_SalesOrderwarningMngSetup.SetRange("Dimension Code", L_DimensionEntry."Dimension Code");
+                                L_SalesOrderwarningMngSetup.SetFilter("Dimension Value", L_DimensionEntry."Dimension Value Code");
+                                //L_SalesOrderwarningMngSetup.SetRange("Attribute Value", L_ItemAttributeValue.Value);
+                                L_SalesOrderwarningMngSetup.SetRange("Attribute value ID", L_ItemAttributeValue.ID);
+                                L_SalesOrderwarningMngSetup.SetRange("Attribute ID", L_ItemAttributeValue."Attribute ID");
+                                if L_SalesOrderwarningMngSetup.FindFirst() then begin
+                                    if L_SalesOrderwarningMngSetup."Warning message" <> '' then begin
+                                        if L_SalesOrderwarningMngSetup."Warning Type" = L_SalesOrderwarningMngSetup."Warning Type"::Error then
+                                            Error(L_SalesOrderwarningMngSetup."Warning message")
+                                        else
+                                            Message(L_SalesOrderwarningMngSetup."Warning message");
                                     end;
                                 end;
                             end;
-                        until L_RecItemAttValMap.Next() = 0;
-                    end;
-                    //end;
+                        end;
+                    until L_RecItemAttValMap.Next() = 0;
                 end;
             until L_DimensionEntry.Next() = 0;
         end;
     end;
 
-    local procedure ValidateforAllAttribute(_DimensionCode: Code[20])
+    local procedure ValidateforAllAttribute(_DimensionEntry: Record "Dimension Set Entry")
     var
         L_SalesOrderwarningMngSetup: Record "Sales Order warning Mng. Setup";
     begin
         L_SalesOrderwarningMngSetup.Reset();
-        L_SalesOrderwarningMngSetup.SetRange("Dimension Code", _DimensionCode);
-        L_SalesOrderwarningMngSetup.SetFilter("Dimension Value", '<>%1', '');
+        L_SalesOrderwarningMngSetup.SetRange("Dimension Code", _DimensionEntry."Dimension Code");
+        L_SalesOrderwarningMngSetup.SetRange("Dimension Value", _DimensionEntry."Dimension Value Code");
         L_SalesOrderwarningMngSetup.SetFilter("Attribute Name", '%1', '');
         if L_SalesOrderwarningMngSetup.FindFirst() then begin
             if L_SalesOrderwarningMngSetup."Warning message" <> '' then begin
@@ -937,4 +945,5 @@ codeunit 70102 "SC Events & Subscriber"
             end;
         end;
     end;
+
 }

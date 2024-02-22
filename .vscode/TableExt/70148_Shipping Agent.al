@@ -2,11 +2,6 @@ tableextension 70148 "SC Shipping Agent" extends "Shipping Agent"
 {
     fields
     {
-        // Add changes to table fields here
-        field(70148; "Restrict CD & Fridge"; Boolean)
-        {
-
-        }
         field(70149; "Status"; Option)
         {
             DataClassification = ToBeClassified;
@@ -14,14 +9,6 @@ tableextension 70148 "SC Shipping Agent" extends "Shipping Agent"
         }
 
 
-    }
-
-    fieldgroups
-    {
-        addlast(DropDown; "Restrict CD & Fridge")
-        {
-
-        }
     }
 
     var

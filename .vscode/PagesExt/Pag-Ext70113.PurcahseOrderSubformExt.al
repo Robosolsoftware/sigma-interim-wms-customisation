@@ -13,6 +13,7 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
             var
                 SCEventsSubscriber: Codeunit "SC Events & Subscriber";
             begin
+                //Check Bin based on warehouse class code++
                 if (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') then begin
                     SCEventsSubscriber.CheckWarehouseClassCodePOLinelevel(Rec);
                 end;
@@ -88,6 +89,11 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
         }
         addafter(Quantity)
         {
+            field("Qty on PO Order"; Rec."Qty on PO Order")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("Shipper Qty."; Rec."Shipper Qty.")
             {
                 ApplicationArea = All;
@@ -109,76 +115,95 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
                 ApplicationArea = All;
                 ToolTip = 'Total Inventory';
                 DecimalPlaces = 0 : 5;
-            }
-            field("Saleable Inventory"; Rec."Saleable Inventory")
-            {
-                Editable = false;
-                ApplicationArea = All;
-                ToolTip = 'Qty available in HD and SH';
-                DecimalPlaces = 0 : 5;
+                Caption = 'Total Physical';
             }
             field(Allocated; Rec.Allocated)
             {
                 Editable = false;
                 ApplicationArea = All;
-                ToolTip = 'Sum of Outstanding Qty on SO';
+                ToolTip = 'Sum of Outstanding Qty on SO across ALL Locations';
                 DecimalPlaces = 0 : 5;
+                Caption = 'Total Allocated on SO';
             }
-            field("Free Quantity"; G_FreeQuantity)
+
+            //Moved this code on Ochannel Extension for calculation++
+            // field("Free Quantity"; TotalAvailableQty(Rec))
+            // {
+            //     Caption = 'Total Free';
+            //     ApplicationArea = All;
+            //     Editable = false;
+            //     DecimalPlaces = 0 : 5;
+            //     ToolTip = 'Inventory (Total Inventory) - Allocated (Sum of Outstanding Qty on SO)';
+            // }
+            //Moved this code on Ochannel Extension for calculation++
+            field("Physical"; Rec."Saleable Inventory")
             {
-                Caption = 'Total Free';
-                ApplicationArea = All;
                 Editable = false;
+                ApplicationArea = All;
+                ToolTip = 'Qty available in HD and SH';
                 DecimalPlaces = 0 : 5;
-                ToolTip = 'Inventory (Total Inventory) - Allocated (Sum of Outstanding Qty on SO)';
+                Caption = 'Physical';
             }
-            field("Qty on SO(Saleable)"; Rec."Qty on SO(Saleable)")
+
+            field("Allocated on SO"; Rec."Qty on SO(Saleable)")
             {
                 Editable = false;
                 ApplicationArea = All;
-                ToolTip = 'Sum of Outstanding Qty in HD and SH';
+                ToolTip = 'Sum of Outstanding SO Qty in HD and SH';
+                Caption = 'Allocated on SO';
                 DecimalPlaces = 0 : 5;
             }
-            field("Total Available Quantity"; TotalAvailableQty(Rec))
-            {
-                ApplicationArea = All;
-                Editable = false;
-                DecimalPlaces = 0 : 5;
-                ToolTip = 'Saleable Inventory – Sum of Outstanding Qty on SO (Saleable)';
-                //Caption = 'Total Available Quantity(Saleable)';
-                Caption = 'Free (Saleable)';
-            }
+            //Moved this code on Ochannel Extension for calculation++
+            // field("Free (Saleable)"; TotalAvailableQtyForSaleable(Rec))
+            // {
+            //     ApplicationArea = All;
+            //     Editable = false;
+            //     DecimalPlaces = 0 : 5;
+            //     ToolTip = 'Saleable Inventory – Sum of Outstanding Qty on SO (Saleable)';
+            //     //Caption = 'Total Available Quantity(Saleable)';
+            //     Caption = 'Free (Saleable)';
+            // }
+            //Moved this code on Ochannel Extension for calculation++
         }
     }
 
     var
-        G_FreeQuantity: Decimal;
 
+    //Moved this code on Ochannel Extension for calculation++
+    // local procedure TotalAvailableQty(_Rec: Record "Purchase Line"): Decimal
+    // var
+    //     L_ILE: Record "Item Ledger Entry";
+    // begin
+    //     //+++++Formula:- Total Free => "Total Physical - Total SO Allocated - Web Orders Qty"
+    //     //Inventory is Total Physical
+    //     //Total SO Allocated is Allocated
+    //     //Web Orders Qty is Web order Qty------
+    //     _Rec.CalcFields(Inventory, Allocated);
+    //     if (_Rec.Inventory - _Rec.Allocated) > 0 then
+    //         exit(_Rec.Inventory - _Rec.Allocated)
+    //     else
+    //         exit(0);
+    // end;
 
-    trigger OnAfterGetRecord()
-    begin
-        Clear(G_FreeQuantity);
-        Rec.CalcFields(Inventory, Allocated);
-        G_FreeQuantity := Rec.Inventory - Rec.Allocated;
-    end;
-
-    local procedure TotalAvailableQty(_Rec: Record "Purchase Line"): Decimal
-    var
-        ItemVariant: Record "Item Variant";
-        _LocationCode: Code[20];
-        L_ILE: Record "Item Ledger Entry";
-        SaleableInventory: Decimal;
-        L_SalesLine: Record "Sales Line";
-        SaleableQtyOnSO: Decimal;
-        item: Record Item;
-    begin
-        _Rec.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
-        if _Rec."Saleable Inventory" > 0 then
-            if (_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)") > 0 then
-                exit(_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)")
-            else
-                exit(0)
-        else
-            exit(0);
-    end;
+    // local procedure TotalAvailableQtyForSaleable(_Rec: Record "Purchase Line"): Decimal
+    // var
+    //     ItemVariant: Record "Item Variant";
+    //     _LocationCode: Code[20];
+    //     L_ILE: Record "Item Ledger Entry";
+    //     SaleableInventory: Decimal;
+    //     L_SalesLine: Record "Sales Line";
+    //     SaleableQtyOnSO: Decimal;
+    //     item: Record Item;
+    // begin
+    //     //Free (Saleable) => Change the formula to "Physical (Saleable) - Allocated on SO (Saleable) - Web Orders Qty"
+    //     _Rec.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
+    //     if _Rec."Saleable Inventory" > 0 then
+    //         if (_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)") > 0 then
+    //             exit(_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)")
+    //         else
+    //             exit(0)
+    //     else
+    //         exit(0);
+    // end;
+    //Moved this code on Ochannel Extension for calculation--
 }

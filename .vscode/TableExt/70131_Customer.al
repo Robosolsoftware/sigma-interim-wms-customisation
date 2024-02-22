@@ -201,7 +201,7 @@ tableextension 70131 "SC Customer" extends Customer
                     ShippingAgentService.SetRange(code, Rec."Weekend Ship. Agnt. Serv. Code");
                     ShippingAgentService.SetRange(Status, ShippingAgentService.Status::Released);
                     if Not ShippingAgentService.FindFirst() then
-                        Error('Status must be equal to Released in Shipping Agent Services');
+                        Error('Status must be equal to Released in Shipping Agent Service');
                 end;
 
                 ShippingAgentService.Reset();
@@ -213,6 +213,10 @@ tableextension 70131 "SC Customer" extends Customer
                     else
                         Evaluate("Shipping Time", '<>');
             end;
+        }
+        field(70159; "Magazine Mailout"; Boolean)
+        {
+            DataClassification = ToBeClassified;
         }
 
         modify("Shipping Agent Code")
@@ -226,8 +230,7 @@ tableextension 70131 "SC Customer" extends Customer
                     ShippingAgent.SetRange(code, Rec."Shipping Agent Code");
                     ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
                     if Not ShippingAgent.FindFirst() then
-                        Error('Status must be equal to Released in Shipping Agent Services');
-                    //ShippingAgent.TestField(ShippingAgent.Status, ShippingAgent.Status::Released);
+                        Error('Status must be equal to Released in Shipping Agent');
                 end;
             end;
         }
@@ -242,8 +245,7 @@ tableextension 70131 "SC Customer" extends Customer
                     ShippingAgentServices.SetRange(code, Rec."Shipping Agent Service Code");
                     ShippingAgentServices.SetRange(Status, ShippingAgentServices.Status::Released);
                     if Not ShippingAgentServices.FindFirst() then
-                        Error('Status must be equal to Released in Shipping Agent Services');
-                    //ShippingAgentServices.TestField(ShippingAgentServices.Status, ShippingAgentServices.Status::Released);
+                        Error('Status must be equal to Released in Shipping Agent Service');
                 end;
             end;
         }

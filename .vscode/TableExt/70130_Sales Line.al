@@ -5,8 +5,8 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         field(70130; Inventory; Decimal)
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."),
-                                                                  "Location Code" = FIELD("Location Code"),
-                                                                  "Drop Shipment" = FIELD("Drop Shipment"),
+                                                                  //"Location Code" = FIELD("Location Code"),
+                                                                  //"Drop Shipment" = FIELD("Drop Shipment"),
                                                                   "Variant Code" = FIELD("Variant Code"),
                                                                   "Unit of Measure Code" = FIELD("Unit of Measure Code")));
             //Caption = 'Inventory';
@@ -36,13 +36,13 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
             CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order),
                                                                             Type = CONST(Item),
                                                                             "No." = FIELD("No."),
-                                                                            "Location Code" = FIELD("Location Code"),
-                                                                            "Drop Shipment" = FIELD("Drop Shipment"),
+                                                                            //"Location Code" = FIELD("Location Code"),
+                                                                            //"Drop Shipment" = FIELD("Drop Shipment"),
                                                                             "Variant Code" = FIELD("Variant Code"),
                                                                             "Unit of Measure Code" = FIELD("Unit of Measure Code"),
                                                                             "Outstanding Qty. (Base)" = filter(> 0)));
             //Caption = 'Allocated';
-            Caption = 'Total Allocated';
+            Caption = 'Total Allocated on SO';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
@@ -101,36 +101,41 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Variant Code" = field("Variant Code"), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Location Code" = field("Location Code"), "Drop Shipment" = FIELD("Drop Shipment"), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order),
+            Type = CONST(Item),
+            "No." = field("No."),
+            "Variant Code" = field("Variant Code"),
+            "Outstanding Quantity" = filter(> 0),
+            //"Saleable Location" = const(true),
+            // "Drop Shipment" = FIELD("Drop Shipment"), 
+            "Unit of Measure Code" = FIELD("Unit of Measure Code"),
+            "Location Code" = field("Location Code")));
             DecimalPlaces = 0 : 5;
-            //Caption = 'Qty on Sales Order (Saleable)';
-            Caption = 'Allocated (Saleable)';
+            Caption = 'Allocated on SO';
         }
         field(70146; "Saleable Inventory"; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Variant Code" = FIELD("Variant Code"), "Saleable Location" = const(true), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Drop Shipment" = FIELD("Drop Shipment")));
-            //Caption = 'Saleable Inventory';
-            Caption = 'Physical (Saleable)';
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Variant Code" = FIELD("Variant Code"),
+            //"Saleable Location" = const(true),
+            "Unit of Measure Code" = FIELD("Unit of Measure Code"),
+            "Location Code" = field("Location Code")));
+            Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
         }
-        field(70147; "UnShipped Qty."; Decimal)
-        {
-            AccessByPermission = TableData "Sales Shipment Header" = R;
-            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order),
-                                                                            Type = CONST(Item),
-                                                                            "No." = FIELD("No."),
-                                                                            "Location Code" = FIELD("Location Code"),
-                                                                            "Drop Shipment" = FIELD("Drop Shipment"),
-                                                                            "Variant Code" = FIELD("Variant Code"),
-                                                                            "Unit of Measure Code" = FIELD("Unit of Measure Code"),
-                                                                            "Outstanding Qty. (Base)" = filter(> 0)));
-            Caption = 'UnShipped Qty.';
-            DecimalPlaces = 0 : 5;
-            Editable = false;
-            FieldClass = FlowField;
-        }
+        // field(70147; "Back Orders (Saleable)"; Decimal)
+        // {
+
+        // }
+        // field(70148; "Total Back Orders"; Decimal)
+        // {
+
+        // }
+        // field(70148; "Date Filter"; Date)
+        // {
+        //     FieldClass = FlowFilter;
+        // }
 
         // modify("Unit Price")
         // {
@@ -166,6 +171,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 UserSetup: Record "User Setup";
                 DisUnitPrice: Decimal;
             begin
+                //Check Min Sell Price Validation++
                 Clear(DisUnitPrice);
                 UserSetup.Reset();
                 UserSetup.SetRange("User ID", UserId);
@@ -206,26 +212,37 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 ConsolidateWarehouseShipment: Codeunit "Consolidate Warehouse Shipment";
             begin
                 if (Rec.Type = Rec.Type::Item) then begin
+                    //Check SHipping Agent Restriction and Sales Order Warning Mesage++
                     L_SalesHeader.Reset();
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                     if L_SalesHeader.FindFirst() then begin
                         //++Shipping Agent Restriction(18274)
-                        if L_SalesHeader."Shipping Agent Code" <> '' then begin
-                            L_Function.CheckShippingAgentRestriction(L_SalesHeader, Rec);
+                        // if L_SalesHeader."Shipping Agent Code" <> '' then begin
+                        //     L_Function.CheckShippingAgentServiceRestriction(L_SalesHeader, Rec);
+                        // end;
+                        if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
+                            L_Function.CheckShippingAgentServiceRestriction(L_SalesHeader, Rec);
                         end;
 
                         //++Sales Order warning message(15813)
                         L_Function.SalesOrderWarningMessage(L_SalesHeader, Rec);
                     end;
 
+
+                    //Upadte Fields from Item++
                     L_Item.Reset();
                     L_Item.SetRange("No.", Rec."No.");
                     if L_Item.FindFirst() then begin
+                        //Check Master Restriction++
+                        L_Item.TestField("QAU Approved");
+                        L_Item.TestField(Status, L_Item.Status::Released);
+
                         Rec."Min Sell Price" := L_Item."Min Sell Price";
                         Rec."Parent Category" := L_Item."Parent Category";
                     end;
 
+                    //Upadte Fields from Item Unit Of Measure++
                     L_ItemUnitofMeasure.Reset();
                     L_ItemUnitofMeasure.SetRange("Item No.", Rec."No.");
                     L_ItemUnitofMeasure.SetRange(Code, Rec."Unit of Measure Code");
@@ -235,6 +252,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                         Rec."Pallet Qty." := L_ItemUnitofMeasure."Pallet Qty.";
                     end;
 
+                    //Upadte Last Unit Price from Shipment++ 
                     CH_SShip.Reset();
                     CH_SShip.SetRange("Sell-to Customer No.", Rec."Sell-to Customer No.");
                     CH_SShip.SetRange("No.", Rec."No.");
@@ -242,6 +260,8 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     if CH_SShip.FindLast() then
                         Rec."Last Price" := CH_SShip."Unit Price";
 
+
+                    //Check Min Sell Price Validation++
                     Clear(DisUnitPrice);
                     UserSetup.Reset();
                     UserSetup.SetRange("User ID", UserId);
@@ -257,7 +277,6 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                                 Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
                         end;
                     end;
-
                 end;
             end;
         }
@@ -295,7 +314,6 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     //         end;
                     //     end;
                     // end;
-
 
                     //GHST Customization++
                     if (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Type = Rec.Type::Item) then begin
@@ -364,17 +382,5 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
 
     var
         myInt: Integer;
-        tes: Record "Item Reference";
 
-    local procedure CheckWholesaleCustomer(L_SalesHeader: Record "Sales Header"): Boolean
-    var
-        L_DimensionSetEntry: Record "Dimension Set Entry";
-    begin
-        L_DimensionSetEntry.Reset();
-        L_DimensionSetEntry.SetRange("Dimension Set ID", L_SalesHeader."Dimension Set ID");
-        L_DimensionSetEntry.SetRange("Dimension Code", 'CUSTOMER TYPE');
-        L_DimensionSetEntry.SetRange("Dimension Value Code", 'WHOLESALE');
-        if L_DimensionSetEntry.FindFirst() then
-            exit(true);
-    end;
 }

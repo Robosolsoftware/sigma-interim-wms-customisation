@@ -9,17 +9,19 @@ tableextension 70139 "SC Purchase Header" extends "Purchase Header"
             var
                 L_Vendor: Record Vendor;
             begin
-                L_Vendor.Reset();
-                L_Vendor.SetRange("No.", Rec."Buy-from Vendor No.");
-                if L_Vendor.FindFirst() then begin
-                    L_Vendor.TestField("QAU Approved");
-                    L_Vendor.TestField(Status, L_Vendor.Status::Released);
+                if "Buy-from Vendor No." <> '' then begin
+                    L_Vendor.Reset();
+                    L_Vendor.SetRange("No.", Rec."Buy-from Vendor No.");
+                    if L_Vendor.FindFirst() then begin
+                        L_Vendor.TestField("QAU Approved");
+                        L_Vendor.TestField(Status, L_Vendor.Status::Released);
 
 
 
-                    Rec."Min Order Value" := L_Vendor."Min Order Value";
-                    Rec."PO Approval required" := L_Vendor."PO Approval required";
-                    //Rec."PO Approval Value" := L_Vendor."PO Approval Value";
+                        Rec."Min Order Value" := L_Vendor."Min Order Value";
+                        Rec."PO Approval required" := L_Vendor."PO Approval required";
+                        //Rec."PO Approval Value" := L_Vendor."PO Approval Value";
+                    end;
                 end;
 
             end;

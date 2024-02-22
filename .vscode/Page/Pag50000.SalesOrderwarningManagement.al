@@ -49,25 +49,6 @@ page 50000 "Sales Order warning Mng. Setup"
                 }
             }
         }
-        area(Factboxes)
-        {
 
-        }
-    }
-
-    actions
-    {
-        area(Processing)
-        {
-            action(ActionName)
-            {
-                ApplicationArea = All;
-
-                trigger OnAction();
-                begin
-
-                end;
-            }
-        }
     }
 }

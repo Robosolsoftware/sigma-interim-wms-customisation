@@ -25,7 +25,11 @@ pageextension 70166 ItemLookup extends "Item Lookup"
         }
         modify(Description)
         {
-            Width = 50;
+            Width = 20;
+        }
+        modify("Search Description")
+        {
+            Width = 30;
         }
     }
 

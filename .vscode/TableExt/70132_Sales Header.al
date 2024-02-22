@@ -53,8 +53,11 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                             Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()))
                         else begin
                             //Update Monday
-                            Rec.Validate("Shipment Date", CalcDate('<+3D>', WorkDate()))
+                            Rec.Validate("Shipment Date", CalcDate('<+3D>', WorkDate()));
                         end;
+                    end else begin
+                        //As discussed shipment date shoud be next day all condistion++
+                        Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()));
                     end;
 
             end;
@@ -65,6 +68,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
             var
                 L_Customer: Record Customer;
                 L_SalesPriceHeader: Record "Price List Header";
+                L_Date: Record Date;
             begin
                 if Rec."Sell-to Customer Name" <> '' then begin
                     L_Customer.Reset();
@@ -93,6 +97,24 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                     L_SalesPriceHeader.SetRange("Special Price Daily", true);
                     if L_SalesPriceHeader.FindFirst() then
                         Rec."Sales Price List Code" := L_SalesPriceHeader.Code;
+
+                    //Update Shipment Date++if 
+                    L_Date.Reset();
+                    L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
+                    L_Date.SetRange(L_Date."Period Start", WorkDate());
+                    if L_Date.FindFirst() then
+                        if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
+                            if Rec."Weekend Ship. Agnt. Serv. Code" <> '' then
+                                //Update Saturday++
+                                Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()))
+                            else begin
+                                //Update Monday
+                                Rec.Validate("Shipment Date", CalcDate('<+3D>', WorkDate()));
+                            end;
+                        end else begin
+                            //As discussed shipment date shoud be next day all condistion++
+                            Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()));
+                        end;
                 end;
             end;
         }
@@ -108,7 +130,6 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                     ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
                     if Not ShippingAgent.FindFirst() then
                         Error('Status must be equal to Released in Shipping Agent');
-                    //ShippingAgent.TestField(ShippingAgent.Status, ShippingAgent.Status::Released);
                 end;
             end;
         }
@@ -123,8 +144,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                     ShippingAgentServices.SetRange(code, Rec."Shipping Agent Service Code");
                     ShippingAgentServices.SetRange(Status, ShippingAgentServices.Status::Released);
                     if Not ShippingAgentServices.FindFirst() then
-                        //ShippingAgentServices.TestField(ShippingAgentServices.Status, ShippingAgentServices.Status::Released);
-                        Error('Status must be equal to Released in Shipping Agent Services');
+                        Error('Status must be equal to Released in Shipping Agent Service');
                 end;
             end;
         }
@@ -214,7 +234,18 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         {
             Caption = 'Weekend Shipping Agent Service Code';
             TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
-            Editable = false;
+            trigger OnValidate()
+            var
+                ShippingAgentServices: Record "Shipping Agent Services";
+            begin
+                if Rec."Weekend Ship. Agnt. Serv. Code" <> '' then begin
+                    ShippingAgentServices.Reset();
+                    ShippingAgentServices.SetRange(code, Rec."Weekend Ship. Agnt. Serv. Code");
+                    ShippingAgentServices.SetRange(Status, ShippingAgentServices.Status::Released);
+                    if Not ShippingAgentServices.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent Service');
+                end;
+            end;
         }
 
     }

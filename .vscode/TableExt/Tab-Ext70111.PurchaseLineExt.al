@@ -62,12 +62,10 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."),
             "Variant Code" = FIELD("Variant Code"),
-            "Saleable Location" = const(true),
-            //"Location Code" = field("Location Code"),
+            "Location Code" = field("Location Code"),
+            //"Saleable Location" = const(true),
             "Unit of Measure Code" = FIELD("Unit of Measure Code")));
-
-            //Caption = 'Saleable Inventory';
-            Caption = 'Physical (Saleable)';
+            Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
@@ -83,7 +81,7 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
                                                                             "Unit of Measure Code" = FIELD("Unit of Measure Code"),
                                                                             "Outstanding Qty. (Base)" = filter(> 0)));
             //Caption = 'Allocated';
-            Caption = 'Total Allocated';
+            Caption = 'Total Allocated on SO';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
@@ -97,13 +95,19 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
             "No." = field("No."),
             "Variant Code" = field("Variant Code"),
             "Outstanding Quantity" = filter(> 0),
-            "Saleable Location" = const(true),
-            //"Location Code" = field("Location Code"),
+            //"Saleable Location" = const(true),
+            "Location Code" = field("Location Code"),
             "Unit of Measure Code" = FIELD("Unit of Measure Code")));
 
             DecimalPlaces = 0 : 5;
             //Caption = 'Qty on Sales Order (Saleable)';
-            Caption = 'Allocated (Saleable)';
+            Caption = 'Allocated on SO';
+        }
+
+        field(70134; "Qty on PO Order"; Decimal)
+        {
+            FieldClass = FlowField;
+            CalcFormula = sum("Purchase Line"."Outstanding Quantity" where("Document Type" = const(Order), Type = const(Item), "Outstanding Quantity" = filter(> 0), "No." = field("No.")));
         }
         modify("No.")
         {
@@ -111,18 +115,30 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
             var
                 L_ItemUnitofMeasure: Record "Item Unit of Measure";
                 Recitem: Record Item;
+                L_PurchaseHeader: Record "Purchase Header";
             begin
                 if Rec.Type = Rec.Type::Item then begin
+
+                    //Check Master Approved++
                     Recitem.Reset();
                     Recitem.SetRange("No.", Rec."No.");
                     if Recitem.FindFirst() then begin
                         Recitem.TestField("QAU Approved");
                         Recitem.TestField(Status, Recitem.Status::Released);
-                        if Recitem."Vendor No." <> '' then
-                            if Recitem."Vendor No." <> Rec."Buy-from Vendor No." then
-                                Message('This is not your default Supplier');
+
+                        L_PurchaseHeader.Reset();
+                        L_PurchaseHeader.SetRange("No.", Rec."Document No.");
+                        L_PurchaseHeader.SetRange("Document Type", Rec."Document Type");
+                        if L_PurchaseHeader.FindFirst() then begin
+                            if L_PurchaseHeader."Sheet Name" = '' then begin
+                                if Recitem."Vendor No." <> '' then
+                                    if Recitem."Vendor No." <> Rec."Buy-from Vendor No." then
+                                        Message('This is not your default Supplier');
+                            end;
+                        end;
                     end;
 
+                    //Update Fields from Item Unit of Measure++
                     L_ItemUnitofMeasure.Reset();
                     L_ItemUnitofMeasure.SetRange("Item No.", Rec."No.");
                     L_ItemUnitofMeasure.SetRange(Code, Rec."Unit of Measure Code");
@@ -132,6 +148,7 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
                         Rec."Pallet Qty." := L_ItemUnitofMeasure."Pallet Qty.";
                     end;
 
+                    //Update Fields from Item++
                     Recitem.Reset();
                     Recitem.SetRange("No.", Rec."No.");
                     if Recitem.FindFirst() then begin
@@ -139,7 +156,6 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
                         Rec.Validate("Pack Size", Recitem."Pack Size");
                         Rec.Validate(Brand, Recitem.Brand);
                     end;
-
 
                 end;
             end;
