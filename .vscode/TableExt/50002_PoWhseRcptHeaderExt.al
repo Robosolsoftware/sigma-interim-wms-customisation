@@ -108,6 +108,11 @@ tableextension 50002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         {
             DataClassification = ToBeClassified;
         }
+        field(50026; "Requested Receipt Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+
     }
 
     keys

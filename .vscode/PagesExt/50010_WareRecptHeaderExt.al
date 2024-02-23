@@ -26,6 +26,12 @@ pageextension 50010 WareRcptHeaderExt extends "Warehouse Receipt"
                         Editable = false;
 
                     }
+                    field("Requested Receipt Date"; Rec."Requested Receipt Date")
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+
+                    }
                     field("Supplier Name"; Rec."Supplier Name")
                     {
                         ApplicationArea = all;
