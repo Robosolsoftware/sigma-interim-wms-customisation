@@ -57,6 +57,7 @@ pageextension 50000 WarehouseReceiptsExt extends "Warehouse Receipts"
         {
             Visible = false;
         }
+
     }
 
 

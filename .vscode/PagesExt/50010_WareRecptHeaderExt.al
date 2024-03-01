@@ -24,6 +24,7 @@ pageextension 50010 WareRcptHeaderExt extends "Warehouse Receipt"
                     {
                         ApplicationArea = all;
                         Editable = false;
+                        Visible = false;
 
                     }
                     field("Requested Receipt Date"; Rec."Requested Receipt Date")
@@ -62,6 +63,16 @@ pageextension 50010 WareRcptHeaderExt extends "Warehouse Receipt"
                         Editable = false;
                     }
                     field("Total Order Qty"; Rec."Total Order Qty")
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+                    }
+                    field(CD; Rec.CD)
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+                    }
+                    field("CD Qty"; Rec."CD Qty")
                     {
                         ApplicationArea = all;
                         Editable = false;

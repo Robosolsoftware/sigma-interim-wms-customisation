@@ -94,6 +94,8 @@ codeunit 70101 "Purchase Events"
         RecWhseRcpLine: Record "Warehouse Receipt Line";
         TransferLineLine1: Record "Transfer Line";
         PurchaseLine: Record "Purchase Line";
+        warehouseClassCode: Boolean;
+        warehouseClasses: Record "Warehouse Class";
     begin
         RecWhseShpLine.Reset();
         RecWhseShpLine.SetRange("No.", WhseShipmentHeader."No.");
@@ -178,8 +180,29 @@ codeunit 70101 "Purchase Events"
                     end;
                 until PurchaseLine.Next = 0;
             end;
-        end;  //Mayank
+        end;
+
+        warehouseClassCode := false;
+        RecWhseRcpLine.Reset();
+        RecWhseRcpLine.SetRange("No.", WhseReceiptHeader."No.");
+        if RecWhseRcpLine.FindSet() then begin
+            repeat
+                warehouseClasses.Reset();
+                warehouseClasses.SetRange(Code, RecWhseRcpLine."Warehouse Class Code");
+                if warehouseClasses.FindFirst() then begin
+                    if warehouseClasses.CD = true then begin
+                        warehouseClassCode := true;
+                    end;
+                end;
+            until RecWhseRcpLine.Next() = 0;
+        end;
+        if warehouseClassCode = true then begin
+            WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes;
+            WhseReceiptHeader.Modify();
+        end;
     end;
+
+
 
 
     [EventSubscriber(ObjectType::Page, page::"Warehouse Shipment", 'OnBeforeActionEvent', 'Post and &Print', true, true)]

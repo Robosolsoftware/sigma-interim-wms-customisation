@@ -23,6 +23,10 @@ tableextension 70152 "SC Warehouse Class" extends "Warehouse Class"
         {
 
         }
+        field(70155; "CD"; Boolean)
+        {
+            
+        }
     }
 
     keys

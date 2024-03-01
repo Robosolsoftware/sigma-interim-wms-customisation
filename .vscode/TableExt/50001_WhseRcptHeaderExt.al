@@ -102,7 +102,7 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         field(50024; CD; Option)
         {
             DataClassification = ToBeClassified;
-            OptionMembers = Yes,No;
+            OptionMembers = "",Yes,No;
         }
         field(50025; "CD Qty"; Integer)
         {
