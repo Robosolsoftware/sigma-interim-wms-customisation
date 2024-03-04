@@ -328,18 +328,16 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             end else
                 L_EditableStatus := false;
 
-
-
-            L_UserSetup.Reset();
-            L_UserSetup.SetRange("User ID", UserId);
-            if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data QAU Approved" = true then
-                    L_EditableQUAApproved := true
-                else
-                    L_EditableQUAApproved := false;
-            end else
-                L_EditableQUAApproved := false;
         end;
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Edit Master Data QAU Approved" = true then
+                L_EditableQUAApproved := true
+            else
+                L_EditableQUAApproved := false;
+        end else
+            L_EditableQUAApproved := false;
     end;
 
     trigger OnOpenPage()
@@ -378,18 +376,17 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             end else
                 L_EditableStatus := false;
 
-
-
-            L_UserSetup.Reset();
-            L_UserSetup.SetRange("User ID", UserId);
-            if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data QAU Approved" = true then
-                    L_EditableQUAApproved := true
-                else
-                    L_EditableQUAApproved := false;
-            end else
-                L_EditableQUAApproved := false;
         end;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Edit Master Data QAU Approved" = true then
+                L_EditableQUAApproved := true
+            else
+                L_EditableQUAApproved := false;
+        end else
+            L_EditableQUAApproved := false;
     end;
 
 }

@@ -29,12 +29,6 @@ page 50120 "ItemAttributecustomFactbox"
         }
     }
 
-    actions
-    {
-    }
-
-
-
     trigger OnFindRecord(Which: Text): Boolean
     begin
         FillTempTable;

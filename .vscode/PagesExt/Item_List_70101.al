@@ -1,5 +1,6 @@
 pageextension 70101 "Item Extended List" extends "Item List"
 {
+
     layout
     {
         modify(InventoryField)

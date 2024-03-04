@@ -31,6 +31,7 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec."Default Bank" := L_Customer."Default Bank";
                         Rec."Min Order Value" := L_Customer."Min Order Value";
                         Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
+                        Rec."SO Approval Required" := L_Customer."SO Approval Required";
                     end;
 
 
@@ -89,6 +90,8 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
                         Rec."Min Order Value" := L_Customer."Min Order Value";
+                        Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
+                        Rec."SO Approval Required" := L_Customer."SO Approval Required";
                     end;
 
 
@@ -246,6 +249,14 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
                         Error('Status must be equal to Released in Shipping Agent Service');
                 end;
             end;
+        }
+        field(70152; "SO Approval Required"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70153; "IRP Order"; Boolean)
+        {
+
         }
 
     }

@@ -163,24 +163,29 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         modify("Customer Price Group")
         {
             Caption = 'Customer Price Group 1';
+            Editable = L_CustomerPriceEditable;
         }
         addafter("Customer Price Group")
         {
             field("Customer Price Group 2"; Rec."Customer Price Group 2")
             {
                 ApplicationArea = All;
+                Editable = L_CustomerPriceEditable;
             }
             field("Customer Price Group 3"; Rec."Customer Price Group 3")
             {
                 ApplicationArea = All;
+                Editable = L_CustomerPriceEditable;
             }
             field("Customer Price Group 4"; Rec."Customer Price Group 4")
             {
                 ApplicationArea = All;
+                Editable = L_CustomerPriceEditable;
             }
             field("Customer Price Group 5"; Rec."Customer Price Group 5")
             {
                 ApplicationArea = All;
+                Editable = L_CustomerPriceEditable;
             }
         }
         addlast(Payments)
@@ -220,6 +225,11 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
             }
+            field("SO Approval Required"; Rec."SO Approval Required")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
             field(Funded; Rec.Funded)
             {
                 ApplicationArea = All;
@@ -234,6 +244,20 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
+            }
+            field(Type; Rec.Type)
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+
+                trigger OnValidate()
+                begin
+                    if Rec.Type = Rec.Type::Main then
+                        L_CustomerPriceEditable := false
+                    else
+                        L_CustomerPriceEditable := true;
+                    CurrPage.Update();
+                end;
             }
         }
         addafter(Statistics)
@@ -297,12 +321,18 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         L_CurrPageEditable: Boolean;
         L_EditableQUAApproved: Boolean;
         L_EditableStatus: Boolean;
+        L_CustomerPriceEditable: Boolean;
 
     trigger OnAfterGetRecord()
     var
         L_UserSetup: Record "User Setup";
-
     begin
+        if Rec.Type = Rec.Type::Main then
+            L_CustomerPriceEditable := false
+        else
+            L_CustomerPriceEditable := true;
+
+
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
@@ -334,18 +364,17 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
             end else
                 L_EditableStatus := false;
 
-
-
-            L_UserSetup.Reset();
-            L_UserSetup.SetRange("User ID", UserId);
-            if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data QAU Approved" = true then
-                    L_EditableQUAApproved := true
-                else
-                    L_EditableQUAApproved := false;
-            end else
-                L_EditableQUAApproved := false;
         end;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Edit Master Data QAU Approved" = true then
+                L_EditableQUAApproved := true
+            else
+                L_EditableQUAApproved := false;
+        end else
+            L_EditableQUAApproved := false;
     end;
 
     trigger OnOpenPage()
@@ -353,6 +382,12 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         L_UserSetup: Record "User Setup";
 
     begin
+        if Rec.Type = Rec.Type::Main then
+            L_CustomerPriceEditable := false
+        else
+            L_CustomerPriceEditable := true;
+
+
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
@@ -385,17 +420,17 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                 L_EditableStatus := false;
 
 
-
-            L_UserSetup.Reset();
-            L_UserSetup.SetRange("User ID", UserId);
-            if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data QAU Approved" = true then
-                    L_EditableQUAApproved := true
-                else
-                    L_EditableQUAApproved := false;
-            end else
-                L_EditableQUAApproved := false;
         end;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Edit Master Data QAU Approved" = true then
+                L_EditableQUAApproved := true
+            else
+                L_EditableQUAApproved := false;
+        end else
+            L_EditableQUAApproved := false;
     end;
 
 }

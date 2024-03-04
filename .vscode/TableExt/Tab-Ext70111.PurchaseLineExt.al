@@ -109,6 +109,14 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
             FieldClass = FlowField;
             CalcFormula = sum("Purchase Line"."Outstanding Quantity" where("Document Type" = const(Order), Type = const(Item), "Outstanding Quantity" = filter(> 0), "No." = field("No.")));
         }
+        field(70135; "Sell-to Customer No."; Code[20])
+        {
+
+        }
+        field(70136; "Sell-to Customer Name"; Text[100])
+        {
+
+        }
         modify("No.")
         {
             trigger OnAfterValidate()

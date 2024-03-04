@@ -1,5 +1,24 @@
 pageextension 70176 "Sales Return Order List" extends "Sales Return Order List"
 {
+
+    layout
+    {
+        addlast(Control1)
+        {
+            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Caption = 'Created By';
+            }
+            field("System CreatedAt"; rec.SystemCreatedAt)
+            {
+                ApplicationArea = all;
+                caption = 'Created At';
+
+            }
+        }
+    }
+
     actions
     {
         addafter("P&osting")
@@ -38,4 +57,16 @@ pageextension 70176 "Sales Return Order List" extends "Sales Return Order List"
             }
         }
     }
+
+
+    procedure GetUserName(UserSecurityId: Code[50]): Text[100]
+    var
+        Users: Record User;
+    begin
+        Users.Reset();
+        Users.SetRange("User Security ID", UserSecurityId);
+        if Users.FindFirst() then
+            exit(Users."Full Name");
+
+    end;
 }

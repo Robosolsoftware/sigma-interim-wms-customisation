@@ -33,6 +33,13 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = all;
                 Provider = SalesLines;
             }
+            part(ItemAttributecustomFactbox; ItemAttributecustomFactbox)
+            {
+                SubPageLink = "Item No." = field("No.");
+                ApplicationArea = all;
+                Provider = SalesLines;
+                Caption = 'Item Attribute';
+            }
         }
         addlast("Invoice Details")
         {
@@ -55,6 +62,21 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                 Editable = false;
             }
             field("Send By"; Rec."Send By")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Min Order Value"; Rec."Min Order Value")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("SO Approval Required"; Rec."SO Approval Required")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("IRP Order"; Rec."IRP Order")
             {
                 ApplicationArea = All;
                 Editable = false;
@@ -82,11 +104,6 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = all;
                 Editable = false;
                 Caption = 'System Modified By';
-            }
-            field("Min Order Value"; Rec."Min Order Value")
-            {
-                ApplicationArea = All;
-                Editable = false;
             }
         }
         addafter(SalesLines)

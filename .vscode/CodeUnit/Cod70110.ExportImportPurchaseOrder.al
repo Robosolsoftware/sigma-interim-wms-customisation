@@ -183,7 +183,7 @@ codeunit 70110 "Export & Import Purchase Order"
         Excelbuffer.AddColumn('Quantity', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Unit Cost', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Order Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
-        Excelbuffer.AddColumn('Requested Receipt Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Requested Receipt Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
         Excelbuffer.AddColumn('Vendor Order No', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.CreateNewBook('Sample Template');
         Excelbuffer.WriteSheet('Sample Template', CompanyName, UserId);

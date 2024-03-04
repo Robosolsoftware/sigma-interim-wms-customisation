@@ -128,12 +128,15 @@ pageextension 70178 "Req. Worksheet" extends "Req. Worksheet"
     var
         L_PurchaseLine: Record "Purchase Line";
         L_ReservationEntry: Record "Reservation Entry";
+        L_Customer: Record Customer;
+        L_Purchasing: Record Purchasing;
     begin
         L_PurchaseLine.Reset();
         L_PurchaseLine.SetRange(Type, L_PurchaseLine.Type::Item);
         L_PurchaseLine.SetRange("Document Type", P_PurchaseHeader."Document Type");
         L_PurchaseLine.SetRange("Document No.", P_PurchaseHeader."No.");
         L_PurchaseLine.SetRange("No.", RequisitionLine."No.");
+        L_PurchaseLine.SetRange("Sales Order No.", RequisitionLine."Sales Order No.");
         if not L_PurchaseLine.FindFirst() then begin
             L_PurchaseLine.Init();
             L_PurchaseLine.Validate("Document Type", P_PurchaseHeader."Document Type");
@@ -142,6 +145,24 @@ pageextension 70178 "Req. Worksheet" extends "Req. Worksheet"
             L_PurchaseLine.Validate(Type, L_PurchaseLine.Type::Item);
             L_PurchaseLine.Validate("No.", RequisitionLine."No.");
             L_PurchaseLine.Validate(Quantity, RequisitionLine.Quantity);
+            L_PurchaseLine.Validate("Sales Order No.", RequisitionLine."Sales Order No.");
+            L_PurchaseLine.Validate("Sales Order Line No.", RequisitionLine."Sales Order Line No.");
+            L_Purchasing.Reset();
+            L_Purchasing.SetRange(Code, RequisitionLine."Purchasing Code");
+            if L_Purchasing.FindFirst() then begin
+                if L_Purchasing."Special Order" = true then begin
+                    L_PurchaseLine.Validate("Special Order Sales No.", RequisitionLine."Sales Order No.");
+                    L_PurchaseLine.Validate("Special Order Sales Line No.", RequisitionLine."Sales Order Line No.");
+                    //L_PurchaseLine.Validate("Special Order", true);
+                end;
+            end;
+            if RequisitionLine."Purchasing Code" <> '' then
+                L_PurchaseLine.Validate("Purchasing Code", RequisitionLine."Purchasing Code");
+            L_PurchaseLine.Validate("Sell-to Customer No.", RequisitionLine."Sell-to Customer No.");
+            L_Customer.Reset();
+            L_Customer.SetRange("No.", RequisitionLine."Sell-to Customer No.");
+            if L_Customer.FindFirst() then
+                L_PurchaseLine.Validate("Sell-to Customer Name", L_Customer.Name);
             L_PurchaseLine.Insert(true);
         end else begin
             L_PurchaseLine.Validate(Quantity, L_PurchaseLine.Quantity + RequisitionLine.Quantity);

@@ -7,11 +7,13 @@ table 70103 "Shipping Agent Restrict Item"
         field(1; "Shipping Agent Code"; Code[20])
         {
             DataClassification = ToBeClassified;
+            TableRelation = "Shipping Agent".Code;
 
         }
         field(2; "Shipping Agent Service Code"; Code[20])
         {
             DataClassification = ToBeClassified;
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
 
         }
         field(3; "Attribute Name"; Text[250])
@@ -62,6 +64,7 @@ table 70103 "Shipping Agent Restrict Item"
         {
             Caption = 'Attribute value ID';
         }
+
     }
 
     keys

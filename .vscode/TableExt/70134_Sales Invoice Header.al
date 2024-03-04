@@ -69,6 +69,14 @@ tableextension 70134 "SC Sales Invoice Header" extends "Sales Invoice Header"
             TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
             Editable = false;
         }
+        field(70152; "SO Approval Required"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70153; "IRP Order"; Boolean)
+        {
+
+        }
     }
 
     var

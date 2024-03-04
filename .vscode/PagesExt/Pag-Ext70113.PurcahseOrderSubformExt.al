@@ -2,6 +2,24 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
 {
     layout
     {
+        addafter("Quantity Invoiced")
+        {
+            field("Sales Order No."; Rec."Sales Order No.")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Sell-to Customer No."; Rec."Sell-to Customer No.")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Sell-to Customer Name"; Rec."Sell-to Customer Name")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
         modify("Unit Price (LCY)")
         {
             Editable = true;

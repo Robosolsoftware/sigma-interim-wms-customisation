@@ -218,6 +218,15 @@ tableextension 70131 "SC Customer" extends Customer
         {
             DataClassification = ToBeClassified;
         }
+        field(70160; Type; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Main,Site,"Main/Site";
+        }
+        field(70161; "SO Approval Required"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
 
         modify("Shipping Agent Code")
         {

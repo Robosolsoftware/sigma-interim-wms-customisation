@@ -926,6 +926,8 @@ codeunit 70102 "SC Events & Subscriber"
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", 'OnBeforePerformManualReleaseProcedure', '', false, false)]
     local procedure OnBeforePerformManualReleaseProcedure(var SalesHeader: Record "Sales Header")
+    var
+        L_SalesLine: Record "Sales Line";
     begin
         if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
             if SalesHeader."Min Order Value" > 0 then begin
@@ -934,10 +936,23 @@ codeunit 70102 "SC Events & Subscriber"
                     Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
             end;
         end;
+
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::"Return Order" then begin
+            L_SalesLine.Reset();
+            L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+            L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+            L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+            L_SalesLine.SetFilter("Return Reason Code", '%1', '');
+            if L_SalesLine.FindFirst() then
+                L_SalesLine.TestField("Return Reason Code");
+
+        end;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnBeforeCheckSalesApprovalPossible', '', false, false)]
     local procedure OnBeforeCheckSalesApprovalPossible(var SalesHeader: Record "Sales Header")
+    var
+        L_SalesLine: Record "Sales Line";
     begin
         if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
             if SalesHeader."Min Order Value" > 0 then begin
@@ -945,6 +960,18 @@ codeunit 70102 "SC Events & Subscriber"
                 if SalesHeader.Amount < SalesHeader."Min Order Value" then
                     Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
             end;
+        end;
+
+
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::"Return Order" then begin
+            L_SalesLine.Reset();
+            L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+            L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+            L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+            L_SalesLine.SetFilter("Return Reason Code", '%1', '');
+            if L_SalesLine.FindFirst() then
+                L_SalesLine.TestField("Return Reason Code");
+
         end;
     end;
 
