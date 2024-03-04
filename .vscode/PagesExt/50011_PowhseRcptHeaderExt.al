@@ -49,6 +49,17 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                         Caption = 'Warehouse Class Code.';
                         Editable = false;
                     }
+                    field(CD; Rec.CD)
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+
+                    }
+                    field("CD Qty"; Rec."CD Qty")
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+                    }
                     field(Locationcode; Rec.Locationcode)
                     {
                         ApplicationArea = all;

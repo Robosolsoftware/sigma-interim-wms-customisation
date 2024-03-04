@@ -192,14 +192,16 @@ codeunit 70101 "Purchase Events"
                 if warehouseClasses.FindFirst() then begin
                     if warehouseClasses.CD = true then begin
                         warehouseClassCode := true;
+                        WhseReceiptHeader."CD Qty" += RecWhseRcpLine.Quantity;
                     end;
                 end;
             until RecWhseRcpLine.Next() = 0;
         end;
-        if warehouseClassCode = true then begin
-            WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes;
-            WhseReceiptHeader.Modify();
-        end;
+        if warehouseClassCode = true then
+            WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes
+        else
+            WhseReceiptHeader.CD := WhseReceiptHeader.CD::No;
+        WhseReceiptHeader.Modify();
     end;
 
 

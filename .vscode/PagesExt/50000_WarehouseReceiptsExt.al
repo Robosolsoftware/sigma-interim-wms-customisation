@@ -46,6 +46,16 @@ pageextension 50000 WarehouseReceiptsExt extends "Warehouse Receipts"
                 ApplicationArea = all;
                 Editable = false;
             }
+            field(CD; Rec.CD)
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+            field("CD Qty"; Rec."CD Qty")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
 
 
         }
