@@ -26,6 +26,10 @@ pageextension 70169 "SC Warehouse Classes" extends "Warehouse Classes"
             {
                 ApplicationArea = all;
             }
+            field(CD; Rec.CD)
+            {
+                ApplicationArea = all;
+            }
         }
     }
 

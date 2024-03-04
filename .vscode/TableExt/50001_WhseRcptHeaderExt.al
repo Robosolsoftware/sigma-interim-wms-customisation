@@ -102,7 +102,7 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         field(50024; CD; Option)
         {
             DataClassification = ToBeClassified;
-            OptionMembers = Yes,No;
+            OptionMembers = "",Yes,No;
         }
         field(50025; "CD Qty"; Integer)
         {
@@ -118,8 +118,8 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
     var
         myInt: Integer;
     begin
-        if (rec."Transportation No." <> '') or (Rec."Receipt Status" <> Rec."Receipt Status"::Closed) then
-            Error('Cannot Delete the Record');
+        if (rec."Transportation No." <> '') and (Rec."Receipt Status" <> Rec."Receipt Status"::Closed) then
+            Error('Cannot Delete the Record because either Transportation No. is not blank or Receipt Status is not set to Closed');
     end;
 
 

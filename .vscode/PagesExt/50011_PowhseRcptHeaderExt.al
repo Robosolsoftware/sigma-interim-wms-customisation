@@ -21,6 +21,12 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                         Caption = 'Purchase Order Date';
                         Editable = false;
                     }
+
+                    field("Requested Receipt Date"; Rec."Requested Receipt Date")
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+                    }
                     field("Transportation No."; Rec."Transportation No.")
                     {
                         ApplicationArea = all;
@@ -69,6 +75,7 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                 group("Booking Details")
                 {
                     Editable = false;
+                    Visible = false;
                     field(Carrier; Rec.Carrier)
                     {
                         ApplicationArea = all;
@@ -109,6 +116,7 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                 group(Status)
                 {
                     Editable = false;
+                    Visible = false;
 
                     field("Actual Receipt Date"; Rec."Actual Receipt Date")
                     {
