@@ -259,6 +259,10 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
         {
             Editable = L_CurrPageEditable;
         }
+        modify("Warehouse Class Code")
+        {
+            Editable = L_EditableQUAApproved;
+        }
     }
 
 
