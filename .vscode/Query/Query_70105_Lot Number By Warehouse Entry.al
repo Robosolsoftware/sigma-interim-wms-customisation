@@ -29,6 +29,10 @@ query 70105 "LotNumber WarehouseEntry New"
             {
                 Method = Sum;
             }
+            column(Reference_No_; "Reference No.")
+            {
+
+            }
         }
 
     }

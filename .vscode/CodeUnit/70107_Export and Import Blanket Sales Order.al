@@ -43,6 +43,8 @@ codeunit 70107 "Export & Import Blanket SO"
     var
         L_SalesandRecSetup: Record "Sales & Receivables Setup";
         NoSeriesManagement: Codeunit NoSeriesManagement;
+        L_Shippingagentservice: Record "Shipping Agent Services";
+        L_cust: Record Customer;
     begin
         L_SalesandRecSetup.Get();
         Rec_ExcelBuffer.DeleteAll();
@@ -109,14 +111,28 @@ codeunit 70107 "Export & Import Blanket SO"
                     InsertSalesHeader."Sheet Name" := FileName;
                     InsertSalesHeader."Import Date" := Today;
                     InsertSalesHeader.Insert(true);
+                    if GetValueAtIndex(RowNo, 10) <> '' then begin
+                        L_Shippingagentservice.Reset();
+                        L_Shippingagentservice.SetRange(Code, GetValueAtIndex(RowNo, 10));
+                        if L_Shippingagentservice.FindFirst() then begin
+                            InsertSalesHeader.Validate("Shipping Agent Code", L_Shippingagentservice."Shipping Agent Code");
+                            InsertSalesHeader.Validate("Shipping Agent Service Code", GetValueAtIndex(RowNo, 10));
+                        end;
+                        L_cust.Reset();
+                        L_cust.SetRange("No.", GetValueAtIndex(RowNo, 1));
+                        if L_cust.FindFirst() then begin
+                            InsertSalesHeader.Validate("Weekend Ship. Agnt. Serv. Code", L_cust."Weekend Ship. Agnt. Serv. Code");
+                        end;
 
+                    end;
+                    if GetValueAtIndex(RowNo, 11) <> '' then
+                        InsertSalesHeader.Validate("Location Code", GetValueAtIndex(RowNo, 11));
                     if GetValueAtIndex(RowNo, 7) <> '' then begin
                         Clear(G_DocumentDate);
                         Evaluate(G_DocumentDate, GetValueAtIndex(RowNo, 7));
                         InsertSalesHeader.Validate("Document Date", G_DocumentDate);
-                        InsertSalesHeader.Modify(true);
                     end;
-
+                    InsertSalesHeader.Modify(true);
                 end;
 
 

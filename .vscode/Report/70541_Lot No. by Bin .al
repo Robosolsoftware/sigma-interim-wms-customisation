@@ -23,6 +23,7 @@ report 70541 "Lot No. by Bin"
                 EntriesExist: Boolean;
                 ItemTrackingSetup: Record "Item Tracking Setup";
                 LotFound: Boolean;
+                ILE: Record "Item Ledger Entry";
             begin
                 Item.CalcFields(Inventory);
                 if Item.Inventory > 0 then begin
@@ -40,7 +41,7 @@ report 70541 "Lot No. by Bin"
                     Clear(NetInventory);
                     Clear(ExpiryDate);
                     Clear(LotFound);
-
+                    Clear(VariantCode);
                     LotNosByBinCode.SETRANGE(Item_No, Item."No.");
                     LotNosByBinCode.OPEN;
                     ItemN := Item."No.";
@@ -56,8 +57,8 @@ report 70541 "Lot No. by Bin"
                     WarehouseClassCode := Item."Warehouse Class Code";
 
 
-                    Item.CalcFields("Net Inventory");
-                    NetInventory := Item."Net Inventory";
+                    Item.CalcFields("Inventory");
+                    NetInventory := Item.Inventory;
 
                     WHILE LotNosByBinCode.READ DO BEGIN
 
@@ -66,9 +67,17 @@ report 70541 "Lot No. by Bin"
                             Locationcode := LotNosByBinCode.Location_Code;
                             Zonecode := LotNosByBinCode.Zone_Code;
                             Bincode := LotNosByBinCode.Bin_Code;
-                            LotNo := LotNosByBinCode.Lot_No;
-                            ExpiryDate := ItemTrackingManagement.ExistingExpirationDate(LotNosByBinCode.Item_No, LotNosByBinCode.Variant_Code, ItemTrackingSetup, FALSE, EntriesExist);
+                            VariantCode := LotNosByBinCode.Variant_Code;
+                            // LotNo := LotNosByBinCode.Lot_No;
+                            // ExpiryDate := ItemTrackingManagement.ExistingExpirationDate(LotNosByBinCode.Item_No, LotNosByBinCode.Variant_Code, ItemTrackingSetup, FALSE, EntriesExist);
                             LotFound := true;
+                            ILE.Reset();
+                            ILE.SetRange("Document No.", LotNosByBinCode.Reference_No_);
+                            If ILE.FindFirst() Then Begin
+                                LotNo := ILE."Lot No.";
+                                ExpiryDate := ILE."Expiration Date";
+
+                            end;
                             MakeExcelDataBody();
                         end;
                     end;
@@ -120,6 +129,7 @@ report 70541 "Lot No. by Bin"
         Inventoryv: Decimal;
         NetInventory: Decimal;
         ExpiryDate: Date;
+        VariantCode: text;
 
 
 
@@ -135,6 +145,7 @@ report 70541 "Lot No. by Bin"
         ExcelBuf.AddColumn('Warehouse Class Code', FALSE, '', TRUE, FALSE, TRUE, '@', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn('Location code', FALSE, '', TRUE, FALSE, TRUE, '@', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn('Zone code', FALSE, '', TRUE, FALSE, TRUE, '@', ExcelBuf."Cell Type"::Text);
+        ExcelBuf.AddColumn('Variant Code', FALSE, '', TRUE, FALSE, TRUE, '@', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn('Bin code', FALSE, '', TRUE, FALSE, TRUE, '@', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn('Lot No.', FALSE, '', TRUE, FALSE, TRUE, '@', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn('Expiry Date', FALSE, '', TRUE, FALSE, TRUE, '@', ExcelBuf."Cell Type"::Text);
@@ -154,6 +165,7 @@ report 70541 "Lot No. by Bin"
         ExcelBuf.AddColumn(WarehouseClassCode, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn(Locationcode, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn(Zonecode, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuf."Cell Type"::Text);
+        ExcelBuf.AddColumn(VariantCode, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn(Bincode, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn(LotNo, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddColumn(ExpiryDate, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuf."Cell Type"::Text);
