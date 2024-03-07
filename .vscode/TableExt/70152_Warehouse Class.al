@@ -25,11 +25,19 @@ tableextension 70152 "SC Warehouse Class" extends "Warehouse Class"
         }
         field(70155; "CD"; Boolean)
         {
-
+            trigger OnValidate()
+            begin
+                if Rec.CD = true then
+                    rec.TestField(Fridge, false);
+            end;
         }
         field(70156; Fridge; Boolean)
         {
-
+            trigger OnValidate()
+            begin
+                if Rec.Fridge = true then
+                    rec.TestField(CD, false);
+            end;
         }
     }
 

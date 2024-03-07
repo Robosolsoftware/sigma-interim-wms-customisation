@@ -208,10 +208,10 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
         {
             Editable = L_CurrPageEditable;
         }
-        modify(Warehouse)
-        {
-            Editable = L_CurrPageEditable;
-        }
+        // modify(Warehouse)
+        // {
+        //     Editable = L_CurrPageEditable;
+        // }
         modify(Inventory)
         {
             ToolTip = 'Inventory from all Locations';
@@ -259,10 +259,52 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
         {
             Editable = L_CurrPageEditable;
         }
+        //Warehouse group++
         modify("Warehouse Class Code")
         {
             Editable = L_EditableQUAApproved;
         }
+        modify("Special Equipment Code")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Put-away Template Code")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Put-away Unit of Measure Code")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Phys Invt Counting Period Code")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Last Phys. Invt. Date")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Last Counting Period Update")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Next Counting Start Date")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Next Counting End Date")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Identifier Code")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Use Cross-Docking")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        //Warehouse group--
     }
 
 

@@ -141,7 +141,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
 
         field(70150; "Whs. Calss Code type"; Option)
         {
-            OptionMembers = " ",CD,Fridge;
+            OptionMembers = Blank,CD,Fridge;
         }
 
         // modify("Unit Price")
@@ -259,7 +259,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                             if L_WarhouseClass.CD = true then
                                 Rec."Whs. Calss Code type" := Rec."Whs. Calss Code type"::CD;
                         end else
-                            Rec."Whs. Calss Code type" := Rec."Whs. Calss Code type"::" ";
+                            Rec."Whs. Calss Code type" := Rec."Whs. Calss Code type"::Blank;
                     end;
 
                     //Upadte Fields from Item Unit Of Measure++
