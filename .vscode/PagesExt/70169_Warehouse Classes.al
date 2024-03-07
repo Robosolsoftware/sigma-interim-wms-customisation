@@ -30,6 +30,10 @@ pageextension 70169 "SC Warehouse Classes" extends "Warehouse Classes"
             {
                 ApplicationArea = all;
             }
+            field(Fridge; Rec.Fridge)
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

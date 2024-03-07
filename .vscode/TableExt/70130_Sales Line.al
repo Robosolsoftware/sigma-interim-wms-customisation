@@ -139,6 +139,11 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
 
         }
 
+        field(70150; "Whs. Calss Code type"; Option)
+        {
+            OptionMembers = " ",CD,Fridge;
+        }
+
         // modify("Unit Price")
         // {
         //     trigger OnAfterValidate()
@@ -212,6 +217,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 DisUnitPrice: Decimal;
                 L_Location: Record Location;
                 ConsolidateWarehouseShipment: Codeunit "Consolidate Warehouse Shipment";
+                L_WarhouseClass: Record "Warehouse Class";
             begin
                 if (Rec.Type = Rec.Type::Item) then begin
                     //Check SHipping Agent Restriction and Sales Order Warning Mesage++
@@ -243,6 +249,17 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                         Rec."Min Sell Price" := L_Item."Min Sell Price";
                         Rec."Parent Category" := L_Item."Parent Category";
                         Rec."Warehouse Class Code" := L_Item."Warehouse Class Code";
+
+                        L_WarhouseClass.Reset();
+                        L_WarhouseClass.SetRange(Code, L_Item."Warehouse Class Code");
+                        if L_WarhouseClass.FindFirst() then begin
+                            if L_WarhouseClass.Fridge = true then
+                                Rec."Whs. Calss Code type" := Rec."Whs. Calss Code type"::Fridge;
+
+                            if L_WarhouseClass.CD = true then
+                                Rec."Whs. Calss Code type" := Rec."Whs. Calss Code type"::CD;
+                        end else
+                            Rec."Whs. Calss Code type" := Rec."Whs. Calss Code type"::" ";
                     end;
 
                     //Upadte Fields from Item Unit Of Measure++
