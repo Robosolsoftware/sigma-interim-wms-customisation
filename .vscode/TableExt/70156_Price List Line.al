@@ -10,6 +10,12 @@ tableextension 70156 "SC Price List Line" extends "Price List Line"
                 Rec.TestField("Variant Code", '');
             end;
         }
+
+        field(70156; "Special Price Daily"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Price List Header"."Special Price Daily" where(Code = field("Price List Code")));
+        }
     }
 
     keys
