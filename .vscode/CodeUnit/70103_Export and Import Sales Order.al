@@ -105,7 +105,7 @@ codeunit 70103 "Export & Import Sales Order"
                     if GetValueAtIndex(RowNo, 8) <> '' then begin
                         Clear(RequestDelivryDate);
                         Evaluate(RequestDelivryDate, GetValueAtIndex(RowNo, 8));
-                        InsertSalesHeader.Validate("Requested Delivery Date", RequestDelivryDate);
+                        InsertSalesHeader.Validate("Shipment Date", RequestDelivryDate);
                     end;
                     InsertSalesHeader.Validate("External Document No.", GetValueAtIndex(RowNo, 9));
                     InsertSalesHeader."Sheet Name" := FileName;
@@ -117,7 +117,8 @@ codeunit 70103 "Export & Import Sales Order"
                         if L_Shippingagentservice.FindFirst() then begin
                             InsertSalesHeader.Validate("Shipping Agent Code", L_Shippingagentservice."Shipping Agent Code");
                             InsertSalesHeader.Validate("Shipping Agent Service Code", GetValueAtIndex(RowNo, 10));
-                        end;
+                        end else
+                            InsertSalesHeader.Validate("Shipping Agent Service Code", GetValueAtIndex(RowNo, 10));
                         L_cust.Reset();
                         L_cust.SetRange("No.", GetValueAtIndex(RowNo, 1));
                         if L_cust.FindFirst() then begin
@@ -130,7 +131,7 @@ codeunit 70103 "Export & Import Sales Order"
                     if GetValueAtIndex(RowNo, 7) <> '' then begin
                         Clear(G_DocumentDate);
                         Evaluate(G_DocumentDate, GetValueAtIndex(RowNo, 7));
-                        InsertSalesHeader.Validate("Document Date", G_DocumentDate);
+                        InsertSalesHeader.Validate("Order Date", G_DocumentDate);
                     end;
                     InsertSalesHeader.Modify(true);
                 end;
@@ -232,8 +233,8 @@ codeunit 70103 "Export & Import Sales Order"
         Excelbuffer.AddColumn('Variant Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Quantity', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Unit Price', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
-        Excelbuffer.AddColumn('Document Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
-        Excelbuffer.AddColumn('Requested Delivery Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Order Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
+        Excelbuffer.AddColumn('Shipment Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('External Document No.', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Shipping Agent Service code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Location Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
