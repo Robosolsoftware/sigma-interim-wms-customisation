@@ -139,9 +139,9 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
 
         }
 
-        field(70150; "Whs. Calss Code type"; Option)
+        field(70150; "Whs. Calss Code type"; Code[20])
         {
-            OptionMembers = Blank,CD,Fridge;
+            //OptionMembers = Blank,CD,Fridge;
         }
 
         // modify("Unit Price")
@@ -254,12 +254,12 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                         L_WarhouseClass.SetRange(Code, L_Item."Warehouse Class Code");
                         if L_WarhouseClass.FindFirst() then begin
                             if L_WarhouseClass.Fridge = true then
-                                Rec."Whs. Calss Code type" := Rec."Whs. Calss Code type"::Fridge;
+                                Rec."Whs. Calss Code type" := 'Fridge';
 
                             if L_WarhouseClass.CD = true then
-                                Rec."Whs. Calss Code type" := Rec."Whs. Calss Code type"::CD;
+                                Rec."Whs. Calss Code type" := 'CD';
                         end else
-                            Rec."Whs. Calss Code type" := Rec."Whs. Calss Code type"::Blank;
+                            Rec."Whs. Calss Code type" := 'Blank'
                     end;
 
                     //Upadte Fields from Item Unit Of Measure++
