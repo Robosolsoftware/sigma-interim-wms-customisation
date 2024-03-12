@@ -143,6 +143,12 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             //OptionMembers = Blank,CD,Fridge;
         }
+        field(70151; "Order Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Header"."Order Date" where("Document Type" = field("Document Type"), "No." = field("Document No.")));
+            Editable = false;
+        }
 
         // modify("Unit Price")
         // {
