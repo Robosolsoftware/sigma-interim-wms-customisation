@@ -19,6 +19,21 @@ tableextension 70146 "SC Sales Shipment Line" extends "Sales Shipment Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(70149; "Warehouse Class Code"; Code[10])
+        {
+
+        }
+
+        field(70150; "Whs. Calss Code type"; Code[20])
+        {
+            //OptionMembers = Blank,CD,Fridge;
+        }
+        field(70151; "Order Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Shipment Header"."Order Date" where("No." = field("Document No.")));
+            Editable = false;
+        }
     }
 
     keys
