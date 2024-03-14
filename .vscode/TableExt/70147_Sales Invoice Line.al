@@ -19,6 +19,11 @@ tableextension 70147 "SC Sales Invoice Line" extends "Sales Invoice Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(70143; "Qty on Return"; Decimal) // Rehan++
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Warehouse Receipt Line".Quantity where("Return Invoice No." = field("Document No."), "Return Invoice Line No." = field("Line No."), "Source Document" = filter("Sales Return Order")));
+        }
     }
 
     keys

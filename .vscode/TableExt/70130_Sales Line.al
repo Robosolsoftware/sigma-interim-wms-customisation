@@ -149,6 +149,22 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
             CalcFormula = lookup("Sales Header"."Order Date" where("Document Type" = field("Document Type"), "No." = field("Document No.")));
             Editable = false;
         }
+        field(70152; "Sales Return Order Invoice No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70153; "Sales Return Order Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70154; "Return Order No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70155; "Return Order Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
 
         // modify("Unit Price")
         // {

@@ -15,6 +15,14 @@ tableextension 70126 WHSERcpLineRBE extends "Warehouse Receipt Line"
             Caption = 'Warehouse Class Code';
             TableRelation = "Warehouse Class";
         }
+        field(70003; "Return Invoice Line No."; Integer) //Rehan++
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70004; "Return Invoice No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     var
