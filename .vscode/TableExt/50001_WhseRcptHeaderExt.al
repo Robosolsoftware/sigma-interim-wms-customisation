@@ -114,10 +114,13 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         }
         field(50027; "Sales Return Order"; Code[20])
         {
-            FieldClass = FlowField;
-            CalcFormula = lookup("Warehouse Receipt Line"."Source No." where("Source Document" = filter("Sales Return Order"), "No." = field("No.")));
+
         }
         field(50028; "Customer No."; Code[20])
+        {
+
+        }
+        field(50029; "Customer Name"; Text[100])
         {
 
         }

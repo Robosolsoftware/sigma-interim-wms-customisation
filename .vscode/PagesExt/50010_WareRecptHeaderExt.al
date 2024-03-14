@@ -77,6 +77,25 @@ pageextension 50010 WareRcptHeaderExt extends "Warehouse Receipt"
                         ApplicationArea = all;
                         Editable = false;
                     }
+
+                    group("Sales Return Order Details")
+                    {
+                        field("Sales Return Order"; Rec."Sales Return Order")
+                        {
+                            ApplicationArea = All;
+                            Editable = false;
+                        }
+                        field("Customer No."; Rec."Customer No.")
+                        {
+                            ApplicationArea = All;
+                            Editable = false;
+                        }
+                        field("Customer Name"; Rec."Customer Name")
+                        {
+                            Editable = false;
+                            ApplicationArea = All;
+                        }
+                    }
                 }
                 // group("Booking Details")
                 // {

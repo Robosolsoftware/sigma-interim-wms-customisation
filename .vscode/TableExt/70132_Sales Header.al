@@ -261,7 +261,8 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
         field(70154; "Return Order No."; Code[20])
         {
             FieldClass = FlowField;
-            CalcFormula = lookup("Sales Line"."Return Order No." where("Document No." = field("No."), "Document Type" = field("Document Type")));
+            CalcFormula = lookup("Sales Line"."Return Order No." where("Document No." = field("No."), "Document Type" = field("Document Type"), Type = const(Item)));
+            Editable = false;
         }
 
     }

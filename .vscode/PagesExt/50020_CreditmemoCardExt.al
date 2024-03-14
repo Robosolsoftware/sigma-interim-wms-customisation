@@ -7,6 +7,7 @@ pageextension 50020 SalesCreditMemoCard extends "Sales Credit Memo"
             field("Return Order No."; Rec."Return Order No.")
             {
                 ApplicationArea = all;
+                Editable = false;
             }
         }
     }
