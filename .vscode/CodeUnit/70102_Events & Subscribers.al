@@ -561,7 +561,7 @@ codeunit 70102 "SC Events & Subscriber"
             exit(Users."User Name");
     end;
 
-    procedure CheckShippingAgentServiceRestriction(_SalesHeader: Record "Sales Header"; _SalesLine: Record "Sales Line")
+    procedure CheckShippingAgentServiceRestriction(_ItemNo: Code[20]; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20])
     var
         L_ShippingAgent: Record "Shipping Agent";
         L_RecItemAttValMap: Record "Item Attribute Value Mapping";
@@ -619,7 +619,7 @@ codeunit 70102 "SC Events & Subscriber"
 
         L_RecItemAttValMap.Reset();
         L_RecItemAttValMap.SetRange("Table ID", 27);
-        L_RecItemAttValMap.SetRange("No.", _SalesLine."No.");
+        L_RecItemAttValMap.SetRange("No.", _ItemNo);
         if L_RecItemAttValMap.FindSet() then begin
             repeat
                 L_ItemAttribute.Reset();
@@ -630,12 +630,12 @@ codeunit 70102 "SC Events & Subscriber"
                     if L_ItemAttributeValue.FindFirst() then begin
                         if L_ItemAttributeValue.Value <> '' then begin
                             ShippingAgentRestrictItem.Reset();
-                            ShippingAgentRestrictItem.SetRange("Shipping Agent Code", _SalesHeader."Shipping Agent Code");
-                            ShippingAgentRestrictItem.SetRange("Shipping Agent Service Code", _SalesHeader."Shipping Agent Service Code");
+                            ShippingAgentRestrictItem.SetRange("Shipping Agent Code", _ShippingAgentCode);
+                            ShippingAgentRestrictItem.SetRange("Shipping Agent Service Code", _ShippingAgentServiceCode);
                             ShippingAgentRestrictItem.SetRange("Attribute ID", L_ItemAttribute.ID);
                             ShippingAgentRestrictItem.SetRange("Attribute value ID", L_RecItemAttValMap."Item Attribute Value ID");
                             if ShippingAgentRestrictItem.FindFirst() then begin
-                                Error('CD and Fridge items are not allowed');
+                                Error('CD and Fridge items are not allowed for Shipping agent service code %1.Item No. %2', _ShippingAgentServiceCode, _ItemNo);
                             end;
                         end;
                     end;

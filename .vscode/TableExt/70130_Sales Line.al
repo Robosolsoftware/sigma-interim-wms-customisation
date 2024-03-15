@@ -238,7 +238,6 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 UserSetup: Record "User Setup";
                 DisUnitPrice: Decimal;
                 L_Location: Record Location;
-                ConsolidateWarehouseShipment: Codeunit "Consolidate Warehouse Shipment";
                 L_WarhouseClass: Record "Warehouse Class";
             begin
                 if (Rec.Type = Rec.Type::Item) then begin
@@ -247,12 +246,15 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                     if L_SalesHeader.FindFirst() then begin
+                        L_SalesHeader.TestField("Shipping Agent Service Code"); //User Story 18274
+
+
                         //++Shipping Agent Restriction(18274)
                         // if L_SalesHeader."Shipping Agent Code" <> '' then begin
                         //     L_Function.CheckShippingAgentServiceRestriction(L_SalesHeader, Rec);
                         // end;
                         if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
-                            L_Function.CheckShippingAgentServiceRestriction(L_SalesHeader, Rec);
+                            L_Function.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
                         end;
 
                         //++Sales Order warning message(15813)

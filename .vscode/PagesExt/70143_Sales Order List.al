@@ -13,16 +13,16 @@ pageextension 70143 "SC Sales Order List" extends "Sales Order List"
         // Add changes to page layout here
         addbefore("Completely Shipped")
         {
-            field("Warehouse Shipment Exist"; Rec."Warehouse Shipment Exist")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
-            field("Pick Registered"; Rec."Pick Registered")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
+            // field("Warehouse Shipment Exist"; Rec."Warehouse Shipment Exist")
+            // {
+            //     ApplicationArea = All;
+            //     Editable = false;
+            // }
+            // field("Pick Registered"; Rec."Pick Registered")
+            // {
+            //     ApplicationArea = All;
+            //     Editable = false;
+            // }
             field(PartiallyShipped; PartiallyShipped)
             {
                 ApplicationArea = All;

@@ -9,25 +9,25 @@ pageextension 70158 "SC Warehouse Shipment List" extends "Warehouse Shipment Lis
             {
                 ApplicationArea = all;
                 Editable = false;
-                Caption = 'System Created At';
+                Caption = 'Created At';
             }
             field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
-                Caption = 'System Created By';
+                Caption = 'Created By';
             }
             field(SystemModifiedAt; Rec.SystemModifiedAt)
             {
                 ApplicationArea = all;
                 Editable = false;
-                Caption = 'System Modified At';
+                Caption = 'Modified At';
             }
             field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
-                Caption = 'System Modified By';
+                Caption = 'Modified By';
             }
         }
     }

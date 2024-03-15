@@ -5,17 +5,17 @@ pageextension 70135 WarehousePutAwaysListExt extends "Warehouse Put-aways"
         addafter("No. of Lines")
         {
 
-            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
-            {
-                ApplicationArea = all;
-            }
             field("System CreatedAt"; rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
-                caption = 'System CreatedAt';
+                caption = 'Created At';
 
             }
-
+            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Caption = 'Created By';
+            }
         }
     }
 

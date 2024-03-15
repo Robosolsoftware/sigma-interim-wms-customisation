@@ -7,15 +7,16 @@ pageextension 70125 TransferOrdListRBE extends "Transfer Orders"
         { Visible = true; }
         addafter("Direct Transfer")
         {
-            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
-            {
-                ApplicationArea = all;
-            }
             field("System CreatedAt"; rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
-                caption = 'System CreatedAt';
+                caption = 'Created At';
 
+            }
+            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Caption = 'Created By';
             }
         }
     }

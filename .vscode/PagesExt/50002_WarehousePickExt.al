@@ -4,16 +4,17 @@ pageextension 50002 WhsePickExt extends "Warehouse Picks"
     {
         addafter("No. of Lines")
         {
-            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
-            {
-                ApplicationArea = all;
-            }
             field("System CreatedAt"; rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
-                caption = 'System CreatedAt';
-
+                caption = 'Created At';
             }
+            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Caption = 'Created By';
+            }
+
         }
     }
 

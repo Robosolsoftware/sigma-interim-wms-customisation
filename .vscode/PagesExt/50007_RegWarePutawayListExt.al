@@ -5,16 +5,18 @@ pageextension 50007 RegWhsePutawayListExt extends "Registered Whse. Put-aways"
     {
         addafter("No. Series")
         {
-            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
-            {
-                ApplicationArea = all;
-            }
             field("System CreatedAt"; rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
-                caption = 'System CreatedAt';
+                caption = 'Created At';
 
             }
+            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Caption = 'Created By';
+            }
+
         }
     }
 

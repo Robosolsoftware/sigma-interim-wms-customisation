@@ -50,11 +50,6 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
         }
         addlast(General)
         {
-            field("Warehouse Shipment Exist"; Rec."Warehouse Shipment Exist")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
             field("Shortcut Dimension 3 Code"; Rec."Shortcut Dimension 3 Code")
             {
                 ApplicationArea = All;

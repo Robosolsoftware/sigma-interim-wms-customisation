@@ -4,16 +4,30 @@ pageextension 50005 InventoryPickCardExt extends "Inventory Pick"
     {
         addafter("Shipment Date")
         {
-            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
-            {
-                ApplicationArea = all;
-            }
             field("System CreatedAt"; rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
-                caption = 'System CreatedAt';
+                caption = 'Created At';
 
             }
+            field("System CreatedBy"; GetUserName(rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Caption = 'Created By';
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'Modified At';
+            }
+            field(SystemModifiedBy; GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'Modified By';
+            }
+
         }
     }
 
