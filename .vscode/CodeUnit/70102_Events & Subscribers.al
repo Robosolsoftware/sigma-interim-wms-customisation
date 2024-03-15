@@ -373,6 +373,10 @@ codeunit 70102 "SC Events & Subscriber"
         PurchaseLine: Record "Purchase Line";
         PurchaseHeader: Record "Purchase Header";
         i: Integer;
+        warehouseClassCode: Boolean;
+        warehouseClasses: Record "Warehouse Class";
+        WhseReceiptHeader: Record "Warehouse Receipt Header";
+        RecWhseRcpLine: Record "Warehouse Receipt Line";
     begin
         i := 0;
         PurchaseHeader.Reset();
@@ -404,6 +408,25 @@ codeunit 70102 "SC Events & Subscriber"
                         i += 1;
                     until PurchaseLine.Next() = 0;
                 end;
+                warehouseClassCode := false;
+                RecWhseRcpLine.Reset();
+                RecWhseRcpLine.SetRange("No.", WhseReceiptHeader."No.");
+                if RecWhseRcpLine.FindSet() then begin
+                    repeat
+                        warehouseClasses.Reset();
+                        warehouseClasses.SetRange(Code, RecWhseRcpLine."Warehouse Class Code");
+                        if warehouseClasses.FindFirst() then begin
+                            if warehouseClasses.CD = true then begin
+                                warehouseClassCode := true;
+                                WhseReceiptHeader."CD Qty" += RecWhseRcpLine.Quantity;
+                            end;
+                        end;
+                    until RecWhseRcpLine.Next() = 0;
+                end;
+                if warehouseClassCode = true then
+                    WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes
+                else
+                    WhseReceiptHeader.CD := WhseReceiptHeader.CD::No;
                 WarehouseReceiptHeader.Modify();
             end;
         end;

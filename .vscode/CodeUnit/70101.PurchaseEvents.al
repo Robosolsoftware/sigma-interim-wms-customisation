@@ -96,6 +96,7 @@ codeunit 70101 "Purchase Events"
         PurchaseLine: Record "Purchase Line";
         warehouseClassCode: Boolean;
         warehouseClasses: Record "Warehouse Class";
+
     begin
         RecWhseShpLine.Reset();
         RecWhseShpLine.SetRange("No.", WhseShipmentHeader."No.");
@@ -182,26 +183,26 @@ codeunit 70101 "Purchase Events"
             end;
         end;
 
-        warehouseClassCode := false;
-        RecWhseRcpLine.Reset();
-        RecWhseRcpLine.SetRange("No.", WhseReceiptHeader."No.");
-        if RecWhseRcpLine.FindSet() then begin
-            repeat
-                warehouseClasses.Reset();
-                warehouseClasses.SetRange(Code, RecWhseRcpLine."Warehouse Class Code");
-                if warehouseClasses.FindFirst() then begin
-                    if warehouseClasses.CD = true then begin
-                        warehouseClassCode := true;
-                        WhseReceiptHeader."CD Qty" += RecWhseRcpLine.Quantity;
-                    end;
-                end;
-            until RecWhseRcpLine.Next() = 0;
-        end;
-        if warehouseClassCode = true then
-            WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes
-        else
-            WhseReceiptHeader.CD := WhseReceiptHeader.CD::No;
-        WhseReceiptHeader.Modify();
+        // warehouseClassCode := false;
+        // RecWhseRcpLine.Reset();
+        // RecWhseRcpLine.SetRange("No.", WhseReceiptHeader."No.");
+        // if RecWhseRcpLine.FindSet() then begin
+        //     repeat
+        //         warehouseClasses.Reset();
+        //         warehouseClasses.SetRange(Code, RecWhseRcpLine."Warehouse Class Code");
+        //         if warehouseClasses.FindFirst() then begin
+        //             if warehouseClasses.CD = true then begin
+        //                 warehouseClassCode := true;
+        //                 WhseReceiptHeader."CD Qty" += RecWhseRcpLine.Quantity;
+        //             end;
+        //         end;
+        //     until RecWhseRcpLine.Next() = 0;
+        // end;
+        // if warehouseClassCode = true then
+        //     WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes
+        // else
+        //     WhseReceiptHeader.CD := WhseReceiptHeader.CD::No;
+        // WhseReceiptHeader.Modify();
     end;
 
 
