@@ -100,12 +100,9 @@ report 70541 "Lot No. by Bin"
 
     trigger OnPreReport()
     var
-
     begin
         ExcelBuf.DeleteAll();
         MakeExcelDataHeader;
-
-
     end;
 
     trigger OnPostReport()
