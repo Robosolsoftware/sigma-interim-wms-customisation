@@ -96,6 +96,11 @@ codeunit 70101 "Purchase Events"
         PurchaseLine: Record "Purchase Line";
         warehouseClassCode: Boolean;
         warehouseClasses: Record "Warehouse Class";
+        WhseRcptLine: Record "Warehouse Receipt Line";
+        PurchaseHeader: Record "Purchase Header";
+        i: Integer;
+
+
     begin
         RecWhseShpLine.Reset();
         RecWhseShpLine.SetRange("No.", WhseShipmentHeader."No.");
@@ -176,31 +181,64 @@ codeunit 70101 "Purchase Events"
                         RecWhseRcpLine."Warehouse Class Code" := PurchaseLine."Warehouse Class Code";
                         RecWhseRcpLine.Brand := PurchaseLine.Brand;
                         RecWhseRcpLine."Pack Size" := PurchaseLine."Pack Size";
+
                         RecWhseRcpLine.Modify();
                     end;
                 until PurchaseLine.Next = 0;
             end;
         end;
 
-        warehouseClassCode := false;
-        RecWhseRcpLine.Reset();
-        RecWhseRcpLine.SetRange("No.", WhseReceiptHeader."No.");
-        if RecWhseRcpLine.FindSet() then begin
-            repeat
-                warehouseClasses.Reset();
-                warehouseClasses.SetRange(Code, RecWhseRcpLine."Warehouse Class Code");
-                if warehouseClasses.FindFirst() then begin
-                    if warehouseClasses.CD = true then begin
-                        warehouseClassCode := true;
-                        WhseReceiptHeader."CD Qty" += RecWhseRcpLine.Quantity;
-                    end;
+        i := 0;
+        PurchaseHeader.Reset();
+        WhseRcptLine.Reset();
+        WhseRcptLine.SetRange("No.", WhseReceiptHeader."No.");
+        WhseRcptLine.SetRange("Source Document", WhseRcptLine."Source Document"::"Purchase Order");
+        if WhseRcptLine.FindFirst() then begin
+            PurchaseHeader.SetRange("No.", WhseRcptLine."Source No.");
+            PurchaseHeader.SetRange("Document Type", PurchaseHeader."Document Type"::Order);
+            if PurchaseHeader.FindFirst() then begin
+                WhseReceiptHeader."Purchase Order No." := PurchaseHeader."No.";
+                WhseReceiptHeader."Purchase Order Date" := PurchaseHeader."Order Date";
+                WhseReceiptHeader."Supplier Name" := PurchaseHeader."Buy-from Vendor Name";
+                WhseReceiptHeader."Requested Receipt Date" := PurchaseHeader."Requested Receipt Date";
+                PurchaseLine.Reset();
+                PurchaseLine.SetRange("Document No.", PurchaseHeader."No.");
+                PurchaseLine.SetRange("Document Type", PurchaseHeader."Document Type");
+                PurchaseLine.SetRange(Type, PurchaseLine.Type::Item);
+                if PurchaseLine.FindSet() then begin
+                    WhseReceiptHeader."No. of Items" := PurchaseLine.Count;
+                    repeat
+                        if i = 0 then begin
+                            WhseReceiptHeader."Item Category Code" := PurchaseLine."Item Category Code";
+                            WhseReceiptHeader."Warehouse Class Code" := PurchaseLine."Warehouse Class Code";
+                            WhseReceiptHeader.Locationcode := PurchaseLine."Location Code";
+                        end;
+                        WhseReceiptHeader."Total Order Qty" += PurchaseLine.Quantity;
+                        i += 1;
+                    until PurchaseLine.Next() = 0;
                 end;
-            until RecWhseRcpLine.Next() = 0;
+                warehouseClassCode := false;
+                RecWhseRcpLine.Reset();
+                RecWhseRcpLine.SetRange("No.", WhseReceiptHeader."No.");
+                if RecWhseRcpLine.FindSet() then begin
+                    repeat
+                        warehouseClasses.Reset();
+                        warehouseClasses.SetRange(Code, RecWhseRcpLine."Warehouse Class Code");
+                        if warehouseClasses.FindFirst() then begin
+                            if warehouseClasses.CD = true then begin
+                                warehouseClassCode := true;
+                                WhseReceiptHeader."CD Qty" += RecWhseRcpLine.Quantity;
+                            end;
+                        end;
+                    until RecWhseRcpLine.Next() = 0;
+                end;
+                if warehouseClassCode = true then
+                    WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes
+                else
+                    WhseReceiptHeader.CD := WhseReceiptHeader.CD::No;
+                WhseReceiptHeader.Modify();
+            end;
         end;
-        if warehouseClassCode = true then
-            WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes
-        else
-            WhseReceiptHeader.CD := WhseReceiptHeader.CD::No;
         WhseReceiptHeader.Modify();
     end;
 

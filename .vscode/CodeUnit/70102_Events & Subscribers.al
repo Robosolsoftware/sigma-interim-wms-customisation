@@ -373,40 +373,62 @@ codeunit 70102 "SC Events & Subscriber"
         PurchaseLine: Record "Purchase Line";
         PurchaseHeader: Record "Purchase Header";
         i: Integer;
+        warehouseClassCode: Boolean;
+        warehouseClasses: Record "Warehouse Class";
+        //WhseReceiptHeader: Record "Warehouse Receipt Header";
+        RecWhseRcpLine: Record "Warehouse Receipt Line";
     begin
-        i := 0;
-        PurchaseHeader.Reset();
-        WhseRcptLine.Reset();
-        WhseRcptLine.SetRange("No.", WarehouseReceiptHeader."No.");
-        WhseRcptLine.SetRange("Source Document", WhseRcptLine."Source Document"::"Purchase Order");
-        if WhseRcptLine.FindFirst() then begin
-            PurchaseHeader.SetRange("No.", WhseRcptLine."Source No.");
-            PurchaseHeader.SetRange("Document Type", PurchaseHeader."Document Type"::Order);
-            if PurchaseHeader.FindFirst() then begin
-                WarehouseReceiptHeader."Purchase Order No." := PurchaseHeader."No.";
-                WarehouseReceiptHeader."Purchase Order Date" := PurchaseHeader."Order Date";
-                WarehouseReceiptHeader."Supplier Name" := PurchaseHeader."Buy-from Vendor Name";
-                WarehouseReceiptHeader."Requested Receipt Date" := PurchaseHeader."Requested Receipt Date";
-                PurchaseLine.Reset();
-                PurchaseLine.Reset();
-                PurchaseLine.SetRange("Document No.", PurchaseHeader."No.");
-                PurchaseLine.SetRange("Document Type", PurchaseHeader."Document Type");
-                PurchaseLine.SetRange(Type, PurchaseLine.Type::Item);
-                if PurchaseLine.FindSet() then begin
-                    WarehouseReceiptHeader."No. of Items" := PurchaseLine.Count;
-                    repeat
-                        if i = 0 then begin
-                            WarehouseReceiptHeader."Item Category Code" := PurchaseLine."Item Category Code";
-                            WarehouseReceiptHeader."Warehouse Class Code" := PurchaseLine."Warehouse Class Code";
-                            WarehouseReceiptHeader.Locationcode := PurchaseLine."Location Code";
-                        end;
-                        WarehouseReceiptHeader."Total Order Qty" += PurchaseLine.Quantity;
-                        i += 1;
-                    until PurchaseLine.Next() = 0;
-                end;
-                WarehouseReceiptHeader.Modify();
-            end;
-        end;
+        // i := 0;
+        // PurchaseHeader.Reset();
+        // WhseRcptLine.Reset();
+        // WhseRcptLine.SetRange("No.", WarehouseReceiptHeader."No.");
+        // WhseRcptLine.SetRange("Source Document", WhseRcptLine."Source Document"::"Purchase Order");
+        // if WhseRcptLine.FindFirst() then begin
+        //     PurchaseHeader.SetRange("No.", WhseRcptLine."Source No.");
+        //     PurchaseHeader.SetRange("Document Type", PurchaseHeader."Document Type"::Order);
+        //     if PurchaseHeader.FindFirst() then begin
+        //         WarehouseReceiptHeader."Purchase Order No." := PurchaseHeader."No.";
+        //         WarehouseReceiptHeader."Purchase Order Date" := PurchaseHeader."Order Date";
+        //         WarehouseReceiptHeader."Supplier Name" := PurchaseHeader."Buy-from Vendor Name";
+        //         WarehouseReceiptHeader."Requested Receipt Date" := PurchaseHeader."Requested Receipt Date";
+        //         PurchaseLine.Reset();
+        //         PurchaseLine.SetRange("Document No.", PurchaseHeader."No.");
+        //         PurchaseLine.SetRange("Document Type", PurchaseHeader."Document Type");
+        //         PurchaseLine.SetRange(Type, PurchaseLine.Type::Item);
+        //         if PurchaseLine.FindSet() then begin
+        //             WarehouseReceiptHeader."No. of Items" := PurchaseLine.Count;
+        //             repeat
+        //                 if i = 0 then begin
+        //                     WarehouseReceiptHeader."Item Category Code" := PurchaseLine."Item Category Code";
+        //                     WarehouseReceiptHeader."Warehouse Class Code" := PurchaseLine."Warehouse Class Code";
+        //                     WarehouseReceiptHeader.Locationcode := PurchaseLine."Location Code";
+        //                 end;
+        //                 WarehouseReceiptHeader."Total Order Qty" += PurchaseLine.Quantity;
+        //                 i += 1;
+        //             until PurchaseLine.Next() = 0;
+        //         end;
+        //         // warehouseClassCode := false;
+        //         // RecWhseRcpLine.Reset();
+        //         // RecWhseRcpLine.SetRange("No.", WarehouseReceiptHeader."No.");
+        //         // if RecWhseRcpLine.FindSet() then begin
+        //         //     repeat
+        //         //         warehouseClasses.Reset();
+        //         //         warehouseClasses.SetRange(Code, RecWhseRcpLine."Warehouse Class Code");
+        //         //         if warehouseClasses.FindFirst() then begin
+        //         //             if warehouseClasses.CD = true then begin
+        //         //                 warehouseClassCode := true;
+        //         //                 WarehouseReceiptHeader."CD Qty" += RecWhseRcpLine.Quantity;
+        //         //             end;
+        //         //         end;
+        //         //     until RecWhseRcpLine.Next() = 0;
+        //         // end;
+        //         // if warehouseClassCode = true then
+        //         //     WarehouseReceiptHeader.CD := WarehouseReceiptHeader.CD::Yes
+        //         // else
+        //         //     WarehouseReceiptHeader.CD := WarehouseReceiptHeader.CD::No;
+        //         WarehouseReceiptHeader.Modify();
+        //     end;
+        // end;
     end;
 
     // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Receipt", 'OnCodeOnAfterWhseRcptHeaderModify', '', true, true)]
