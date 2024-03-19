@@ -82,12 +82,12 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         {
 
         }
-        field(50021; "Receipt Status"; Option)
+        field(50021; "Receipt Status"; Text[50])
         {
             DataClassification = ToBeClassified;
             Caption = 'Transportation Receipt Status';
-            OptionMembers = " ","Transportation Booked","Goods Arrived","Goods Not Shownup","GRN In Progress",Closed;
-            OptionCaption = ' ,Transportation Booked,Goods Arrived,Goods Not Shownup,GRN In Progress,Closed';
+            // OptionMembers = " ","Transportation Booked","Goods Arrived","Goods Not Shownup","GRN In Progress",Closed;
+            // OptionCaption = ' ,Transportation Booked,Goods Arrived,Goods Not Shownup,GRN In Progress,Closed';
 
         }
         field(50022; "PO Expected Receipt Date"; Date)
@@ -130,7 +130,7 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
     var
         myInt: Integer;
     begin
-        if (rec."Transportation No." <> '') and (Rec."Receipt Status" <> Rec."Receipt Status"::Closed) then
+        if (rec."Transportation No." <> '') and (Rec."Receipt Status" <> 'Closed') then
             Error('Cannot Delete the Record because either Transportation No. is not blank or Receipt Status is not set to Closed');
     end;
 
