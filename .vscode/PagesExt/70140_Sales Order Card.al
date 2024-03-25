@@ -333,8 +333,6 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                                     end;
                                 end;
                                 //With Zero and based on priority--------------------------------------------------------------------
-
-
                             end else
                                 if not Confirm(StrSubstNo('Inventory does not exist for item number %1 line number. Click Yes to continue without variant code ', L_SalesLine."No.", L_SalesLine."Line No."), false) then
                                     Error('')
@@ -362,23 +360,23 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
 
         //     end;
         // }
-        modify(SendApprovalRequest)
-        {
-            trigger OnAfterAction()
-            var
-                L_SalesLine: Record "Sales Line";
-            begin
-                //GHST Customization++
-                L_SalesLine.Reset();
-                L_SalesLine.SetRange("Document No.", Rec."No.");
-                L_SalesLine.SetRange("Document Type", Rec."Document Type");
-                L_SalesLine.SetFilter("Variant Code", '%1', '');
-                L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-                if not L_SalesLine.IsEmpty then
-                    Error('Please Assign Variant Code Item No %1 line No %2', L_SalesLine."No.", L_SalesLine."Line No.");
+        // modify(SendApprovalRequest)
+        // {
+        //     trigger OnAfterAction()
+        //     var
+        //         L_SalesLine: Record "Sales Line";
+        //     begin
+        //         //GHST Customization++
+        //         L_SalesLine.Reset();
+        //         L_SalesLine.SetRange("Document No.", Rec."No.");
+        //         L_SalesLine.SetRange("Document Type", Rec."Document Type");
+        //         L_SalesLine.SetFilter("Variant Code", '%1', '');
+        //         L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+        //         if not L_SalesLine.IsEmpty then
+        //             Error('Please Assign Variant Code Item No %1 line No %2', L_SalesLine."No.", L_SalesLine."Line No.");
 
-            end;
-        }
+        //     end;
+        // }
 
 
     }

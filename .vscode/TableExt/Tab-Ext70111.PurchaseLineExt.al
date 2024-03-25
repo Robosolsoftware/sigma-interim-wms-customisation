@@ -117,6 +117,21 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         {
 
         }
+        field(70137; "Net Unit Cost"; Decimal)
+        {
+
+        }
+        modify("Line Discount %")
+        {
+            trigger OnAfterValidate()
+            begin
+                //Update Net Unit Cose++
+                if Rec."Line Discount %" <> 0 then begin
+                    Rec."Net Unit Cost" := Rec."Direct Unit Cost" - (Rec."Direct Unit Cost" * Rec."Line Discount %" / 100);
+                end else
+                    Rec."Net Unit Cost" := Rec."Direct Unit Cost";
+            end;
+        }
         modify("No.")
         {
             trigger OnAfterValidate()
@@ -165,6 +180,11 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
                         Rec.Validate(Brand, Recitem.Brand);
                     end;
 
+                    //Update Net Unit Cose++
+                    if Rec."Line Discount %" <> 0 then begin
+                        Rec."Net Unit Cost" := Rec."Direct Unit Cost" - (Rec."Direct Unit Cost" * Rec."Line Discount %" / 100);
+                    end else
+                        Rec."Net Unit Cost" := Rec."Direct Unit Cost";
                 end;
             end;
         }

@@ -30,7 +30,7 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
         field(70141; Inventory; Decimal)
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Variant Code" = FIELD(Code), "Location Code" = field("Location Filter")));
-            Caption = 'Inventory';
+            Caption = 'Total Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
@@ -41,7 +41,7 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
             FieldClass = FlowField;
             CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Variant Code" = field(Code), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Location Code" = field("Location Filter")));
             DecimalPlaces = 0 : 5;
-            Caption = 'Qty on Sales Order (Saleable)';
+            Caption = 'Allocated on SO';
             //GHST Customization++
         }
         field(70143; Quantity; Decimal)
@@ -53,7 +53,7 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
         field(70144; "Saleable Inventory"; Decimal)
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Variant Code" = FIELD(Code), "Saleable Location" = const(true), "Location Code" = field("Location Filter")));
-            Caption = 'Saleable Inventory';
+            Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;

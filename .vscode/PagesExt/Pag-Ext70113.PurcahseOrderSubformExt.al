@@ -2,6 +2,14 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
 {
     layout
     {
+        addafter("Direct Unit Cost")
+        {
+            field("Net Unit Cost"; Rec."Net Unit Cost")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
         addafter("Quantity Invoiced")
         {
             field("Sales Order No."; Rec."Sales Order No.")
@@ -22,7 +30,7 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
         }
         modify("Unit Price (LCY)")
         {
-            Editable = true;
+            Editable = false;
             Visible = true;
         }
         modify("No.")

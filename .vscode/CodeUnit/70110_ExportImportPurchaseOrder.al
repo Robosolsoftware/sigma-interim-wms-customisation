@@ -135,6 +135,9 @@ codeunit 70110 "Export & Import Purchase Order"
                         Evaluate(G_UnitCost, GetValueAtIndex(RowNo, 5));
                         PurchLn.Validate("Direct Unit Cost", G_UnitCost);
                     end;
+                    if GetValueAtIndex(RowNo, 9) <> '' then begin
+                        PurchLn.Validate("Location Code", GetValueAtIndex(RowNo, 9));
+                    end;
                     PurchLn.Insert(true);
                 end;
             end
@@ -185,6 +188,7 @@ codeunit 70110 "Export & Import Purchase Order"
         Excelbuffer.AddColumn('Order Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
         Excelbuffer.AddColumn('Requested Receipt Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
         Excelbuffer.AddColumn('Vendor Order No', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Location Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.CreateNewBook('Sample Template');
         Excelbuffer.WriteSheet('Sample Template', CompanyName, UserId);
         Excelbuffer.CloseBook();

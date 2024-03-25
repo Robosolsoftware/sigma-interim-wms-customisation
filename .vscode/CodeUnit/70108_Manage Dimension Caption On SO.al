@@ -10,6 +10,7 @@ codeunit 70108 "Manage Dimension Caption"
     var
         myInt: Integer;
         G_Caption: Text;
+        G_DocumentType: Enum "Sales Document Type";
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Caption Class", 'OnResolveCaptionClass', '', true, true)]
     local procedure MyOnResolveCaptionClass(CaptionArea: Text; CaptionExpr: Text; Language: Integer; var Caption: Text; var Resolved: Boolean)
@@ -69,5 +70,29 @@ codeunit 70108 "Manage Dimension Caption"
                 //SalesHeader.Modify();
             end;
         end;
+    end;
+
+
+    //Non-Editable Dimesion on SO
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::DimensionManagement, 'OnBeforeEditDimensionSet2', '', false, false)]
+    local procedure OnBeforeEditDimensionSet2(RecVariant: Variant)
+    var
+        L_SalesHeader: Record "Sales Header";
+        RecordRef: RecordRef;
+    begin
+        L_SalesHeader.Reset();
+        RecordRef.GetTable(RecVariant);
+        RecordRef.SetTable(L_SalesHeader);
+        Clear(G_DocumentType);
+        G_DocumentType := L_SalesHeader."Document Type";
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::DimensionManagement, 'OnEditDimensionSetOnBeforeEditDimEntries', '', false, false)]
+    local procedure OnEditDimensionSetOnBeforeEditDimEntries(var EditDimSetEntries: Page "Edit Dimension Set Entries")
+    var
+        L_SalesHeader: Record "Sales Header";
+    begin
+        if G_DocumentType = G_DocumentType::Order then
+            EditDimSetEntries.Editable(false);
     end;
 }

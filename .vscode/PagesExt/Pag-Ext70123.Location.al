@@ -12,23 +12,6 @@ pageextension 70123 LocationExt extends "Location Card"
             {
                 ApplicationArea = All;
             }
-            field("Manual Picking"; Rec."Manual Picking")
-            {
-                ApplicationArea = All;
-
-                trigger OnValidate()
-                var
-                    L_Location: Record Location;
-                begin
-                    L_Location.Reset();
-                    L_Location.SetFilter(Code, '<>%1', Rec.Code);
-                    L_Location.SetRange("Manual Picking", true);
-                    if L_Location.FindFirst() then
-                        Error('Manual Picking Location Should not be more than one');
-
-                end;
-
-            }
         }
         addbefore("Home Page")
         {

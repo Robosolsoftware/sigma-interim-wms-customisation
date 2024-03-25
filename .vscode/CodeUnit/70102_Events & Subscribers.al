@@ -76,6 +76,8 @@ codeunit 70102 "SC Events & Subscriber"
         L_ItemVariant.Reset();
         L_ItemVariant.SetRange("Item No.", _SalesLine."No.");
         L_ItemVariant.SetFilter("Location Filter", _SalesLine."Location Code");
+        L_ItemVariant.SetRange(Blocked, false);
+        L_ItemVariant.SetRange("Sales Blocked", false);
         if L_ItemVariant.FindSet() then
             repeat
                 L_ItemVariant.CalcFields("Saleable Inventory", "Qty on SO(Saleable)");
@@ -103,6 +105,8 @@ codeunit 70102 "SC Events & Subscriber"
         _ItemVariant.Reset();
         _ItemVariant.SetRange("Item No.", _SalesLine."No.");
         _ItemVariant.SetFilter("Location Filter", _SalesLine."Location Code");
+        _ItemVariant.SetRange(Blocked, false);
+        _ItemVariant.SetRange("Sales Blocked", false);
         _ItemVariant.SetFilter(Priority, '<>%1', 0);
         _ItemVariant.SetCurrentKey(Priority);
         _ItemVariant.Ascending(true);
@@ -126,6 +130,8 @@ codeunit 70102 "SC Events & Subscriber"
         _ItemVariant.Reset();
         _ItemVariant.SetRange("Item No.", _SalesLine."No.");
         _ItemVariant.SetFilter("Location Filter", _SalesLine."Location Code");
+        _ItemVariant.SetRange(Blocked, false);
+        _ItemVariant.SetRange("Sales Blocked", false);
         _ItemVariant.SetFilter(Priority, '%1', 0);
         _ItemVariant.SetFilter(Quantity, '>%1', 0); //Quantity equal to Availble Quantity++
         _ItemVariant.SetCurrentKey(Quantity);
@@ -176,6 +182,8 @@ codeunit 70102 "SC Events & Subscriber"
         L_ItemVariant.Reset();
         L_ItemVariant.SetRange("Item No.", _SalesLine."No.");
         L_ItemVariant.SetRange("Location Filter", _SalesLine."Location Code");
+        L_ItemVariant.SetRange(Blocked, false);
+        L_ItemVariant.SetRange("Sales Blocked", false);
         if L_ItemVariant.FindSet() then begin
             repeat
                 L_ItemVariant.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
@@ -223,6 +231,8 @@ codeunit 70102 "SC Events & Subscriber"
         L_ItemVariant.Reset();
         L_ItemVariant.SetRange("Item No.", _SalesLine."No.");
         L_ItemVariant.SetFilter("Location Filter", _SalesLine."Location Code");
+        L_ItemVariant.SetRange(Blocked, false);
+        L_ItemVariant.SetRange("Sales Blocked", false);
         L_ItemVariant.SetRange(Code, _ItemVariant.Code);
         if L_ItemVariant.FindSet() then begin
             repeat

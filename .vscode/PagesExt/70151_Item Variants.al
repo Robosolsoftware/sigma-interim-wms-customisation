@@ -9,24 +9,19 @@ pageextension 70151 "SC Item Variants" extends "Item Variants"
             {
                 ApplicationArea = All;
                 Editable = false;
-                ToolTip = 'Total Inventory';
+                Caption = 'Total Physical';
             }
-            // field("Qty on SO"; Rec."Qty on SO")
-            // {
-            //     ApplicationArea = All;
-            //     Editable = false;
-            // }
             field("Saleable Inventory"; Rec."Saleable Inventory")
             {
                 ApplicationArea = All;
                 Editable = false;
-                ToolTip = 'Qty available in HD and SH';
+                Caption = 'Physical';
             }
             field("Qty on SO(Saleable)"; Rec."Qty on SO(Saleable)")
             {
                 ApplicationArea = All;
                 Editable = false;
-                ToolTip = 'Sum of Outstanding Qty in HD and SH';
+                Caption = 'Allocated on SO';
                 //GHST Customization++
             }
             field("Total Available Quantity"; TotalAvailableQty(Rec))
@@ -34,8 +29,7 @@ pageextension 70151 "SC Item Variants" extends "Item Variants"
                 ApplicationArea = All;
                 Editable = false;
                 DecimalPlaces = 0 : 5;
-                ToolTip = 'Saleable Inventory – Sum of Outstanding Qty on SO (Saleable)';
-                Caption = 'Total Available Quantity(Saleable)';
+                Caption = 'Free';
                 //GHST Customization++
             }
             field(Priority; Rec.Priority)
