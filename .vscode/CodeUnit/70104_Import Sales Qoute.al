@@ -110,13 +110,14 @@ codeunit 70104 "Export & Import Sales Quote"
                     InsertSalesHeader."Import Date" := Today;
                     InsertSalesHeader.Insert(true);
 
+                    if GetValueAtIndex(RowNo, 10) <> '' then
+                        InsertSalesHeader.Validate("Location Code", GetValueAtIndex(RowNo, 10));
                     if GetValueAtIndex(RowNo, 7) <> '' then begin
                         Clear(G_DocumentDate);
                         Evaluate(G_DocumentDate, GetValueAtIndex(RowNo, 7));
                         InsertSalesHeader.Validate("Document Date", G_DocumentDate);
-                        InsertSalesHeader.Modify(true);
                     end;
-
+                    InsertSalesHeader.Modify(true);
                 end;
 
 
@@ -219,6 +220,7 @@ codeunit 70104 "Export & Import Sales Quote"
         Excelbuffer.AddColumn('Document Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
         Excelbuffer.AddColumn('Requested Delivery Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('External Document No.', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Location Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.CreateNewBook('Sample Template');
         Excelbuffer.WriteSheet('Sample Template', CompanyName, UserId);
         Excelbuffer.CloseBook();
