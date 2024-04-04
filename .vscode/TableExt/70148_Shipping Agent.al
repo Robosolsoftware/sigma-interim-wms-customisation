@@ -7,6 +7,11 @@ tableextension 70148 "SC Shipping Agent" extends "Shipping Agent"
             DataClassification = ToBeClassified;
             OptionMembers = Open,"Pending Approval",Released;
         }
+        field(70150; "Service Type"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = "In",Out;
+        }
 
 
     }

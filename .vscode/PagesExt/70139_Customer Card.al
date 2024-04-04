@@ -323,6 +323,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         L_EditableStatus: Boolean;
         L_CustomerPriceEditable: Boolean;
 
+
     trigger OnAfterGetRecord()
     var
         L_UserSetup: Record "User Setup";

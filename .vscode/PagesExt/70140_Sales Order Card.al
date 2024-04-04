@@ -18,6 +18,21 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
         modify("Location Code")
         {
             Editable = G_EditShipping;
+
+            trigger OnAfterValidate()
+            var
+                L_WareEmployee: Record "Warehouse Employee";
+            begin
+                if Rec."Location Code" <> '' then begin
+                    L_WareEmployee.Reset();
+                    L_WareEmployee.SetRange("User ID", UserId);
+                    L_WareEmployee.SetRange("Location Code", Rec."Location Code");
+                    L_WareEmployee.SetRange("Allow selection on SO", true);
+                    if not L_WareEmployee.FindFirst() then
+                        Error('You do not have permission to select location code %1', Rec."Location Code");
+                end;
+
+            end;
         }
         addfirst(factboxes)
         {

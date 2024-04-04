@@ -52,6 +52,10 @@ pageextension 70160 "SC Shipping Agents" extends "Shipping Agents"
                     CurrPage.Update();
                 end;
             }
+            field("Service Type"; Rec."Service Type")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

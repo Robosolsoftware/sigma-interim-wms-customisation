@@ -4,12 +4,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
     {
         field(70130; Inventory; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."),
-                                                                  //"Location Code" = FIELD("Location Code"),
-                                                                  //"Drop Shipment" = FIELD("Drop Shipment"),
-                                                                  "Variant Code" = FIELD("Variant Code"),
-                                                                  "Unit of Measure Code" = FIELD("Unit of Measure Code")));
-            //Caption = 'Inventory';
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
             Caption = 'Total Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -18,13 +13,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         field(70131; "Qty. on Purch. Order"; Decimal)
         {
             AccessByPermission = TableData "Purch. Rcpt. Header" = R;
-            CalcFormula = Sum("Purchase Line"."Outstanding Qty. (Base)" WHERE("Document Type" = CONST(Order),
-                                                                               Type = CONST(Item),
-                                                                               "No." = FIELD("No."),
-                                                                               //"Location Code" = FIELD("Location Code"),
-                                                                               "Drop Shipment" = FIELD("Drop Shipment"),
-                                                                               "Variant Code" = FIELD("Variant Code"),
-                                                                               "Unit of Measure Code" = FIELD("Unit of Measure Code")));
+            CalcFormula = Sum("Purchase Line"."Outstanding Qty. (Base)" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
             Caption = 'Qty. on Purch. Order';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -33,15 +22,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         field(70132; "Allocated"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
-            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order),
-                                                                            Type = CONST(Item),
-                                                                            "No." = FIELD("No."),
-                                                                            //"Location Code" = FIELD("Location Code"),
-                                                                            //"Drop Shipment" = FIELD("Drop Shipment"),
-                                                                            "Variant Code" = FIELD("Variant Code"),
-                                                                            "Unit of Measure Code" = FIELD("Unit of Measure Code"),
-                                                                            "Outstanding Qty. (Base)" = filter(> 0)));
-            //Caption = 'Allocated';
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Outstanding Qty. (Base)" = filter(> 0)));
             Caption = 'Total Allocated on SO';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -101,23 +82,13 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order),
-            Type = CONST(Item),
-            "No." = field("No."),
-            "Variant Code" = field("Variant Code"),
-            "Outstanding Quantity" = filter(> 0),
-            //"Saleable Location" = const(true),
-            "Unit of Measure Code" = FIELD("Unit of Measure Code"),
-            "Location Code" = field("Location Code")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code")));
             DecimalPlaces = 0 : 5;
             Caption = 'Allocated on SO';
         }
         field(70146; "Saleable Inventory"; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Variant Code" = FIELD("Variant Code"),
-            //"Saleable Location" = const(true),
-            "Unit of Measure Code" = FIELD("Unit of Measure Code"),
-            "Location Code" = field("Location Code")));
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code")));
             Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -219,13 +190,13 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                         if not UserSetup.FindFirst() then begin
                             if Rec."Min Sell Price" > 0 then begin
                                 if Rec."Unit Price" < Rec."Min Sell Price" then begin
-                                    Error('Unit price should not be less than Min Sell Price');
+                                    Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."No.");
                                 end;
                             end else begin
                                 if CurrFieldNo = 22 then begin
                                     DisUnitPrice := (xRec."Unit Price" / 100) * 10;
                                     if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
-                                        Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
+                                        Error('You cannot enter the Unit Price less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', xRec."Unit Price" - DisUnitPrice, Rec."No.");
                                 end;
                             end;
                         end;
@@ -336,12 +307,12 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                             if not UserSetup.FindFirst() then begin
                                 if Rec."Min Sell Price" > 0 then begin
                                     if Rec."Unit Price" < Rec."Min Sell Price" then begin
-                                        Error('Unit price should not be less than Min Sell Price');
+                                        Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."No.");
                                     end;
                                 end else begin
                                     DisUnitPrice := (xRec."Unit Price" / 100) * 10;
                                     if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
-                                        Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
+                                        Error('You cannot enter the Unit Price less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', xRec."Unit Price" - DisUnitPrice, Rec."No.");
                                 end;
                             end;
                         end;

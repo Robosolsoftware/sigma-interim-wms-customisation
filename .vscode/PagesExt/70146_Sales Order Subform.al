@@ -3,6 +3,23 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
     layout
     {
         // Add changes to page layout here
+        modify("Location Code")
+        {
+            trigger OnAfterValidate()
+            var
+                L_WareEmployee: Record "Warehouse Employee";
+            begin
+                if Rec."Location Code" <> '' then begin
+                    L_WareEmployee.Reset();
+                    L_WareEmployee.SetRange("User ID", UserId);
+                    L_WareEmployee.SetRange("Location Code", Rec."Location Code");
+                    L_WareEmployee.SetRange("Allow selection on SO", true);
+                    if not L_WareEmployee.FindFirst() then
+                        Error('You do not have permission to select location code %1', Rec."Location Code");
+                end;
+
+            end;
+        }
         addafter(Description)
         {
             field("Warehouse Class Code"; Rec."Warehouse Class Code")
@@ -67,7 +84,6 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 ApplicationArea = All;
                 ToolTip = 'Qty available in HD and SH';
                 DecimalPlaces = 0 : 5;
-                //Caption = 'Physical (Saleable)';
                 Caption = 'Physical';
             }
 
@@ -77,7 +93,6 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 ApplicationArea = All;
                 ToolTip = 'Sum of Outstanding SO Qty in HD and SH';
                 DecimalPlaces = 0 : 5;
-                //Caption = 'Allocated on SO (Saleable)';
                 Caption = 'Allocated on SO';
             }
             //Moved this code on Ochannel Extension for calculation++

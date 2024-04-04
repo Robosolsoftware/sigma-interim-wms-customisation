@@ -95,6 +95,7 @@ codeunit 70103 "Export & Import Sales Order"
                 InsertSalesHeader.SetRange("Sell-to Customer No.", GetValueAtIndex(RowNo, 1));
                 InsertSalesHeader.SetRange("Document Type", InsertSalesHeader."Document Type"::Order);
                 InsertSalesHeader.SetRange("Sheet Name", FileName);
+                InsertSalesHeader.SetRange("External Document No.", GetValueAtIndex(RowNo, 9));
                 if not InsertSalesHeader.FindFirst() then begin
                     InsertSalesHeader.Init();
                     InsertSalesHeader.Validate("Document Type", InsertSalesHeader."Document Type"::Order);
@@ -142,6 +143,7 @@ codeunit 70103 "Export & Import Sales Order"
                 InsertSalesHeader.SetRange("Document Type", InsertSalesHeader."Document Type"::Order);
                 InsertSalesHeader.SetRange("Sell-to Customer No.", GetValueAtIndex(RowNo, 1));
                 InsertSalesHeader.SetRange("Sheet Name", FileName);
+                InsertSalesHeader.SetRange("External Document No.", GetValueAtIndex(RowNo, 9));
                 if InsertSalesHeader.FindFirst() then begin
                     InsertSalesLine.Reset();
                     InsertSalesLine.Init();

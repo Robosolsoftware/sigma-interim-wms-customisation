@@ -48,6 +48,21 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
         modify("Location Code")
         {
             Visible = false;
+
+            trigger OnAfterValidate()
+            var
+                L_WareEmployee: Record "Warehouse Employee";
+            begin
+                if Rec."Location Code" <> '' then begin
+                    L_WareEmployee.Reset();
+                    L_WareEmployee.SetRange("User ID", UserId);
+                    L_WareEmployee.SetRange("Location Code", Rec."Location Code");
+                    L_WareEmployee.SetRange("Allow selection on PO", true);
+                    if not L_WareEmployee.FindFirst() then
+                        Error('You do not have permission to select location code %1', Rec."Location Code");
+                end;
+
+            end;
         }
         modify("Bin Code")
         {

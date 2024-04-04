@@ -80,6 +80,9 @@ codeunit 70110 "Export & Import Purchase Order"
                     Evaluate(RequestReceiptDate, GetValueAtIndex(RowNo, 7));
                     PurchHdr.SetRange("Requested Receipt Date", RequestReceiptDate);
                 end;
+                if GetValueAtIndex(RowNo, 9) <> '' then begin
+                    PurchHdr.SetRange("Location Code", GetValueAtIndex(RowNo, 9));
+                end;
                 if not PurchHdr.FindFirst() then begin
                     PurchHdr.Init();
                     PurchHdr.Validate("Document Type", PurchHdr."Document Type"::Order);
@@ -101,6 +104,10 @@ codeunit 70110 "Export & Import Purchase Order"
                         PurchHdr.Validate("Order Date", G_DocumentDate);
                         PurchHdr.Modify(true);
                     end;
+                    if GetValueAtIndex(RowNo, 9) <> '' then begin
+                        PurchHdr.Validate("Location Code", GetValueAtIndex(RowNo, 9));
+                        PurchHdr.Modify(true);
+                    end;
 
                 end;
 
@@ -113,6 +120,9 @@ codeunit 70110 "Export & Import Purchase Order"
                     Clear(RequestReceiptDate);
                     Evaluate(RequestReceiptDate, GetValueAtIndex(RowNo, 7));
                     PurchHdr.SetRange("Requested Receipt Date", RequestReceiptDate);
+                end;
+                if GetValueAtIndex(RowNo, 9) <> '' then begin
+                    PurchHdr.SetRange("Location Code", GetValueAtIndex(RowNo, 9));
                 end;
                 if PurchHdr.FindFirst() then begin
                     PurchLn.Reset();
@@ -135,9 +145,9 @@ codeunit 70110 "Export & Import Purchase Order"
                         Evaluate(G_UnitCost, GetValueAtIndex(RowNo, 5));
                         PurchLn.Validate("Direct Unit Cost", G_UnitCost);
                     end;
-                    if GetValueAtIndex(RowNo, 9) <> '' then begin
-                        PurchLn.Validate("Location Code", GetValueAtIndex(RowNo, 9));
-                    end;
+                    // if GetValueAtIndex(RowNo, 9) <> '' then begin
+                    //     PurchLn.Validate("Location Code", GetValueAtIndex(RowNo, 9));
+                    // end;
                     PurchLn.Insert(true);
                 end;
             end

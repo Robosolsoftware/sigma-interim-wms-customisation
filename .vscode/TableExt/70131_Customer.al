@@ -240,6 +240,12 @@ tableextension 70131 "SC Customer" extends Customer
                     ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
                     if Not ShippingAgent.FindFirst() then
                         Error('Status must be equal to Released in Shipping Agent');
+
+                    ShippingAgent.Reset();
+                    ShippingAgent.SetRange(Code, Rec."Shipping Agent Code");
+                    if ShippingAgent.FindFirst() then begin
+                        ShippingAgent.TestField("Service Type", ShippingAgent."Service Type"::Out);
+                    end;
                 end;
             end;
         }

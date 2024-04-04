@@ -604,51 +604,6 @@ codeunit 70102 "SC Events & Subscriber"
         L_Item: Record Item;
         ShippingAgentRestrictItem: Record "Shipping Agent Restrict Item";
     begin
-        // L_ShippingAgent.Reset();
-        // L_ShippingAgent.SetRange(Code, _SalesHeader."Shipping Agent Code");
-        // if L_ShippingAgent.FindFirst() then begin
-        //     if L_ShippingAgent."Restrict CD & Fridge" = true then begin
-        //         L_Item.Reset();
-        //         L_Item.SetRange("No.", _SalesLine."No.");
-        //         if L_Item.FindFirst() then begin
-        //             L_WarehouseClassCode.Reset();
-        //             L_WarehouseClassCode.SetRange(Code, L_Item."Warehouse Class Code");
-        //             if L_WarehouseClassCode.FindFirst() then begin
-        //                 if (L_WarehouseClassCode."Restrict CD 2,3" = true) OR (L_WarehouseClassCode."Restrict CD 4,5" = true) OR (L_WarehouseClassCode."Restrict Fridge" = true) then begin
-        //                     Error('CD and Fridge items are not allowed');
-        //                 end;
-        //             end;
-        //         end;
-        //     end;
-        // end;
-
-
-
-        // L_ShippingAgent.Reset();
-        // L_ShippingAgent.SetRange(Code, _SalesHeader."Shipping Agent Code");
-        // if L_ShippingAgent.FindFirst() then begin
-        //     if L_ShippingAgent."Restrict CD & Fridge" = true then begin
-        //         L_RecItemAttValMap.Reset();
-        //         L_RecItemAttValMap.SetRange("Table ID", 27);
-        //         L_RecItemAttValMap.SetRange("No.", _SalesLine."No.");
-        //         if L_RecItemAttValMap.FindSet() then begin
-        //             repeat
-        //                 L_ItemAttribute.Reset();
-        //                 L_ItemAttribute.SetRange(ID, L_RecItemAttValMap."Item Attribute ID");
-        //                 if L_ItemAttribute.FindFirst() then begin
-        //                     if (L_ItemAttribute."CD Schedule" = true) OR (L_ItemAttribute.Fridge = true) then begin
-        //                         L_ItemAttributeValue.SetRange("Attribute ID", L_ItemAttribute.ID);
-        //                         L_ItemAttributeValue.SetRange(ID, L_RecItemAttValMap."Item Attribute Value ID");
-        //                         if not L_ItemAttributeValue.IsEmpty() then begin
-        //                             Error('CD and Fridge items are not allowed');
-        //                         end;
-        //                     end;
-        //                 end;
-        //             until L_RecItemAttValMap.Next() = 0;
-        //         end;
-        //     end;
-        // end;
-
         L_RecItemAttValMap.Reset();
         L_RecItemAttValMap.SetRange("Table ID", 27);
         L_RecItemAttValMap.SetRange("No.", _ItemNo);
