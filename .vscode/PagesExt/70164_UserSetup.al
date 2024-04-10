@@ -23,6 +23,10 @@ pageextension 70164 UserSetupEst1 extends "User Setup"
                 ApplicationArea = All;
                 ToolTip = 'Master Data consists of Customers, Items, Vendors, Shipment Agent, Shipping Agent Service Code';
             }
+            field("Edit Unit/RRP Price on Item"; Rec."Edit Unit/RRP Price on Item")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

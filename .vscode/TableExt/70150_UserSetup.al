@@ -18,6 +18,10 @@ tableextension 70150 "SC User Setup" extends "User Setup"
         {
             DataClassification = ToBeClassified;
         }
+        field(50007; "Edit Unit/RRP Price on Item"; Boolean)
+        {
+
+        }
     }
 
     keys

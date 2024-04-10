@@ -10,6 +10,16 @@ pageextension 70151 "SC Item Variants" extends "Item Variants"
                 ApplicationArea = All;
                 Editable = false;
                 Caption = 'Total Physical';
+                ToolTip = 'Total Inventory';
+                DecimalPlaces = 0 : 5;
+            }
+            field(Allocated; Rec.Allocated)
+            {
+                Editable = false;
+                ApplicationArea = All;
+                ToolTip = 'Sum of Outstanding Qty on SO across ALL Locations';
+                DecimalPlaces = 0 : 5;
+                Caption = 'Total Allocated on SO';
             }
             field("Saleable Inventory"; Rec."Saleable Inventory")
             {

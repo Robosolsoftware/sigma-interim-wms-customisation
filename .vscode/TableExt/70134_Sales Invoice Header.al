@@ -77,6 +77,10 @@ tableextension 70134 "SC Sales Invoice Header" extends "Sales Invoice Header"
         {
 
         }
+        field(70156; "Rejection"; Boolean)
+        {
+
+        }
     }
 
     var

@@ -37,11 +37,11 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
         {
             trigger OnAfterValidate()
             var
-                SCEventsSubscriber: Codeunit "SC Events & Subscriber";
+                PurchaseEventandFunction: Codeunit "Purchase Event & Function";
             begin
                 //Check Bin based on warehouse class code++
                 if (Rec.Type = Rec.Type::Item) AND (Rec."No." <> '') then begin
-                    SCEventsSubscriber.CheckWarehouseClassCodePOLinelevel(Rec);
+                    PurchaseEventandFunction.CheckWarehouseClassCodePOLinelevel(Rec);
                 end;
             end;
         }
@@ -181,7 +181,7 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
             {
                 Editable = false;
                 ApplicationArea = All;
-                ToolTip = 'Qty available in HD and SH';
+                ToolTip = 'Qty available in the selected location';
                 DecimalPlaces = 0 : 5;
                 Caption = 'Physical';
             }
@@ -190,7 +190,7 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
             {
                 Editable = false;
                 ApplicationArea = All;
-                ToolTip = 'Sum of Outstanding SO Qty in HD and SH';
+                ToolTip = 'Sum of Outstanding SO Qty in the selected location';
                 Caption = 'Allocated on SO';
                 DecimalPlaces = 0 : 5;
             }

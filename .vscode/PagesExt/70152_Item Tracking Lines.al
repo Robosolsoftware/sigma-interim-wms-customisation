@@ -36,6 +36,10 @@ pageextension 70152 "SC Item Tracking Lines" extends "Item Tracking Lines"
                 end;
             }
         }
+        modify("Variant Code")
+        {
+            Caption = 'Default Varaint Code';
+        }
     }
 
     actions
@@ -49,41 +53,36 @@ pageextension 70152 "SC Item Tracking Lines" extends "Item Tracking Lines"
         IsVariantVisible: Boolean;
 
 
-    trigger OnOpenPage()
-    begin
-        Clear(IsVariantVisible);
-        if (Rec."Source Type" = 39) AND (Rec."Source Subtype" = 1) then
-            IsVariantVisible := true;
-    end;
-
     trigger OnAfterGetRecord()
     var
         L_Item: Record Item;
         L_PurchaseLine: Record "Purchase Line";
     begin
         Clear(IsVariantVisible);
-        if (Rec."Source Type" = 39) AND (Rec."Source Subtype" = 1) then
+        Clear(IsVariantMandatory);
+        if (Rec."Source Type" = 39) AND (Rec."Source Subtype" = 1) then begin
             IsVariantVisible := true;
 
 
-        Clear(IsVariantMandatory);
-        L_Item.Reset();
-        L_Item.SetRange("No.", Rec."Item No.");
-        if L_Item.FindFirst() then begin
-            if L_Item."Variant Mandatory if Exists" <> L_Item."Variant Mandatory if Exists"::No then begin
-                L_PurchaseLine.Reset();
-                L_PurchaseLine.SetRange("Document Type", L_PurchaseLine."Document Type"::Order);
-                L_PurchaseLine.SetRange("Document No.", Rec."Source ID");
-                L_PurchaseLine.SetRange("Line No.", Rec."Source Ref. No.");
-                if L_PurchaseLine.FindFirst() then begin
-                    if L_PurchaseLine."Variant Code" <> '' then
-                        IsVariantMandatory := false
-                    else
-                        IsVariantMandatory := true;
-                end;
-            end else
-                IsVariantMandatory := false;
+            Clear(IsVariantMandatory);
+            L_Item.Reset();
+            L_Item.SetRange("No.", Rec."Item No.");
+            if L_Item.FindFirst() then begin
+                if L_Item."Variant Mandatory if Exists" <> L_Item."Variant Mandatory if Exists"::No then begin
+                    L_PurchaseLine.Reset();
+                    L_PurchaseLine.SetRange("Document Type", L_PurchaseLine."Document Type"::Order);
+                    L_PurchaseLine.SetRange("Document No.", Rec."Source ID");
+                    L_PurchaseLine.SetRange("Line No.", Rec."Source Ref. No.");
+                    if L_PurchaseLine.FindFirst() then begin
+                        if L_PurchaseLine."Variant Code" <> '' then
+                            IsVariantMandatory := false
+                        else
+                            IsVariantMandatory := true;
+                    end;
+                end else
+                    IsVariantMandatory := false;
 
+            end;
         end;
     end;
 }

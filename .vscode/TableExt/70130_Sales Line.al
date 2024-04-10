@@ -137,33 +137,10 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(70156; "Rejection"; Boolean)
+        {
 
-        // modify("Unit Price")
-        // {
-        //     trigger OnAfterValidate()
-        //     var
-        //         UserSetup: Record "User Setup";
-        //         DisUnitPrice: Decimal;
-        //     begin
-        //         if Rec."Unit Price" > 0 then begin
-        //             Clear(DisUnitPrice);
-        //             UserSetup.Reset();
-        //             UserSetup.SetRange("User ID", UserId);
-        //             UserSetup.SetRange("Allow to change unit price", true);
-        //             if not UserSetup.FindFirst() then begin
-        //                 if Rec."Min Sell Price" > 0 then begin
-        //                     if Rec."Unit Price" < Rec."Min Sell Price" then begin
-        //                         Error('Unit price should not be less than Min Sell Price');
-        //                     end;
-        //                 end else begin
-        //                     DisUnitPrice := (xRec."Unit Price" / 100) * 10;
-        //                     if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
-        //                         Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
-        //                 end;
-        //             end;
-        //         end;
-        //     end;
-        // }
+        }
 
         modify("Unit Price")
         {
@@ -178,6 +155,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                 L_SalesPriceHeader.Reset();
                 L_SalesPriceHeader.SetRange("Special Price Daily", true);
                 if L_SalesPriceHeader.FindFirst() then begin
+                    //If not Promotion Item then checking Min Sell Price Validation++
                     L_PriceListLine.Reset();
                     L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
                     L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
@@ -196,10 +174,20 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                                 if CurrFieldNo = 22 then begin
                                     DisUnitPrice := (xRec."Unit Price" / 100) * 10;
                                     if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
-                                        Error('You cannot enter the Unit Price less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', xRec."Unit Price" - DisUnitPrice, Rec."No.");
+                                        Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', xRec."Unit Price" - DisUnitPrice, Rec."No.");
                                 end;
                             end;
                         end;
+                    end;
+
+                    //If Promostion Item then checking Unit Price should not be less then Promostion Price++
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
+                    L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
+                    L_PriceListLine.SetRange("Product No.", Rec."No.");
+                    if L_PriceListLine.FindFirst() then begin
+                        if L_PriceListLine."Unit Price" > Rec."Unit Price" then
+                            Error('Unit Price %1 should not be less then special promotion price %2. For special item %3', Rec."Unit Price", L_PriceListLine."Unit Price", Rec."No.");
                     end;
                 end;
             end;
@@ -213,18 +201,18 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
             var
                 L_SalesHeader: Record "Sales Header";
                 L_Item: Record Item;
-                _Codeunit: Codeunit "SC Events & Subscriber";
                 L_ItemVariant: Record "Item Variant";
                 CH_SShip: Record "Sales Shipment Line";
                 L_ItemUnitofMeasure: Record "Item Unit of Measure";
                 ShippingAgent: Record "Shipping Agent";
-                L_Function: Codeunit "SC Events & Subscriber";
                 UserSetup: Record "User Setup";
                 DisUnitPrice: Decimal;
                 L_Location: Record Location;
                 L_WarhouseClass: Record "Warehouse Class";
                 L_PriceListLine: Record "Price List Line";
                 L_SalesPriceHeader: Record "Price List Header";
+
+                L_SalesEventandFuncion: Codeunit "Sales Event & Function";
             begin
                 if (Rec.Type = Rec.Type::Item) then begin
                     //Check SHipping Agent Restriction and Sales Order Warning Mesage++
@@ -234,17 +222,12 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     if L_SalesHeader.FindFirst() then begin
                         L_SalesHeader.TestField("Shipping Agent Service Code"); //User Story 18274
 
-
-                        //++Shipping Agent Restriction(18274)
-                        // if L_SalesHeader."Shipping Agent Code" <> '' then begin
-                        //     L_Function.CheckShippingAgentServiceRestriction(L_SalesHeader, Rec);
-                        // end;
                         if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
-                            L_Function.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
+                            L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
                         end;
 
                         //++Sales Order warning message(15813)
-                        L_Function.SalesOrderWarningMessage(L_SalesHeader, Rec);
+                        L_SalesEventandFuncion.SalesOrderWarningMessage(L_SalesHeader, Rec);
                     end;
 
 
@@ -295,6 +278,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     L_SalesPriceHeader.Reset();
                     L_SalesPriceHeader.SetRange("Special Price Daily", true);
                     if L_SalesPriceHeader.FindFirst() then begin
+                        //If not Promotion Item then checking Min Sell Price Validation++
                         L_PriceListLine.Reset();
                         L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
                         L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
@@ -315,6 +299,16 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                                         Error('You cannot enter the Unit Price less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', xRec."Unit Price" - DisUnitPrice, Rec."No.");
                                 end;
                             end;
+                        end;
+
+                        //If Promostion Item then checking Unit Price should not be less then Promostion Price++
+                        L_PriceListLine.Reset();
+                        L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
+                        L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
+                        L_PriceListLine.SetRange("Product No.", Rec."No.");
+                        if L_PriceListLine.FindFirst() then begin
+                            if L_PriceListLine."Unit Price" > Rec."Unit Price" then
+                                Error('Unit Price %1 should not be less then special promotion price %2. For special item %3', Rec."Unit Price", L_PriceListLine."Unit Price", Rec."No.");
                         end;
                     end;
                 end;

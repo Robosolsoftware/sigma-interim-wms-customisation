@@ -5,6 +5,7 @@ tableextension 70137 "SC Price List Header" extends "Price List Header"
         // Add changes to table fields here
         field(70137; "Special Price Daily"; Boolean)
         {
+            Caption = 'Daily Promotions';
             trigger OnValidate()
             var
                 L_PriceListHeader: Record "Price List Header";

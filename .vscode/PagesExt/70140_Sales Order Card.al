@@ -95,25 +95,25 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
             {
                 ApplicationArea = all;
                 Editable = false;
-                Caption = 'System Created At';
+                Caption = 'Created At';
             }
-            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
+            field(SystemCreatedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemCreatedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
-                Caption = 'System Created By';
+                Caption = 'Created By';
             }
             field(SystemModifiedAt; Rec.SystemModifiedAt)
             {
                 ApplicationArea = all;
                 Editable = false;
-                Caption = 'System Modified At';
+                Caption = 'Modified At';
             }
-            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            field(SystemModifiedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemModifiedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
-                Caption = 'System Modified By';
+                Caption = 'Modified By';
             }
         }
         addafter(SalesLines)
@@ -122,6 +122,7 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
             {
                 ApplicationArea = All;
                 SubPageLink = "Price List Code" = field("Sales Price List Code");
+                Caption = 'Daily Promotions';
             }
         }
         addbefore("Invoice Details")
@@ -200,7 +201,7 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                 trigger OnAction()
                 var
                     L_SalesLine: Record "Sales Line";
-                    CustomeCodeunit: Codeunit "SC Events & Subscriber";
+                    CustomeCodeunit: Codeunit "Udate Variant on SO";
                     RemQty: Decimal;
                     QtyToApply: Decimal;
                     L_ItemVariant: Record "Item Variant";
@@ -428,7 +429,7 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
     var
         myInt: Integer;
         cust: Record Customer;
-        G_Functions: Codeunit "SC Events & Subscriber";
+        G_MiscellaneousCharges: Codeunit "Miscellaneous Charges";
         G_DimensionVisibility: Boolean;
         G_EditShipping: Boolean;
 }

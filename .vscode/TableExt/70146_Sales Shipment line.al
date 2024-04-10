@@ -34,6 +34,26 @@ tableextension 70146 "SC Sales Shipment Line" extends "Sales Shipment Line"
             CalcFormula = lookup("Sales Shipment Header"."Order Date" where("No." = field("Document No.")));
             Editable = false;
         }
+        field(70152; "Sales Return Order Invoice No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70153; "Sales Return Order Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70154; "Return Order No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70155; "Return Order Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70156; "Rejection"; Boolean)
+        {
+
+        }
     }
 
     keys

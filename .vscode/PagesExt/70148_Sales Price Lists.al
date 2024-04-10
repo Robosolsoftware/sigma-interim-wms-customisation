@@ -9,6 +9,7 @@ pageextension 70148 "SC Sales Price Lists" extends "Sales Price Lists"
             {
                 ApplicationArea = All;
                 Editable = false;
+                Caption = 'Daily Promotions';
             }
         }
     }

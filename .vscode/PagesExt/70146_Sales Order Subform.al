@@ -82,7 +82,7 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
             {
                 Editable = false;
                 ApplicationArea = All;
-                ToolTip = 'Qty available in HD and SH';
+                ToolTip = 'Qty available in the selected location';
                 DecimalPlaces = 0 : 5;
                 Caption = 'Physical';
             }
@@ -91,7 +91,7 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
             {
                 Editable = false;
                 ApplicationArea = All;
-                ToolTip = 'Sum of Outstanding SO Qty in HD and SH';
+                ToolTip = 'Sum of Outstanding SO Qty in the selected location';
                 DecimalPlaces = 0 : 5;
                 Caption = 'Allocated on SO';
             }

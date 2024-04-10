@@ -3,6 +3,13 @@ pageextension 70179 "SC Sales Return Order" extends "Sales Return Order"
     layout
     {
         // Add changes to page layout here
+        addlast(General)
+        {
+            field(Rejection; Rec.Rejection)
+            {
+                ApplicationArea = All;
+            }
+        }
     }
 
     actions

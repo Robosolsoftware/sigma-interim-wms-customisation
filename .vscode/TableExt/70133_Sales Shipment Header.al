@@ -73,6 +73,10 @@ tableextension 70133 "SC Sales Shipment Header" extends "Sales Shipment Header"
         {
 
         }
+        field(70156; "Rejection"; Boolean)
+        {
+
+        }
     }
 
     var

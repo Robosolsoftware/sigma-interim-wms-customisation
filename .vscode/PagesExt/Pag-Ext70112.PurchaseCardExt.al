@@ -45,7 +45,7 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
                 Editable = false;
                 Caption = 'Created At';
             }
-            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
+            field(SystemCreatedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemCreatedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
@@ -57,7 +57,7 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
                 Editable = false;
                 Caption = 'Modified At';
             }
-            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            field(SystemModifiedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemModifiedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
@@ -123,7 +123,7 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
     }
 
     var
-        G_Functions: Codeunit "SC Events & Subscriber";
+        G_MiscellaneousCharges: Codeunit "Miscellaneous Charges";
         G_EditLocation: Boolean;
 
 

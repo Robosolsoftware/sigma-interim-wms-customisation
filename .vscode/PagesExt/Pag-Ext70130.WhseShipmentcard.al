@@ -10,7 +10,7 @@ pageextension 70130 whseShipmentCardRBE extends "Warehouse Shipment"
                 Editable = false;
                 Caption = 'Created At';
             }
-            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
+            field(SystemCreatedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemCreatedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
@@ -22,7 +22,7 @@ pageextension 70130 whseShipmentCardRBE extends "Warehouse Shipment"
                 Editable = false;
                 Caption = 'Modified At';
             }
-            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            field(SystemModifiedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemModifiedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
@@ -114,8 +114,6 @@ pageextension 70130 whseShipmentCardRBE extends "Warehouse Shipment"
                 //Visible=false;
             }
 
-
-
             field(Comments; rec.Comments)
             {
                 ApplicationArea = all;
@@ -140,5 +138,5 @@ pageextension 70130 whseShipmentCardRBE extends "Warehouse Shipment"
         }
     }
     var
-        G_Functions: Codeunit "SC Events & Subscriber";
+        G_MiscellaneousCharges: Codeunit "Miscellaneous Charges";
 }

@@ -11,7 +11,7 @@ pageextension 70177 "SC Sales Lines" extends "Sales Lines"
                 Editable = false;
                 Caption = 'Created At';
             }
-            field(SystemCreatedBy; G_Functions.GetUserName(Rec.SystemCreatedBy))
+            field(SystemCreatedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemCreatedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
@@ -23,7 +23,7 @@ pageextension 70177 "SC Sales Lines" extends "Sales Lines"
                 Editable = false;
                 Caption = 'Modified At';
             }
-            field(SystemModifiedBy; G_Functions.GetUserName(Rec.SystemModifiedBy))
+            field(SystemModifiedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemModifiedBy))
             {
                 ApplicationArea = all;
                 Editable = false;
@@ -39,5 +39,5 @@ pageextension 70177 "SC Sales Lines" extends "Sales Lines"
 
     var
         myInt: Integer;
-        G_Functions: Codeunit "SC Events & Subscriber";
+        G_MiscellaneousCharges: Codeunit "Miscellaneous Charges";
 }

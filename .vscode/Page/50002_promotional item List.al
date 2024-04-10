@@ -4,7 +4,7 @@ page 50002 "Promotional Item List"
     PageType = ListPart;
     SourceTable = "Price List Line";
     Editable = false;
-    Caption = 'Special Promotions';
+    Caption = 'Daily Promotions';
 
     layout
     {

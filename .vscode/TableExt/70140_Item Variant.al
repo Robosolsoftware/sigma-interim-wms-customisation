@@ -29,7 +29,7 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
         }
         field(70141; Inventory; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Variant Code" = FIELD(Code), "Location Code" = field("Location Filter")));
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Variant Code" = FIELD(Code)));
             Caption = 'Total Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -70,6 +70,16 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
             CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Variant Code" = field(Code), "Outstanding Quantity" = filter(> 0), "Location Code" = field("Location Filter")));
             DecimalPlaces = 0 : 5;
             Caption = 'Qty on Sales Order';
+            //GHST Customization++
+        }
+        field(70147; "Allocated"; Decimal)
+        {
+            AccessByPermission = TableData "Sales Shipment Header" = R;
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("Item No."), "Outstanding Qty. (Base)" = filter(> 0), "Variant Code" = field(Code)));
+            Caption = 'Total Allocated on SO';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
             //GHST Customization++
         }
     }

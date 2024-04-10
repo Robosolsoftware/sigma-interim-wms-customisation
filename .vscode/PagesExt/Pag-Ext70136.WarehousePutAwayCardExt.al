@@ -49,5 +49,4 @@ pageextension 70136 WarehousePutAwayCardExt extends "Warehouse Put-away"
 
     var
         myInt: Integer;
-        G_Functions: Codeunit "SC Events & Subscriber";
 }

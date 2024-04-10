@@ -270,6 +270,10 @@ tableextension 70132 "SC Sales Header" extends "Sales Header"
             CalcFormula = lookup("Sales Line"."Return Order No." where("Document No." = field("No."), "Document Type" = field("Document Type"), Type = const(Item)));
             Editable = false;
         }
+        field(70156; "Rejection"; Boolean)
+        {
+
+        }
 
     }
 

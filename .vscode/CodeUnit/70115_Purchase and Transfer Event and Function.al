@@ -1,17 +1,121 @@
-codeunit 70101 "Purchase Events"
+codeunit 70115 "Purchase Event & Function"
 {
-    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post", 'OnBeforeCode', '', false, false)]
-    // local procedure CheckingReason(var ItemJournalLine: Record "Item Journal Line")
-    // begin
-    //     if ItemJournalLine.FindSet then begin
-    //         repeat
-    //             if ItemJournalLine."Reason Code" = '' then begin
-    //                 Error('Please enter Reason code Item Line No.:%1', ItemJournalLine."Line No.");
-    //             end
-    //         until ItemJournalLine.Next = 0;
-    //     end;
+    SingleInstance = true;
+    trigger OnRun()
+    begin
 
-    // end;
+    end;
+
+    var
+        myInt: Integer;
+        G_LocationCode: Code[20];
+
+    #Region Bin code Warehouse Class Code Missmatch Customization+++
+    //Step1+++ Purchase Line Location Code not mandatory++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Purchase Document", 'OnBeforeMandatoryFields', '', false, false)]
+    local procedure OnBeforeMandatoryFields(PurchaseHeader: Record "Purchase Header")
+    var
+        InvtSetup: Record "Inventory Setup";
+    begin
+        // Check Header location if line location is not mandatory++
+        // This is code for skip default error meesage for Variant code++
+        Clear(G_LocationCode);
+        //Clear(G_FromPOScreen);
+        InvtSetup.Get();
+        if not InvtSetup."Location Mandatory" then begin
+            if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
+                G_LocationCode := PurchaseHeader."Location Code";
+                //G_FromPOScreen := true;
+
+
+                //Check Warehouse class code missmatch+++
+                // Check Header location if line location is not mandatory++
+                CheckWarehouseClassCodePOHeaderlevel(PurchaseHeader);
+
+            end;
+        end;
+    end;
+
+    //Step1+++ Purchase Line Location Code mandatory++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Purchase Document", 'OnCodeOnCheckPurchLineLocationCode', '', false, false)]
+    local procedure OnCodeOnCheckPurchLineLocationCode(var PurchaseLine: Record "Purchase Line")
+    var
+        InvtSetup: Record "Inventory Setup";
+    begin
+        // Check Line location if line location is mandatory++
+        // This is code for skip default error meesage for Variant code++
+        Clear(G_LocationCode);
+        //Clear(G_FromPOScreen);
+        InvtSetup.Get();
+        if InvtSetup."Location Mandatory" then begin
+            if PurchaseLine."Document Type" = PurchaseLine."Document Type"::Order then begin
+                G_LocationCode := PurchaseLine."Location Code";
+                //G_FromPOScreen := true;
+
+                //Check Warehouse class code missmatch+++
+                // Check Line location if line location is mandatory++
+                CheckWarehouseClassCodePOLinelevel(PurchaseLine);
+
+            end;
+        end;
+    end;
+
+    //Step2++
+    [EventSubscriber(ObjectType::Table, Database::Item, 'OnBeforeIsVariantMandatory', '', false, false)]
+    local procedure OnBeforeIsVariantMandatory(var IsHandled: Boolean; var Result: Boolean)
+    var
+        L_Location: Record Location;
+    begin
+        //This is code for skip default error meesage for Variant code + +
+        //if G_FromPOScreen = true then begin
+        if G_LocationCode <> '' then begin
+            L_Location.Reset();
+            if L_Location.Get(G_LocationCode) then begin
+                if L_Location."Require Receive" = true then begin
+                    IsHandled := true;
+                    Result := false;
+                end;
+            end;
+        end;
+        Clear(G_LocationCode);
+        //end;
+    end;
+
+
+    local procedure CheckWarehouseClassCodePOHeaderlevel(_PurchaseHeader: Record "Purchase Header")
+    var
+        Bin: Record Bin;
+        L_PurchaseLine: Record "Purchase Line";
+    begin
+        L_PurchaseLine.Reset();
+        L_PurchaseLine.SetRange("Document No.", _PurchaseHeader."No.");
+        L_PurchaseLine.SetRange("Document Type", _PurchaseHeader."Document Type");
+        L_PurchaseLine.SetRange(Type, L_PurchaseLine.Type::Item);
+        if L_PurchaseLine.FindSet() then begin
+            repeat
+                Bin.Reset();
+                Bin.SetRange("Location Code", _PurchaseHeader."Location Code");
+                Bin.SetRange("Warehouse Class Code", L_PurchaseLine."Warehouse Class Code");
+                if not Bin.FindFirst() then
+                    Error('Warehouse class Code: %1 missmatch for Location: %2. Puchase Line No. %3', L_PurchaseLine."Warehouse Class Code", _PurchaseHeader."Location Code", L_PurchaseLine."Line No.");
+            until L_PurchaseLine.Next() = 0;
+        end;
+
+    end;
+
+    procedure CheckWarehouseClassCodePOLinelevel(_PurchaseLine: Record "Purchase Line")
+    var
+        Bin: Record Bin;
+    begin
+        Bin.Reset();
+        Bin.SetRange("Location Code", _PurchaseLine."Location Code");
+        Bin.SetRange("Warehouse Class Code", _PurchaseLine."Warehouse Class Code");
+        if not Bin.FindFirst() then
+            Error('Warehouse class Code: %1 missmatch for Location: %2. Puchase Line No. %3', _PurchaseLine."Warehouse Class Code", _PurchaseLine."Location Code", _PurchaseLine."Line No.");
+    end;
+    #endregion Bin code Warehouse Class Code Missmatch Customization+++
+
+    #Region Check Min Order Validation on PO+++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Purchase Document", 'OnPerformManualReleaseOnBeforeTestPurchasePrepayment', '', false, false)]
     local procedure OnPerformManualReleaseOnBeforeTestPurchasePrepayment(var PurchaseHeader: Record "Purchase Header")
     begin
@@ -35,7 +139,27 @@ codeunit 70101 "Purchase Events"
             end;
         end;
     end;
+    #endregion Check Min Order Validation on PO+++
 
+    #Region Update Transfer Line Fields to Posted Document++++
+    [EventSubscriber(ObjectType::Table, database::"Transfer Shipment Line", 'OnAfterCopyFromTransferLine', '', false, false)]
+    local procedure OnAfterCopyFromTransferShpLine(TransferLine: Record "Transfer Line"; var TransferShipmentLine: Record "Transfer Shipment Line")
+    begin
+        TransferShipmentLine.Brand := TransferLine.Brand;
+        TransferShipmentLine."Pack Size" := TransferLine."Pack Size";
+        TransferShipmentLine."Warehouse Class Code" := TransferLine."Warehouse Class Code";
+    end;
+
+    [EventSubscriber(ObjectType::Table, database::"Transfer Receipt Line", 'OnAfterCopyFromTransferLine', '', false, false)]
+    local procedure OnAfterCopyFromTransferRcpLine(TransferLine: Record "Transfer Line"; var TransferReceiptLine: Record "Transfer Receipt Line")
+    begin
+        TransferReceiptLine.Brand := TransferLine.Brand;
+        TransferReceiptLine."Pack Size" := TransferLine."Pack Size";
+        TransferReceiptLine."Warehouse Class Code" := TransferLine."Warehouse Class Code";
+    end;
+    #endregion Update Transfer Line Fields to Posted Document++++
+
+    #Region Check Reason Code On Item journal Post+++
     [EventSubscriber(ObjectType::Page, Page::"Item Journal", 'OnBeforeActionEvent', 'Post', false, false)]
     local procedure CheckingReason(var Rec: Record "Item Journal Line")
     var
@@ -63,29 +187,29 @@ codeunit 70101 "Purchase Events"
         end;
 
     end;
+    #endregion Check Reason Code On Item journal Post+++
 
-    [EventSubscriber(ObjectType::Table, Database::"Transfer Line", 'OnAfterValidateEvent', 'Item No.', false, false)]
-    local procedure clearFileds(CurrFieldNo: Integer; var Rec: Record "Transfer Line")
+    #Region Update Customized Fields on Warehouse Recpt Header From PO header+++
+    [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", 'OnAfterCreateRcptHeader', '', false, false)]
+    local procedure OnAfterCreateRcptHeader(PurchaseLine: Record "Purchase Line"; var WarehouseReceiptHeader: Record "Warehouse Receipt Header")
     var
-        Recitem: Record Item;
+        L_PurchaseHeader: Record "Purchase Header";
     begin
-        Rec.Validate("Transfer-from Bin Code", '');
-        Rec.Validate("Transfer-To Bin Code", '');
-        Recitem.Reset();
-        Recitem.SetRange("No.", Rec."Item No.");
-        if Recitem.FindFirst() then begin
-            Rec.Validate("Warehouse Class Code", Recitem."Warehouse Class Code");
+        L_PurchaseHeader.Reset();
+        L_PurchaseHeader.SetRange("Document Type", PurchaseLine."Document Type");
+        L_PurchaseHeader.SetRange("No.", PurchaseLine."Document No.");
+        if L_PurchaseHeader.FindFirst() then begin
+            WarehouseReceiptHeader."Purchase Order No." := L_PurchaseHeader."No.";
+            WarehouseReceiptHeader."Purchase Order Date" := L_PurchaseHeader."Order Date";
+            WarehouseReceiptHeader."Supplier Name" := L_PurchaseHeader."Buy-from Vendor Name";
+            WarehouseReceiptHeader."Requested Receipt Date" := L_PurchaseHeader."Requested Receipt Date";
+            WarehouseReceiptHeader.Locationcode := L_PurchaseHeader."Location Code";
         end;
     end;
+    #endregion Update Customized Fields on Warehouse Recpt Header From PO header+++
 
 
-    [EventSubscriber(ObjectType::Table, Database::"Transfer Line", 'OnAfterValidateEvent', 'Transfer-from Bin Code', false, false)]
-    local procedure clearFiledsFrmQty(CurrFieldNo: Integer; var Rec: Record "Transfer Line")
-    begin
-        Rec.Validate(Quantity, 0);
-        // Rec.Validate("Transfer-To Bin Code", '');
-    end;
-
+    #Region Update Customized Fields on Warehouse shipment Header and Line From Tranfer Header and Line+++
     [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", 'OnAfterCreateWhseDocuments', '', false, false)]
     local procedure UpdateWarehouseReceipt(var WhseShipmentHeader: Record "Warehouse Shipment Header"; var WhseReceiptHeader: Record "Warehouse Receipt Header")
     var
@@ -99,7 +223,6 @@ codeunit 70101 "Purchase Events"
         WhseRcptLine: Record "Warehouse Receipt Line";
         PurchaseHeader: Record "Purchase Header";
         i: Integer;
-
 
     begin
         RecWhseShpLine.Reset();
@@ -242,9 +365,6 @@ codeunit 70101 "Purchase Events"
         WhseReceiptHeader.Modify();
     end;
 
-
-
-
     [EventSubscriber(ObjectType::Page, page::"Warehouse Shipment", 'OnBeforeActionEvent', 'Post and &Print', true, true)]
     local procedure UpdatingTransferHeaderNew(var Rec: Record "Warehouse Shipment Header")
     var
@@ -318,54 +438,30 @@ codeunit 70101 "Purchase Events"
         end;
         //Commit();
     end;
+    #endregion Update Customized Fields on Warehouse shipment Header and Line From Tranfer Header and Line+++
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment", 'OnAfterCreatePostedShptHeader', '', true, true)]
-    local procedure UpdatePostedWareHouseShpHeader(var PostedWhseShptHeader: Record "Posted Whse. Shipment Header"; var WarehouseShipmentHeader: Record "Warehouse Shipment Header")
+    #Region Clear Fields on Transfer Line++
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Line", 'OnAfterValidateEvent', 'Item No.', false, false)]
+    local procedure clearFileds(CurrFieldNo: Integer; var Rec: Record "Transfer Line")
+    var
+        Recitem: Record Item;
     begin
-        PostedWhseShptHeader."Requested By" := WarehouseShipmentHeader."Requested By";
-        PostedWhseShptHeader.Validate("Time of Shipment", WarehouseShipmentHeader."Time of Shipment");
-        PostedWhseShptHeader.Validate("Time of Receipt", WarehouseShipmentHeader."Time of Receipt");
-        PostedWhseShptHeader.Validate("Vehicle Reg No.", WarehouseShipmentHeader."Vehicle Reg No.");
-        PostedWhseShptHeader.Validate("Pallet ID", WarehouseShipmentHeader."Pallet ID");
-        PostedWhseShptHeader.Validate("Shipped By", WarehouseShipmentHeader."Shipped By");
-        PostedWhseShptHeader.Validate("Receipted By", WarehouseShipmentHeader."Receipted By");
-        PostedWhseShptHeader.Validate(Comments, WarehouseShipmentHeader.Comments);
-        PostedWhseShptHeader.Validate("Seal No.", WarehouseShipmentHeader."Seal No.");
-        PostedWhseShptHeader.Modify()
-    end;
-
-    [EventSubscriber(ObjectType::Table, database::"Transfer Shipment Line", 'OnAfterCopyFromTransferLine', '', false, false)]
-
-    local procedure OnAfterCopyFromTransferShpLine(TransferLine: Record "Transfer Line"; var TransferShipmentLine: Record "Transfer Shipment Line")
-    begin
-        TransferShipmentLine.Brand := TransferLine.Brand;
-        TransferShipmentLine."Pack Size" := TransferLine."Pack Size";
-        TransferShipmentLine."Warehouse Class Code" := TransferLine."Warehouse Class Code";
-    end;
-
-    [EventSubscriber(ObjectType::Table, database::"Transfer Receipt Line", 'OnAfterCopyFromTransferLine', '', false, false)]
-
-    local procedure OnAfterCopyFromTransferRcpLine(TransferLine: Record "Transfer Line"; var TransferReceiptLine: Record "Transfer Receipt Line")
-    begin
-        TransferReceiptLine.Brand := TransferLine.Brand;
-        TransferReceiptLine."Pack Size" := TransferLine."Pack Size";
-        TransferReceiptLine."Warehouse Class Code" := TransferLine."Warehouse Class Code";
+        Rec.Validate("Transfer-from Bin Code", '');
+        Rec.Validate("Transfer-To Bin Code", '');
+        Recitem.Reset();
+        Recitem.SetRange("No.", Rec."Item No.");
+        if Recitem.FindFirst() then begin
+            Rec.Validate("Warehouse Class Code", Recitem."Warehouse Class Code");
+        end;
     end;
 
 
-    [EventSubscriber(ObjectType::Table, Database::"Transfer Header", 'OnValidateShipmentDateOnBeforeCalcReceiptDate', '', false, false)]
-    local procedure UpdateRecShipDate(var IsHandled: Boolean; var TransferHeader: Record "Transfer Header")
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Line", 'OnAfterValidateEvent', 'Transfer-from Bin Code', false, false)]
+    local procedure clearFiledsFrmQty(CurrFieldNo: Integer; var Rec: Record "Transfer Line")
     begin
-        // IsHandled := false;
-        // TransferHeader."Receipt Date" := 0D;
-        // TransferHeader."Shipment Date" := 0D;
-        //TransferHeader.Modify();
+        Rec.Validate(Quantity, 0);
+        // Rec.Validate("Transfer-To Bin Code", '');
     end;
+    #endregion Clear Fields on Transfer Line++
 
-    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment (Yes/No)", 'OnBeforeConfirmWhseShipmentPost', '', false, false)]
-    // local procedure OnlyShip(var Invoice: Boolean; var Selection: Integer;var HideDialog: Boolean;var IsPosted: Boolean;var WhseShptLine: Record "Warehouse Shipment Line")
-    // begin
-
-    //     Invoice := (Selection = 1);
-    // end;
 }

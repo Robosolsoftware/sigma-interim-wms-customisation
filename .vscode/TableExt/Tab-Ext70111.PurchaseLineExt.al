@@ -49,10 +49,7 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         }
         field(70006; Inventory; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."),
-                                                                  //"Location Code" = FIELD("Location Code"),
-                                                                  "Variant Code" = FIELD("Variant Code"),
-                                                                  "Unit of Measure Code" = FIELD("Unit of Measure Code")));
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
             Caption = 'Total Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -60,11 +57,7 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         }
         field(70007; "Saleable Inventory"; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."),
-            "Variant Code" = FIELD("Variant Code"),
-            "Location Code" = field("Location Code"),
-            //"Saleable Location" = const(true),
-            "Unit of Measure Code" = FIELD("Unit of Measure Code")));
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
             Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -73,14 +66,7 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         field(70132; "Allocated"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
-            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order),
-                                                                            Type = CONST(Item),
-                                                                            "No." = FIELD("No."),
-                                                                            //"Location Code" = FIELD("Location Code"),
-                                                                            "Variant Code" = FIELD("Variant Code"),
-                                                                            "Unit of Measure Code" = FIELD("Unit of Measure Code"),
-                                                                            "Outstanding Qty. (Base)" = filter(> 0)));
-            //Caption = 'Allocated';
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Outstanding Qty. (Base)" = filter(> 0)));
             Caption = 'Total Allocated on SO';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -90,17 +76,8 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order),
-            Type = CONST(Item),
-            "No." = field("No."),
-            "Variant Code" = field("Variant Code"),
-            "Outstanding Quantity" = filter(> 0),
-            //"Saleable Location" = const(true),
-            "Location Code" = field("Location Code"),
-            "Unit of Measure Code" = FIELD("Unit of Measure Code")));
-
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
             DecimalPlaces = 0 : 5;
-            //Caption = 'Qty on Sales Order (Saleable)';
             Caption = 'Allocated on SO';
         }
 
