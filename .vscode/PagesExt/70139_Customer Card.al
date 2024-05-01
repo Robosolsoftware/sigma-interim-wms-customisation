@@ -259,6 +259,11 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                     CurrPage.Update();
                 end;
             }
+            field("Territory Code"; Rec."Territory Code")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
         }
         addafter(Statistics)
         {

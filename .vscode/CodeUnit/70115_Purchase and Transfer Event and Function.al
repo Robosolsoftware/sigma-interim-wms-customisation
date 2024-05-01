@@ -209,9 +209,9 @@ codeunit 70115 "Purchase Event & Function"
     #endregion Update Customized Fields on Warehouse Recpt Header From PO header+++
 
 
-    #Region Update Customized Fields on Warehouse shipment Header and Line From Tranfer Header and Line+++
+    #Region Update Customized Fields on Warehouse Recp Header and Line From Tranfer Header and Line+++
     [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", 'OnAfterCreateWhseDocuments', '', false, false)]
-    local procedure UpdateWarehouseReceipt(var WhseShipmentHeader: Record "Warehouse Shipment Header"; var WhseReceiptHeader: Record "Warehouse Receipt Header")
+    local procedure OnAfterCreateWhseDocuments(var WhseShipmentHeader: Record "Warehouse Shipment Header"; var WhseReceiptHeader: Record "Warehouse Receipt Header")
     var
         TransferHeader: Record "Transfer Header";
         RecWhseShpLine: Record "Warehouse Shipment Line";
@@ -225,45 +225,6 @@ codeunit 70115 "Purchase Event & Function"
         i: Integer;
 
     begin
-        RecWhseShpLine.Reset();
-        RecWhseShpLine.SetRange("No.", WhseShipmentHeader."No.");
-        if RecWhseShpLine.FindFirst() then begin
-            TransferHeader.Reset();
-            //TransferHeader.SetRange("Document Type", PurchaseLine."Document Type");
-            TransferHeader.SetRange("No.", RecWhseShpLine."Source No.");
-            if TransferHeader.FindFirst() then begin
-                WhseShipmentHeader.VALIDATE("Requested By", TransferHeader."Requested By");
-                WhseShipmentHeader.Validate("Time of Shipment", TransferHeader."Time of Shipment");
-                WhseShipmentHeader.Validate("Time of Receipt", TransferHeader."Time of Receipt");
-                WhseShipmentHeader.Validate("Vehicle Reg No.", TransferHeader."Vehicle Reg No.");
-                WhseShipmentHeader.Validate("Pallet ID", TransferHeader."Pallet ID");
-                WhseShipmentHeader.Validate("Shipped By", TransferHeader."Shipped By");
-                WhseShipmentHeader.Validate("Receipted By", TransferHeader."Receipted By");
-                WhseShipmentHeader.Validate(Comments, TransferHeader.Comments);
-                WhseShipmentHeader.Validate("Seal No.", TransferHeader."Seal No.");
-                WhseShipmentHeader.Modify();
-            end;
-
-
-            TransferLineLine1.Reset();
-            //TransferLineLine1.SetRange("Document Type", PurchaseLine1."Document Type"::Order);
-            TransferLineLine1.SetRange("Document No.", RecWhseShpLine."Source No.");
-            if TransferLineLine1.FindSet() then begin
-                repeat
-                    RecWhseShpLine.Reset();
-                    RecWhseShpLine.SetRange("Source No.", TransferLineLine1."Document No.");
-                    RecWhseShpLine.SetRange("Source Line No.", TransferLineLine1."Line No.");
-                    //RecWhseShpLine.SetRange("Source Document", TransferLineLine1."Source Document"::"Purchase Order");
-                    if RecWhseShpLine.FindFirst() then begin
-                        RecWhseShpLine."Warehouse Class Code" := TransferLineLine1."Warehouse Class Code";
-                        RecWhseShpLine.Brand := TransferLineLine1.Brand;
-                        RecWhseShpLine."Pack Size" := TransferLineLine1."Pack Size";
-                        RecWhseShpLine.Modify();
-                    end;
-                until TransferLineLine1.Next = 0;
-            end;
-        end;
-
         RecWhseRcpLine.Reset();
         RecWhseRcpLine.SetRange("No.", WhseReceiptHeader."No.");
         if RecWhseRcpLine.FindFirst() then begin

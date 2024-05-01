@@ -17,12 +17,18 @@ codeunit 70114 "Sales Event & Function"
     local procedure OnBeforePerformManualReleaseProcedure(var SalesHeader: Record "Sales Header")
     var
         L_SalesLine: Record "Sales Line";
+        L_UserSetup: Record "User Setup";
     begin
-        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
-            if SalesHeader."Min Order Value" > 0 then begin
-                SalesHeader.CalcFields(Amount);
-                if SalesHeader.Amount < SalesHeader."Min Order Value" then
-                    Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        L_UserSetup.SetRange("SO Override Min Order Value", true);
+        if not L_UserSetup.FindFirst() then begin
+            if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+                if SalesHeader."Min Order Value" > 0 then begin
+                    SalesHeader.CalcFields(Amount);
+                    if SalesHeader.Amount < SalesHeader."Min Order Value" then
+                        Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
+                end;
             end;
         end;
 
@@ -42,12 +48,18 @@ codeunit 70114 "Sales Event & Function"
     local procedure OnBeforeCheckSalesApprovalPossible(var SalesHeader: Record "Sales Header")
     var
         L_SalesLine: Record "Sales Line";
+        L_UserSetup: Record "User Setup";
     begin
-        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
-            if SalesHeader."Min Order Value" > 0 then begin
-                SalesHeader.CalcFields(Amount);
-                if SalesHeader.Amount < SalesHeader."Min Order Value" then
-                    Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        L_UserSetup.SetRange("SO Override Min Order Value", true);
+        if not L_UserSetup.FindFirst() then begin
+            if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+                if SalesHeader."Min Order Value" > 0 then begin
+                    SalesHeader.CalcFields(Amount);
+                    if SalesHeader.Amount < SalesHeader."Min Order Value" then
+                        Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
+                end;
             end;
         end;
 
@@ -228,26 +240,49 @@ codeunit 70114 "Sales Event & Function"
     end;
     #endregion Update WorkDescription on Warehouse Shipment Header from Sales Header++
 
-    #Region Update Customize Fields on Warehouse Shipment from Sales Header and Flow all fields on Posted Warehouse Shipment Header++
+    #Region Update Customize Fields on Warehouse Shipment from Sales Header and Transfer Header and move fields on Posted Warehouse Shipment Header++
     [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", 'OnAfterCreateShptHeader', '', false, false)]
-    local procedure OnAfterCreateShptHeader(var WarehouseShipmentHeader: Record "Warehouse Shipment Header"; SalesLine: Record "Sales Line")
+    local procedure OnAfterCreateShptHeader(var WarehouseShipmentHeader: Record "Warehouse Shipment Header"; SalesLine: Record "Sales Line"; WarehouseRequest: Record "Warehouse Request")
     var
         L_SalesHeader: Record "Sales Header";
+        L_TransferHeader: Record "Transfer Header";
     begin
-        L_SalesHeader.Reset();
-        L_SalesHeader.SetRange("Document Type", SalesLine."Document Type");
-        L_SalesHeader.SetRange("No.", SalesLine."Document No.");
-        if L_SalesHeader.FindFirst() then begin
-            WarehouseShipmentHeader.Validate("Delivery Note", L_SalesHeader."Delivery Note");
-            WarehouseShipmentHeader.Validate("Collection Note", L_SalesHeader."Collection Note");
-            WarehouseShipmentHeader.Validate(_Invoice, L_SalesHeader._Invoice);
-            WarehouseShipmentHeader.Validate("Packing list", L_SalesHeader."Packing list");
-            WarehouseShipmentHeader.Validate("Export Checklist", L_SalesHeader."Export Checklist");
-            WarehouseShipmentHeader.Validate("Data Logger Sheet", L_SalesHeader."Data Logger Sheet");
-            WarehouseShipmentHeader.Validate(Labels, L_SalesHeader.Labels);
-            WarehouseShipmentHeader.Validate("Extra Documents", L_SalesHeader."Extra Documents");
-            WarehouseShipmentHeader.Modify();
+        //Sales Header Fields++
+        if SalesLine."Document Type" = SalesLine."Document Type"::Order then begin
+            L_SalesHeader.Reset();
+            L_SalesHeader.SetRange("Document Type", SalesLine."Document Type");
+            L_SalesHeader.SetRange("No.", SalesLine."Document No.");
+            if L_SalesHeader.FindFirst() then begin
+                WarehouseShipmentHeader.Validate("Delivery Note", L_SalesHeader."Delivery Note");
+                WarehouseShipmentHeader.Validate("Collection Note", L_SalesHeader."Collection Note");
+                WarehouseShipmentHeader.Validate(_Invoice, L_SalesHeader._Invoice);
+                WarehouseShipmentHeader.Validate("Packing list", L_SalesHeader."Packing list");
+                WarehouseShipmentHeader.Validate("Export Checklist", L_SalesHeader."Export Checklist");
+                WarehouseShipmentHeader.Validate("Data Logger Sheet", L_SalesHeader."Data Logger Sheet");
+                WarehouseShipmentHeader.Validate(Labels, L_SalesHeader.Labels);
+                WarehouseShipmentHeader.Validate("Extra Documents", L_SalesHeader."Extra Documents");
+                WarehouseShipmentHeader.Modify();
+            end;
         end;
+
+        //Transfer Header fields++
+        if WarehouseRequest."Source Document" = WarehouseRequest."Source Document"::"Outbound Transfer" then begin
+            L_TransferHeader.Reset();
+            L_TransferHeader.SetRange("No.", WarehouseRequest."Source No.");
+            if L_TransferHeader.FindFirst() then begin
+                WarehouseShipmentHeader.VALIDATE("Requested By", L_TransferHeader."Requested By");
+                WarehouseShipmentHeader.Validate("Time of Shipment", L_TransferHeader."Time of Shipment");
+                WarehouseShipmentHeader.Validate("Time of Receipt", L_TransferHeader."Time of Receipt");
+                WarehouseShipmentHeader.Validate("Vehicle Reg No.", L_TransferHeader."Vehicle Reg No.");
+                WarehouseShipmentHeader.Validate("Pallet ID", L_TransferHeader."Pallet ID");
+                WarehouseShipmentHeader.Validate("Shipped By", L_TransferHeader."Shipped By");
+                WarehouseShipmentHeader.Validate("Receipted By", L_TransferHeader."Receipted By");
+                WarehouseShipmentHeader.Validate(Comments, L_TransferHeader.Comments);
+                WarehouseShipmentHeader.Validate("Seal No.", L_TransferHeader."Seal No.");
+                WarehouseShipmentHeader.Modify();
+            end;
+        end;
+
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment", 'OnAfterCreatePostedShptHeader', '', true, true)]
@@ -278,9 +313,46 @@ codeunit 70114 "Sales Event & Function"
     [EventSubscriber(ObjectType::Page, Page::"Sales Order", 'OnBeforeValidateShipToOptions', '', false, false)]
     local procedure OnBeforeValidateShipToOptions(ShipToOptions: Option; var SalesHeader: Record "Sales Header")
     begin
-        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
             if ShipToOptions = 2 then
                 Error('You cannot select Custom Address');
+
+            if ShipToOptions = 1 then
+                Error('You cannot select Alternate Shipping Address');
+        end;
     end;
     #endregion Not allow to select Custom Ship to Adderess on Sales Order++
+
+    #Region Update Customize Fields on Warehouse Shipment line from Sales line and Transfer line and move fields on Posted Warehouse Shipment lin++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Transfer Warehouse Mgt.", 'OnAfterCreateShptLineFromTransLine', '', false, false)]
+    local procedure OnAfterCreateShptLineFromTransLine(TransferLine: Record "Transfer Line"; var WarehouseShipmentLine: Record "Warehouse Shipment Line")
+    var
+        L_wareshipment: page "Warehouse Shipment";
+    begin
+        if WarehouseShipmentLine."Source Document" = WarehouseShipmentLine."Source Document"::"Inbound Transfer" then begin
+            WarehouseShipmentLine."Warehouse Class Code" := TransferLine."Warehouse Class Code";
+            WarehouseShipmentLine.Brand := TransferLine.Brand;
+            WarehouseShipmentLine."Pack Size" := TransferLine."Pack Size";
+            WarehouseShipmentLine.Modify();
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Warehouse Mgt.", 'OnAfterCreateShptLineFromSalesLine', '', false, false)]
+    local procedure OnAfterCreateShptLineFromSalesLine(var WarehouseShipmentLine: Record "Warehouse Shipment Line"; SalesLine: Record "Sales Line")
+    var
+        L_Item: Record Item;
+    begin
+        if WarehouseShipmentLine."Source Document" = WarehouseShipmentLine."Source Document"::"Sales Order" then begin
+            L_Item.Reset();
+            L_Item.SetRange("No.", WarehouseShipmentLine."Item No.");
+            if L_Item.FindFirst() then begin
+                WarehouseShipmentLine."Warehouse Class Code" := L_Item."Warehouse Class Code";
+                WarehouseShipmentLine.Brand := L_Item.Brand;
+                WarehouseShipmentLine."Pack Size" := L_Item."Pack Size";
+                WarehouseShipmentLine.Modify();
+            end;
+        end;
+    end;
+    #endregion Update Customize Fields on Warehouse Shipment line from Sales line and Transfer line and move fields on Posted Warehouse Shipment lin++
+
 }

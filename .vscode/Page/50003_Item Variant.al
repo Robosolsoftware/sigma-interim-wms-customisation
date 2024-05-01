@@ -22,36 +22,48 @@ page 50003 "Item Variants Details"
                 {
                     ApplicationArea = All;
                     Visible = false;
+
                 }
                 field(Inventory; Rec.Inventory)
                 {
                     ApplicationArea = All;
-                }
-                field("Qty on SO"; Rec."Qty on SO")
-                {
-                    ApplicationArea = All;
                     Editable = false;
+                    Caption = 'Total Physical';
+                    ToolTip = 'Total Inventory';
+                    DecimalPlaces = 0 : 5;
+                    //GHST Customization++
                 }
+                field(Allocated; Rec.Allocated)
+                {
+                    Editable = false;
+                    ApplicationArea = All;
+                    ToolTip = 'Sum of Outstanding Qty on SO across ALL Locations';
+                    DecimalPlaces = 0 : 5;
+                    Caption = 'Total Allocated on SO';
+                    //GHST Customization++
+                }
+                //Total Free field added on Ochannel Extensio+++
                 field("Saleable Inventory"; Rec."Saleable Inventory")
                 {
                     ApplicationArea = All;
                     Editable = false;
+                    Caption = 'Physical';
+                    ToolTip = 'Qty available in Saleable location';
+                    //GHST Customization++
                 }
                 field("Qty on SO(Saleable)"; Rec."Qty on SO(Saleable)")
                 {
                     ApplicationArea = All;
                     Editable = false;
-                }
-                field("Total Available Quantity"; TotalAvailableQty(Rec))
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                    DecimalPlaces = 0 : 5;
+                    Caption = 'Allocated on SO';
+                    ToolTip = 'Sum of Outstanding SO Qty in Saleable location';
                     //GHST Customization++
                 }
+                //Free field added on Ochannel Extensio+++
                 field(Priority; Rec.Priority)
                 {
                     ApplicationArea = All;
+                    //GHST Customization++
                 }
             }
         }

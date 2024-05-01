@@ -2,6 +2,17 @@ pageextension 50005 InventoryPickCardExt extends "Inventory Pick"
 {
     layout
     {
+        addafter("External Document No.2")
+        {
+            field("Work Description"; Rec."Work Description")
+            {
+                ApplicationArea = All;
+                Editable = false;
+                MultiLine = true;
+                //Note:- Value comming from Sales header. Check the code in KNAPP extension
+
+            }
+        }
         addafter("Shipment Date")
         {
             field("System CreatedAt"; rec.SystemCreatedAt)

@@ -12,6 +12,7 @@ pageextension 70151 "SC Item Variants" extends "Item Variants"
                 Caption = 'Total Physical';
                 ToolTip = 'Total Inventory';
                 DecimalPlaces = 0 : 5;
+                //GHST Customization++
             }
             field(Allocated; Rec.Allocated)
             {
@@ -20,28 +21,27 @@ pageextension 70151 "SC Item Variants" extends "Item Variants"
                 ToolTip = 'Sum of Outstanding Qty on SO across ALL Locations';
                 DecimalPlaces = 0 : 5;
                 Caption = 'Total Allocated on SO';
+                //GHST Customization++
             }
+            //Total Free field added on Ochannel Extensio+++
             field("Saleable Inventory"; Rec."Saleable Inventory")
             {
                 ApplicationArea = All;
                 Editable = false;
                 Caption = 'Physical';
+                ToolTip = 'Qty available in Saleable location';
+                //GHST Customization++
             }
             field("Qty on SO(Saleable)"; Rec."Qty on SO(Saleable)")
             {
                 ApplicationArea = All;
                 Editable = false;
                 Caption = 'Allocated on SO';
+                ToolTip = 'Sum of Outstanding SO Qty in Saleable location';
                 //GHST Customization++
             }
-            field("Total Available Quantity"; TotalAvailableQty(Rec))
-            {
-                ApplicationArea = All;
-                Editable = false;
-                DecimalPlaces = 0 : 5;
-                Caption = 'Free';
-                //GHST Customization++
-            }
+            //Free field added on Ochannel Extensio+++
+
             field(Priority; Rec.Priority)
             {
                 ApplicationArea = All;
@@ -59,58 +59,6 @@ pageextension 70151 "SC Item Variants" extends "Item Variants"
         myInt: Integer;
         L_CurrpageEdit: Boolean;
 
-    local procedure TotalAvailableQty(_Rec: Record "Item Variant"): Decimal
-    var
-        ItemVariant: Record "Item Variant";
-        _LocationCode: Code[20];
-        L_ILE: Record "Item Ledger Entry";
-        SaleableInventory: Decimal;
-        L_SalesLine: Record "Sales Line";
-        SaleableQtyOnSO: Decimal;
-        item: Record Item;
-    begin
-
-
-
-        // //Calculate Saleable Inventory++
-        // Clear(SaleableInventory);
-        // L_ILE.Reset();
-        // L_ILE.SetRange("Item No.", _Rec."Item No.");
-        // L_ILE.SetRange("Variant Code", _Rec.Code);
-        // L_ILE.SetRange("Saleable Location", true);
-        // if _LocationCode <> '' then
-        //     L_ILE.SetFilter("Location Code", _LocationCode);
-        // L_ILE.CalcSums(Quantity);
-        // SaleableInventory := L_ILE.Quantity;
-
-
-        // //Calculate Saleable Qty on SO++
-        // Clear(SaleableQtyOnSO);
-        // L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-        // L_SalesLine.SetRange("No.", _Rec."Item No.");
-        // L_SalesLine.SetRange("Variant Code", _Rec.Code);
-        // L_SalesLine.SetRange("Saleable Location", true);
-        // if _LocationCode <> '' then
-        //     L_SalesLine.SetRange("Location Code", _LocationCode);
-        // L_SalesLine.CalcSums("Outstanding Quantity");
-        // SaleableQtyOnSO := L_SalesLine."Outstanding Quantity";
-
-        // if SaleableInventory > 0 then begin
-        //     if (SaleableInventory - SaleableQtyOnSO) > 0 then
-        //         exit(SaleableInventory - SaleableQtyOnSO)
-        //     else
-        //         exit(0);
-        // end else
-        //     exit(0);
-        _Rec.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
-        if _Rec."Saleable Inventory" > 0 then
-            if (_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)") > 0 then
-                exit(_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)")
-            else
-                exit(0)
-        else
-            exit(0);
-    end;
 
     trigger OnOpenPage()
     var

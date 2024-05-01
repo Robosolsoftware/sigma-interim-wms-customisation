@@ -54,6 +54,10 @@ tableextension 70146 "SC Sales Shipment Line" extends "Sales Shipment Line"
         {
 
         }
+        field(70157; RRP; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+        }
     }
 
     keys

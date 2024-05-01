@@ -12,14 +12,13 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
                 L_ItemVariant: Record "Item Variant";
             begin
                 if Rec.Priority <> 0 then
-                    if TotalAvailableQty(Rec) <= 0 then
-                        Error('Total Available Quantity should be greater than 0');
+                    if TotalAvailableQtyForSaleable(Rec) <= 0 then
+                        Error('Free Quantity should be greater than 0');
 
 
                 if Rec.Priority > 0 then begin
                     L_ItemVariant.Reset();
                     L_ItemVariant.SetRange("Item No.", Rec."Item No.");
-                    //L_ItemVariant.SetRange(Code, Rec.Code);
                     L_ItemVariant.SetRange(Priority, Rec.Priority);
                     if L_ItemVariant.FindFirst() then
                         Error('Priority %1 is already defined', Rec.Priority);
@@ -39,7 +38,7 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
         field(70142; "Qty on SO(Saleable)"; Decimal)
         {
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Variant Code" = field(Code), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Location Code" = field("Location Filter")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("Item No."), "Variant Code" = field(Code), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Location Code" = field("Location Filter")));
             DecimalPlaces = 0 : 5;
             Caption = 'Allocated on SO';
             //GHST Customization++
@@ -63,6 +62,7 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
         {
             FieldClass = FlowFilter;
             TableRelation = Location;
+            //GHST Customization++
         }
         field(70146; "Qty on SO"; Decimal)
         {
@@ -87,7 +87,7 @@ tableextension 70140 "SC Item Variant" extends "Item Variant"
     var
         myInt: Integer;
 
-    local procedure TotalAvailableQty(_Rec: Record "Item Variant"): Decimal
+    local procedure TotalAvailableQtyForSaleable(_Rec: Record "Item Variant"): Decimal
     begin
         _Rec.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
         if _Rec."Saleable Inventory" > 0 then

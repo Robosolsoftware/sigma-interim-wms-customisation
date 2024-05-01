@@ -53,6 +53,10 @@ tableextension 70147 "SC Sales Invoice Line" extends "Sales Invoice Line"
         {
 
         }
+        field(70157; RRP; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+        }
     }
 
     keys

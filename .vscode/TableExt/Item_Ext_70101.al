@@ -178,10 +178,24 @@ tableextension 70101 "Item_Extension" extends Item
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
+
+            //Not Required++
         }
         field(70101; "Min Sell Price"; Decimal)
         {
             DecimalPlaces = 0 : 5;
+
+            trigger OnValidate()
+            begin
+                if Rec."Min Sell Price" > 0 then begin
+                    //Rec.TestField("Unit Price");
+                    if Rec."Unit Price" = 0 then
+                        Error('Unit Price should not be blank');
+
+                    if Rec."Min Sell Price" > Rec."Unit Price" then
+                        Error('Min Sell Price %1 should be less than Unit Price %2. Item No.: %3.', Rec."Min Sell Price", Rec."Unit Price", Rec."No.");
+                end;
+            end;
         }
         field(70102; "Variant Exist"; Boolean)
         {
@@ -205,7 +219,7 @@ tableextension 70101 "Item_Extension" extends Item
         field(70106; "Status"; Option)
         {
             DataClassification = ToBeClassified;
-            OptionMembers = Open,"Pending Approval",Released;
+            OptionMembers = Open,Released;
         }
         field(70107; Storage; Code[20])
         {
@@ -228,6 +242,15 @@ tableextension 70101 "Item_Extension" extends Item
         field(70111; "Top Category"; Boolean)
         {
 
+        }
+        modify("Unit Price")
+        {
+            trigger OnAfterValidate()
+            begin
+                if Rec."Unit Price" > 0 then
+                    if Rec."Unit Price" < Rec."Min Sell Price" then
+                        Error('Unit Price %1 should be greater than Min Sell Price %2', Rec."Unit Price", Rec."Min Sell Price");
+            end;
         }
     }
     fieldgroups

@@ -56,8 +56,11 @@ pageextension 50000 WarehouseReceiptsExt extends "Warehouse Receipts"
                 ApplicationArea = all;
                 Editable = false;
             }
-
-
+            field("Source Document"; Rec."Source Document")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
         modify("Assigned User ID")
         {

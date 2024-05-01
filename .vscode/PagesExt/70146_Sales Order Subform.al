@@ -77,7 +77,6 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
             //     ToolTip = 'Inventory (Total Inventory) - Allocated (Sum of Outstanding Qty on SO)';
             // }
             //Moved this code on Ochannel Extension for calculation++
-
             field("Physical"; Rec."Saleable Inventory")
             {
                 Editable = false;
@@ -175,6 +174,11 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 ApplicationArea = All;
                 Editable = false;
                 ToolTip = 'Last sales unit price';
+            }
+            field(RRP; Rec.RRP)
+            {
+                ApplicationArea = All;
+                Editable = false;
             }
         }
         addafter("Unit of Measure Code")

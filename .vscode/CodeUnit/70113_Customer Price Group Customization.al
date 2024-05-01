@@ -38,11 +38,11 @@ codeunit 70113 "Customer Price Group Changes"
                 L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group");
                 L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
                 //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
                 if L_PriceListLine.FindFirst() then begin
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                        if L_PriceListLine."Minimum Quantity" < SalesLine.Quantity then begin
+                        if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
                             SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -67,11 +67,11 @@ codeunit 70113 "Customer Price Group Changes"
                 L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 2");
                 L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
                 //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
                 if L_PriceListLine.FindFirst() then begin
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                        if L_PriceListLine."Minimum Quantity" < SalesLine.Quantity then begin
+                        if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
                             SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -96,11 +96,11 @@ codeunit 70113 "Customer Price Group Changes"
                 L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 3");
                 L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
                 //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
                 if L_PriceListLine.FindFirst() then begin
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                        if L_PriceListLine."Minimum Quantity" < SalesLine.Quantity then begin
+                        if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
                             SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -125,11 +125,11 @@ codeunit 70113 "Customer Price Group Changes"
                 L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 4");
                 L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
                 //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
                 if L_PriceListLine.FindFirst() then begin
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                        if L_PriceListLine."Minimum Quantity" < SalesLine.Quantity then begin
+                        if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
                             SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -154,11 +154,11 @@ codeunit 70113 "Customer Price Group Changes"
                 L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 5");
                 L_PriceListLine.SetRange("Unit of Measure Code", SalesLine."Unit of Measure Code");
                 //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
                 if L_PriceListLine.FindFirst() then begin
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                        if L_PriceListLine."Minimum Quantity" < SalesLine.Quantity then begin
+                        if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
                             SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -251,6 +251,137 @@ codeunit 70113 "Customer Price Group Changes"
             //         end;
             //     end;
             // end;
+        end;
+    end;
+
+
+
+    //Get the Original Sales Price+++
+    procedure GetOriginalUnitPrice(_SelltoCustomerNumber: Code[20]; _ItemNumber: Code[20]; _Qty: Decimal; _UOM: Code[20]; _VariantCode: Code[20]; _OrderDate: Date): Decimal
+    var
+        L_PriceListLine: Record "Price List Line";
+        L_Customer: Record Customer;
+        L_Item: Record Item;
+        L_BillToCustomerNumber: Code[20];
+    begin
+        Clear(L_BillToCustomerNumber);
+        L_Customer.Reset();
+        L_Customer.SetRange("No.", _SelltoCustomerNumber);
+        if L_Customer.FindFirst() then
+            if L_Customer."Bill-to Customer No." <> '' then
+                L_BillToCustomerNumber := L_Customer."Bill-to Customer No."
+            else
+                L_BillToCustomerNumber := L_Customer."No.";
+
+
+        L_Customer.Reset();
+        If L_Customer.Get(L_BillToCustomerNumber) then begin
+            //1st Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _ItemNumber);
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group");
+            L_PriceListLine.SetRange("Unit of Measure Code", _UOM);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Qty then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+
+            //2nd Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _ItemNumber);
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 2");
+            L_PriceListLine.SetRange("Unit of Measure Code", _UOM);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Qty then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+
+            //3rd Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _ItemNumber);
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 3");
+            L_PriceListLine.SetRange("Unit of Measure Code", _UOM);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Qty then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+
+            //4th Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _ItemNumber);
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 4");
+            L_PriceListLine.SetRange("Unit of Measure Code", _UOM);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Qty then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+            //5th Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _ItemNumber);
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 5");
+            L_PriceListLine.SetRange("Unit of Measure Code", _UOM);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Qty then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+            //If Price List not found
+            IF L_Item.Get(_ItemNumber) then
+                exit(L_Item."Unit Price");
         end;
     end;
 }

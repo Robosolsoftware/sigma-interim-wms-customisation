@@ -42,10 +42,20 @@ codeunit 70111 SalesReturnOrderChanges
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Warehouse Mgt.", 'OnAfterCreateRcptLineFromSalesLine', '', true, true)]
     local procedure UpdateWhseRcptLine(var WarehouseReceiptLine: Record "Warehouse Receipt Line"; SalesLine: Record "Sales Line")
+    var
+        L_Item: Record Item;
     begin
         if WarehouseReceiptLine."Source Document" = WarehouseReceiptLine."Source Document"::"Sales Return Order" then begin
             WarehouseReceiptLine."Return Invoice No." := SalesLine."Sales Return Order Invoice No.";
             WarehouseReceiptLine."Return Invoice Line No." := SalesLine."Sales Return Order Line No.";
+
+            L_Item.Reset();
+            L_Item.SetRange("No.", SalesLine."No.");
+            if L_Item.FindFirst() then begin
+                WarehouseReceiptLine."Warehouse Class Code" := L_Item."Warehouse Class Code";
+                WarehouseReceiptLine."Pack Size" := L_Item."Pack Size";
+                WarehouseReceiptLine.Brand := L_Item.Brand;
+            end;
             WarehouseReceiptLine.Modify();
         end;
     end;

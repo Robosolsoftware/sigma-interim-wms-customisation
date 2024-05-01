@@ -39,10 +39,6 @@ pageextension 70101 "Item Extended List" extends "Item List"
         addbefore("Vendor No.")
         {
 
-            // field("Pallet Quantity"; Rec."Pallet Quantity")
-            // {
-            //     ApplicationArea = all;
-            // }
             field("Manufacturer Code"; Rec."Manufacturer Code")
             {
                 ApplicationArea = All;
@@ -51,14 +47,6 @@ pageextension 70101 "Item Extended List" extends "Item List"
         }
         addafter(InventoryField)
         {
-            field("Net Inventory"; Rec."Net Inventory")
-            {
-                ApplicationArea = all;
-            }
-            field("Saleable Inventory"; Rec."Saleable Inventory")
-            {
-                ApplicationArea = all;
-            }
             field("Qty. on Sales Order"; Rec."Qty. on Sales Order")
             {
                 ApplicationArea = all;

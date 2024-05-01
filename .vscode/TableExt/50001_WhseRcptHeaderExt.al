@@ -124,6 +124,11 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         {
 
         }
+        field(50030; "Source Document"; Enum "Warehouse Activity Source Document")
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Warehouse Receipt Line"."Source Document" where("No." = field("No.")));
+        }
 
     }
     trigger OnDelete()

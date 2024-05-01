@@ -29,42 +29,42 @@ pageextension 70178 "Req. Worksheet" extends "Req. Worksheet"
     {
         addafter(CarryOutActionMessage)
         {
-            action("Create Combine PO")
-            {
-                ApplicationArea = Planning;
-                Caption = 'Create Combine PO';
-                Ellipsis = true;
-                Image = Purchase;
-                PromotedCategory = Process;
-                Promoted = true;
+            // action("Create Combine PO")
+            // {
+            //     ApplicationArea = Planning;
+            //     Caption = 'Create Combine PO';
+            //     Ellipsis = true;
+            //     Image = Purchase;
+            //     PromotedCategory = Process;
+            //     Promoted = true;
 
-                trigger OnAction()
-                var
-                    RequisitionLine: Record "Requisition Line";
-                begin
-                    if not Confirm('Do you want to proceed?', false) then
-                        Error('');
+            //     trigger OnAction()
+            //     var
+            //         RequisitionLine: Record "Requisition Line";
+            //     begin
+            //         if not Confirm('Do you want to proceed?', false) then
+            //             Error('');
 
-                    Clear(G_VendorNo);
-                    RequisitionLine.Reset();
-                    RequisitionLine.SetRange("Accept Action Message", true);
-                    RequisitionLine.SetFilter("Vendor No.", '<>%1', '');
-                    RequisitionLine.SetRange("Worksheet Template Name", Rec."Worksheet Template Name");
-                    RequisitionLine.SetRange("Journal Batch Name", Rec."Journal Batch Name");
-                    RequisitionLine.SetFilter("Action Message", '%1|%2|%3', RequisitionLine."Action Message"::New, RequisitionLine."Action Message"::"Change Qty.", RequisitionLine."Action Message"::"Resched. & Chg. Qty.");
-                    RequisitionLine.SetCurrentKey("Vendor No.");
-                    RequisitionLine.Ascending(true);
-                    if RequisitionLine.FindSet() then begin
-                        repeat
-                            CreateCombinePO(RequisitionLine);
-                        until RequisitionLine.Next() = 0;
+            //         Clear(G_VendorNo);
+            //         RequisitionLine.Reset();
+            //         RequisitionLine.SetRange("Accept Action Message", true);
+            //         RequisitionLine.SetFilter("Vendor No.", '<>%1', '');
+            //         RequisitionLine.SetRange("Worksheet Template Name", Rec."Worksheet Template Name");
+            //         RequisitionLine.SetRange("Journal Batch Name", Rec."Journal Batch Name");
+            //         RequisitionLine.SetFilter("Action Message", '%1|%2|%3', RequisitionLine."Action Message"::New, RequisitionLine."Action Message"::"Change Qty.", RequisitionLine."Action Message"::"Resched. & Chg. Qty.");
+            //         RequisitionLine.SetCurrentKey("Vendor No.");
+            //         RequisitionLine.Ascending(true);
+            //         if RequisitionLine.FindSet() then begin
+            //             repeat
+            //                 CreateCombinePO(RequisitionLine);
+            //             until RequisitionLine.Next() = 0;
 
-                        // if GetLastErrorText() = '' then
-                        DeleteCancelLinesFromRequistionSheet(RequisitionLine);
-                    end;
-                    Message('Process Completed Successfully');
-                end;
-            }
+            //             // if GetLastErrorText() = '' then
+            //             DeleteCancelLinesFromRequistionSheet(RequisitionLine);
+            //         end;
+            //         Message('Process Completed Successfully');
+            //     end;
+            // }
         }
     }
 

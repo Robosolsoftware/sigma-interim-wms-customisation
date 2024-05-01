@@ -55,6 +55,7 @@ pageextension 70160 "SC Shipping Agents" extends "Shipping Agents"
             field("Service Type"; Rec."Service Type")
             {
                 ApplicationArea = All;
+                Editable = L_CurrPageEditable;
             }
         }
     }
@@ -105,7 +106,7 @@ pageextension 70160 "SC Shipping Agents" extends "Shipping Agents"
         end;
     end;
 
-    trigger OnOpenPage()
+    trigger OnNewRecord(BelowxRec: Boolean)
     var
         L_UserSetup: Record "User Setup";
     begin
@@ -139,4 +140,39 @@ pageextension 70160 "SC Shipping Agents" extends "Shipping Agents"
                 L_EditableStatus := false;
         end;
     end;
+
+    // trigger OnOpenPage()
+    // var
+    //     L_UserSetup: Record "User Setup";
+    // begin
+    //     Clear(L_CurrPageEditable);
+    //     Clear(L_EditableStatus);
+    //     if Rec.Status = Rec.Status::Open then begin
+    //         L_CurrPageEditable := true;
+    //         L_EditableStatus := true;
+    //     end else begin
+    //         L_UserSetup.Reset();
+    //         L_UserSetup.SetRange("User ID", UserId);
+    //         if L_UserSetup.FindFirst() then begin
+    //             if L_UserSetup."Edit Master Data" = true then begin
+    //                 if Rec.Status = Rec.Status::Open then
+    //                     L_CurrPageEditable := true
+    //                 else
+    //                     L_CurrPageEditable := false;
+    //             end else
+    //                 L_CurrPageEditable := false;
+    //         end else
+    //             L_CurrPageEditable := false;
+
+    //         L_UserSetup.Reset();
+    //         L_UserSetup.SetRange("User ID", UserId);
+    //         if L_UserSetup.FindFirst() then begin
+    //             if L_UserSetup."Edit Master Data" = true then
+    //                 L_EditableStatus := true
+    //             else
+    //                 L_EditableStatus := false;
+    //         end else
+    //             L_EditableStatus := false;
+    //     end;
+    // end;
 }

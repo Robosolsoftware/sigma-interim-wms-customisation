@@ -27,6 +27,10 @@ pageextension 70164 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+            field("SO Override Min Order Value"; Rec."SO Override Min Order Value")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

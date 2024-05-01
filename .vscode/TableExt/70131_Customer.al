@@ -176,7 +176,7 @@ tableextension 70131 "SC Customer" extends Customer
         field(70149; "Status"; Option)
         {
             DataClassification = ToBeClassified;
-            OptionMembers = Open,"Pending Approval",Released;
+            OptionMembers = Open,Released;
         }
         field(70156; Funded; Boolean)
         {
@@ -226,6 +226,15 @@ tableextension 70131 "SC Customer" extends Customer
         field(70161; "SO Approval Required"; Boolean)
         {
             DataClassification = ToBeClassified;
+        }
+
+        modify("Ship-to Code")
+        {
+            trigger OnAfterValidate()
+            begin
+                //Not Required in Sigma Process++
+                Rec.TestField("Ship-to Code", '');
+            end;
         }
 
         modify("Shipping Agent Code")

@@ -122,11 +122,6 @@ pageextension 70150 "SC Vendor Card" extends "Vendor Card"
                 ApplicationArea = All;
                 Editable = L_EditableQUAApproved;
             }
-            field(EDI; Rec.EDI)
-            {
-                ApplicationArea = all;
-                Editable = L_CurrPageEditable;
-            }
         }
         addafter("Purchaser Code")
         {

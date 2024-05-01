@@ -22,6 +22,10 @@ tableextension 70150 "SC User Setup" extends "User Setup"
         {
 
         }
+        field(50008; "SO Override Min Order Value"; Boolean)
+        {
+
+        }
     }
 
     keys

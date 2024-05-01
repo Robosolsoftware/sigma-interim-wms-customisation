@@ -5,7 +5,7 @@ tableextension 50004 ShippingAgentServices extends "Shipping Agent Services"
         field(70149; "Status"; Option)
         {
             DataClassification = ToBeClassified;
-            OptionMembers = Open,"Pending Approval",Released;
+            OptionMembers = Open,Released;
         }
 
     }

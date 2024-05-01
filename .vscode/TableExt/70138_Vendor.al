@@ -20,13 +20,9 @@ tableextension 70138 "SC Vendor" extends Vendor
         field(70141; "Status"; Option)
         {
             DataClassification = ToBeClassified;
-            OptionMembers = Open,"Pending Approval",Released;
+            OptionMembers = Open,Released;
         }
         field(70146; "QAU Approved"; Boolean)
-        {
-
-        }
-        field(70147; EDI; Boolean)
         {
 
         }
