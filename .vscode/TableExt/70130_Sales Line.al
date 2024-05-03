@@ -88,7 +88,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         }
         field(70146; "Saleable Inventory"; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code")));
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code"), "Daily Priority Exist" = field("Variant Code mandatory")));
             Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -145,7 +145,6 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             DecimalPlaces = 0 : 5;
         }
-
         modify("Unit Price")
         {
             trigger OnAfterValidate()

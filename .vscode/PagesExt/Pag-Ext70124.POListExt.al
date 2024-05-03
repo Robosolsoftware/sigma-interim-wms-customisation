@@ -123,6 +123,39 @@ pageextension 70124 POListExt extends "Purchase Order List"
                 }
 
             }
+            group("Import/Export PO With No")
+            {
+                Caption = 'Import/Export Purchase Order With No';
+                action("Export PO Template")
+                {
+                    ApplicationArea = All;
+                    Image = Journal;
+                    //PromotedCategory = Process;
+                    //Promoted = true;
+                    Caption = 'Export PO Template With No';
+                    trigger OnAction()
+                    var
+                        UploadPO: XmlPort "Upload Purchase Order";
+                    begin
+                        UploadPO.SampleTemplate();
+                    end;
+                }
+                action("Import PO")
+                {
+                    ApplicationArea = All;
+                    Image = Journal;
+                    //PromotedCategory = Process;
+                    //Promoted = true;
+                    Caption = 'Import PO With No';
+                    trigger OnAction()
+                    var
+                        UploadPO: XmlPort "Upload Purchase Order";
+                    begin
+                        UploadPO.Run();
+                        Message('Completed..');
+                    end;
+                }
+            }
         }
         addbefore(Category_Process)
         {
@@ -153,6 +186,19 @@ pageextension 70124 POListExt extends "Purchase Order List"
                 {
                 }
 
+            }
+
+            group(Category_Category78)
+            {
+                Caption = 'Import/Export Purchase Order With No';
+                actionref(ExportPOTemplateWithNo; "Export PO Template")
+                {
+
+                }
+                actionref(ImportPoWithNo; "Import PO")
+                {
+
+                }
             }
         }
 

@@ -20,5 +20,10 @@ tableextension 70107 ILE extends "Item Ledger Entry"
             FieldClass = FlowField;
             CalcFormula = lookup(Location."Saleable Location" where(Code = field("Location Code")));
         }
+        field(70143; "Daily Priority Exist"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Item Variant" where("Item No." = field("Item No."), Code = field("Variant Code"), Priority = filter(> 0)));
+        }
     }
 }
