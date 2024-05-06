@@ -21,8 +21,6 @@ pageextension 70159 "SC Purchase Quote List" extends "Purchase Quotes"
         {
             trigger OnBeforeAction()
             begin
-                //Rec.TestField("Quality & Regulatory Check");
-                //Rec.TestField("Second Check");
                 Rec.TestField("Shortcut Dimension 1 Code");
             end;
         }

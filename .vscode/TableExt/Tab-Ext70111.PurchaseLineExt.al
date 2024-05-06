@@ -2,20 +2,29 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
 {
     fields
     {
+        modify("Location Code")
+        {
+            trigger OnAfterValidate()
+            var
+                L_WareEmployee: Record "Warehouse Employee";
+            begin
+                if CurrFieldNo = 7 then begin
+                    if Rec."Location Code" <> '' then begin
+                        L_WareEmployee.Reset();
+                        L_WareEmployee.SetRange("User ID", UserId);
+                        L_WareEmployee.SetRange("Location Code", Rec."Location Code");
+                        L_WareEmployee.SetRange("Allow selection on PO", true);
+                        if not L_WareEmployee.FindFirst() then
+                            Error('You do not have permission to select location code %1', Rec."Location Code");
+                    end;
+                end;
+            end;
+        }
 
         field(80017; "Pack"; Decimal)
         {
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 0;
-            // trigger OnValidate()
-            // var
-            //     CUPurchaseEvents: Codeunit "Purchase Events";
-            // begin
-            //     if "VAT %" > 0 then
-            //         CUPurchaseEvents.CalculatePORDiscVAT(Rec)
-            //     else
-            //         CUPurchaseEvents.CalculatePORDisc(Rec);
-            // end;
         }
         field(70102; "Size"; Text[30])
         {
@@ -47,7 +56,7 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         {
             DataClassification = ToBeClassified;
         }
-        field(70006; Inventory; Decimal)
+        field(70006; "Total Physical"; Decimal)
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
             Caption = 'Total Physical';
@@ -55,15 +64,15 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
             Editable = false;
             FieldClass = FlowField;
         }
-        field(70007; "Saleable Inventory"; Decimal)
+        field(70007; Physical; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Variant Code" = field("Variant Code")));
             Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
         }
-        field(70132; "Allocated"; Decimal)
+        field(70132; "Total Allocated on SO"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Outstanding Qty. (Base)" = filter(> 0)));
@@ -72,11 +81,11 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
             Editable = false;
             FieldClass = FlowField;
         }
-        field(70133; "Qty on SO(Saleable)"; Decimal)
+        field(70133; "Allocated on SO"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Variant Code" = field("Variant Code")));
             DecimalPlaces = 0 : 5;
             Caption = 'Allocated on SO';
         }
@@ -118,7 +127,6 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
                 L_PurchaseHeader: Record "Purchase Header";
             begin
                 if Rec.Type = Rec.Type::Item then begin
-
                     //Check Master Approved++
                     Recitem.Reset();
                     Recitem.SetRange("No.", Rec."No.");
@@ -126,15 +134,11 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
                         Recitem.TestField("QAU Approved");
                         Recitem.TestField(Status, Recitem.Status::Released);
 
-                        L_PurchaseHeader.Reset();
-                        L_PurchaseHeader.SetRange("No.", Rec."Document No.");
-                        L_PurchaseHeader.SetRange("Document Type", Rec."Document Type");
-                        if L_PurchaseHeader.FindFirst() then begin
-                            if L_PurchaseHeader."Sheet Name" = '' then begin
-                                if Recitem."Vendor No." <> '' then
-                                    if Recitem."Vendor No." <> Rec."Buy-from Vendor No." then
-                                        Message('This is not your default Supplier');
-                            end;
+                        //Ignore this validation at the time Uploading PO from Template++
+                        if CurrFieldNo = 6 then begin
+                            if Recitem."Vendor No." <> '' then
+                                if Recitem."Vendor No." <> Rec."Buy-from Vendor No." then
+                                    Message('This is not your default Supplier');
                         end;
                     end;
 

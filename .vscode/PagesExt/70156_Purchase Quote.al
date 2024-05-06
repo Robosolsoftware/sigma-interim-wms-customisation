@@ -3,12 +3,10 @@ pageextension 70156 "SC Purchase Quote" extends "Purchase Quote"
     layout
     {
         moveafter(Status; "Shortcut Dimension 1 Code")
-
         modify("Shortcut Dimension 1 Code")
         {
             ShowMandatory = true;
         }
-        // Add changes to page layout here
         addlast(General)
         {
             field(SystemCreatedAt; Rec.SystemCreatedAt)
@@ -54,8 +52,6 @@ pageextension 70156 "SC Purchase Quote" extends "Purchase Quote"
         {
             trigger OnBeforeAction()
             begin
-                //Rec.TestField("Quality & Regulatory Check");
-                //Rec.TestField("Second Check");
                 Rec.TestField("Shortcut Dimension 1 Code");
             end;
         }

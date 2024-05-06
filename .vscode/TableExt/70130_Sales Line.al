@@ -2,7 +2,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
 {
     fields
     {
-        field(70130; Inventory; Decimal)
+        field(70130; "Total Physical"; Decimal)
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
             Caption = 'Total Physical';
@@ -19,7 +19,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
             Editable = false;
             FieldClass = FlowField;
         }
-        field(70132; "Allocated"; Decimal)
+        field(70132; "Total Allocated on SO"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Outstanding Qty. (Base)" = filter(> 0)));
@@ -78,34 +78,23 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
             FieldClass = FlowField;
             CalcFormula = lookup(Location."Saleable Location" where(Code = field("Location Code")));
         }
-        field(70145; "Qty on SO(Saleable)"; Decimal)
+        field(70145; "Allocated on SO"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code"), "Variant Code" = field("Variant Code")));
             DecimalPlaces = 0 : 5;
             Caption = 'Allocated on SO';
         }
-        field(70146; "Saleable Inventory"; Decimal)
+        field(70146; Physical; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code"), "Daily Priority Exist" = field("Variant Code mandatory")));
+            //Note:- Aplied UOM filter only for Sigma Process
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code"), "Variant Code" = field("Variant Code")));
             Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
         }
-        // field(70147; "Back Orders (Saleable)"; Decimal)
-        // {
-
-        // }
-        // field(70148; "Total Back Orders"; Decimal)
-        // {
-
-        // }
-        // field(70148; "Date Filter"; Date)
-        // {
-        //     FieldClass = FlowFilter;
-        // }
         field(70149; "Warehouse Class Code"; Code[10])
         {
 
@@ -113,7 +102,6 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
 
         field(70150; "Whs. Calss Code type"; Code[20])
         {
-            //OptionMembers = Blank,CD,Fridge;
         }
         field(70151; "Order Date"; Date)
         {
@@ -284,79 +272,6 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                     if CH_SShip.FindLast() then
                         Rec."Last Price" := CH_SShip."Unit Price";
                 end;
-            end;
-        }
-        modify(Quantity)
-        {
-            trigger OnAfterValidate()
-            var
-                L_ItemUOM: Record "Item Unit of Measure";
-                L_CalculateNumber: Decimal;
-                L_NextMultipleNumber: Decimal;
-                L_SalesHeader: Record "Sales Header";
-            begin
-                if CurrFieldNo = 15 then begin
-                    //GHST Customization++
-                    if (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Type = Rec.Type::Item) then begin
-                        Rec.TestField("Quantity Shipped", 0);
-                        if Rec.Quantity <> xRec.Quantity then
-                            Rec.Validate("Variant Code", '');
-                    end;
-                end;
-            end;
-        }
-
-        modify("Variant Code")
-        {
-
-            trigger OnAfterValidate()
-            begin
-                if CurrFieldNo = 5402 then begin
-                    //GHST Customization++
-                    if (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Type = Rec.Type::Item) then begin
-                        Rec.TestField("Quantity Shipped", 0);
-                    end;
-                end;
-            end;
-        }
-
-        modify("Unit of Measure Code")
-        {
-            trigger OnAfterValidate()
-            var
-                L_ItemUOM: Record "Item Unit of Measure";
-                L_CalculateNumber: Decimal;
-                L_NextMultipleNumber: Decimal;
-                L_SalesHeader: Record "Sales Header";
-            begin
-                // if CurrFieldNo > 0 then begin
-                //     if Rec."Unit of Measure Code" <> '' then begin
-                //         L_SalesHeader.Reset();
-                //         L_SalesHeader.SetRange("No.", Rec."Document No.");
-                //         L_SalesHeader.SetRange("Document Type", Rec."Document Type");
-                //         if L_SalesHeader.FindFirst() then begin
-                //             if CheckWholesaleCustomer(L_SalesHeader) = true then begin
-                //                 Clear(L_NextMultipleNumber);
-                //                 Clear(L_CalculateNumber);
-                //                 if (Rec.Type = Rec.Type::Item) AND (Rec."Document Type" = Rec."Document Type"::Order) AND (Rec.Quantity <> 0) then begin
-                //                     L_ItemUOM.Reset();
-                //                     L_ItemUOM.SetRange("Item No.", Rec."No.");
-                //                     L_ItemUOM.SetRange(Code, Rec."Unit of Measure Code");
-                //                     L_ItemUOM.SetFilter("Sales Order multiple", '>%1', 0);
-                //                     if L_ItemUOM.FindFirst() then begin
-                //                         if Rec.Quantity MOD L_ItemUOM."Sales Order multiple" <> 0 then
-                //                             if confirm(StrSubstNo('Quantity should be multiple of UOM "%1" quantity. Do you want to continue?', L_ItemUOM."Sales Order multiple"), true) then begin
-                //                                 L_CalculateNumber := Round(Rec.Quantity / L_ItemUOM."Sales Order multiple", 1, '<') + 1;
-                //                                 L_NextMultipleNumber := L_ItemUOM."Sales Order multiple" * L_CalculateNumber;
-                //                                 Rec.Validate(Quantity, L_NextMultipleNumber);
-                //                             end;
-                //                     end;
-                //                 end;
-                //             end;
-                //         end;
-                //     end;
-                // end;
-
             end;
         }
     }

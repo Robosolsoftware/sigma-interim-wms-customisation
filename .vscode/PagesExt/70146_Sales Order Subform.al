@@ -50,7 +50,7 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 Editable = false;
                 ApplicationArea = All;
             }
-            field(Inventory; Rec.Inventory)
+            field("Total Physical"; Rec."Total Physical")
             {
                 Editable = false;
                 ApplicationArea = All;
@@ -58,7 +58,7 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 DecimalPlaces = 0 : 5;
                 Caption = 'Total Physical';
             }
-            field(Allocated; Rec.Allocated)
+            field("Total Allocated on SO"; Rec."Total Allocated on SO")
             {
                 Editable = false;
                 ApplicationArea = All;
@@ -66,18 +66,7 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 DecimalPlaces = 0 : 5;
                 Caption = 'Total Allocated on SO';
             }
-
-            //Moved this code on Ochannel Extension for calculation++
-            // field("Total Free"; TotalAvailableQty(rec))
-            // {
-            //     Caption = 'Total Free';
-            //     ApplicationArea = All;
-            //     Editable = false;
-            //     DecimalPlaces = 0 : 5;
-            //     ToolTip = 'Inventory (Total Inventory) - Allocated (Sum of Outstanding Qty on SO)';
-            // }
-            //Moved this code on Ochannel Extension for calculation++
-            field("Physical"; Rec."Saleable Inventory")
+            field(Physical; Rec.Physical)
             {
                 Editable = false;
                 ApplicationArea = All;
@@ -86,7 +75,7 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 Caption = 'Physical';
             }
 
-            field("Allocated on SO"; Rec."Qty on SO(Saleable)")
+            field("Allocated on SO"; Rec."Allocated on SO")
             {
                 Editable = false;
                 ApplicationArea = All;
@@ -94,70 +83,6 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 DecimalPlaces = 0 : 5;
                 Caption = 'Allocated on SO';
             }
-            //Moved this code on Ochannel Extension for calculation++
-            // field("Free (Saleable)"; TotalAvailableQtyForSaleable(Rec))
-            // {
-            //     ApplicationArea = All;
-            //     Editable = false;
-            //     DecimalPlaces = 0 : 5;
-            //     ToolTip = 'Saleable Inventory – Sum of Outstanding Qty on SO (Saleable)';
-            //     //Caption = 'Total Available Quantity(Saleable)';
-            //     Caption = 'Free (Saleable)';
-            // }
-            //Moved this code on Ochannel Extension for calculation++
-            // field("Back Orders (Saleable)"; Rec."Back Orders (Saleable)")
-            // {
-            //     Caption = 'Back Orders (Saleable)';
-            //     ApplicationArea = All;
-            //     Editable = false;
-            //     DecimalPlaces = 0 : 5;
-            //     ToolTip = 'Unshipped Qty in HD and SH';
-
-            //     trigger OnAssistEdit()
-            //     var
-            //         L_SalesLine: Record "Sales Line";
-            //         Page_SalesLinePage: Page "Sales Lines";
-            //     begin
-            //         Clear(Page_SalesLinePage);
-            //         L_SalesLine.Reset();
-            //         L_SalesLine.SetRange("Document Type", L_SalesLine."Document Type"::Order);
-            //         L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-            //         L_SalesLine.SetRange("No.", Rec."No.");
-            //         L_SalesLine.SetRange("Variant Code", Rec."Variant Code");
-            //         L_SalesLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-            //         L_SalesLine.SetFilter("Outstanding Quantity", '>%1', 0);
-            //         L_SalesLine.SetRange("Saleable Location", true);
-            //         L_SalesLine.SetFilter("Shipment Date", '<%1', Today);
-            //         Page_SalesLinePage.SetTableView(L_SalesLine);
-            //         Page_SalesLinePage.Run();
-            //     end;
-            // }
-            // field("Total Back Orders"; Rec."Total Back Orders")
-            // {
-            //     Caption = 'Back Orders (Saleable)';
-            //     ApplicationArea = All;
-            //     Editable = false;
-            //     DecimalPlaces = 0 : 5;
-            //     ToolTip = 'Unshipped Qty across ALL Locations';
-            //     trigger OnAssistEdit()
-            //     var
-            //         L_SalesLine: Record "Sales Line";
-            //         Page_SalesLinePage: Page "Sales Lines";
-            //     begin
-            //         Clear(Page_SalesLinePage);
-            //         L_SalesLine.Reset();
-            //         L_SalesLine.SetRange("Document Type", L_SalesLine."Document Type"::Order);
-            //         L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-            //         L_SalesLine.SetRange("No.", Rec."No.");
-            //         L_SalesLine.SetRange("Variant Code", Rec."Variant Code");
-            //         L_SalesLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-            //         L_SalesLine.SetFilter("Outstanding Quantity", '>%1', 0);
-            //         //L_SalesLine.SetRange("Saleable Location", true);
-            //         L_SalesLine.SetFilter("Shipment Date", '<%1', Today);
-            //         Page_SalesLinePage.SetTableView(L_SalesLine);
-            //         Page_SalesLinePage.Run();
-            //     end;
-            // }
             field("Variant Code mandatory"; Rec."Variant Code mandatory")
             {
                 ApplicationArea = All;
@@ -191,71 +116,4 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
         }
     }
 
-    var
-        DisUnitPrice: Decimal;
-
-
-    // trigger OnAfterGetRecord()
-    // var
-    //     L_SalesLine: Record "Sales Line";
-    // begin
-    //     L_SalesLine.Reset();
-    //     L_SalesLine.SetRange("Document Type", L_SalesLine."Document Type"::Order);
-    //     L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-    //     L_SalesLine.SetRange("No.", Rec."No.");
-    //     L_SalesLine.SetRange("Variant Code", Rec."Variant Code");
-    //     L_SalesLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-    //     L_SalesLine.SetFilter("Outstanding Quantity", '>%1', 0);
-    //     L_SalesLine.SetRange("Saleable Location", true);
-    //     L_SalesLine.SetFilter("Shipment Date", '<%1', Today);
-    //     L_SalesLine.CalcSums("Outstanding Quantity");
-    //     Rec."Back Orders (Saleable)" := L_SalesLine."Outstanding Quantity";
-
-    //     L_SalesLine.Reset();
-    //     L_SalesLine.SetRange("Document Type", L_SalesLine."Document Type"::Order);
-    //     L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-    //     L_SalesLine.SetRange("No.", Rec."No.");
-    //     L_SalesLine.SetRange("Variant Code", Rec."Variant Code");
-    //     L_SalesLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-    //     L_SalesLine.SetFilter("Outstanding Quantity", '>%1', 0);
-    //     L_SalesLine.SetFilter("Shipment Date", '<%1', Today);
-    //     L_SalesLine.CalcSums("Outstanding Quantity");
-    //     Rec."Total Back Orders" := L_SalesLine."Outstanding Quantity";
-    //     Rec.Modify();
-    // end;
-
-
-    //Moved this code on Ochannel Extension for calculation++
-    // local procedure TotalAvailableQty(_Rec: Record "Sales Line"): Decimal
-    // var
-    //     L_ILE: Record "Item Ledger Entry";
-    // begin
-    //     //+++++Formula:- Total Free => "Total Physical - Total SO Allocated - Web Orders Qty"
-    //     //Inventory is Total Physical
-    //     //Total SO Allocated is Allocated
-    //     //Web Orders Qty is Web order Qty------
-    //     _Rec.CalcFields(Inventory, Allocated);
-    //     if (_Rec.Inventory - _Rec.Allocated) > 0 then
-    //         exit(_Rec.Inventory - _Rec.Allocated)
-    //     else
-    //         exit(0);
-    // end;
-
-
-    // local procedure TotalAvailableQtyForSaleable(_Rec: Record "Sales Line"): Decimal
-    // var
-    //     _LocationCode: Code[20];
-    //     L_ILE: Record "Item Ledger Entry";
-    // begin
-    //     //Free (Saleable) => Change the formula to "Physical (Saleable) - Allocated on SO (Saleable) - Web Orders Qty"
-    //     _Rec.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
-    //     if _Rec."Saleable Inventory" > 0 then
-    //         if (_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)") > 0 then
-    //             exit(_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)")
-    //         else
-    //             exit(0)
-    //     else
-    //         exit(0);
-    // end;
-    //Moved this code on Ochannel Extension for calculation--
 }

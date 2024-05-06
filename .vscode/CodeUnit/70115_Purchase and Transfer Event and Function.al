@@ -23,7 +23,7 @@ codeunit 70115 "Purchase Event & Function"
         //Clear(G_FromPOScreen);
         InvtSetup.Get();
         if not InvtSetup."Location Mandatory" then begin
-            if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
+            if (PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order) OR (PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Quote) then begin
                 G_LocationCode := PurchaseHeader."Location Code";
                 //G_FromPOScreen := true;
 
@@ -48,7 +48,7 @@ codeunit 70115 "Purchase Event & Function"
         //Clear(G_FromPOScreen);
         InvtSetup.Get();
         if InvtSetup."Location Mandatory" then begin
-            if PurchaseLine."Document Type" = PurchaseLine."Document Type"::Order then begin
+            if (PurchaseLine."Document Type" = PurchaseLine."Document Type"::Order) OR (PurchaseLine."Document Type" = PurchaseLine."Document Type"::Quote) then begin
                 G_LocationCode := PurchaseLine."Location Code";
                 //G_FromPOScreen := true;
 
