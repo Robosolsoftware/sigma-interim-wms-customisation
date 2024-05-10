@@ -116,4 +116,9 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
         }
     }
 
+
+    trigger OnOpenPage()
+    begin
+        Rec.SetFilter("Date Filter", '>=%1', WorkDate());
+    end;
 }

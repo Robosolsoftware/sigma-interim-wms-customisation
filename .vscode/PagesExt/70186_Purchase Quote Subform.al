@@ -79,6 +79,11 @@ pageextension 70186 "SC Purchase Quote Subform" extends "Purchase Quote Subform"
         // Add changes to page actions here
     }
 
+    trigger OnOpenPage()
+    begin
+        Rec.SetFilter("Date Filter", '>=%1', WorkDate());
+    end;
+
     var
         myInt: Integer;
 }

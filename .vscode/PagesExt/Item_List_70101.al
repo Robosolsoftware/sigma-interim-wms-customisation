@@ -24,17 +24,6 @@ pageextension 70101 "Item Extended List" extends "Item List"
                 ApplicationArea = All;
             }
         }
-        addfirst(factboxes)
-        {
-
-            part("Lot-Number-by-Item"; "Lot-Number-by-Item")
-            {
-                SubPageLink = "Item No." = field("No.");
-                ApplicationArea = all;
-            }
-
-        }
-
 
         addbefore("Vendor No.")
         {

@@ -46,6 +46,12 @@ pageextension 70185 "SC Sales Quote Subform" extends "Sales Quote Subform"
         // Add changes to page actions here
     }
 
+
+    trigger OnOpenPage()
+    begin
+        Rec.SetFilter("Date Filter", '>=%1', WorkDate());
+    end;
+
     var
         myInt: Integer;
 }

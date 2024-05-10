@@ -2,39 +2,6 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
 {
     layout
     {
-
-        // addafter(Inventory)
-        // {
-        //     field("Net Inventory"; Rec."Net Inventory")
-        //     {
-        //         ApplicationArea = all;
-        //         //Editable = L_CurrPageEditable;
-        //         Editable = false;
-        //         ToolTip = 'Inventory - Sales Order';
-        //     }
-        //     field("Saleable Inventory"; Rec."Saleable Inventory")
-        //     {
-        //         ApplicationArea = all;
-        //         //Editable = L_CurrPageEditable;
-        //         Editable = false;
-        //         ToolTip = 'HD House and Sigma House';
-        //     }
-        // }
-        // modify(VariantMandatoryDefaultYes)
-        // {
-        //     trigger OnAfterValidate()
-        //     var
-        //         myInt: Integer;
-        //     begin
-        //         Clear(ItemVarVisible);
-        //         if Rec."Variant Mandatory if Exists" = Rec."Variant Mandatory if Exists"::No then
-        //             ItemVarVisible := false
-        //         else
-        //             ItemVarVisible := true;
-        //     end;
-        // }
-
-
         #Region Item Tab Group+++
         modify("No.")
         {
@@ -265,19 +232,6 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             Editable = L_CurrPageEditable;
         }
         #endregion Warehouse group--
-
-        #Region Factbox Area++
-        addfirst(factboxes)
-        {
-
-            part("Lot-Number-by-Item"; "Lot-Number-by-Item")
-            {
-                SubPageLink = "Item No." = field("No.");
-                ApplicationArea = all;
-            }
-
-        }
-        #endregion Factbox Area---
 
         #Region Prices & Sales Group++
         modify("Unit Price")

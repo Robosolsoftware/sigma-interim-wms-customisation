@@ -252,7 +252,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
 
                 trigger OnValidate()
                 begin
-                    if Rec.Type = Rec.Type::Main then
+                    if Rec.Type = Rec.Type::Site then
                         L_CustomerPriceEditable := false
                     else
                         L_CustomerPriceEditable := true;
@@ -333,7 +333,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
     var
         L_UserSetup: Record "User Setup";
     begin
-        if Rec.Type = Rec.Type::Main then
+        if Rec.Type = Rec.Type::Site then
             L_CustomerPriceEditable := false
         else
             L_CustomerPriceEditable := true;
@@ -388,7 +388,7 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
         L_UserSetup: Record "User Setup";
 
     begin
-        if Rec.Type = Rec.Type::Main then
+        if Rec.Type = Rec.Type::Site then
             L_CustomerPriceEditable := false
         else
             L_CustomerPriceEditable := true;

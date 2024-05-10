@@ -22,7 +22,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         field(70132; "Total Allocated on SO"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
-            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Outstanding Qty. (Base)" = filter(> 0)));
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Outstanding Qty. (Base)" = filter(> 0), "Shipment Date" = field("Date Filter")));
             Caption = 'Total Allocated on SO';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -82,7 +82,7 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code"), "Variant Code" = field("Variant Code")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Location Code" = field("Location Code"), "Variant Code" = field("Variant Code"), "Shipment Date" = field("Date Filter")));
             DecimalPlaces = 0 : 5;
             Caption = 'Allocated on SO';
         }
@@ -133,6 +133,10 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             DecimalPlaces = 0 : 5;
         }
+        field(70158; "Date Filter"; Date)
+        {
+            FieldClass = FlowFilter;
+        }
         modify("Unit Price")
         {
             trigger OnAfterValidate()
@@ -169,9 +173,9 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
                                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                                     if L_SalesHeader.FindFirst() then begin
-                                        DisUnitPrice := (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec."Sell-to Customer No.", Rec."No.", Rec.Quantity, Rec."Unit of Measure", Rec."Variant Code", L_SalesHeader."Order Date") / 100) * 10;
-                                        if (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec."Sell-to Customer No.", Rec."No.", Rec.Quantity, Rec."Unit of Measure", Rec."Variant Code", L_SalesHeader."Order Date") - DisUnitPrice) > Rec."Unit Price" then
-                                            Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec."Sell-to Customer No.", Rec."No.", Rec.Quantity, Rec."Unit of Measure", Rec."Variant Code", L_SalesHeader."Order Date") - DisUnitPrice, Rec."No.");
+                                        DisUnitPrice := (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(L_SalesHeader, Rec) / 100) * 10;
+                                        if (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(L_SalesHeader, Rec) - DisUnitPrice) > Rec."Unit Price" then
+                                            Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', L_CustomerPriceGroupChanges.GetOriginalUnitPrice(L_SalesHeader, Rec) - DisUnitPrice, Rec."No.");
                                     end;
                                 end;
                             end;

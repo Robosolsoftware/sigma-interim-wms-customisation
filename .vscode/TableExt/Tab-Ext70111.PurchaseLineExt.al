@@ -75,7 +75,7 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         field(70132; "Total Allocated on SO"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
-            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Outstanding Qty. (Base)" = filter(> 0)));
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Outstanding Qty. (Base)" = filter(> 0), "Shipment Date" = field("Date Filter")));
             Caption = 'Total Allocated on SO';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -85,7 +85,7 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Variant Code" = field("Variant Code")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("Document Type" = CONST(Order), Type = CONST(Item), "No." = field("No."), "Outstanding Quantity" = filter(> 0), "Location Code" = field("Location Code"), "Unit of Measure Code" = FIELD("Unit of Measure Code"), "Variant Code" = field("Variant Code"), "Shipment Date" = field("Date Filter")));
             DecimalPlaces = 0 : 5;
             Caption = 'Allocated on SO';
         }
@@ -106,6 +106,10 @@ tableextension 70111 PurchaseLineExt extends "Purchase Line"
         field(70137; "Net Unit Cost"; Decimal)
         {
 
+        }
+        field(70138; "Date Filter"; Date)
+        {
+            FieldClass = FlowFilter;
         }
         modify("Line Discount %")
         {

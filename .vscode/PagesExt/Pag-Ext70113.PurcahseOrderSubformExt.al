@@ -171,5 +171,10 @@ pageextension 70113 PurcahseOrderSubformExt extends "Purchase Order Subform"
         }
     }
 
+    trigger OnOpenPage()
+    begin
+        Rec.SetFilter("Date Filter", '>=%1', WorkDate());
+    end;
+
     var
 }
