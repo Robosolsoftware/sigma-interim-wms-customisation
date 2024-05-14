@@ -42,13 +42,6 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                         Caption = 'Suplier Name.';
                         Editable = false;
                     }
-
-                    field("Warehouse Class Code"; Rec."Warehouse Class Code")
-                    {
-                        ApplicationArea = all;
-                        Caption = 'Warehouse Class Code.';
-                        Editable = false;
-                    }
                     field(CD; Rec.CD)
                     {
                         ApplicationArea = all;
@@ -66,12 +59,6 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                         Caption = 'Location Code.';
                         Editable = false;
                     }
-                    field("Item Category Code"; Rec."Item Category Code")
-                    {
-                        ApplicationArea = all;
-                        Caption = 'Item Category Code';
-                        Editable = false;
-                    }
                     field("No. of Items"; Rec."No. of Items")
                     {
                         ApplicationArea = all;
@@ -83,62 +70,80 @@ pageextension 50011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                         Editable = false;
                     }
                 }
-                group("Booking Details")
+                group("Sales Return Order Details")
                 {
-                    Editable = false;
-                    Visible = false;
-                    field(Carrier; Rec.Carrier)
+                    field("Sales Return Order"; Rec."Sales Return Order")
                     {
-                        ApplicationArea = all;
+                        ApplicationArea = All;
+                        Editable = false;
                     }
-                    field("Requested Delivery Date"; Rec."Requested Delivery Date")
+                    field("Customer No."; Rec."Customer No.")
                     {
-                        ApplicationArea = all;
+                        ApplicationArea = All;
+                        Editable = false;
                     }
-                    field("Expected Delivery Date"; Rec."Expected Delivery Date")
+                    field("Customer Name"; Rec."Customer Name")
                     {
-                        ApplicationArea = all;
-                    }
-                    field("Expected Delivery Time"; Rec."Expected Delivery Time")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Booked Pallets"; Rec."Booked Pallets")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field(Lifts; Rec.Lifts)
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Loose Boxes"; Rec."Loose Boxes")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Curtain Side"; Rec."Curtain Side")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field(Comments; Rec.Comments)
-                    {
-                        ApplicationArea = all;
+                        Editable = false;
+                        ApplicationArea = All;
                     }
                 }
-                group(Status)
-                {
-                    Editable = false;
-                    Visible = false;
+                // group("Booking Details")
+                // {
+                //     Editable = false;
+                //     Visible = false;
+                //     field(Carrier; Rec.Carrier)
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Requested Delivery Date"; Rec."Requested Delivery Date")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Expected Delivery Date"; Rec."Expected Delivery Date")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Expected Delivery Time"; Rec."Expected Delivery Time")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Booked Pallets"; Rec."Booked Pallets")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field(Lifts; Rec.Lifts)
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Loose Boxes"; Rec."Loose Boxes")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Curtain Side"; Rec."Curtain Side")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field(Comments; Rec.Comments)
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                // }
+                // group(Status)
+                // {
+                //     Editable = false;
+                //     Visible = false;
 
-                    field("Actual Receipt Date"; Rec."Actual Receipt Date")
-                    {
-                        ApplicationArea = all;
-                    }
-                    field("Actual Receipt Time"; Rec."Actual Receipt Time")
-                    {
-                        ApplicationArea = all;
-                    }
+                //     field("Actual Receipt Date"; Rec."Actual Receipt Date")
+                //     {
+                //         ApplicationArea = all;
+                //     }
+                //     field("Actual Receipt Time"; Rec."Actual Receipt Time")
+                //     {
+                //         ApplicationArea = all;
+                //     }
 
-                }
+                // }
 
             }
             group("User Details:")

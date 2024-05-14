@@ -20,6 +20,11 @@ pageextension 70134 POWhseRcpSubformRbe extends "Posted Whse. Receipt Subform"
                 ApplicationArea = all;
                 Editable = false;
             }
+            field("Item Category Code"; Rec."Item Category Code")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
 
         }
     }

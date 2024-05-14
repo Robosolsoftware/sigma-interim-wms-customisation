@@ -39,22 +39,10 @@ pageextension 50010 WareRcptHeaderExt extends "Warehouse Receipt"
                         Caption = 'Suplier Name.';
                         Editable = false;
                     }
-                    field("Warehouse Class Code"; Rec."Warehouse Class Code")
-                    {
-                        ApplicationArea = all;
-                        Caption = 'Warehouse Class Code.';
-                        Editable = false;
-                    }
                     field(Locationcode; Rec.Locationcode)
                     {
                         ApplicationArea = all;
                         Caption = 'Location Code.';
-                        Editable = false;
-                    }
-                    field("Item Category Code"; Rec."Item Category Code")
-                    {
-                        ApplicationArea = all;
-                        Caption = 'Item Category Code';
                         Editable = false;
                     }
                     field("No. of Items"; Rec."No. of Items")

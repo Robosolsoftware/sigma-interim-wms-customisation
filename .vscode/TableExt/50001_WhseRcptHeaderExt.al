@@ -14,19 +14,11 @@ tableextension 50001 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(50004; "Item Category Code"; Code[20])
-        {
-            DataClassification = ToBeClassified;
-        }
         field(50005; "No. of Items"; Decimal)
         {
             DataClassification = ToBeClassified;
         }
         field(50006; "Total Order Qty"; Decimal)
-        {
-            DataClassification = ToBeClassified;
-        }
-        field(50007; "Warehouse Class Code"; Code[20])
         {
             DataClassification = ToBeClassified;
         }

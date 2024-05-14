@@ -243,6 +243,14 @@ tableextension 70101 "Item_Extension" extends Item
         {
 
         }
+        field(70112; VMPP; Code[20])
+        {
+
+        }
+        field(70113; AMPP; Code[20])
+        {
+
+        }
         modify("Unit Price")
         {
             trigger OnAfterValidate()

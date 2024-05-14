@@ -14,19 +14,11 @@ tableextension 50002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         {
             DataClassification = ToBeClassified;
         }
-        field(50004; "Item Category Code"; Code[20])
-        {
-            DataClassification = ToBeClassified;
-        }
         field(50005; "No. of Items"; Decimal)
         {
             DataClassification = ToBeClassified;
         }
         field(50006; "Total Order Qty"; Decimal)
-        {
-            DataClassification = ToBeClassified;
-        }
-        field(50007; "Warehouse Class Code"; Code[20])
         {
             DataClassification = ToBeClassified;
         }
@@ -86,9 +78,6 @@ tableextension 50002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         {
             DataClassification = ToBeClassified;
             Caption = 'Transportation Receipt Status';
-            // OptionMembers = " ","Transportation Booked","Goods Arrived","Goods Not Shownup","GRN In Progress",Closed;
-            // OptionCaption = ' ,Transportation Booked,Goods Arrived,Goods Not Shownup,GRN In Progress,Closed';
-
         }
         field(50022; "PO Expected Receipt Date"; Date)
         {
@@ -111,6 +100,18 @@ tableextension 50002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         field(50026; "Requested Receipt Date"; Date)
         {
             DataClassification = ToBeClassified;
+        }
+        field(50027; "Sales Return Order"; Code[20])
+        {
+
+        }
+        field(50028; "Customer No."; Code[20])
+        {
+
+        }
+        field(50029; "Customer Name"; Text[100])
+        {
+
         }
 
     }

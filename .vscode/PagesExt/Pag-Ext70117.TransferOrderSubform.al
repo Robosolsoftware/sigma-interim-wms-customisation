@@ -20,22 +20,7 @@ pageextension 70117 TransferOrderSubformExt extends "Transfer Order Subform"
                 Editable = false;
             }
         }
-        modify("Item No.")
-        {
-            trigger OnAfterValidate()
-            var
-                L_Item: Record Item;
-            begin
-                L_Item.Reset();
-                L_Item.SetRange("No.", rec."Item No.");
-                if L_Item.FindFirst() then begin
-                    rec."Pack Size" := L_Item."Pack Size";
-                    rec.Brand := L_Item.Brand;
-                    Rec."Warehouse Class Code" := L_Item."Warehouse Class Code";
-                    rec.Modify(true);
-                end;
-            end;
-        }
+
         modify("Variant Code")
         {
             trigger OnAfterValidate()

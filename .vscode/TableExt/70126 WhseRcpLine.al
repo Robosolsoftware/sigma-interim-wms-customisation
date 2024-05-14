@@ -23,6 +23,11 @@ tableextension 70126 WHSERcpLineRBE extends "Warehouse Receipt Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(70005; "Item Category Code"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Item Category";
+        }
     }
 
     var

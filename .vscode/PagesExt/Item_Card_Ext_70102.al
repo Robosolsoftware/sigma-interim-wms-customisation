@@ -86,6 +86,16 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
                 ApplicationArea = all;
                 Editable = L_CurrPageEditable;
             }
+            field(VMPP; Rec.VMPP)
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
+            field(AMPP; Rec.AMPP)
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
         }
 
         addafter(Description)
@@ -141,7 +151,7 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             field("Child Category"; Rec."Child Category")
             {
                 ApplicationArea = All;
-                Editable = false;
+                Editable = L_CurrPageEditable;
             }
         }
         #endregion Item Tab Group---
