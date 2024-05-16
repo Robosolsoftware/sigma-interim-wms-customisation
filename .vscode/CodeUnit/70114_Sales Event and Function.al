@@ -355,4 +355,305 @@ codeunit 70114 "Sales Event & Function"
     end;
     #endregion Update Customize Fields on Warehouse Shipment line from Sales line and Transfer line and move fields on Posted Warehouse Shipment lin++
 
+    #Region Check Duplicate Customer Price+++
+    procedure CheckDulicatePriceGroup(_CallFromGroup: Integer; _Rec: Record Customer)
+    begin
+        case _CallFromGroup of
+            1:
+                begin
+                    if _Rec."Customer Price Group 2" = _Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 3" = _Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 4" = _Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 5" = _Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 6" = _Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 7" = _Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 8" = _Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 9" = _Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 10" = _Rec."Customer Price Group" then
+                        Error('Customer Price Group already exist');
+                end;
+            2:
+                begin
+                    if _Rec."Customer Price Group" = _Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 3" = _Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 4" = _Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 5" = _Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 6" = _Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 7" = _Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 8" = _Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 9" = _Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 10" = _Rec."Customer Price Group 2" then
+                        Error('Customer Price Group already exist');
+
+                end;
+            3:
+                begin
+                    if _Rec."Customer Price Group" = _Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 2" = _Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 4" = _Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 5" = _Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 6" = _Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 7" = _Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 8" = _Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 9" = _Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 10" = _Rec."Customer Price Group 3" then
+                        Error('Customer Price Group already exist');
+
+                end;
+            4:
+                begin
+                    if _Rec."Customer Price Group" = _Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 2" = _Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 3" = _Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 5" = _Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 6" = _Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 7" = _Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 8" = _Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 9" = _Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 10" = _Rec."Customer Price Group 4" then
+                        Error('Customer Price Group already exist');
+
+                end;
+            5:
+                begin
+                    if _Rec."Customer Price Group" = _Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 2" = _Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 3" = _Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 4" = _Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 6" = _Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 7" = _Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 8" = _Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 9" = _Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 10" = _Rec."Customer Price Group 5" then
+                        Error('Customer Price Group already exist');
+                end;
+            6:
+                begin
+                    if _Rec."Customer Price Group" = _Rec."Customer Price Group 6" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 2" = _Rec."Customer Price Group 6" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 3" = _Rec."Customer Price Group 6" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 4" = _Rec."Customer Price Group 6" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 5" = _Rec."Customer Price Group 6" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 7" = _Rec."Customer Price Group 6" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 8" = _Rec."Customer Price Group 6" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 9" = _Rec."Customer Price Group 6" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 10" = _Rec."Customer Price Group 6" then
+                        Error('Customer Price Group already exist');
+                end;
+            7:
+                begin
+                    if _Rec."Customer Price Group" = _Rec."Customer Price Group 7" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 2" = _Rec."Customer Price Group 7" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 3" = _Rec."Customer Price Group 7" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 4" = _Rec."Customer Price Group 7" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 5" = _Rec."Customer Price Group 7" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 6" = _Rec."Customer Price Group 7" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 8" = _Rec."Customer Price Group 7" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 9" = _Rec."Customer Price Group 7" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 10" = _Rec."Customer Price Group 7" then
+                        Error('Customer Price Group already exist');
+                end;
+            8:
+                begin
+                    if _Rec."Customer Price Group" = _Rec."Customer Price Group 8" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 2" = _Rec."Customer Price Group 8" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 3" = _Rec."Customer Price Group 8" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 4" = _Rec."Customer Price Group 8" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 5" = _Rec."Customer Price Group 8" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 6" = _Rec."Customer Price Group 8" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 7" = _Rec."Customer Price Group 8" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 9" = _Rec."Customer Price Group 8" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 10" = _Rec."Customer Price Group 8" then
+                        Error('Customer Price Group already exist');
+                end;
+            9:
+                begin
+                    if _Rec."Customer Price Group" = _Rec."Customer Price Group 9" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 2" = _Rec."Customer Price Group 9" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 3" = _Rec."Customer Price Group 9" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 4" = _Rec."Customer Price Group 9" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 5" = _Rec."Customer Price Group 9" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 6" = _Rec."Customer Price Group 9" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 7" = _Rec."Customer Price Group 9" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 8" = _Rec."Customer Price Group 9" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 10" = _Rec."Customer Price Group 9" then
+                        Error('Customer Price Group already exist');
+                end;
+            10:
+                begin
+                    if _Rec."Customer Price Group" = _Rec."Customer Price Group 10" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 2" = _Rec."Customer Price Group 10" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 3" = _Rec."Customer Price Group 10" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 4" = _Rec."Customer Price Group 10" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 5" = _Rec."Customer Price Group 10" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 6" = _Rec."Customer Price Group 10" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 7" = _Rec."Customer Price Group 10" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 8" = _Rec."Customer Price Group 10" then
+                        Error('Customer Price Group already exist');
+
+                    if _Rec."Customer Price Group 9" = _Rec."Customer Price Group 10" then
+                        Error('Customer Price Group already exist');
+                end;
+        end;
+    end;
+    #endregion Check Duplicate Customer Price+++
+
 }

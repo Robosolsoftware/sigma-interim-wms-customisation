@@ -204,40 +204,43 @@ codeunit 70115 "Purchase Event & Function"
             WarehouseReceiptHeader."Supplier Name" := L_PurchaseHeader."Buy-from Vendor Name";
             WarehouseReceiptHeader."Requested Receipt Date" := L_PurchaseHeader."Requested Receipt Date";
             WarehouseReceiptHeader.Locationcode := L_PurchaseHeader."Location Code";
+            WarehouseReceiptHeader.Modify();
         end;
     end;
 
     [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", 'OnAfterPostDataItemPurchaseHeader', '', false, false)]
-    local procedure OnAfterPostDataItemPurchaseHeader(var WhseReceiptHeader: Record "Warehouse Receipt Header")
+    local procedure OnAfterPostDataItemPurchaseHeader(var WhseReceiptHeader: Record "Warehouse Receipt Header"; var PurchaseHeader: Record "Purchase Header")
     var
         L_WarehouseRecptLine: Record "Warehouse Receipt Line";
         L_WarehouseClasses: Record "Warehouse Class";
     begin
-        L_WarehouseRecptLine.Reset();
-        L_WarehouseRecptLine.SetRange("No.", WhseReceiptHeader."No.");
-        if L_WarehouseRecptLine.FindSet() then begin
-            WhseReceiptHeader."No. of Items" := L_WarehouseRecptLine.Count;
+        if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
+            L_WarehouseRecptLine.Reset();
+            L_WarehouseRecptLine.SetRange("No.", WhseReceiptHeader."No.");
+            if L_WarehouseRecptLine.FindSet() then begin
+                WhseReceiptHeader."No. of Items" := L_WarehouseRecptLine.Count;
 
-            L_WarehouseRecptLine.CalcSums(Quantity);
-            WhseReceiptHeader."Total Order Qty" := L_WarehouseRecptLine.Quantity;
-        end;
+                L_WarehouseRecptLine.CalcSums(Quantity);
+                WhseReceiptHeader."Total Order Qty" := L_WarehouseRecptLine.Quantity;
+            end;
 
-        L_WarehouseRecptLine.Reset();
-        L_WarehouseRecptLine.SetRange("No.", WhseReceiptHeader."No.");
-        if L_WarehouseRecptLine.FindSet() then begin
-            repeat
-                L_WarehouseClasses.Reset();
-                L_WarehouseClasses.SetRange(Code, L_WarehouseRecptLine."Warehouse Class Code");
-                if L_WarehouseClasses.FindFirst() then begin
-                    if L_WarehouseClasses.CD = true then begin
-                        WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes;
-                        WhseReceiptHeader."CD Qty" += L_WarehouseRecptLine.Quantity;
+            L_WarehouseRecptLine.Reset();
+            L_WarehouseRecptLine.SetRange("No.", WhseReceiptHeader."No.");
+            if L_WarehouseRecptLine.FindSet() then begin
+                repeat
+                    L_WarehouseClasses.Reset();
+                    L_WarehouseClasses.SetRange(Code, L_WarehouseRecptLine."Warehouse Class Code");
+                    if L_WarehouseClasses.FindFirst() then begin
+                        if L_WarehouseClasses.CD = true then begin
+                            WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes;
+                            WhseReceiptHeader."CD Qty" += L_WarehouseRecptLine.Quantity;
+                        end;
                     end;
-                end;
-            until L_WarehouseRecptLine.Next() = 0;
-        end;
+                until L_WarehouseRecptLine.Next() = 0;
+            end;
 
-        WhseReceiptHeader.Modify();
+            WhseReceiptHeader.Modify();
+        end;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purchases Warehouse Mgt.", 'OnAfterCreateRcptLineFromPurchLine', '', false, false)]

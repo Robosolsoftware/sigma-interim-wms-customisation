@@ -187,6 +187,31 @@ pageextension 70139 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
                 Editable = L_CustomerPriceEditable;
             }
+            field("Customer Price Group 6"; Rec."Customer Price Group 6")
+            {
+                ApplicationArea = All;
+                Editable = L_CustomerPriceEditable;
+            }
+            field("Customer Price Group 7"; Rec."Customer Price Group 7")
+            {
+                ApplicationArea = All;
+                Editable = L_CustomerPriceEditable;
+            }
+            field("Customer Price Group 8"; Rec."Customer Price Group 8")
+            {
+                ApplicationArea = All;
+                Editable = L_CustomerPriceEditable;
+            }
+            field("Customer Price Group 9"; Rec."Customer Price Group 9")
+            {
+                ApplicationArea = All;
+                Editable = L_CustomerPriceEditable;
+            }
+            field("Customer Price Group 10"; Rec."Customer Price Group 10")
+            {
+                ApplicationArea = All;
+                Editable = L_CustomerPriceEditable;
+            }
         }
         addlast(Payments)
         {

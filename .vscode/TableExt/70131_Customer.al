@@ -64,17 +64,7 @@ tableextension 70131 "SC Customer" extends Customer
             trigger OnValidate()
             begin
                 if Rec."Customer Price Group 2" <> '' then begin
-                    if Rec."Customer Price Group" = Rec."Customer Price Group 2" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 3" = Rec."Customer Price Group 2" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 4" = Rec."Customer Price Group 2" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 5" = Rec."Customer Price Group 2" then
-                        Error('Customer Price Group already exist');
+                    SalesEventFunction.CheckDulicatePriceGroup(2, Rec);
                 end;
             end;
         }
@@ -86,17 +76,7 @@ tableextension 70131 "SC Customer" extends Customer
             trigger OnValidate()
             begin
                 if Rec."Customer Price Group 3" <> '' then begin
-                    if Rec."Customer Price Group" = Rec."Customer Price Group 3" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 2" = Rec."Customer Price Group 3" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 4" = Rec."Customer Price Group 3" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 5" = Rec."Customer Price Group 3" then
-                        Error('Customer Price Group already exist');
+                    SalesEventFunction.CheckDulicatePriceGroup(3, Rec);
                 end;
             end;
         }
@@ -111,17 +91,7 @@ tableextension 70131 "SC Customer" extends Customer
             trigger OnAfterValidate()
             begin
                 if Rec."Customer Price Group" <> '' then begin
-                    if Rec."Customer Price Group 2" = Rec."Customer Price Group" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 3" = Rec."Customer Price Group" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 4" = Rec."Customer Price Group" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 5" = Rec."Customer Price Group" then
-                        Error('Customer Price Group already exist');
+                    SalesEventFunction.CheckDulicatePriceGroup(1, Rec);
                 end;
             end;
         }
@@ -137,17 +107,7 @@ tableextension 70131 "SC Customer" extends Customer
             trigger OnValidate()
             begin
                 if Rec."Customer Price Group 4" <> '' then begin
-                    if Rec."Customer Price Group" = Rec."Customer Price Group 4" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 2" = Rec."Customer Price Group 4" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 3" = Rec."Customer Price Group 4" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 5" = Rec."Customer Price Group 4" then
-                        Error('Customer Price Group already exist');
+                    SalesEventFunction.CheckDulicatePriceGroup(4, Rec);
                 end;
             end;
         }
@@ -158,18 +118,8 @@ tableextension 70131 "SC Customer" extends Customer
 
             trigger OnValidate()
             begin
-                if Rec."Customer Price Group 4" <> '' then begin
-                    if Rec."Customer Price Group" = Rec."Customer Price Group 5" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 2" = Rec."Customer Price Group 5" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 3" = Rec."Customer Price Group 5" then
-                        Error('Customer Price Group already exist');
-
-                    if Rec."Customer Price Group 4" = Rec."Customer Price Group 5" then
-                        Error('Customer Price Group already exist');
+                if Rec."Customer Price Group 5" <> '' then begin
+                    SalesEventFunction.CheckDulicatePriceGroup(5, Rec);
                 end;
             end;
         }
@@ -226,6 +176,66 @@ tableextension 70131 "SC Customer" extends Customer
         field(70161; "SO Approval Required"; Boolean)
         {
             DataClassification = ToBeClassified;
+        }
+        field(70162; "Customer Price Group 6"; Code[10])
+        {
+            Caption = 'Customer Price Group 6';
+            TableRelation = "Customer Price Group";
+
+            trigger OnValidate()
+            begin
+                if Rec."Customer Price Group 6" <> '' then begin
+                    SalesEventFunction.CheckDulicatePriceGroup(6, Rec);
+                end;
+            end;
+        }
+        field(70163; "Customer Price Group 7"; Code[10])
+        {
+            Caption = 'Customer Price Group 7';
+            TableRelation = "Customer Price Group";
+
+            trigger OnValidate()
+            begin
+                if Rec."Customer Price Group 7" <> '' then begin
+                    SalesEventFunction.CheckDulicatePriceGroup(7, Rec);
+                end;
+            end;
+        }
+        field(70164; "Customer Price Group 8"; Code[10])
+        {
+            Caption = 'Customer Price Group 8';
+            TableRelation = "Customer Price Group";
+
+            trigger OnValidate()
+            begin
+                if Rec."Customer Price Group 8" <> '' then begin
+                    SalesEventFunction.CheckDulicatePriceGroup(8, Rec);
+                end;
+            end;
+        }
+        field(70165; "Customer Price Group 9"; Code[10])
+        {
+            Caption = 'Customer Price Group 9';
+            TableRelation = "Customer Price Group";
+
+            trigger OnValidate()
+            begin
+                if Rec."Customer Price Group 9" <> '' then begin
+                    SalesEventFunction.CheckDulicatePriceGroup(9, Rec);
+                end;
+            end;
+        }
+        field(70166; "Customer Price Group 10"; Code[10])
+        {
+            Caption = 'Customer Price Group 10';
+            TableRelation = "Customer Price Group";
+
+            trigger OnValidate()
+            begin
+                if Rec."Customer Price Group 10" <> '' then begin
+                    SalesEventFunction.CheckDulicatePriceGroup(10, Rec);
+                end;
+            end;
         }
 
         modify("Ship-to Code")
@@ -290,4 +300,5 @@ tableextension 70131 "SC Customer" extends Customer
 
     var
         myInt: Integer;
+        SalesEventFunction: Codeunit "Sales Event & Function";
 }
