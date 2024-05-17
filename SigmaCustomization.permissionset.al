@@ -25,7 +25,6 @@ permissionset 50000 SigmaCustomization
         page "Custom Variant List" = X,
         page "Item Variants Details" = X,
         page ItemAttributecustomFactbox = X,
-        page "Lot-Number-by-Item" = X,
         page "Promotional Item List" = X,
         page "Sales Order warning Mng. Setup" = X,
         page "Temperature Category" = X,

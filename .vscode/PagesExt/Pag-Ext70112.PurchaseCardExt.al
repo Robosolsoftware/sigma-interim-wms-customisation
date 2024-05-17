@@ -68,12 +68,6 @@ pageextension 70112 PurchaseCardExt extends "Purchase Order"
 
         addfirst(factboxes)
         {
-            part("Lot-Number-by-Item"; "Lot-Number-by-Item")
-            {
-                SubPageLink = "Item No." = field("No.");
-                ApplicationArea = all;
-                Provider = PurchLines;
-            }
             part(ItemAttributecustomFactbox; ItemAttributecustomFactbox)
             {
                 SubPageLink = "Item No." = field("No.");

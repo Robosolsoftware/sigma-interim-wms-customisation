@@ -42,12 +42,6 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
                 Provider = SalesLines;
                 SubPageLink = "Item No." = field("No.");
             }
-            part("Lot-Number-by-Item"; "Lot-Number-by-Item")
-            {
-                SubPageLink = "Item No." = field("No.");
-                ApplicationArea = all;
-                Provider = SalesLines;
-            }
             part(ItemAttributecustomFactbox; ItemAttributecustomFactbox)
             {
                 SubPageLink = "Item No." = field("No.");

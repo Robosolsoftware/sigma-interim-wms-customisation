@@ -2,17 +2,6 @@ pageextension 70115 TransferOrderCardExt extends "Transfer Order"
 {
     layout
     {
-        addfirst(factboxes)
-        {
-            part("Lot-Number-by-Item"; "Lot-Number-by-Item")
-            {
-                SubPageLink = "Item No." = field("Item No.");
-                ApplicationArea = all;
-                Provider = TransferLines;
-            }
-
-
-        }
         addlast(General)
         {
             field("Requested By"; rec."Requested By")
