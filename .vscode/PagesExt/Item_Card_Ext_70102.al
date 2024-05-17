@@ -332,6 +332,38 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
             }
         }
         #endregion Prices & Sales Group--
+        addafter("Item Category Code")
+        {
+
+
+            field("Special Product"; Rec."Special Product")
+            {
+                ApplicationArea = all;
+
+                trigger OnValidate()
+                var
+                    myInt: Integer;
+                begin
+                    Clear(IsTariffEditable);
+                    If Rec."Special Product" then
+                        IsTariffEditable := true
+                    else
+                        IsTariffEditable := false;
+
+
+                end;
+            }
+            field(Strength; Rec.Strength)
+            {
+                ApplicationArea = All;
+                Editable = IsTariffEditable;
+
+            }
+
+
+        }
+
+
 
     }
 
@@ -352,6 +384,7 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
         L_CurrPageEditable: Boolean;
         L_EditableStatus: Boolean;
         L_EditableUnitandRRP: Boolean;
+        IsTariffEditable: Boolean;
 
 
     /*trigger OnOpenPage()
@@ -487,5 +520,7 @@ pageextension 70102 "Item Card Extend" extends "Item Card"
         end else
             L_EditableUnitandRRP := false;
     end;
+
+
 
 }

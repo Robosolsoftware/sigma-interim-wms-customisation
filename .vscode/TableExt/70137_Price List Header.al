@@ -19,6 +19,13 @@ tableextension 70137 "SC Price List Header" extends "Price List Header"
                 end;
             end;
         }
+        field(70138; "Drug Special"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            //OptionMembers = " ","Drug Tariff";
+
+
+        }
     }
 
     var

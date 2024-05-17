@@ -114,6 +114,23 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
                 Editable = false;
             }
         }
+        addafter("Min Sell Price")
+        {
+            field("Special Product"; Rec."Special Product")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+
+
+        }
+
+        modify("Unit Volume")
+        {
+            Editable = TariffFieldsEditable;
+        }
+
+
     }
 
 
@@ -121,4 +138,22 @@ pageextension 70146 "SC Sales Order Subform" extends "Sales Order Subform"
     begin
         Rec.SetFilter("Date Filter", '>=%1', WorkDate());
     end;
+
+    trigger OnAfterGetRecord()
+    var
+        myInt: Integer;
+    begin
+        If Rec."Special Product" then
+            TariffFieldsEditable := true
+        else
+            TariffFieldsEditable := false;
+
+
+    end;
+
+    var
+
+        TariffFieldsEditable: Boolean;
+
+
 }

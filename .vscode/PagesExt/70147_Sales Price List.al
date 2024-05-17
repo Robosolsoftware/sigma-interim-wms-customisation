@@ -9,6 +9,22 @@ pageextension 70147 "SC Sales Price List" extends "Sales Price List"
             {
                 ApplicationArea = All;
             }
+            field("Drug Special"; Rec."Drug Special")
+            {
+                ApplicationArea = All;
+
+                trigger OnValidate()
+                var
+                    myInt: Integer;
+                begin
+                    if Rec."Drug Special" = true then
+                        CurrPage.Lines.Page.UpdateColumnVisibility();
+
+                    if Rec."Drug Special" = false then
+                        CurrPage.Lines.page.UpdateColumnVisibilityfalse();
+
+                end;
+            }
         }
     }
 
@@ -16,6 +32,17 @@ pageextension 70147 "SC Sales Price List" extends "Sales Price List"
     {
         // Add changes to page actions here
     }
+    trigger OnOpenPage()
+    var
+        myInt: Integer;
+    begin
+        if Rec."Drug Special" = true then
+            CurrPage.Lines.Page.UpdateColumnVisibility();
+
+        if Rec."Drug Special" = false then
+            CurrPage.Lines.page.UpdateColumnVisibilityfalse();
+
+    end;
 
     var
         myInt: Integer;

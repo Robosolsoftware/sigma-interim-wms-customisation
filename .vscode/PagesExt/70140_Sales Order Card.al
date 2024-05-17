@@ -180,6 +180,27 @@ pageextension 70140 "SC Sales Order Card" extends "Sales Order"
         }
     }
 
+    actions
+    {
+        addafter(Release)
+        {
+            action(CalculateTariff)
+            {
+                ApplicationArea = All;
+                Caption = 'Calculate Tariff';
+                Image = Calculate;
+                Promoted = True;
+                PromotedCategory = Process;
+                RunObject = codeunit "Tariff Price Management";
+                trigger OnAction()
+                begin
+
+                end;
+            }
+        }
+    }
+
+
     trigger OnOpenPage()
     var
         GenLedgerSetup: Record "General Ledger Setup";

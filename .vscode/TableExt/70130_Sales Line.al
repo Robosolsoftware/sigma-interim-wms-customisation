@@ -137,6 +137,22 @@ tableextension 70130 "SC Sales Line" extends "Sales Line"
         {
             FieldClass = FlowFilter;
         }
+
+        field(70159; Strength; Code[35])
+        {
+            DataClassification = ToBeClassified;
+            Description = 'Product Strength';
+            Editable = false;
+        }
+        field(70160; "Special Product"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70161; Rebate; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+
         modify("Unit Price")
         {
             trigger OnAfterValidate()

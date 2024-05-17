@@ -30,6 +30,9 @@ pageextension 70177 "SC Sales Lines" extends "Sales Lines"
                 Caption = 'Modified By';
             }
         }
+
+
+
     }
 
     actions

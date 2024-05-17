@@ -251,6 +251,15 @@ tableextension 70101 "Item_Extension" extends Item
         {
 
         }
+        field(70114; "Special Product"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70115; Strength; Code[35])
+        {
+            DataClassification = ToBeClassified;
+
+        }
         modify("Unit Price")
         {
             trigger OnAfterValidate()

@@ -58,8 +58,27 @@ tableextension 70146 "SC Sales Shipment Line" extends "Sales Shipment Line"
         {
             DecimalPlaces = 0 : 5;
         }
+        field(70158; "Strength UoM"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            Description = 'Relation with Pack Code in Table Strength Master';
+            //TableRelation = "Strength Master".Code;
+        }
+        field(70159; Strength; Code[35])
+        {
+            DataClassification = ToBeClassified;
+            Description = 'Product Strength';
+            Editable = true;
+        }
+        field(70160; "Special Product"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(70161; Rebate; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
-
     keys
     {
         // Add changes to keys here
