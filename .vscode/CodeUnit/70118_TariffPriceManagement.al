@@ -62,6 +62,17 @@ codeunit 70118 "Tariff Price Management"
                     CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 4";
                 if Customer2."Customer Price Group 5" <> '' then
                     CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 5";
+                if Customer2."Customer Price Group 6" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 6";
+                if Customer2."Customer Price Group 7" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 7";
+                if Customer2."Customer Price Group 8" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 8";
+                if Customer2."Customer Price Group 9" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 9";
+                if Customer2."Customer Price Group 10" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 10";
+
 
             end;
 
@@ -184,6 +195,16 @@ codeunit 70118 "Tariff Price Management"
                     CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 4";
                 if Customer2."Customer Price Group 5" <> '' then
                     CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 5";
+                if Customer2."Customer Price Group 6" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 6";
+                if Customer2."Customer Price Group 7" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 7";
+                if Customer2."Customer Price Group 8" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 8";
+                if Customer2."Customer Price Group 9" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 9";
+                if Customer2."Customer Price Group 10" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 10";
 
             end;
 
@@ -257,6 +278,16 @@ codeunit 70118 "Tariff Price Management"
                     CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 4";
                 if Customer2."Customer Price Group 5" <> '' then
                     CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 5";
+                if Customer2."Customer Price Group 6" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 6";
+                if Customer2."Customer Price Group 7" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 7";
+                if Customer2."Customer Price Group 8" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 8";
+                if Customer2."Customer Price Group 9" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 9";
+                if Customer2."Customer Price Group 10" <> '' then
+                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 10";
 
             end;
 
