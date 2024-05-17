@@ -26,6 +26,17 @@ codeunit 70113 "Customer Price Group Changes"
         if PriceListLine."Source Type" = PriceListLine."Source Type"::Customer then
             exit;
 
+
+        if SalesLine."Special Product" = true then begin
+            IF L_Item.Get(SalesLine."No.") then begin
+                if L_SalesHeader."Currency Factor" > 0 then
+                    SalesLine.Validate("Unit Price", L_Item."Unit Price" / L_SalesHeader."Currency Factor")
+                else
+                    SalesLine.Validate("Unit Price", L_Item."Unit Price")
+            end;
+            exit;
+        end;
+
         Clear(L_PriceFound);
         If L_Customer.Get(L_SalesHeader."Bill-to Customer No.") then begin
             //1st Price++
