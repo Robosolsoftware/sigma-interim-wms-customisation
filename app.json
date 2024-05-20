@@ -2,7 +2,7 @@
   "id": "89b2d3ff-cff9-4506-9a14-597a5b6d370f",
   "name": "Interim WMS BC Customisation",
   "publisher": "Robosol",
-  "version": "22.0.0.0",
+  "version": "24.0.0.1",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -23,8 +23,8 @@
   "application": "23.0.0.0",
   "idRanges": [
     {
-      "from": 50000,
-      "to": 70549
+      "from": 85000,
+      "to": 87000
     }
   ],
   "resourceExposurePolicy": {

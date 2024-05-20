@@ -1,4 +1,4 @@
-permissionset 50000 SigmaCustomization
+permissionset 85000 SigmaCustomization
 {
     Assignable = true;
     Permissions = tabledata "Custom Variant" = RIMD,
@@ -7,7 +7,6 @@ permissionset 50000 SigmaCustomization
         table "Custom Variant" = X,
         table "Sales Order warning Mng. Setup" = X,
         table "Temperature Range" = X,
-        report "Lot No. by Bin" = X,
         codeunit "Export & Import Blanket SO" = X,
         codeunit "Export & Import Purchase Order" = X,
         codeunit "Export & Import Sales Order" = X,
@@ -29,6 +28,14 @@ permissionset 50000 SigmaCustomization
         page "Sales Order warning Mng. Setup" = X,
         page "Temperature Category" = X,
         page "Warehouse Pick Lines List" = X,
-        query "LotNumber WarehouseEntry New" = X,
-        query "Without LotNumber Whs Entry" = X;
+        tabledata "Shipping Agent Restrict Item" = RIMD,
+        table "Shipping Agent Restrict Item" = X,
+        codeunit "Customer Price Group Changes" = X,
+        codeunit "Miscellaneous Charges" = X,
+        codeunit "Purchase Event & Function" = X,
+        codeunit "Requisation WorkSheet Cust." = X,
+        codeunit SalesReturnOrderChanges = X,
+        codeunit "Tariff Price Management" = X,
+        codeunit "Udate Variant on SO" = X,
+        page "Shipping Agent Restrict Item" = X;
 }
