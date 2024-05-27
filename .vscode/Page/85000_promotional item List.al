@@ -6,6 +6,7 @@ page 85000 "Promotional Item List"
     Editable = false;
     Caption = 'Daily Promotions';
 
+
     layout
     {
         area(Content)

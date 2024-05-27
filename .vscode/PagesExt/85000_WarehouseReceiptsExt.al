@@ -1,5 +1,7 @@
 pageextension 85000 WarehouseReceiptsExt extends "Warehouse Receipts"
 {
+
+
     layout
     {
         addafter("No.")
