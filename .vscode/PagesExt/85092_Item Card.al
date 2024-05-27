@@ -79,7 +79,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             field("QAU Approved"; Rec."QAU Approved")
             {
                 ApplicationArea = all;
-                Editable = L_EditableQUAApproved;
+                Editable = L_EditableQUAApproved; //AND L_CurrPageEditable;
             }
             field("Top Category"; Rec."Top Category")
             {
@@ -119,7 +119,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;
-                Editable = L_EditableStatus;
+                Editable = L_EditableStatus;// AND L_CurrPageEditable;
 
                 trigger OnValidate()
                 var
@@ -186,6 +186,19 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         {
             Editable = L_CurrPageEditable;
         }
+        addlast(Replenishment)
+        {
+            field("Ops Purchase Blocked"; Rec."Ops Purchase Blocked")
+            {
+                ApplicationArea = All;
+                Editable = G_OpSOandPOBlocked;// AND L_CurrPageEditable;
+            }
+        }
+        modify("Purchasing Blocked")
+        {
+            ApplicationArea = All;
+            Editable = G_OpSOandPOBlocked;// AND   L_CurrPageEditable;
+        }
         modify(Planning)
         {
             Editable = L_CurrPageEditable;
@@ -199,7 +212,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         #Region Warehouse group++
         modify("Warehouse Class Code")
         {
-            Editable = L_EditableQUAApproved;
+            Editable = L_EditableQUAApproved;// AND L_CurrPageEditable;
         }
         modify("Special Equipment Code")
         {
@@ -244,9 +257,17 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         #endregion Warehouse group--
 
         #Region Prices & Sales Group++
+        addlast("Prices & Sales")
+        {
+            field("Ops Sales Blocked"; Rec."Ops Sales Blocked")
+            {
+                ApplicationArea = All;
+                Editable = G_OpSOandPOBlocked;// AND  L_CurrPageEditable;
+            }
+        }
         modify("Unit Price")
         {
-            Editable = L_EditableUnitandRRP;
+            Editable = L_EditableUnitandRRP;// AND L_CurrPageEditable;
         }
         modify(CalcUnitPriceExclVAT)
         {
@@ -294,7 +315,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         }
         modify("Sales Blocked")
         {
-            Editable = L_CurrPageEditable;
+            Editable = G_SalesBlocked;// AND L_CurrPageEditable
 
         }
         modify("Application Wksh. User ID")
@@ -319,7 +340,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             field(RRP; Rec.RRP)
             {
                 ApplicationArea = All;
-                Editable = L_EditableUnitandRRP;
+                Editable = L_EditableUnitandRRP;//AND L_CurrPageEditable;
             }
         }
 
@@ -339,6 +360,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             field("Special Product"; Rec."Special Product")
             {
                 ApplicationArea = all;
+                Editable = L_CurrPageEditable;
 
                 trigger OnValidate()
                 var
@@ -356,11 +378,8 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             field(Strength; Rec.Strength)
             {
                 ApplicationArea = All;
-                Editable = IsTariffEditable;
-
+                Editable = IsTariffEditable;// AND L_CurrPageEditable;
             }
-
-
         }
 
 
@@ -385,6 +404,9 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         L_EditableStatus: Boolean;
         L_EditableUnitandRRP: Boolean;
         IsTariffEditable: Boolean;
+        G_SalesBlocked: Boolean;
+        G_PurchaseBlocked: Boolean;
+        G_OpSOandPOBlocked: Boolean;
 
 
     /*trigger OnOpenPage()
@@ -409,6 +431,9 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
         Clear(L_EditableUnitandRRP);
+        Clear(G_SalesBlocked);
+        Clear(G_PurchaseBlocked);
+        Clear(G_OpSOandPOBlocked);
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
             //L_EditableQUAApproved := true;
@@ -458,6 +483,36 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 L_EditableUnitandRRP := false;
         end else
             L_EditableUnitandRRP := false;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Sales Blocked" = true then
+                G_SalesBlocked := true
+            else
+                G_SalesBlocked := false;
+        end else
+            G_SalesBlocked := false;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Purchase Blocked" = true then
+                G_PurchaseBlocked := true
+            else
+                G_PurchaseBlocked := false;
+        end else
+            G_PurchaseBlocked := false;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Ops Sales and Purchase Blocked" = true then
+                G_OpSOandPOBlocked := true
+            else
+                G_OpSOandPOBlocked := false;
+        end else
+            G_OpSOandPOBlocked := false;
     end;
 
     trigger OnOpenPage()
@@ -519,6 +574,36 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 L_EditableUnitandRRP := false;
         end else
             L_EditableUnitandRRP := false;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Sales Blocked" = true then
+                G_SalesBlocked := true
+            else
+                G_SalesBlocked := false;
+        end else
+            G_SalesBlocked := false;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Purchase Blocked" = true then
+                G_PurchaseBlocked := true
+            else
+                G_PurchaseBlocked := false;
+        end else
+            G_PurchaseBlocked := false;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Ops Sales and Purchase Blocked" = true then
+                G_OpSOandPOBlocked := true
+            else
+                G_OpSOandPOBlocked := false;
+        end else
+            G_OpSOandPOBlocked := false;
     end;
 
 

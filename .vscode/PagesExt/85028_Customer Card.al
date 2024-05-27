@@ -153,6 +153,10 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
 
         addafter("Shipping Agent Service Code")
         {
+            field("Weekend Shipping Agent Code"; Rec."Weekend Shipping Agent Code")
+            {
+                ApplicationArea = All;
+            }
             field("Weekend Ship. Agnt. Serv. Code"; Rec."Weekend Ship. Agnt. Serv. Code")
             {
                 ApplicationArea = All;
@@ -251,11 +255,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 Editable = L_CurrPageEditable;
             }
             field("SO Approval Required"; Rec."SO Approval Required")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
-            field(Funded; Rec.Funded)
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;

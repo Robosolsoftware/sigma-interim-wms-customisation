@@ -171,47 +171,49 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                 L_SalesHeader: Record "Sales Header";
             begin
                 //Check Min Sell Price Validation++
-                L_SalesPriceHeader.Reset();
-                L_SalesPriceHeader.SetRange("Special Price Daily", true);
-                if L_SalesPriceHeader.FindFirst() then begin
-                    //If not Promotion Item then checking Min Sell Price Validation++
-                    L_PriceListLine.Reset();
-                    L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
-                    L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
-                    L_PriceListLine.SetRange("Product No.", Rec."No.");
-                    if not L_PriceListLine.FindFirst() then begin
-                        Clear(DisUnitPrice);
-                        UserSetup.Reset();
-                        UserSetup.SetRange("User ID", UserId);
-                        UserSetup.SetRange("Allow to change unit price", true);
-                        if not UserSetup.FindFirst() then begin
-                            if CurrFieldNo = 22 then begin
-                                if Rec."Min Sell Price" > 0 then begin
-                                    if Rec."Unit Price" < Rec."Min Sell Price" then begin
-                                        Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."No.");
-                                    end;
-                                end else begin
-                                    L_SalesHeader.Reset();
-                                    L_SalesHeader.SetRange("Document Type", Rec."Document Type");
-                                    L_SalesHeader.SetRange("No.", Rec."Document No.");
-                                    if L_SalesHeader.FindFirst() then begin
-                                        DisUnitPrice := (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(L_SalesHeader, Rec) / 100) * 10;
-                                        if (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(L_SalesHeader, Rec) - DisUnitPrice) > Rec."Unit Price" then
-                                            Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', L_CustomerPriceGroupChanges.GetOriginalUnitPrice(L_SalesHeader, Rec) - DisUnitPrice, Rec."No.");
+                if Rec."Special Product" = false then begin
+                    L_SalesPriceHeader.Reset();
+                    L_SalesPriceHeader.SetRange("Special Price Daily", true);
+                    if L_SalesPriceHeader.FindFirst() then begin
+                        //If not Promotion Item then checking Min Sell Price Validation++
+                        L_PriceListLine.Reset();
+                        L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
+                        L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
+                        L_PriceListLine.SetRange("Product No.", Rec."No.");
+                        if not L_PriceListLine.FindFirst() then begin
+                            Clear(DisUnitPrice);
+                            UserSetup.Reset();
+                            UserSetup.SetRange("User ID", UserId);
+                            UserSetup.SetRange("Allow to change unit price", true);
+                            if not UserSetup.FindFirst() then begin
+                                if CurrFieldNo = 22 then begin
+                                    if Rec."Min Sell Price" > 0 then begin
+                                        if Rec."Unit Price" < Rec."Min Sell Price" then begin
+                                            Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."No.");
+                                        end;
+                                    end else begin
+                                        L_SalesHeader.Reset();
+                                        L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+                                        L_SalesHeader.SetRange("No.", Rec."Document No.");
+                                        if L_SalesHeader.FindFirst() then begin
+                                            DisUnitPrice := (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(L_SalesHeader, Rec) / 100) * 10;
+                                            if (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(L_SalesHeader, Rec) - DisUnitPrice) > Rec."Unit Price" then
+                                                Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', L_CustomerPriceGroupChanges.GetOriginalUnitPrice(L_SalesHeader, Rec) - DisUnitPrice, Rec."No.");
+                                        end;
                                     end;
                                 end;
                             end;
                         end;
-                    end;
 
-                    //If Promostion Item then checking Unit Price should not be less then Promostion Price++
-                    L_PriceListLine.Reset();
-                    L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
-                    L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
-                    L_PriceListLine.SetRange("Product No.", Rec."No.");
-                    if L_PriceListLine.FindFirst() then begin
-                        if L_PriceListLine."Unit Price" > Rec."Unit Price" then
-                            Error('Unit Price %1 should not be less then special promotion price %2. For special item %3', Rec."Unit Price", L_PriceListLine."Unit Price", Rec."No.");
+                        //If Promostion Item then checking Unit Price should not be less then Promostion Price++
+                        L_PriceListLine.Reset();
+                        L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
+                        L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
+                        L_PriceListLine.SetRange("Product No.", Rec."No.");
+                        if L_PriceListLine.FindFirst() then begin
+                            if L_PriceListLine."Unit Price" > Rec."Unit Price" then
+                                Error('Unit Price %1 should not be less then special promotion price %2. For special item %3', Rec."Unit Price", L_PriceListLine."Unit Price", Rec."No.");
+                        end;
                     end;
                 end;
             end;
@@ -262,6 +264,8 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                         //Check Master Restriction++
                         L_Item.TestField("QAU Approved");
                         L_Item.TestField(Status, L_Item.Status::Released);
+                        L_Item.TestField("Sales Blocked", false);
+                        L_Item.TestField("Ops Sales Blocked", false);
 
                         Rec."Min Sell Price" := L_Item."Min Sell Price";
                         Rec."Parent Category" := L_Item."Parent Category";

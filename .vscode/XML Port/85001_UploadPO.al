@@ -608,7 +608,7 @@ xmlport 85001 "Upload Purchase Order"
                 P_Location2.Reset();
                 P_Location2.SetFilter(Deliveryadd2, Delivery_addressn);
                 if P_Location2.FindFirst() then begin
-                    PurchaseLine.Validate("Location Code", P_Location.Code);
+                    PurchaseLine.Validate("Location Code", P_Location2.Code);
                 end;
             end;
 

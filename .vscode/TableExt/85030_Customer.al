@@ -140,7 +140,7 @@ tableextension 85030 "SC Customer" extends Customer
         field(85158; "Weekend Ship. Agnt. Serv. Code"; Code[10])
         {
             Caption = 'Weekend Shipping Agent Service Code';
-            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Weekend Shipping Agent Code"));
 
             trigger OnValidate()
             var
@@ -235,6 +235,18 @@ tableextension 85030 "SC Customer" extends Customer
                 if Rec."Customer Price Group 10" <> '' then begin
                     SalesEventFunction.CheckDulicatePriceGroup(10, Rec);
                 end;
+            end;
+        }
+        field(85167; "Weekend Shipping Agent Code"; Code[10])
+        {
+            AccessByPermission = TableData "Shipping Agent Services" = R;
+            Caption = 'Weekend Shipping Agent Code';
+            TableRelation = "Shipping Agent";
+
+            trigger OnValidate()
+            begin
+                if "Weekend Shipping Agent Code" <> xRec."Weekend Shipping Agent Code" then
+                    Validate("Weekend Ship. Agnt. Serv. Code", '');
             end;
         }
 

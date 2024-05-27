@@ -27,4 +27,29 @@ pageextension 85027 "SC Item Units of Measure" extends "Item Units of Measure"
 
     var
         myInt: Integer;
+
+    trigger OnOpenPage()
+    var
+        L_Item: Record Item;
+    begin
+        L_Item.Reset();
+        L_Item.SetRange("No.", Rec."Item No.");
+        if L_Item.FindFirst() then begin
+            if L_Item.Status = L_Item.Status::Released then
+                CurrPage.Editable(false);
+        end;
+    end;
+
+    trigger OnAfterGetRecord()
+    var
+        L_Item: Record Item;
+    begin
+        L_Item.Reset();
+        L_Item.SetRange("No.", Rec."Item No.");
+        if L_Item.FindFirst() then begin
+            if L_Item.Status = L_Item.Status::Released then
+                CurrPage.Editable(false);
+        end;
+
+    end;
 }

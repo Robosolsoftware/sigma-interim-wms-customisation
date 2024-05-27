@@ -80,11 +80,6 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = All;
                 Editable = false;
             }
-            field("IRP Order"; Rec."IRP Order")
-            {
-                ApplicationArea = All;
-                Editable = false;
-            }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;

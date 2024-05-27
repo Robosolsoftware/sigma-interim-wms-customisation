@@ -26,6 +26,18 @@ tableextension 85028 "SC User Setup" extends "User Setup"
         {
 
         }
+        field(85009; "Sales Blocked"; Boolean)
+        {
+
+        }
+        field(85010; "Purchase Blocked"; Boolean)
+        {
+
+        }
+        field(85011; "Ops Sales and Purchase Blocked"; Boolean)
+        {
+
+        }
     }
 
     keys

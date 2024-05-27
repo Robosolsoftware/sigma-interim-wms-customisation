@@ -121,6 +121,16 @@ tableextension 85026 "Item_Extension" extends Item
             DataClassification = ToBeClassified;
 
         }
+        field(85117; "Ops Sales Blocked"; Boolean)
+        {
+            Caption = 'Ops Sales Blocked';
+            DataClassification = CustomerContent;
+        }
+        field(85118; "Ops Purchase Blocked"; Boolean)
+        {
+            Caption = 'Ops Purchase Blocked';
+            DataClassification = CustomerContent;
+        }
         modify("Unit Price")
         {
             trigger OnAfterValidate()

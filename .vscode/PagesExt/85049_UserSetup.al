@@ -31,6 +31,18 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+            field("Sales Blocked"; Rec."Sales Blocked")
+            {
+                ApplicationArea = All;
+            }
+            field("Purchase Blocked"; Rec."Purchase Blocked")
+            {
+                ApplicationArea = All;
+            }
+            field("Ops Sales and Purchase Blocked"; Rec."Ops Sales and Purchase Blocked")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

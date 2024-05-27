@@ -3,6 +3,41 @@ pageextension 85040 "SC Item Variants" extends "Item Variants"
     layout
     {
         // Add changes to page layout here
+        modify("Item No.")
+        {
+            Editable = L_CurrFieldEditable;
+        }
+        modify(Code)
+        {
+            Editable = L_CurrFieldEditable;
+        }
+        modify(Description)
+        {
+            Editable = L_CurrFieldEditable;
+        }
+        modify("Description 2")
+        {
+            Editable = L_CurrFieldEditable;
+        }
+        modify(Blocked)
+        {
+            Editable = L_CurrFieldEditable;
+
+        }
+        modify("Sales Blocked")
+        {
+            Editable = L_CurrFieldEditable;
+        }
+        modify("Service Blocked")
+        {
+            Editable = L_CurrFieldEditable;
+        }
+        modify("Purchasing Blocked")
+        {
+            Editable = L_CurrFieldEditable;
+        }
+
+
         addlast(Control1)
         {
             field(Inventory; Rec.Inventory)
@@ -58,6 +93,7 @@ pageextension 85040 "SC Item Variants" extends "Item Variants"
     var
         myInt: Integer;
         L_CurrpageEdit: Boolean;
+        L_CurrFieldEditable: Boolean;
 
 
     trigger OnOpenPage()
@@ -69,8 +105,14 @@ pageextension 85040 "SC Item Variants" extends "Item Variants"
         if L_Item.FindFirst() then begin
             if L_Item."Variant Mandatory if Exists" = L_Item."Variant Mandatory if Exists"::No then
                 CurrPage.Editable(false);
-        end;
 
+
+            Clear(L_CurrFieldEditable);
+            if L_Item.Status = L_Item.Status::Released then
+                L_CurrFieldEditable := false
+            else
+                L_CurrFieldEditable := true;
+        end;
     end;
 
     trigger OnAfterGetRecord()
@@ -82,6 +124,12 @@ pageextension 85040 "SC Item Variants" extends "Item Variants"
         if L_Item.FindFirst() then begin
             if L_Item."Variant Mandatory if Exists" = L_Item."Variant Mandatory if Exists"::No then
                 CurrPage.Editable(false);
+
+            Clear(L_CurrFieldEditable);
+            if L_Item.Status = L_Item.Status::Released then
+                L_CurrFieldEditable := false
+            else
+                L_CurrFieldEditable := true;
         end;
 
     end;

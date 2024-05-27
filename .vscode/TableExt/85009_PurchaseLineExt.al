@@ -137,6 +137,8 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
                     if Recitem.FindFirst() then begin
                         Recitem.TestField("QAU Approved");
                         Recitem.TestField(Status, Recitem.Status::Released);
+                        Recitem.TestField("Purchasing Blocked", false);
+                        Recitem.TestField("Ops Sales Blocked", false);
 
                         //Ignore this validation at the time Uploading PO from Template++
                         if CurrFieldNo = 6 then begin
