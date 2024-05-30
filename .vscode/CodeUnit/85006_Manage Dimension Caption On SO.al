@@ -37,40 +37,38 @@ codeunit 85006 "Manage Dimension Caption"
         end;
     end;
 
-    [EventSubscriber(ObjectType::Page, Page::"Sales Order", 'OnAfterGetRecordEvent', '', false, false)]
-    local procedure OnAfterGetRecordEvent(var Rec: Record "Sales Header")
+    [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnAfterValidateEvent', 'Sell-to Customer No.', false, false)]
+    local procedure SelltoCustomer_OnAfterValidateEvent(var Rec: Record "Sales Header")
     var
         L_DimensionSetEntry: Record "Dimension Set Entry";
     begin
         L_DimensionSetEntry.Reset();
         L_DimensionSetEntry.SetRange("Dimension Set ID", Rec."Dimension Set ID");
-        L_DimensionSetEntry.SetRange("Dimension Code", G_Caption);
+        L_DimensionSetEntry.SetRange("Dimension Code", GetCaptionItemAttribute('83'));
         if L_DimensionSetEntry.FindFirst() then begin
             L_DimensionSetEntry.CalcFields("Dimension Value Name");
             if Rec."Shortcut Dimension 3 Code" <> L_DimensionSetEntry."Dimension Value Name" then begin
                 Rec."Shortcut Dimension 3 Code" := L_DimensionSetEntry."Dimension Value Name";
-                //Rec.Modify();
             end;
         end;
     end;
 
-
-    [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnCreateDimOnBeforeUpdateLines', '', false, false)]
-    local procedure OnCreateDimOnBeforeUpdateLines(var SalesHeader: Record "Sales Header")
-    var
-        L_DimensionSetEntry: Record "Dimension Set Entry";
-    begin
-        L_DimensionSetEntry.Reset();
-        L_DimensionSetEntry.SetRange("Dimension Set ID", SalesHeader."Dimension Set ID");
-        L_DimensionSetEntry.SetRange("Dimension Code", G_Caption);
-        if L_DimensionSetEntry.FindFirst() then begin
-            L_DimensionSetEntry.CalcFields("Dimension Value Name");
-            if SalesHeader."Shortcut Dimension 3 Code" <> L_DimensionSetEntry."Dimension Value Name" then begin
-                SalesHeader."Shortcut Dimension 3 Code" := L_DimensionSetEntry."Dimension Value Name";
-                //SalesHeader.Modify();
-            end;
-        end;
-    end;
+    // [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnCreateDimOnBeforeUpdateLines', '', false, false)]
+    // local procedure OnCreateDimOnBeforeUpdateLines(var SalesHeader: Record "Sales Header")
+    // var
+    //     L_DimensionSetEntry: Record "Dimension Set Entry";
+    // begin
+    //     L_DimensionSetEntry.Reset();
+    //     L_DimensionSetEntry.SetRange("Dimension Set ID", SalesHeader."Dimension Set ID");
+    //     L_DimensionSetEntry.SetRange("Dimension Code", G_Caption);
+    //     if L_DimensionSetEntry.FindFirst() then begin
+    //         L_DimensionSetEntry.CalcFields("Dimension Value Name");
+    //         if SalesHeader."Shortcut Dimension 3 Code" <> L_DimensionSetEntry."Dimension Value Name" then begin
+    //             SalesHeader."Shortcut Dimension 3 Code" := L_DimensionSetEntry."Dimension Value Name";
+    //             //SalesHeader.Modify();
+    //         end;
+    //     end;
+    // end;
 
 
     //Non-Editable Dimesion on SO

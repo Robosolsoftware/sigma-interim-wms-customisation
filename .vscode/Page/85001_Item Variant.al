@@ -68,17 +68,4 @@ page 85001 "Item Variants Details"
             }
         }
     }
-
-
-    local procedure TotalAvailableQty(_Rec: Record "Item Variant"): Decimal
-    begin
-        _Rec.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
-        if _Rec."Saleable Inventory" > 0 then
-            if (_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)") > 0 then
-                exit(_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)")
-            else
-                exit(0)
-        else
-            exit(0);
-    end;
 }

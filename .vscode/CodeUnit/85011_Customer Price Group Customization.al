@@ -9,6 +9,14 @@ codeunit 85011 "Customer Price Group Changes"
     var
         myInt: Integer;
 
+    [EventSubscriber(ObjectType::Table, Database::"Price Source", 'OnBeforeVerifyAmountTypeForSourceType', '', false, false)]
+    local procedure OnBeforeVerifyAmountTypeForSourceType(var IsHandled: Boolean)
+    begin
+        //Ignore View Columns validation+++
+        IsHandled := true;
+    end;
+
+
     //Multiple Customer Price Group++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Line - Price", 'OnAfterSetPrice', '', false, false)]
     local procedure OnAfterSetPrice(AmountType: Enum "Price Amount Type"; PriceListLine: Record "Price List Line"; var SalesLine: Record "Sales Line")

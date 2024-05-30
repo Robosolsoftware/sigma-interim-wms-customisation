@@ -140,7 +140,7 @@ codeunit 85008 "Export & Import Purchase Order"
                         PurchLn.Validate(Quantity, G_Quantity);
                     end else
                         PurchLn.Validate(Quantity, 0);
-                    if GetValueAtIndex(RowNo, 6) <> '' then begin
+                    if GetValueAtIndex(RowNo, 5) <> '' then begin
                         Clear(G_UnitCost);
                         Evaluate(G_UnitCost, GetValueAtIndex(RowNo, 5));
                         PurchLn.Validate("Direct Unit Cost", G_UnitCost);

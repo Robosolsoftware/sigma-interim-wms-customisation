@@ -104,11 +104,11 @@ tableextension 85026 "Item_Extension" extends Item
         {
 
         }
-        field(85112; VMPP; Code[20])
+        field(85112; VMPP; Code[30])
         {
 
         }
-        field(85113; AMPP; Code[20])
+        field(85113; AMPP; Code[30])
         {
 
         }
@@ -153,6 +153,8 @@ tableextension 85026 "Item_Extension" extends Item
     }
     var
         myInt: Integer;
+        tes: Record "Price List Header";
+        teee: Page "Sales Price List";
 
     // local procedure CalculatePORDisc()
     // begin

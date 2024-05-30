@@ -36,18 +36,18 @@ pageextension 85032 "SC Sales Order List" extends "Sales Order List"
     {
         addafter("&Print")
         {
-            action("Delete Shipment Line")
-            {
-                ApplicationArea = All;
-                trigger OnAction()
-                var
-                    L_WarehouseshipmentLine: Record "Warehouse Shipment Line";
-                begin
-                    L_WarehouseshipmentLine.Reset();
-                    L_WarehouseshipmentLine.SetFilter("No.", '%1', '');
-                    L_WarehouseshipmentLine.DeleteAll();
-                end;
-            }
+            // action("Delete Shipment Line")
+            // {
+            //     ApplicationArea = All;
+            //     trigger OnAction()
+            //     var
+            //         L_WarehouseshipmentLine: Record "Warehouse Shipment Line";
+            //     begin
+            //         L_WarehouseshipmentLine.Reset();
+            //         L_WarehouseshipmentLine.SetFilter("No.", '%1', '');
+            //         L_WarehouseshipmentLine.DeleteAll();
+            //     end;
+            // }
         }
         addafter("P&osting")
         {

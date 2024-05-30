@@ -94,6 +94,10 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
         {
 
         }
+        field(85158; "No of Boxes"; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     var

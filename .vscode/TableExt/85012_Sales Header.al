@@ -274,6 +274,15 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         {
 
         }
+        field(85157; "Inv. Pick Exist"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Warehouse Activity Header" where("Source No." = field("No."), "Source Document" = const("Sales Order")));
+        }
+        field(85158; "No of Boxes"; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
 
