@@ -41,6 +41,8 @@ codeunit 85013 "Purchase Event & Function"
     local procedure OnCodeOnCheckPurchLineLocationCode(var PurchaseLine: Record "Purchase Line")
     var
         InvtSetup: Record "Inventory Setup";
+        tes: Codeunit 1620;
+    //tes: Codeunit 80;
     begin
         // Check Line location if line location is mandatory++
         // This is code for skip default error meesage for Variant code++
@@ -60,26 +62,26 @@ codeunit 85013 "Purchase Event & Function"
         end;
     end;
 
-    //Step2++
-    [EventSubscriber(ObjectType::Table, Database::Item, 'OnBeforeIsVariantMandatory', '', false, false)]
-    local procedure OnBeforeIsVariantMandatory(var IsHandled: Boolean; var Result: Boolean)
-    var
-        L_Location: Record Location;
-    begin
-        //This is code for skip default error meesage for Variant code + +
-        //if G_FromPOScreen = true then begin
-        if G_LocationCode <> '' then begin
-            L_Location.Reset();
-            if L_Location.Get(G_LocationCode) then begin
-                if L_Location."Require Receive" = true then begin
-                    IsHandled := true;
-                    Result := false;
-                end;
-            end;
-        end;
-        Clear(G_LocationCode);
-        //end;
-    end;
+    // //Step2++
+    // [EventSubscriber(ObjectType::Table, Database::Item, 'OnBeforeIsVariantMandatory', '', false, false)]
+    // local procedure OnBeforeIsVariantMandatory(var IsHandled: Boolean; var Result: Boolean)
+    // var
+    //     L_Location: Record Location;
+    // begin
+    //     //This is code for skip default error meesage for Variant code + +
+    //     //if G_FromPOScreen = true then begin
+    //     if G_LocationCode <> '' then begin
+    //         L_Location.Reset();
+    //         if L_Location.Get(G_LocationCode) then begin
+    //             if L_Location."Require Receive" = true then begin
+    //                 IsHandled := true;
+    //                 Result := false;
+    //             end;
+    //         end;
+    //     end;
+    //     Clear(G_LocationCode);
+    //     //end;
+    // end;
 
 
     local procedure CheckWarehouseClassCodePOHeaderlevel(_PurchaseHeader: Record "Purchase Header")
