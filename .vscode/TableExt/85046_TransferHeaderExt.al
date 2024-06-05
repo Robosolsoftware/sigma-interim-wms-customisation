@@ -38,6 +38,14 @@ tableextension 85046 TransferHeaderExt extends "Transfer Header"
         {
             DataClassification = ToBeClassified;
         }
+        field(85009; "Sheet Name"; Text[100])
+        {
+
+        }
+        field(85010; "Import Date"; Date)
+        {
+
+        }
     }
 
     var

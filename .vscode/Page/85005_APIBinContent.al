@@ -10,7 +10,7 @@ page 85005 APIBinContent
     SourceTable = "Bin Content";
     DelayedInsert = true;
     ApplicationArea = all;
-    ODataKeyFields = SystemId;
+    //ODataKeyFields = SystemId;
     InsertAllowed = false;
     DeleteAllowed = false;
     ModifyAllowed = false;
@@ -24,86 +24,77 @@ page 85005 APIBinContent
             {
                 field(ItemNo; Rec."Item No.")
                 {
-                    Caption = 'Item No.';
                     ApplicationArea = all;
 
                 }
-                field(ItemDesc1; GetItemDesc())
+                field(Item_Description; GetItemDesc())
                 {
-                    Caption = 'Item Description';
+                    ApplicationArea = all;
+                }
+                field(WarehouseClassCode; Rec."Warehouse Class Code")
+                {
+                    ApplicationArea = All;
+                }
+                field(Pack_Size; GetPackSize())
+                {
                     ApplicationArea = all;
                 }
                 field(LocationCode; Rec."Location Code")
                 {
-                    Caption = 'Location Code';
                     ApplicationArea = all;
                 }
                 field(ZoneCode; Rec."Zone Code")
                 {
-                    Caption = 'Zone Code';
                     ApplicationArea = all;
                 }
                 field(BinCode; Rec."Bin Code")
                 {
-                    Caption = 'Bin Code';
                     ApplicationArea = all;
                 }
-                field(packsize1; GetPackSize())
+                field(Inventory; GetInventory())
                 {
-                    Caption = 'Pack Size';
-                    ApplicationArea = all;
-                }
-                field(inventory1; GetInventory())
-                {
-                    Caption = 'Inventory';
                     ApplicationArea = all;
                 }
                 field(NetInventory; GetNetInventory())
                 {
-                    Caption = 'Net Inventory';
                     ApplicationArea = all;
                 }
-                field(dimentioncode1; Getdimention())
+                field(Dimension_Code; Getdimention())
                 {
-                    Caption = 'Dimension Code';
                     ApplicationArea = all;
                 }
-                field(CalcQtyAvailToTakeUOM; Rec.CalcQtyAvailToTakeUOM())
+                field(Quantity_Base; Rec."Quantity (Base)")
+                {
+                    ApplicationArea = All;
+                }
+                field(PickQuantity_Base; Rec."Pick Quantity (Base)")
+                {
+                    ApplicationArea = All;
+                }
+                field(Putaway_Quantity_Base; Rec."Put-away Quantity (Base)")
+                {
+                    ApplicationArea = All;
+                }
+                field(Available_Qty_to_Take; Rec.CalcQtyAvailToTakeUOM())
                 {
                     ApplicationArea = Warehouse;
-                    Caption = 'Available Qty. to Take';
                     DecimalPlaces = 0 : 5;
                     Editable = false;
-                    ToolTip = 'Specifies the quantity of the item that is available in the bin.';
                 }
 
             }
         }
     }
-    trigger OnAfterGetRecord()
-    var
-    //     L_Item: Record Item;
-    begin
-        //     L_Item.Reset();
-        //     L_Item.SetRange("No.", rec."Item No.");
-        //     if L_Item.FindFirst() then begin
-        //         ItemDesc := L_Item.Description;
-        //         packsize := L_Item."Pack Size";
-        //         inventory := L_Item.Inventory;
-        //     end;
-        // GetItemDesc();
-    end;
 
     local procedure GetItemDesc(): Text[250];
     var
         L_Item: Record Item;
+        bincontent: Page "Bin Contents";
+        bincontenttable: Record "Bin Content";
     begin
         L_Item.Reset();
         L_Item.SetRange("No.", rec."Item No.");
         if L_Item.FindFirst() then begin
-            // ItemDesc := L_Item.Description;
-            // packsize := L_Item."Pack Size";
-            // inventory := L_Item.Inventory;
             exit(L_Item.Description);
         end;
     end;
@@ -115,9 +106,6 @@ page 85005 APIBinContent
         L_Item.Reset();
         L_Item.SetRange("No.", rec."Item No.");
         if L_Item.FindFirst() then begin
-            // ItemDesc := L_Item.Description;
-            // packsize := L_Item."Pack Size";
-            // inventory := L_Item.Inventory;
             exit(L_Item."Pack Size");
         end;
     end;
@@ -129,9 +117,6 @@ page 85005 APIBinContent
         L_Item.Reset();
         L_Item.SetRange("No.", rec."Item No.");
         if L_Item.FindFirst() then begin
-            // ItemDesc := L_Item.Description;
-            // packsize := L_Item."Pack Size";
-            // inventory := L_Item.Inventory;
             L_Item.CalcFields(Inventory);
             exit(L_Item.Inventory);
         end;
@@ -144,9 +129,6 @@ page 85005 APIBinContent
         L_Item.Reset();
         L_Item.SetRange("No.", rec."Item No.");
         if L_Item.FindFirst() then begin
-            // ItemDesc := L_Item.Description;
-            // packsize := L_Item."Pack Size";
-            // inventory := L_Item.Inventory;
             L_Item.CalcFields("Net Inventory");
             exit(L_Item."Net Inventory");
         end;
@@ -166,17 +148,16 @@ page 85005 APIBinContent
             if Dimention.FindFirst() then begin
                 exit(Dimention."Dimension Code");
             end;
-            // ItemDesc := L_Item.Description;
-            // packsize := L_Item."Pack Size";
-            // inventory := L_Item.Inventory;
-
         end;
     end;
 
-
-
-    var
-        ItemDesc: Text[100];
-        packsize: Code[20];
-        inventory: Decimal;
+    // local procedure GetExpiryDate()
+    // var
+    //     ItemTrackingSetup: Record "Item Tracking Setup";
+    //     EntriesExist: Boolean;
+    //     ItemTrackingManagement: Codeunit 6500;
+    //     ExpiryDate: Date;
+    // begin
+    //     ExpiryDate := ItemTrackingManagement.ExistingExpirationDate(Rec."Item No.", Rec."Variant Code", ItemTrackingSetup, false, EntriesExist);
+    // end;
 }

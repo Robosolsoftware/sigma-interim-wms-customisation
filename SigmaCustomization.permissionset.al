@@ -41,5 +41,6 @@ permissionset 85000 SigmaCustomization
         query "LotNumber WarehouseEntry New" = X,
         query PostedTransferReceiptsPowerBI = X,
         query PostedTransferShipmentsPowerBI = X,
-        query TransferOrderPowerBI = X;
+        query TransferOrderPowerBI = X,
+        report "Create Warehouse Receipt" = X;
 }

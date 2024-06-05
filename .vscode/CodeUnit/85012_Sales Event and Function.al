@@ -329,7 +329,7 @@ codeunit 85012 "Sales Event & Function"
     var
         L_wareshipment: page "Warehouse Shipment";
     begin
-        if WarehouseShipmentLine."Source Document" = WarehouseShipmentLine."Source Document"::"Inbound Transfer" then begin
+        if WarehouseShipmentLine."Source Document" = WarehouseShipmentLine."Source Document"::"Outbound Transfer" then begin
             WarehouseShipmentLine."Warehouse Class Code" := TransferLine."Warehouse Class Code";
             WarehouseShipmentLine.Brand := TransferLine.Brand;
             WarehouseShipmentLine."Pack Size" := TransferLine."Pack Size";

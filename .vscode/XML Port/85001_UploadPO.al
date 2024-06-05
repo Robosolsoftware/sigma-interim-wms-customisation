@@ -436,6 +436,8 @@ xmlport 85001 "Upload Purchase Order"
         RelPurchHeader: Record "Purchase Header";
         s: Integer;
         t: Integer;
+        BatchProcessingMgt: Codeunit "Batch Processing Mgt.";
+        RecRef: RecordRef;
     begin
         RecILETemp.Reset();
         RecILETemp.SetRange(Open, true);
@@ -474,7 +476,12 @@ xmlport 85001 "Upload Purchase Order"
                 RelPurchHeader.Reset();
                 RelPurchHeader.SetRange("No.", tempRecPurchHeader."No.");
                 if RelPurchHeader.FindFirst() then begin
-                    ReleasePurchaseDoc.PerformManualRelease(RelPurchHeader);
+                    //ReleasePurchaseDoc.PerformManualRelease(RelPurchHeader);
+                    //BatchProcessingMgt.BatchProcess(tempRecPurchHeader, Codeunit::"Purchase Manual Release", Enum::"Error Handling Options"::"Show Notification", 1, 0);
+
+                    RecRef.GetTable(RelPurchHeader);
+                    BatchProcessingMgt.SetProcessingCodeunit(Codeunit::"Purchase Manual Release");
+                    BatchProcessingMgt.BatchProcess(RecRef, Enum::"Error Handling Options"::"Show Notification");
                 end;
             until tempRecPurchHeader.Next = 0;
         end;
@@ -485,6 +492,7 @@ xmlport 85001 "Upload Purchase Order"
             repeat
                 RelPurchHeader.Reset();
                 RelPurchHeader.SetRange("No.", tempRecPurchHeader."No.");
+                RelPurchHeader.SetRange(Status, RelPurchHeader.Status::Released);
                 if RelPurchHeader.FindFirst() then begin
                     if RelPurchHeader."Location Code" <> '' then begin
                         Location.Get(RelPurchHeader."Location Code");
@@ -495,7 +503,6 @@ xmlport 85001 "Upload Purchase Order"
                             if Location."Require Put-away" = true then begin
                                 CreateInvtPutAwayPick(RelPurchHeader);
                             end;
-
                             Commit();
                         end;
 
@@ -559,6 +566,7 @@ xmlport 85001 "Upload Purchase Order"
     procedure CreateOrder(DocumentNoD1: Text; supplier_code1: Text; PO_Reference1: text; Document_Date1: Date; Our_code1: text; Delivery_addressn: Text; Quantity_1: Decimal; Unit_prize1: Decimal)
     var
         ReleasePurchaseDoc: Codeunit "Release Purchase Document";
+        L_ItemVendor: Record "Item Vendor";
     begin
         G_PurchHeader.Reset();
         G_PurchHeader.SetRange("No.", DocumentNoD1);
@@ -579,6 +587,7 @@ xmlport 85001 "Upload Purchase Order"
             purchaseheader.Validate("Buy-from Vendor No.", supplier_code1);
             purchaseheader.Validate("Your Reference", PO_Reference1);
             purchaseheader.Validate("Document Date", Document_Date1);
+            purchaseheader."Sheet Name" := currXMLport.Filename;
 
             purchaseheader.Insert(true);
 
@@ -614,11 +623,20 @@ xmlport 85001 "Upload Purchase Order"
 
             PurchaseLine.Validate(Quantity, Quantity_1);
             PurchaseLine.Validate("Direct Unit Cost", Unit_prize1);
+
+            L_ItemVendor.Reset();
+            L_ItemVendor.SetRange("Vendor No.", supplier_code1);
+            L_ItemVendor.SetRange("Item No.", Our_code1);
+            if L_ItemVendor.FindFirst() then begin
+                if L_ItemVendor."Variant Code" <> '' then
+                    PurchaseLine.Validate("Variant Code", L_ItemVendor."Variant Code");
+            end;
+
             PurchaseLine.Insert(true);
 
             purchaseheader."Location Code" := PurchaseLine."Location Code";
             purchaseheader.Modify(true);
-            Commit();
+            //Commit(); //Temporary Removed++
 
             tempRecPurchHeader.Reset();
             tempRecPurchHeader.SetRange("No.", DocumentNoD1);
@@ -627,7 +645,7 @@ xmlport 85001 "Upload Purchase Order"
                 tempRecPurchHeader."Document Type" := purchaseheader."Document Type"::Order;
                 tempRecPurchHeader.Validate("No.", DocumentNoD1);
                 tempRecPurchHeader.Insert(true);
-                Commit();
+                //Commit(); //Temporary Removed++
             end;
 
             //Message('Order completed1');
@@ -651,7 +669,7 @@ xmlport 85001 "Upload Purchase Order"
 
             if G_PurchHeader.Status <> G_PurchHeader.Status::Open then begin
                 ReleasePurchaseDoc.Reopen(G_PurchHeader);
-                Commit();
+                //Commit(); //Temporary Removed++
             end;
 
             PurchaseLine.Init();
@@ -678,10 +696,19 @@ xmlport 85001 "Upload Purchase Order"
                 PurchaseLine.Validate("Location Code", P_Location.Code);
             PurchaseLine.Validate(Quantity, Quantity_1);
             PurchaseLine.Validate("Direct Unit Cost", Unit_prize1);
+
+            L_ItemVendor.Reset();
+            L_ItemVendor.SetRange("Vendor No.", supplier_code1);
+            L_ItemVendor.SetRange("Item No.", Our_code1);
+            if L_ItemVendor.FindFirst() then begin
+                if L_ItemVendor."Variant Code" <> '' then
+                    PurchaseLine.Validate("Variant Code", L_ItemVendor."Variant Code");
+            end;
+
             PurchaseLine.Insert(true);
             //purchaseheader."Location Code" := PurchaseLine."Location Code";
             //purchaseheader.Modify(true);
-            Commit();
+            //Commit(); //Temporary Removed++
             // Message('Order completed2');
             //end;
 
@@ -692,7 +719,7 @@ xmlport 85001 "Upload Purchase Order"
                 tempRecPurchHeader."Document Type" := purchaseheader."Document Type"::Order;
                 tempRecPurchHeader.Validate("No.", DocumentNoD1);
                 tempRecPurchHeader.Insert(true);
-                Commit();
+                //Commit(); //Temporary Removed++
             end;
 
 

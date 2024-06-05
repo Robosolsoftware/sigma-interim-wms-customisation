@@ -24,6 +24,56 @@ pageextension 85080 TransferOrdListRBE extends "Transfer Orders"
     actions
     {
         // Add changes to page actions here
+        addafter("P&osting")
+        {
+            group("Import/Export TO")
+            {
+                Caption = 'Import/Export Transfer Order';
+                action("Export Transfer Order Template")
+                {
+                    ApplicationArea = All;
+                    Image = Export;
+                    Caption = 'Export Transfer Order Template';
+
+                    trigger OnAction()
+                    var
+                        ExportImportTransferOrder: Codeunit "Export & Import Transfer Order";
+                    begin
+                        ExportImportTransferOrder.SamplePOTemplate();
+                    end;
+                }
+                action("Import Transfer Order")
+                {
+                    ApplicationArea = All;
+                    Image = Import;
+
+                    trigger OnAction()
+                    var
+                        ExportImportTransferOrder: Codeunit "Export & Import Transfer Order";
+                    begin
+                        ExportImportTransferOrder.Run();
+                        Message('Completed..');
+                    end;
+                }
+
+            }
+        }
+        addbefore(Category_Process)
+        {
+
+            group(Category_Category77)
+            {
+                Caption = 'Import/Export Transfer Order';
+
+                actionref(ExportTOTemplate; "Export Transfer Order Template")
+                {
+                }
+                actionref(Excel_Upload1; "Import Transfer Order")
+                {
+                }
+
+            }
+        }
     }
 
     var

@@ -9,6 +9,36 @@ codeunit 85013 "Purchase Event & Function"
     var
         myInt: Integer;
         G_LocationCode: Code[20];
+        G_PurchaseOrderNo: Code[20];
+
+    #Region Skip Error meesage at the time of Release Purchase order from Upload Template+++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Batch Processing Mgt.", 'OnBatchProcessOnBeforeResetBatchID', '', false, false)]
+    local procedure OnBatchProcessOnBeforeResetBatchID(var RecRef: RecordRef)
+    var
+        L_PurchaseHeader: Record "Purchase Header";
+    begin
+        Clear(G_PurchaseOrderNo);
+        L_PurchaseHeader.Reset();
+        RecRef.SetTable(L_PurchaseHeader);
+        G_PurchaseOrderNo := L_PurchaseHeader."No.";
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Batch Processing Mgt.", 'OnBatchProcessOnBeforeShowMessage', '', false, false)]
+    local procedure OnBatchProcessOnBeforeShowMessage(var IsHandled: Boolean)
+    var
+        L_PurchaseHeader: Record "Purchase Header";
+    begin
+        L_PurchaseHeader.Reset();
+        L_PurchaseHeader.SetRange("Document Type", L_PurchaseHeader."Document Type"::Order);
+        L_PurchaseHeader.SetRange("No.", G_PurchaseOrderNo);
+        if L_PurchaseHeader.FindFirst() then begin
+            if L_PurchaseHeader."Sheet Name" <> '' then
+                IsHandled := true;
+        end;
+    end;
+    #endregion Skip Error meesage at the time of Release Purchase order from Upload Template+++
+
+
 
     #Region Bin code Warehouse Class Code Missmatch Customization+++
     //Step1+++ Purchase Line Location Code not mandatory++
@@ -217,6 +247,9 @@ codeunit 85013 "Purchase Event & Function"
         L_WarehouseClasses: Record "Warehouse Class";
     begin
         if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
+            if WhseReceiptHeader."No." = '' then
+                exit;
+
             L_WarehouseRecptLine.Reset();
             L_WarehouseRecptLine.SetRange("No.", WhseReceiptHeader."No.");
             if L_WarehouseRecptLine.FindSet() then begin

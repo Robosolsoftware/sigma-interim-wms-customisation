@@ -35,6 +35,8 @@ codeunit 85000 "WHP Based On BIN"
         G_SourceSubLineNo := SourceSubLineNo;
     end;
     // +++++++++++++++++++++++++++ AND ++++++++++++++++++++++++
+
+    //With Lot "Lot warehouse" on Item Tracking COde++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Create Pick", 'OnBeforeCreateTempItemTrkgLines', '', false, false)]
     local procedure OnBeforeCreateTempItemTrkgLines(WhseShptLine: Record "Warehouse Shipment Line"; Location: Record Location; ItemNo: Code[20]; VariantCode: Code[10]; HasExpiryDate: Boolean; var TotalQtytoPickBase: Decimal; WhseWkshLine: Record "Whse. Worksheet Line")
     begin
@@ -43,6 +45,15 @@ codeunit 85000 "WHP Based On BIN"
         G_SourceDocument := WhseShptLine."Source Document";
         G_CalledFromWhseWkshLine := not WhseWkshLine.IsEmpty;
     end;
+
+    //
+    [EventSubscriber(ObjectType::Report, Report::"Whse.-Shipment - Create Pick", 'OnAfterGetRecordWarehouseShipmentLineOnBeforeCreatePickTempLine', '', false, false)]
+    local procedure OnAfterGetRecordWarehouseShipmentLineOnBeforeCreatePickTempLine(var WarehouseShipmentLine: Record "Warehouse Shipment Line")
+    begin
+        Clear(G_SourceDocument);
+        G_SourceDocument := WarehouseShipmentLine."Source Document";
+    end;
+
     //Step1 +++++++++++++++++++++++++++++++++++++++++
 
 

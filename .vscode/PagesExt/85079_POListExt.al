@@ -3,6 +3,21 @@ pageextension 85079 POListExt extends "Purchase Order List"
     layout
     {
         // Add changes to page layout here
+        addlast(Control1)
+        {
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'Created At';
+            }
+            field(SystemCreatedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'Created By';
+            }
+        }
         addafter(Status)
         {
             field("Warehouse Receipt Exist"; Rec."Warehouse Receipt Exist")
@@ -26,6 +41,31 @@ pageextension 85079 POListExt extends "Purchase Order List"
 
     actions
     {
+        addafter(Print)
+        {
+            action("Create Warehouse Receipt")
+            {
+                ApplicationArea = All;
+                Image = Create;
+                Caption = 'Create Bulk Warehouse Receipt';
+
+                trigger OnAction()
+                begin
+                    Report.Run(85001, true, false);
+                end;
+            }
+        }
+        addlast(Category_Process)
+        {
+            group(CreateWarehouseReceipt)
+            {
+                Caption = 'Create Bulk Warehouse Receipt';
+                actionref("Create Bulk Warehouse Receipt"; "Create Warehouse Receipt")
+                {
+
+                }
+            }
+        }
         // Add changes to page actions here
         // modify(Release)
         // {
@@ -207,6 +247,7 @@ pageextension 85079 POListExt extends "Purchase Order List"
     var
         myInt: Integer;
         PartiallyReceived: Boolean;
+        G_MiscellaneousCharges: Codeunit "Miscellaneous Charges";
 
     trigger OnAfterGetRecord()
     var
