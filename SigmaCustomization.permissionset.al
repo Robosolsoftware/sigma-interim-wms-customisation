@@ -42,5 +42,6 @@ permissionset 85000 SigmaCustomization
         query PostedTransferReceiptsPowerBI = X,
         query PostedTransferShipmentsPowerBI = X,
         query TransferOrderPowerBI = X,
-        report "Create Warehouse Receipt" = X;
+        report "Create Whs. Recpt & Put-Away" = X,
+        codeunit "Export & Import Transfer Order" = X;
 }

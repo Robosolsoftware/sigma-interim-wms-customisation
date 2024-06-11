@@ -11,9 +11,9 @@ tableextension 85035 "SC Item Variant" extends "Item Variant"
             var
                 L_ItemVariant: Record "Item Variant";
             begin
-                if Rec.Priority <> 0 then
-                    if TotalAvailableQtyForSaleable(Rec) <= 0 then
-                        Error('Free Quantity should be greater than 0');
+                //if Rec.Priority <> 0 then
+                // if TotalAvailableQtyForSaleable(Rec) <= 0 then
+                //     Error('Free Quantity should be greater than 0');
 
 
                 if Rec.Priority > 0 then begin

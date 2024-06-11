@@ -14,18 +14,33 @@ codeunit 85009 SalesReturnOrderChanges
     local procedure UpdateLocationCode(var SalesHeader: Record "Sales Header")
     var
         L_SalesLine: Record "Sales Line";
+        L_Location: Record Location;
     begin
         //Update Line Location+++
         if SalesHeader."Document Type" = SalesHeader."Document Type"::"Return Order" then begin
-            L_SalesLine.Reset();
-            L_SalesLine.SetRange("Document No.", SalesHeader."No.");
-            L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
-            L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-            if L_SalesLine.FindFirst() then
-                repeat
-                    L_SalesLine.Validate("Location Code", SalesHeader."Location Code");
-                    L_SalesLine.Modify;
-                until L_SalesLine.Next() = 0;
+            L_Location.Reset();
+            L_Location.SetRange("Sales Return Location", true);
+            if L_Location.FindFirst() then begin
+                L_SalesLine.Reset();
+                L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+                L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                if L_SalesLine.FindFirst() then
+                    repeat
+                        L_SalesLine.Validate("Location Code", L_Location.Code);
+                        L_SalesLine.Modify;
+                    until L_SalesLine.Next() = 0;
+            end else begin
+                L_SalesLine.Reset();
+                L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+                L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                if L_SalesLine.FindFirst() then
+                    repeat
+                        L_SalesLine.Validate("Location Code", SalesHeader."Location Code");
+                        L_SalesLine.Modify;
+                    until L_SalesLine.Next() = 0;
+            end;
         end;
     end;
 

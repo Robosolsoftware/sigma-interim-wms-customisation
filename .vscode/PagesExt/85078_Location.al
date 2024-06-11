@@ -12,6 +12,11 @@ pageextension 85078 LocationExt extends "Location Card"
             {
                 ApplicationArea = All;
             }
+            field("Sales Return Location"; Rec."Sales Return Location")
+            {
+                ApplicationArea = All;
+
+            }
         }
         addbefore("Home Page")
         {

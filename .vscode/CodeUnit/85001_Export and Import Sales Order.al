@@ -45,6 +45,7 @@ codeunit 85001 "Export & Import Sales Order"
         NoSeriesManagement: Codeunit NoSeriesManagement;
         L_Shippingagentservice: Record "Shipping Agent Services";
         L_cust: Record Customer;
+        L_Item: Record Item;
     begin
         L_SalesandRecSetup.Get();
         Rec_ExcelBuffer.DeleteAll();
@@ -150,8 +151,17 @@ codeunit 85001 "Export & Import Sales Order"
                     InsertSalesLine.Validate("Document Type", InsertSalesHeader."Document Type");
                     InsertSalesLine.Validate("Document No.", InsertSalesHeader."No.");
                     InsertSalesLine.Validate("Line No.", GetLastLineNo(InsertSalesHeader."No."));
-                    InsertSalesLine.Validate(Type, InsertSalesLine.Type::Item);
-                    InsertSalesLine.Validate("No.", GetValueAtIndex(RowNo, 3));
+
+                    L_Item.Reset();
+                    L_Item.SetRange("No.", GetValueAtIndex(RowNo, 3));
+                    if L_Item.FindFirst() then begin
+                        InsertSalesLine.Validate(Type, InsertSalesLine.Type::Item);
+                        InsertSalesLine.Validate("No.", GetValueAtIndex(RowNo, 3));
+                    end else begin
+                        InsertSalesLine.Validate(Type, InsertSalesLine.Type::"Charge (Item)");
+                        InsertSalesLine.Validate("No.", GetValueAtIndex(RowNo, 3));
+                    end;
+
                     if GetValueAtIndex(RowNo, 4) <> '' then
                         InsertSalesLine.Validate("Variant Code", GetValueAtIndex(RowNo, 4));
                     if GetValueAtIndex(RowNo, 5) <> '' then begin

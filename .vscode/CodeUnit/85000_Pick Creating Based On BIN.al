@@ -193,4 +193,30 @@ codeunit 85000 "WHP Based On BIN"
         end;
 
     end;
+
+
+
+
+
+    //Inve Pick Based on Selected Bin code on Transfer Line++
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Create Inventory Pick/Movement", 'OnCreatePickOrMoveLineOnAfterFindTakeQtyForBinCodeSourceLine', '', false, false)]
+    local procedure OnCreatePickOrMoveLineOnAfterFindTakeQtyForBinCodeSourceLine(WarehouseActivityHeader: Record "Warehouse Activity Header"; var RemQtyToPickBase: Decimal; var NewWarehouseActivityLine: Record "Warehouse Activity Line")
+    begin
+        if (NewWarehouseActivityLine."Source Type" = 5741) AND (NewWarehouseActivityLine."Source Subtype" = 0) AND (NewWarehouseActivityLine."Source Document" = NewWarehouseActivityLine."Source Document"::"Outbound Transfer") then
+            RemQtyToPickBase := 0;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Transfer Document", 'OnBeforeReleaseTransferDoc', '', false, false)]
+    local procedure OnBeforeReleaseTransferDoc(var TransferHeader: Record "Transfer Header")
+    var
+        L_TransferLine: Record "Transfer Line";
+    begin
+        L_TransferLine.Reset();
+        L_TransferLine.SetRange("Document No.", TransferHeader."No.");
+        L_TransferLine.SetRange("Derived From Line No.", 0);
+        L_TransferLine.SetRange("Transfer-from Bin Code", '');
+        if L_TransferLine.FindFirst() then
+            L_TransferLine.TestField("Transfer-from Bin Code");
+    end;
 }

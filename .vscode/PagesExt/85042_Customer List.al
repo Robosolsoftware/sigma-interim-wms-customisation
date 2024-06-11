@@ -5,6 +5,11 @@ pageextension 85042 "SC Customer List" extends "Customer List"
         // Add changes to page layout here
         addafter(Name)
         {
+            field(Type; Rec.Type)
+            {
+                Editable = false;
+                ApplicationArea = All;
+            }
             field("Bill-to Customer No."; Rec."Bill-to Customer No.")
             {
                 Editable = false;

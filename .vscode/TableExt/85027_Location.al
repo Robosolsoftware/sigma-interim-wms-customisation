@@ -22,6 +22,19 @@ tableextension 85027 LocationExt extends Location
         {
 
         }
+        field(85005; "Sales Return Location"; Boolean)
+        {
+            trigger OnValidate()
+            var
+                L_Location: Record Location;
+            begin
+                L_Location.Reset();
+                L_Location.SetFilter(Code, '<>%1', Rec.Code);
+                L_Location.SetRange("Sales Return Location", true);
+                if L_Location.FindFirst() then
+                    Error('Sales Return Location Should not be more than one');
+            end;
+        }
 
     }
 
