@@ -245,7 +245,7 @@ tableextension 85030 "SC Customer" extends Customer
 
             trigger OnValidate()
             begin
-                if "Weekend Shipping Agent Code" <> xRec."Weekend Shipping Agent Code" then
+                if Rec."Weekend Shipping Agent Code" <> xRec."Weekend Shipping Agent Code" then
                     Validate("Weekend Ship. Agnt. Serv. Code", '');
             end;
         }

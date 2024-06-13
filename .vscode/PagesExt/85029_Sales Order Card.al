@@ -167,6 +167,11 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
 
         addafter("Shipping Agent Service Code")
         {
+            field("Weekend Shipping Agent Code"; Rec."Weekend Shipping Agent Code")
+            {
+                ApplicationArea = All;
+                Editable = G_EditShipping;
+            }
             field("Weekend Ship. Agnt. Serv. Code"; Rec."Weekend Ship. Agnt. Serv. Code")
             {
                 ApplicationArea = All;

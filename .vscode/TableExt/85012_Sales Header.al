@@ -30,6 +30,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         Rec."QAU Approved" := L_Customer."QAU Approved";
                         Rec."Default Bank" := L_Customer."Default Bank";
                         Rec."Min Order Value" := L_Customer."Min Order Value";
+                        Rec."Weekend Shipping Agent Code" := L_Customer."Weekend Shipping Agent Code";
                         Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
                         Rec."SO Approval Required" := L_Customer."SO Approval Required";
                     end;
@@ -242,7 +243,8 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         field(85151; "Weekend Ship. Agnt. Serv. Code"; Code[10])
         {
             Caption = 'Weekend Shipping Agent Service Code';
-            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Weekend Shipping Agent Code"));
+            ValidateTableRelation = false;
             trigger OnValidate()
             var
                 ShippingAgentServices: Record "Shipping Agent Services";
@@ -282,6 +284,29 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         field(85158; "No of Boxes"; Integer)
         {
             DataClassification = ToBeClassified;
+        }
+        field(85159; "Weekend Shipping Agent Code"; Text[30])
+        {
+            Caption = 'Weekend Shipping Agent Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "Shipping Agent";
+            Editable = false;
+
+            trigger OnValidate()
+            var
+                ShippingAgent: Record "Shipping Agent";
+            begin
+                if Rec."Weekend Shipping Agent Code" <> '' then begin
+                    ShippingAgent.Reset();
+                    ShippingAgent.SetRange(code, Rec."Weekend Shipping Agent Code");
+                    ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
+                    if Not ShippingAgent.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent');
+
+                    if Rec."Weekend Shipping Agent Code" <> xRec."Weekend Shipping Agent Code" then
+                        Rec."Weekend Ship. Agnt. Serv. Code" := '';
+                end;
+            end;
         }
 
     }

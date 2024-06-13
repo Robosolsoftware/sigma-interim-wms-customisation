@@ -79,7 +79,8 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
         field(85151; "Weekend Ship. Agnt. Serv. Code"; Code[10])
         {
             Caption = 'Weekend Shipping Agent Service Code';
-            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Weekend Shipping Agent Code"));
+            ValidateTableRelation = false;
             Editable = false;
         }
         field(85152; "SO Approval Required"; Boolean)
@@ -97,6 +98,26 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
         field(85158; "No of Boxes"; Integer)
         {
             DataClassification = ToBeClassified;
+        }
+        field(85159; "Weekend Shipping Agent Code"; Text[30])
+        {
+            Caption = 'Weekend Shipping Agent Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "Shipping Agent";
+            Editable = false;
+
+            trigger OnValidate()
+            var
+                ShippingAgent: Record "Shipping Agent";
+            begin
+                if Rec."Weekend Shipping Agent Code" <> '' then begin
+                    ShippingAgent.Reset();
+                    ShippingAgent.SetRange(code, Rec."Weekend Shipping Agent Code");
+                    ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
+                    if Not ShippingAgent.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent');
+                end;
+            end;
         }
     }
 
