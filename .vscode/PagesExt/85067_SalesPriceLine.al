@@ -2,6 +2,11 @@ pageextension 85067 DT_SalesPriceList extends "Price List Lines"
 {
     layout
     {
+        // modify("Amount Type")
+        // {
+        //     Editable = false;
+        // }
+
         // Add changes to page layout here
         addafter(Description)
         {

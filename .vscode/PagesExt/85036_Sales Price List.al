@@ -3,6 +3,11 @@ pageextension 85036 "SC Sales Price List" extends "Sales Price List"
     layout
     {
         // Add changes to page layout here
+        // modify(AmountType)
+        // {
+        //     Editable = false;
+        // }
+
         addlast(General)
         {
             field("Special Price Daily"; Rec."Special Price Daily")
@@ -17,6 +22,7 @@ pageextension 85036 "SC Sales Price List" extends "Sales Price List"
                 var
                     myInt: Integer;
                 begin
+                    CurrPage.Update();
                     if Rec."Drug Special" = true then
                         CurrPage.Lines.Page.UpdateColumnVisibility();
 
@@ -46,4 +52,5 @@ pageextension 85036 "SC Sales Price List" extends "Sales Price List"
 
     var
         myInt: Integer;
+
 }
