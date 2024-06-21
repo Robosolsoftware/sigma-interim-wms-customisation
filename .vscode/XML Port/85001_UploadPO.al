@@ -60,6 +60,10 @@ xmlport 85001 "Upload Purchase Order"
                 {
 
                 }
+                textelement(AlternateVendorAdress)
+                {
+
+                }
                 textelement(Poreference)
                 {
 
@@ -123,6 +127,7 @@ xmlport 85001 "Upload Purchase Order"
                     EntryNU: Integer;
                     Recvendor: Record Vendor;
                     RecItem: Record Item;
+                    L_OrderAddress: Record "Order Address";
                 begin
                     if Headerfound = false then begin
                         Headerfound := true;
@@ -139,6 +144,7 @@ xmlport 85001 "Upload Purchase Order"
                     Clear(Quantity_);
                     Clear(Unit_prize);
                     Clear(j);
+                    Clear(G_AlternateVendorAddress);
                     // IF (UnitCostT <> '') THEN
                     //     EVALUATE(UnitCostD, UnitCostT);
 
@@ -165,6 +171,9 @@ xmlport 85001 "Upload Purchase Order"
 
                     if (Unitprize <> '') then
                         Evaluate(Unit_prize, Unitprize);
+
+                    if AlternateVendorAdress <> '' then
+                        Evaluate(G_AlternateVendorAddress, AlternateVendorAdress);
                     Clear(Skipentry);
 
                     if i = 0 then begin
@@ -266,6 +275,17 @@ xmlport 85001 "Upload Purchase Order"
                         j := j + 1;
                     end;
 
+                    if G_AlternateVendorAddress <> '' then begin
+                        L_OrderAddress.Reset();
+                        L_OrderAddress.SetRange("Vendor No.", supplier_code);
+                        L_OrderAddress.SetRange(Code, G_AlternateVendorAddress);
+                        if not L_OrderAddress.FindFirst() then begin
+                            Skipentry := true;
+                            excelbuffer.AddColumn(StrSubstNo('The field Order Address Code of table Purchase Header contains a value (%1) that cannot be found in the related table (Order Address).:', G_AlternateVendorAddress), false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+                            j := j + 1;
+                        end;
+                    end;
+
                     // if Unit_prize < 0 then begin
                     //     Skipentry := true;
                     //     excelbuffer.AddColumn('Unit Price Is invalid. Document ID:' + DocumentNoD, false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
@@ -289,6 +309,7 @@ xmlport 85001 "Upload Purchase Order"
                     RecILETemp.Quantity := Quantity_;
                     RecILETemp."Qty. per Unit of Measure" := Unit_prize;
                     RecILETemp."Your ref Temp" := PO_Reference;
+                    RecILETemp."Alternate Vendor Address" := G_AlternateVendorAddress;
                     if Skipentry = true then
                         RecILETemp.Open := true;
                     RecILETemp.Insert();
@@ -464,7 +485,7 @@ xmlport 85001 "Upload Purchase Order"
                 end else begin
                     //RecILETemp.CalcFields("Purchase Amount (Actual)");
                     CreateOrder(RecILETemp."Document No.", RecILETemp."Source No.",
-                    RecILETemp."Your ref Temp", RecILETemp."Document Date", RecILETemp."Item No.", RecILETemp."Del Adress Temp", RecILETemp.Quantity, RecILETemp."Qty. per Unit of Measure");
+                    RecILETemp."Your ref Temp", RecILETemp."Document Date", RecILETemp."Item No.", RecILETemp."Del Adress Temp", RecILETemp.Quantity, RecILETemp."Qty. per Unit of Measure", RecILETemp."Alternate Vendor Address");
                     //Message(RecILETemp."Document No." + '  ' + ' Skip' + Format(RecILETemp.Open));
                 end;
             until RecILETemp.Next = 0;
@@ -563,7 +584,7 @@ xmlport 85001 "Upload Purchase Order"
         //REPORT.RunModal(REPORT::"Create Invt Put-away/Pick/Mvmt", false, false, WhseRequest);
     end;
 
-    procedure CreateOrder(DocumentNoD1: Text; supplier_code1: Text; PO_Reference1: text; Document_Date1: Date; Our_code1: text; Delivery_addressn: Text; Quantity_1: Decimal; Unit_prize1: Decimal)
+    procedure CreateOrder(DocumentNoD1: Text; supplier_code1: Text; PO_Reference1: text; Document_Date1: Date; Our_code1: text; Delivery_addressn: Text; Quantity_1: Decimal; Unit_prize1: Decimal; _AlterNateVendorAddress: Code[20])
     var
         ReleasePurchaseDoc: Codeunit "Release Purchase Document";
         L_ItemVendor: Record "Item Vendor";
@@ -588,6 +609,7 @@ xmlport 85001 "Upload Purchase Order"
             purchaseheader.Validate("Your Reference", PO_Reference1);
             purchaseheader.Validate("Document Date", Document_Date1);
             purchaseheader."Sheet Name" := currXMLport.Filename;
+            purchaseheader.Validate("Order Address Code", _AlterNateVendorAddress);
 
             purchaseheader.Insert(true);
 
@@ -750,20 +772,21 @@ xmlport 85001 "Upload Purchase Order"
         Csvbuffer.InsertEntry(1, 9, 'Supplier Address');
         Csvbuffer.InsertEntry(1, 10, 'Supplier Tel');
         Csvbuffer.InsertEntry(1, 11, 'Supplier Fax');
-        Csvbuffer.InsertEntry(1, 12, 'PO Reference');
-        Csvbuffer.InsertEntry(1, 13, 'Document Date');
-        Csvbuffer.InsertEntry(1, 14, 'Due Date');
-        Csvbuffer.InsertEntry(1, 15, 'Page Number');
-        Csvbuffer.InsertEntry(1, 16, 'OP Code');
-        Csvbuffer.InsertEntry(1, 17, 'Line Number');
-        Csvbuffer.InsertEntry(1, 18, 'Our Code');
-        Csvbuffer.InsertEntry(1, 19, 'EAN');
-        Csvbuffer.InsertEntry(1, 20, 'Case Barcode');
-        Csvbuffer.InsertEntry(1, 21, 'Quantity');
-        Csvbuffer.InsertEntry(1, 22, 'Size');
-        Csvbuffer.InsertEntry(1, 23, 'Description');
-        Csvbuffer.InsertEntry(1, 24, 'Unit Price');
-        Csvbuffer.InsertEntry(1, 25, 'Line Price');
+        Csvbuffer.InsertEntry(1, 12, 'Alternate Vendor Address Code');
+        Csvbuffer.InsertEntry(1, 13, 'PO Reference');
+        Csvbuffer.InsertEntry(1, 14, 'Document Date');
+        Csvbuffer.InsertEntry(1, 15, 'Due Date');
+        Csvbuffer.InsertEntry(1, 16, 'Page Number');
+        Csvbuffer.InsertEntry(1, 17, 'OP Code');
+        Csvbuffer.InsertEntry(1, 18, 'Line Number');
+        Csvbuffer.InsertEntry(1, 19, 'Our Code');
+        Csvbuffer.InsertEntry(1, 20, 'EAN');
+        Csvbuffer.InsertEntry(1, 21, 'Case Barcode');
+        Csvbuffer.InsertEntry(1, 22, 'Quantity');
+        Csvbuffer.InsertEntry(1, 23, 'Size');
+        Csvbuffer.InsertEntry(1, 24, 'Description');
+        Csvbuffer.InsertEntry(1, 25, 'Unit Price');
+        Csvbuffer.InsertEntry(1, 26, 'Line Price');
 
 
         Csvbuffer.SaveDataToBlob(TempBLOB, ',');
@@ -813,4 +836,5 @@ xmlport 85001 "Upload Purchase Order"
         Skipentry: Boolean;
         RecILETemp2: Record "Item Ledger Entry" temporary;
         excelbuffer: Record "Excel Buffer" temporary;
+        G_AlternateVendorAddress: Code[20];
 }

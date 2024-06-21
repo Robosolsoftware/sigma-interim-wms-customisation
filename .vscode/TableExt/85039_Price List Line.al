@@ -53,6 +53,10 @@ tableextension 85039 "SC Price List Line" extends "Price List Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(85163; "No of Count"; Integer)
+        {
+
+        }
     }
 
     keys

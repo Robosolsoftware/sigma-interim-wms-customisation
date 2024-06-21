@@ -37,7 +37,6 @@ permissionset 85000 SigmaCustomization
         page "Shipping Agent Restrict Item" = X,
         page "Temperature Category" = X,
         page "Warehouse Pick Lines List" = X,
-        page APILotNoByBin = X,
         query "LotNumber WarehouseEntry New" = X,
         query PostedTransferReceiptsPowerBI = X,
         query PostedTransferShipmentsPowerBI = X,

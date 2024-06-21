@@ -102,12 +102,17 @@ codeunit 85008 "Export & Import Purchase Order"
                         Clear(G_DocumentDate);
                         Evaluate(G_DocumentDate, GetValueAtIndex(RowNo, 7));
                         PurchHdr.Validate("Order Date", G_DocumentDate);
-                        PurchHdr.Modify(true);
+                        //PurchHdr.Modify(true);
                     end;
                     if GetValueAtIndex(RowNo, 9) <> '' then begin
                         PurchHdr.Validate("Location Code", GetValueAtIndex(RowNo, 9));
-                        PurchHdr.Modify(true);
+                        //PurchHdr.Modify(true);
                     end;
+
+                    if GetValueAtIndex(RowNo, 10) <> '' then
+                        PurchHdr.Validate("Order Address Code", GetValueAtIndex(RowNo, 10));
+
+                    PurchHdr.Modify(true);
 
                 end;
 
@@ -199,6 +204,7 @@ codeunit 85008 "Export & Import Purchase Order"
         Excelbuffer.AddColumn('Requested Receipt Date', false, '', false, false, false, '', excelbuffer."Cell Type"::Date);
         Excelbuffer.AddColumn('Vendor Order No', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.AddColumn('Location Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
+        Excelbuffer.AddColumn('Alternate Vendor Address Code', false, '', false, false, false, '', excelbuffer."Cell Type"::Text);
         Excelbuffer.CreateNewBook('Sample Template');
         Excelbuffer.WriteSheet('Sample Template', CompanyName, UserId);
         Excelbuffer.CloseBook();

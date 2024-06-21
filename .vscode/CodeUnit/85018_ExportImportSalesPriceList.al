@@ -18,6 +18,7 @@ codeunit 85018 "Export & Import Sales Price"
         RowNo: Integer;
         L_PriceListHeader: Record "Price List Header";
         L_SalesPriceListLine: Record "Price List line";
+        ErrorLog_excelbuffer: Record "Excel Buffer" temporary;
 
     procedure ImportSalesPrice()
     var
@@ -30,9 +31,16 @@ codeunit 85018 "Export & Import Sales Price"
         L_Rebate: Decimal;
         L_StartDate: Date;
         L_EndDate: Date;
-
+        L_ErrorFound: Boolean;
         PriceListManagement: Codeunit "Price List Management";
+        L_IfErrorExit: Boolean;
+        Temp_PriceListLine: Record "Price List Line" temporary; //Dont Remove Temp Property++
     begin
+        Temp_PriceListLine.DeleteAll();
+        ErrorLog_excelbuffer.DeleteAll();
+        Clear(L_ErrorFound);
+        Clear(L_IfErrorExit);
+
         Rec_ExcelBuffer.DeleteAll();
         Rows := 0;
         Columns := 0;
@@ -66,184 +74,389 @@ codeunit 85018 "Export & Import Sales Price"
                 Columns := Columns + 1;
             until Rec_ExcelBuffer.Next() = 0;
 
-        for RowNo := 2 to Rows do begin
-            if SalesPriceHeaderExit(GetValueAtIndex(RowNo, 1)) = true then begin
-                if SalesPriceLineExit(GetValueAtIndex(RowNo, 1), GetValueAtIndex(RowNo, 3)) = true then begin
-                    L_SalesPriceListLine.Reset();
-                    L_SalesPriceListLine.SetRange("Price List Code", GetValueAtIndex(RowNo, 1));
-                    L_SalesPriceListLine.SetRange("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
-                    L_SalesPriceListLine.SetRange("Product No.", GetValueAtIndex(RowNo, 3));
-                    if L_SalesPriceListLine.FindFirst() then begin
-                        // Clear(L_Statuse);
-                        // Evaluate(L_Statuse, GetValueAtIndex(RowNo, 1));
-                        // L_SalesPriceListLine.Validate(Status, L_Statuse);
+        #Region Create Excel Header for Error++
+        ErrorLog_excelbuffer.NewRow();
+        ErrorLog_excelbuffer.AddColumn('Sales Price List Code', false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+        ErrorLog_excelbuffer.AddColumn('Sales Price Description', false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+        ErrorLog_excelbuffer.AddColumn('Item No.', false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+        ErrorLog_excelbuffer.AddColumn('Error', false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+        #EndRegion Create Excel Header for Error++
 
-                        Clear(L_MinQty);
-                        Evaluate(L_MinQty, GetValueAtIndex(RowNo, 4));
+        for RowNo := 2 to Rows do begin
+            Clear(L_ErrorFound);
+
+            #Region Create Temp Record to check dulicate line in the excel++
+            Temp_PriceListLine.Reset();
+            Temp_PriceListLine.SetRange("Price List Code", GetValueAtIndex(RowNo, 1));
+            Temp_PriceListLine.SetRange("Asset Type", Temp_PriceListLine."Asset Type"::Item);
+            Temp_PriceListLine.SetRange("Product No.", GetValueAtIndex(RowNo, 3));
+            Clear(L_MinQty);
+            if (GetValueAtIndex(RowNo, 4) <> '0') then
+                Evaluate(L_MinQty, GetValueAtIndex(RowNo, 4))
+            else
+                L_MinQty := 0;
+            Temp_PriceListLine.SetRange("Minimum Quantity", L_MinQty);
+            if not Temp_PriceListLine.FindFirst() then begin
+                Temp_PriceListLine.Init();
+                Temp_PriceListLine."Price List Code" := GetValueAtIndex(RowNo, 1);
+                Temp_PriceListLine."Product No." := GetValueAtIndex(RowNo, 3);
+                Temp_PriceListLine."Minimum Quantity" := L_MinQty;
+                Temp_PriceListLine."Line No." := RowNo;
+                Temp_PriceListLine."No of Count" := 1;
+                Temp_PriceListLine.Insert();
+            end else begin
+                Temp_PriceListLine."No of Count" += 1;
+                Temp_PriceListLine.Modify();
+            end;
+            #EndRegion Create Temp Record to check dulicate line in the excel++
+
+            #Region Excel Body For Error++
+            ErrorLog_excelbuffer.NewRow();
+            ErrorLog_excelbuffer.AddColumn(GetValueAtIndex(RowNo, 1), false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+            ErrorLog_excelbuffer.AddColumn(GetValueAtIndex(RowNo, 2), false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+            ErrorLog_excelbuffer.AddColumn(GetValueAtIndex(RowNo, 3), false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+            #EndRegion Excel Body For Error++
+
+            #Region Check Basic Error++
+            //Error Seq 1
+            if GetValueAtIndex(RowNo, 1) = '' then begin
+                ErrorLog_excelbuffer.AddColumn(StrSubstNo('The column Sales Price Code is blank. Row Number: %1', RowNo), false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+                L_ErrorFound := true;
+                L_IfErrorExit := true;
+            end;
+
+            //Error Seq 2
+            if GetValueAtIndex(RowNo, 3) = '' then begin
+                ErrorLog_excelbuffer.AddColumn(StrSubstNo('The column Item Number is blank. Row Number: %1', RowNo), false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+                L_ErrorFound := true;
+                L_IfErrorExit := true;
+            end;
+
+            //Error Seq 3
+            Temp_PriceListLine.Reset();
+            Temp_PriceListLine.SetRange("Price List Code", GetValueAtIndex(RowNo, 1));
+            Temp_PriceListLine.SetRange("Asset Type", Temp_PriceListLine."Asset Type"::Item);
+            Temp_PriceListLine.SetRange("Product No.", GetValueAtIndex(RowNo, 3));
+            Clear(L_MinQty);
+            if (GetValueAtIndex(RowNo, 4) <> '0') then
+                Evaluate(L_MinQty, GetValueAtIndex(RowNo, 4))
+            else
+                L_MinQty := 0;
+            Temp_PriceListLine.SetRange("Minimum Quantity", L_MinQty);
+            if Temp_PriceListLine.FindFirst() then begin
+                if Temp_PriceListLine."No of Count" = 2 then begin
+                    ErrorLog_excelbuffer.AddColumn(StrSubstNo('Duplicate Line. Row Number: %1', RowNo), false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+                    L_ErrorFound := true;
+                    L_IfErrorExit := true;
+                end;
+            end;
+            #EndRegion Check Basic Error--
+
+            if (SalesPriceHeaderExit(GetValueAtIndex(RowNo, 1)) = true) AND (L_ErrorFound = false) then begin
+                //Create Excel Body For Error++
+                //Error Seq 5
+                if ((GetValueAtIndex(RowNo, 5) <> '0')) AND ((GetValueAtIndex(RowNo, 6) <> '0')) then begin
+                    ErrorLog_excelbuffer.AddColumn(StrSubstNo('The columns Unit Price and Line discount contain value. Either one of them should be blank'), false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+                    L_ErrorFound := true;
+                    L_IfErrorExit := true;
+                end;
+
+                if L_ErrorFound = false then begin
+                    Clear(L_MinQty);
+                    if (GetValueAtIndex(RowNo, 4) <> '0') then
+                        Evaluate(L_MinQty, GetValueAtIndex(RowNo, 4))
+                    else
+                        L_MinQty := 0;
+
+                    if SalesPriceLineExit(GetValueAtIndex(RowNo, 1), GetValueAtIndex(RowNo, 3), L_MinQty) = true then begin
+                        //Delete Line If Columns Unit Price and Line discount conatins value are blank++
+                        if (GetValueAtIndex(RowNo, 5) = '0') AND (GetValueAtIndex(RowNo, 6) = '0') then begin
+                            L_SalesPriceListLine.Reset();
+                            L_SalesPriceListLine.SetRange("Price List Code", GetValueAtIndex(RowNo, 1));
+                            L_SalesPriceListLine.SetRange("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
+                            L_SalesPriceListLine.SetRange("Product No.", GetValueAtIndex(RowNo, 3));
+                            L_SalesPriceListLine.SetRange("Minimum Quantity", L_MinQty);
+                            if L_SalesPriceListLine.FindFirst() then begin
+                                L_SalesPriceListLine.Delete(true);
+                            end;
+                        end else begin
+                            L_SalesPriceListLine.Reset();
+                            L_SalesPriceListLine.SetRange("Price List Code", GetValueAtIndex(RowNo, 1));
+                            L_SalesPriceListLine.SetRange("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
+                            L_SalesPriceListLine.SetRange("Product No.", GetValueAtIndex(RowNo, 3));
+                            L_SalesPriceListLine.SetRange("Minimum Quantity", L_MinQty);
+                            if L_SalesPriceListLine.FindFirst() then begin
+                                L_SalesPriceListLine.Validate("Minimum Quantity", L_MinQty);
+
+                                Clear(L_UnitPrice);
+                                if (GetValueAtIndex(RowNo, 5) <> '0') then
+                                    Evaluate(L_UnitPrice, GetValueAtIndex(RowNo, 5));
+                                L_SalesPriceListLine.Validate("Unit Price", L_UnitPrice);
+
+                                Clear(L_LineDiscount);
+                                if (GetValueAtIndex(RowNo, 6) <> '0') then
+                                    Evaluate(L_LineDiscount, GetValueAtIndex(RowNo, 6));
+                                L_SalesPriceListLine.Validate("Line Discount %", L_LineDiscount);
+
+                                Clear(L_BaseVolume);
+                                if (GetValueAtIndex(RowNo, 7) <> '0') then
+                                    Evaluate(L_BaseVolume, GetValueAtIndex(RowNo, 7));
+                                L_SalesPriceListLine.Validate("Base Volume", L_BaseVolume);
+
+                                Clear(L_CostUnitThereafter);
+                                if (GetValueAtIndex(RowNo, 8) <> '0') then
+                                    Evaluate(L_CostUnitThereafter, GetValueAtIndex(RowNo, 8));
+                                L_SalesPriceListLine.Validate("Cost Unit Thereafter", L_CostUnitThereafter);
+
+                                Clear(L_Rebate);
+                                if (GetValueAtIndex(RowNo, 9) <> '0') then
+                                    Evaluate(L_Rebate, GetValueAtIndex(RowNo, 9));
+                                L_SalesPriceListLine.Validate(Rebate, L_Rebate);
+                                L_SalesPriceListLine.Modify(true);
+                            end;
+                        end;
+                    end else begin
+                        //Insert New Price Line++
+
+                        //Clear Filter++
+                        L_SalesPriceListLine.Reset();
+
+                        //Get Header
+                        L_PriceListHeader.Reset();
+                        L_PriceListHeader.SetRange(Code, GetValueAtIndex(RowNo, 1));
+                        if L_PriceListHeader.FindFirst() then;
+
+                        L_SalesPriceListLine.Init();
+                        L_SalesPriceListLine.Validate("Price List Code", GetValueAtIndex(RowNo, 1));
+                        L_SalesPriceListLine.Validate("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
+                        L_SalesPriceListLine.Validate("Product No.", GetValueAtIndex(RowNo, 3));
+                        L_SalesPriceListLine.Validate("Line No.", GetLastLineNo(GetValueAtIndex(RowNo, 1)));
+                        L_SalesPriceListLine.Validate("Amount Type", L_SalesPriceListLine."Amount Type"::Any);
+                        L_SalesPriceListLine.Insert(true);
                         L_SalesPriceListLine.Validate("Minimum Quantity", L_MinQty);
 
                         Clear(L_UnitPrice);
-                        Evaluate(L_UnitPrice, GetValueAtIndex(RowNo, 5));
+                        if (GetValueAtIndex(RowNo, 5) <> '0') then
+                            Evaluate(L_UnitPrice, GetValueAtIndex(RowNo, 5));
                         L_SalesPriceListLine.Validate("Unit Price", L_UnitPrice);
 
                         Clear(L_LineDiscount);
-                        Evaluate(L_LineDiscount, GetValueAtIndex(RowNo, 6));
+                        if (GetValueAtIndex(RowNo, 6) <> '0') then
+                            Evaluate(L_LineDiscount, GetValueAtIndex(RowNo, 6));
                         L_SalesPriceListLine.Validate("Line Discount %", L_LineDiscount);
 
                         Clear(L_BaseVolume);
-                        Evaluate(L_BaseVolume, GetValueAtIndex(RowNo, 7));
+                        if (GetValueAtIndex(RowNo, 7) <> '0') then
+                            Evaluate(L_BaseVolume, GetValueAtIndex(RowNo, 7));
                         L_SalesPriceListLine.Validate("Base Volume", L_BaseVolume);
 
                         Clear(L_CostUnitThereafter);
-                        Evaluate(L_CostUnitThereafter, GetValueAtIndex(RowNo, 8));
+                        if (GetValueAtIndex(RowNo, 8) <> '0') then
+                            Evaluate(L_CostUnitThereafter, GetValueAtIndex(RowNo, 8));
                         L_SalesPriceListLine.Validate("Cost Unit Thereafter", L_CostUnitThereafter);
 
                         Clear(L_Rebate);
-                        Evaluate(L_Rebate, GetValueAtIndex(RowNo, 9));
+                        if (GetValueAtIndex(RowNo, 9) <> '0') then
+                            Evaluate(L_Rebate, GetValueAtIndex(RowNo, 9));
                         L_SalesPriceListLine.Validate(Rebate, L_Rebate);
 
-                        // Clear(L_StartDate);
-                        // if GetValueAtIndex(RowNo, 12) <> '' then begin
-                        //     Evaluate(L_StartDate, GetValueAtIndex(RowNo, 12));
-                        //     L_SalesPriceListLine.Validate("Starting Date", L_StartDate);
-                        // end;
-
-                        // Clear(L_EndDate);
-                        // if GetValueAtIndex(RowNo, 13) <> '' then begin
-                        //     Evaluate(L_EndDate, GetValueAtIndex(RowNo, 13));
-                        //     L_SalesPriceListLine.Validate("Ending Date", L_EndDate);
-                        // end;
-
-                        L_SalesPriceListLine.Modify(true);
+                        L_SalesPriceListLine.Validate(Status, L_SalesPriceListLine.Status::Active);
+                        L_SalesPriceListLine.Modify();
                     end;
-                end else begin
-                    //Insert New Price Line++
-
-                    //Clear Filter++
-                    L_SalesPriceListLine.Reset();
-
-                    //Get Header
-                    L_PriceListHeader.Reset();
-                    L_PriceListHeader.SetRange(Code, GetValueAtIndex(RowNo, 1));
-                    if L_PriceListHeader.FindFirst() then;
-
-                    L_SalesPriceListLine.Init();
-                    L_SalesPriceListLine.Validate("Price List Code", GetValueAtIndex(RowNo, 1));
-                    L_SalesPriceListLine.Validate("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
-                    L_SalesPriceListLine.Validate("Product No.", GetValueAtIndex(RowNo, 3));
-                    L_SalesPriceListLine.Validate("Line No.", GetLastLineNo(GetValueAtIndex(RowNo, 1)));
-                    L_SalesPriceListLine.Validate("Amount Type", L_SalesPriceListLine."Amount Type"::Any);
-                    L_SalesPriceListLine.Insert(true);
-
-                    Clear(L_MinQty);
-                    Evaluate(L_MinQty, GetValueAtIndex(RowNo, 4));
-                    L_SalesPriceListLine.Validate("Minimum Quantity", L_MinQty);
-
-                    Clear(L_UnitPrice);
-                    Evaluate(L_UnitPrice, GetValueAtIndex(RowNo, 5));
-                    L_SalesPriceListLine.Validate("Unit Price", L_UnitPrice);
-
-                    Clear(L_LineDiscount);
-                    Evaluate(L_LineDiscount, GetValueAtIndex(RowNo, 6));
-                    L_SalesPriceListLine.Validate("Line Discount %", L_LineDiscount);
-
-                    Clear(L_BaseVolume);
-                    Evaluate(L_BaseVolume, GetValueAtIndex(RowNo, 7));
-                    L_SalesPriceListLine.Validate("Base Volume", L_BaseVolume);
-
-                    Clear(L_CostUnitThereafter);
-                    Evaluate(L_CostUnitThereafter, GetValueAtIndex(RowNo, 8));
-                    L_SalesPriceListLine.Validate("Cost Unit Thereafter", L_CostUnitThereafter);
-
-                    Clear(L_Rebate);
-                    Evaluate(L_Rebate, GetValueAtIndex(RowNo, 9));
-                    L_SalesPriceListLine.Validate(Rebate, L_Rebate);
-
-                    // Clear(L_StartDate);
-                    // if GetValueAtIndex(RowNo, 12) <> '' then begin
-                    //     Evaluate(L_StartDate, GetValueAtIndex(RowNo, 12));
-                    //     L_SalesPriceListLine.Validate("Starting Date", L_StartDate);
-                    // end;
-
-                    // Clear(L_EndDate);
-                    // if GetValueAtIndex(RowNo, 13) <> '' then begin
-                    //     Evaluate(L_EndDate, GetValueAtIndex(RowNo, 13));
-                    //     L_SalesPriceListLine.Validate("Ending Date", L_EndDate);
-                    // end;
-                    L_SalesPriceListLine.Validate(Status, L_SalesPriceListLine.Status::Active);
-                    L_SalesPriceListLine.Modify();
                 end;
             end else begin
-                Error('Sales Price Code %1 does not exist', GetValueAtIndex(RowNo, 1));
-                //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                // //Insert New Price Header++
+                //Create Excel Body For Error++
+                //Error Seq 4
+                if L_ErrorFound = false then begin
+                    ErrorLog_excelbuffer.AddColumn(StrSubstNo('Sales Price Code %1 does not exist', GetValueAtIndex(RowNo, 1)), false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+                    L_ErrorFound := true;
+                    L_IfErrorExit := true;
+                end;
+            end;
 
-                // //Create Price List Header++
-                // L_PriceListHeader.Reset();
-                // L_PriceListHeader.Init();
-                // L_PriceListHeader.Validate(Code, GetValueAtIndex(RowNo, 1));
-                // L_PriceListHeader.Validate(Description, GetValueAtIndex(RowNo, 2));
-                // L_PriceListHeader.Validate("Source Type", L_PriceListHeader."Source Type"::"Customer Price Group");
-                // L_PriceListHeader.Validate("Source No.", GetValueAtIndex(RowNo, 10));
-                // L_PriceListHeader.Validate("Assign-to No.", GetValueAtIndex(RowNo, 10));
-                // L_PriceListHeader.Validate("Price Type", L_PriceListHeader."Price Type"::Sale);
-                // L_PriceListHeader.Validate("Allow Invoice Disc.", true);
-                // L_PriceListHeader.Validate("Allow Line Disc.", true);
-                // L_PriceListHeader.Validate(Status, L_PriceListHeader.Status::Active);
-                // L_PriceListHeader.Insert(true);
-                // L_PriceListHeader.Validate("Amount Type", L_PriceListHeader."Amount Type"::Any);
-                // L_PriceListHeader.Modify();
-
-                // //Create Proce List Line++
-                // L_SalesPriceListLine.Reset();
-                // L_SalesPriceListLine.Init();
-                // L_SalesPriceListLine.Validate("Price List Code", GetValueAtIndex(RowNo, 1));
-                // L_SalesPriceListLine.Validate("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
-                // L_SalesPriceListLine.Validate("Product No.", GetValueAtIndex(RowNo, 3));
-                // L_SalesPriceListLine.Validate("Line No.", GetLastLineNo(GetValueAtIndex(RowNo, 1)));
-                // L_SalesPriceListLine.Validate("Amount Type", L_SalesPriceListLine."Amount Type"::Any);
-                // L_SalesPriceListLine.Insert(true);
-
-                // Clear(L_MinQty);
-                // Evaluate(L_MinQty, GetValueAtIndex(RowNo, 4));
-                // L_SalesPriceListLine.Validate("Minimum Quantity", L_MinQty);
-
-                // Clear(L_UnitPrice);
-                // Evaluate(L_UnitPrice, GetValueAtIndex(RowNo, 5));
-                // L_SalesPriceListLine.Validate("Unit Price", L_UnitPrice);
-
-                // Clear(L_LineDiscount);
-                // Evaluate(L_LineDiscount, GetValueAtIndex(RowNo, 6));
-                // L_SalesPriceListLine.Validate("Line Discount %", L_LineDiscount);
-
-                // Clear(L_BaseVolume);
-                // Evaluate(L_BaseVolume, GetValueAtIndex(RowNo, 7));
-                // L_SalesPriceListLine.Validate("Base Volume", L_BaseVolume);
-
-                // Clear(L_CostUnitThereafter);
-                // Evaluate(L_CostUnitThereafter, GetValueAtIndex(RowNo, 8));
-                // L_SalesPriceListLine.Validate("Cost Unit Thereafter", L_CostUnitThereafter);
-
-                // Clear(L_Rebate);
-                // Evaluate(L_Rebate, GetValueAtIndex(RowNo, 9));
-                // L_SalesPriceListLine.Validate(Rebate, L_Rebate);
-
-                // // Clear(L_StartDate);
-                // // if GetValueAtIndex(RowNo, 12) <> '' then begin
-                // //     Evaluate(L_StartDate, GetValueAtIndex(RowNo, 12));
-                // //     L_SalesPriceListLine.Validate("Starting Date", L_StartDate);
-                // // end;
-
-                // // Clear(L_EndDate);
-                // // if GetValueAtIndex(RowNo, 13) <> '' then begin
-                // //     Evaluate(L_EndDate, GetValueAtIndex(RowNo, 13));
-                // //     L_SalesPriceListLine.Validate("Ending Date", L_EndDate);
-                // // end;
-                // L_SalesPriceListLine.Validate(Status, L_SalesPriceListLine.Status::Active);
-                // L_SalesPriceListLine.Modify();
-                //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            if L_ErrorFound = false then begin
+                ErrorLog_excelbuffer.AddColumn('No Error', false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
             end;
         end;
+
+        // for RowNo := 2 to Rows do begin
+        //     if SalesPriceHeaderExit(GetValueAtIndex(RowNo, 1)) = true then begin
+        //         if SalesPriceLineExit(GetValueAtIndex(RowNo, 1), GetValueAtIndex(RowNo, 3)) = true then begin
+        //             L_SalesPriceListLine.Reset();
+        //             L_SalesPriceListLine.SetRange("Price List Code", GetValueAtIndex(RowNo, 1));
+        //             L_SalesPriceListLine.SetRange("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
+        //             L_SalesPriceListLine.SetRange("Product No.", GetValueAtIndex(RowNo, 3));
+        //             if L_SalesPriceListLine.FindFirst() then begin
+        //                 // Clear(L_Statuse);
+        //                 // Evaluate(L_Statuse, GetValueAtIndex(RowNo, 1));
+        //                 // L_SalesPriceListLine.Validate(Status, L_Statuse);
+
+        //                 Clear(L_MinQty);
+        //                 Evaluate(L_MinQty, GetValueAtIndex(RowNo, 4));
+        //                 L_SalesPriceListLine.Validate("Minimum Quantity", L_MinQty);
+
+        //                 Clear(L_UnitPrice);
+        //                 Evaluate(L_UnitPrice, GetValueAtIndex(RowNo, 5));
+        //                 L_SalesPriceListLine.Validate("Unit Price", L_UnitPrice);
+
+        //                 Clear(L_LineDiscount);
+        //                 Evaluate(L_LineDiscount, GetValueAtIndex(RowNo, 6));
+        //                 L_SalesPriceListLine.Validate("Line Discount %", L_LineDiscount);
+
+        //                 Clear(L_BaseVolume);
+        //                 Evaluate(L_BaseVolume, GetValueAtIndex(RowNo, 7));
+        //                 L_SalesPriceListLine.Validate("Base Volume", L_BaseVolume);
+
+        //                 Clear(L_CostUnitThereafter);
+        //                 Evaluate(L_CostUnitThereafter, GetValueAtIndex(RowNo, 8));
+        //                 L_SalesPriceListLine.Validate("Cost Unit Thereafter", L_CostUnitThereafter);
+
+        //                 Clear(L_Rebate);
+        //                 Evaluate(L_Rebate, GetValueAtIndex(RowNo, 9));
+        //                 L_SalesPriceListLine.Validate(Rebate, L_Rebate);
+
+        //                 // Clear(L_StartDate);
+        //                 // if GetValueAtIndex(RowNo, 12) <> '' then begin
+        //                 //     Evaluate(L_StartDate, GetValueAtIndex(RowNo, 12));
+        //                 //     L_SalesPriceListLine.Validate("Starting Date", L_StartDate);
+        //                 // end;
+
+        //                 // Clear(L_EndDate);
+        //                 // if GetValueAtIndex(RowNo, 13) <> '' then begin
+        //                 //     Evaluate(L_EndDate, GetValueAtIndex(RowNo, 13));
+        //                 //     L_SalesPriceListLine.Validate("Ending Date", L_EndDate);
+        //                 // end;
+
+        //                 L_SalesPriceListLine.Modify(true);
+        //             end;
+        //         end else begin
+        //             //Insert New Price Line++
+
+        //             //Clear Filter++
+        //             L_SalesPriceListLine.Reset();
+
+        //             //Get Header
+        //             L_PriceListHeader.Reset();
+        //             L_PriceListHeader.SetRange(Code, GetValueAtIndex(RowNo, 1));
+        //             if L_PriceListHeader.FindFirst() then;
+
+        //             L_SalesPriceListLine.Init();
+        //             L_SalesPriceListLine.Validate("Price List Code", GetValueAtIndex(RowNo, 1));
+        //             L_SalesPriceListLine.Validate("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
+        //             L_SalesPriceListLine.Validate("Product No.", GetValueAtIndex(RowNo, 3));
+        //             L_SalesPriceListLine.Validate("Line No.", GetLastLineNo(GetValueAtIndex(RowNo, 1)));
+        //             L_SalesPriceListLine.Validate("Amount Type", L_SalesPriceListLine."Amount Type"::Any);
+        //             L_SalesPriceListLine.Insert(true);
+
+        //             Clear(L_MinQty);
+        //             Evaluate(L_MinQty, GetValueAtIndex(RowNo, 4));
+        //             L_SalesPriceListLine.Validate("Minimum Quantity", L_MinQty);
+
+        //             Clear(L_UnitPrice);
+        //             Evaluate(L_UnitPrice, GetValueAtIndex(RowNo, 5));
+        //             L_SalesPriceListLine.Validate("Unit Price", L_UnitPrice);
+
+        //             Clear(L_LineDiscount);
+        //             Evaluate(L_LineDiscount, GetValueAtIndex(RowNo, 6));
+        //             L_SalesPriceListLine.Validate("Line Discount %", L_LineDiscount);
+
+        //             Clear(L_BaseVolume);
+        //             Evaluate(L_BaseVolume, GetValueAtIndex(RowNo, 7));
+        //             L_SalesPriceListLine.Validate("Base Volume", L_BaseVolume);
+
+        //             Clear(L_CostUnitThereafter);
+        //             Evaluate(L_CostUnitThereafter, GetValueAtIndex(RowNo, 8));
+        //             L_SalesPriceListLine.Validate("Cost Unit Thereafter", L_CostUnitThereafter);
+
+        //             Clear(L_Rebate);
+        //             Evaluate(L_Rebate, GetValueAtIndex(RowNo, 9));
+        //             L_SalesPriceListLine.Validate(Rebate, L_Rebate);
+
+        //             // Clear(L_StartDate);
+        //             // if GetValueAtIndex(RowNo, 12) <> '' then begin
+        //             //     Evaluate(L_StartDate, GetValueAtIndex(RowNo, 12));
+        //             //     L_SalesPriceListLine.Validate("Starting Date", L_StartDate);
+        //             // end;
+
+        //             // Clear(L_EndDate);
+        //             // if GetValueAtIndex(RowNo, 13) <> '' then begin
+        //             //     Evaluate(L_EndDate, GetValueAtIndex(RowNo, 13));
+        //             //     L_SalesPriceListLine.Validate("Ending Date", L_EndDate);
+        //             // end;
+        //             L_SalesPriceListLine.Validate(Status, L_SalesPriceListLine.Status::Active);
+        //             L_SalesPriceListLine.Modify();
+        //         end;
+        //     end else begin
+        //         Error('Sales Price Code %1 does not exist', GetValueAtIndex(RowNo, 1));
+        //         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //         // //Insert New Price Header++
+
+        //         // //Create Price List Header++
+        //         // L_PriceListHeader.Reset();
+        //         // L_PriceListHeader.Init();
+        //         // L_PriceListHeader.Validate(Code, GetValueAtIndex(RowNo, 1));
+        //         // L_PriceListHeader.Validate(Description, GetValueAtIndex(RowNo, 2));
+        //         // L_PriceListHeader.Validate("Source Type", L_PriceListHeader."Source Type"::"Customer Price Group");
+        //         // L_PriceListHeader.Validate("Source No.", GetValueAtIndex(RowNo, 10));
+        //         // L_PriceListHeader.Validate("Assign-to No.", GetValueAtIndex(RowNo, 10));
+        //         // L_PriceListHeader.Validate("Price Type", L_PriceListHeader."Price Type"::Sale);
+        //         // L_PriceListHeader.Validate("Allow Invoice Disc.", true);
+        //         // L_PriceListHeader.Validate("Allow Line Disc.", true);
+        //         // L_PriceListHeader.Validate(Status, L_PriceListHeader.Status::Active);
+        //         // L_PriceListHeader.Insert(true);
+        //         // L_PriceListHeader.Validate("Amount Type", L_PriceListHeader."Amount Type"::Any);
+        //         // L_PriceListHeader.Modify();
+
+        //         // //Create Proce List Line++
+        //         // L_SalesPriceListLine.Reset();
+        //         // L_SalesPriceListLine.Init();
+        //         // L_SalesPriceListLine.Validate("Price List Code", GetValueAtIndex(RowNo, 1));
+        //         // L_SalesPriceListLine.Validate("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
+        //         // L_SalesPriceListLine.Validate("Product No.", GetValueAtIndex(RowNo, 3));
+        //         // L_SalesPriceListLine.Validate("Line No.", GetLastLineNo(GetValueAtIndex(RowNo, 1)));
+        //         // L_SalesPriceListLine.Validate("Amount Type", L_SalesPriceListLine."Amount Type"::Any);
+        //         // L_SalesPriceListLine.Insert(true);
+
+        //         // Clear(L_MinQty);
+        //         // Evaluate(L_MinQty, GetValueAtIndex(RowNo, 4));
+        //         // L_SalesPriceListLine.Validate("Minimum Quantity", L_MinQty);
+
+        //         // Clear(L_UnitPrice);
+        //         // Evaluate(L_UnitPrice, GetValueAtIndex(RowNo, 5));
+        //         // L_SalesPriceListLine.Validate("Unit Price", L_UnitPrice);
+
+        //         // Clear(L_LineDiscount);
+        //         // Evaluate(L_LineDiscount, GetValueAtIndex(RowNo, 6));
+        //         // L_SalesPriceListLine.Validate("Line Discount %", L_LineDiscount);
+
+        //         // Clear(L_BaseVolume);
+        //         // Evaluate(L_BaseVolume, GetValueAtIndex(RowNo, 7));
+        //         // L_SalesPriceListLine.Validate("Base Volume", L_BaseVolume);
+
+        //         // Clear(L_CostUnitThereafter);
+        //         // Evaluate(L_CostUnitThereafter, GetValueAtIndex(RowNo, 8));
+        //         // L_SalesPriceListLine.Validate("Cost Unit Thereafter", L_CostUnitThereafter);
+
+        //         // Clear(L_Rebate);
+        //         // Evaluate(L_Rebate, GetValueAtIndex(RowNo, 9));
+        //         // L_SalesPriceListLine.Validate(Rebate, L_Rebate);
+
+        //         // // Clear(L_StartDate);
+        //         // // if GetValueAtIndex(RowNo, 12) <> '' then begin
+        //         // //     Evaluate(L_StartDate, GetValueAtIndex(RowNo, 12));
+        //         // //     L_SalesPriceListLine.Validate("Starting Date", L_StartDate);
+        //         // // end;
+
+        //         // // Clear(L_EndDate);
+        //         // // if GetValueAtIndex(RowNo, 13) <> '' then begin
+        //         // //     Evaluate(L_EndDate, GetValueAtIndex(RowNo, 13));
+        //         // //     L_SalesPriceListLine.Validate("Ending Date", L_EndDate);
+        //         // // end;
+        //         // L_SalesPriceListLine.Validate(Status, L_SalesPriceListLine.Status::Active);
+        //         // L_SalesPriceListLine.Modify();
+        //         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //     end;
+        // end;
 
         //Verify Sales Price++
         //Note:- System Skip sales price which is already verified++
@@ -256,6 +469,14 @@ codeunit 85018 "Export & Import Sales Price"
         end;
 
 
+        //Export Error Excel File++
+        if L_IfErrorExit = true then begin
+            ErrorLog_excelbuffer.CreateNewBook('Errors');
+            ErrorLog_excelbuffer.WriteSheet('Errors', CompanyName, UserId);
+            ErrorLog_excelbuffer.CloseBook();
+            ErrorLog_excelbuffer.SetFriendlyFilename(StrSubstNo('Error', CurrentDateTime, UserId));
+            ErrorLog_excelbuffer.OpenExcel();
+        end;
     end;
 
 
@@ -271,7 +492,7 @@ codeunit 85018 "Export & Import Sales Price"
             exit(10000);
     end;
 
-    local procedure SalesPriceLineExit(_Code: Code[20]; _ProductCode: Code[20]): Boolean
+    local procedure SalesPriceLineExit(_Code: Code[20]; _ProductCode: Code[20]; _MinQty: Decimal): Boolean
     var
         L_SalesPriceListLine: Record "Price List line";
     begin
@@ -279,6 +500,7 @@ codeunit 85018 "Export & Import Sales Price"
         L_SalesPriceListLine.SetRange("Price List Code", _Code);
         L_SalesPriceListLine.SetRange("Asset Type", L_SalesPriceListLine."Asset Type"::Item);
         L_SalesPriceListLine.SetRange("Product No.", _ProductCode);
+        L_SalesPriceListLine.SetRange("Minimum Quantity", _MinQty);
         if L_SalesPriceListLine.FindFirst() then
             exit(true)
         else
@@ -305,7 +527,6 @@ codeunit 85018 "Export & Import Sales Price"
         If Rec_ExcelBuffer.Get(RowNo, ColNo) then
             exit(Rec_ExcelBuffer."Cell Value as Text");
     end;
-
 
 
 

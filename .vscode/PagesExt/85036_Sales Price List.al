@@ -2,11 +2,12 @@ pageextension 85036 "SC Sales Price List" extends "Sales Price List"
 {
     layout
     {
-        // Add changes to page layout here
-        // modify(AmountType)
-        // {
-        //     Editable = false;
-        // }
+        //Add changes to page layout here
+        modify(AmountType)
+        {
+            Editable = false;
+            Visible = false;
+        }
 
         addlast(General)
         {

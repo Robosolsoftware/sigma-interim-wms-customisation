@@ -16,43 +16,40 @@ codeunit 85011 "Customer Price Group Changes"
         IsHandled := true;
     end;
 
-    // [EventSubscriber(ObjectType::Table, Database::"Price Source", 'OnBeforeGetDefaultAmountType', '', false, false)]
-    // local procedure OnBeforeGetDefaultAmountType(var IsHandled: Boolean; PriceSource: Record "Price Source" temporary; var AmountType: Enum "Price Amount Type")
-    // begin
-    //     //Set always "Price and Discount"
-    //     AmountType := AmountType::Any;
-    //     IsHandled := true;
-    // end;
+    [EventSubscriber(ObjectType::Table, Database::"Price Source", 'OnBeforeGetDefaultAmountType', '', false, false)]
+    local procedure OnBeforeGetDefaultAmountType(var IsHandled: Boolean; PriceSource: Record "Price Source" temporary; var AmountType: Enum "Price Amount Type")
+    begin
+        //Set always "Price and Discount"
+        AmountType := AmountType::Any;
+        IsHandled := true;
+    end;
 
-    // [EventSubscriber(ObjectType::Table, Database::"Price List Line", 'OnAfterValidateEvent', 'Unit Price', false, false)]
-    // local procedure UnitPrice_OnAfterValidateEvent(var Rec: Record "Price List Line")
-    // var
-    //     L_PriceListLine: Record "Price List Line";
-    //     L_PriceListManagement: codeunit "Price List Management";
-    //     L_PriceListHeader: Record "Price List Header";
-    //     DuplicatePriceLine: Record "Duplicate Price Line";
-    // begin
-    //     //Get Header++
-    //     if not L_PriceListHeader.Get(L_PriceListLine."Price List Code") then
-    //         exit;
+    [EventSubscriber(ObjectType::Table, Database::"Price List Line", 'OnAfterValidateEvent', 'Unit Price', false, false)]
+    local procedure UnitPrice_OnAfterValidateEvent(var Rec: Record "Price List Line")
+    var
+    // L_PriceListLine: Record "Price List Line";
+    // L_PriceListManagement: codeunit "Price List Management";
+    // L_PriceListHeader: Record "Price List Header";
+    // DuplicatePriceLine: Record "Duplicate Price Line";
+    begin
+        //User can enter only unit price or Line Discount
+        if Rec."Unit Price" <> 0 then
+            Rec.TestField("Line Discount %", 0);
+    end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Price List Line", 'OnAfterValidateEvent', 'Line Discount %', false, false)]
+    local procedure LineDiscount_OnAfterValidateEvent(var Rec: Record "Price List Line")
+    var
+    // L_PriceListLine: Record "Price List Line";
+    // L_PriceListManagement: codeunit "Price List Management";
+    // L_PriceListHeader: Record "Price List Header";
+    // DuplicatePriceLine: Record "Duplicate Price Line";
+    begin
+        //User can enter only unit price or Line Discount
+        if Rec."Line Discount %" <> 0 then
+            Rec.TestField("Unit Price", 0);
 
-    //     //User can enter only unit price or Line Discount
-    //     if Rec."Unit Price" <> 0 then
-    //         Rec.TestField("Line Discount %", 0);
-
-    //     if Rec."Line Discount %" <> 0 then
-    //         Rec.TestField("Unit Price");
-
-
-    //     //Find Duplicate line InSide++
-    //     if L_PriceListManagement.FindDuplicatePrices(L_PriceListHeader, true, DuplicatePriceLine) = true then
-    //         Error('Found Inside Duplicate');
-
-    //     //Find Duplicate line OutSide++
-    //     if L_PriceListManagement.FindDuplicatePrices(L_PriceListHeader, false, DuplicatePriceLine) = true then
-    //         Error('Found Out Side Duplicate');
-    // end;
+    end;
 
 
 

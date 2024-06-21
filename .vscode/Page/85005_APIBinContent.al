@@ -51,14 +51,14 @@ page 85005 APIBinContent
                 {
                     ApplicationArea = all;
                 }
-                field(Inventory; GetInventory())
-                {
-                    ApplicationArea = all;
-                }
-                field(NetInventory; GetNetInventory())
-                {
-                    ApplicationArea = all;
-                }
+                // field(Inventory; GetInventory())
+                // {
+                //     ApplicationArea = all;
+                // }
+                // field(NetInventory; GetNetInventory())
+                // {
+                //     ApplicationArea = all;
+                // }
                 field(Dimension_Code; Getdimention())
                 {
                     ApplicationArea = all;

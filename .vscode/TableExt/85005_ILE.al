@@ -20,5 +20,9 @@ tableextension 85005 ILE extends "Item Ledger Entry"
             FieldClass = FlowField;
             CalcFormula = exist("Item Variant" where("Item No." = field("Item No."), Code = field("Variant Code"), Priority = filter(> 0)));
         }
+        field(85005; "Alternate Vendor Address"; Code[20])
+        {
+
+        }
     }
 }

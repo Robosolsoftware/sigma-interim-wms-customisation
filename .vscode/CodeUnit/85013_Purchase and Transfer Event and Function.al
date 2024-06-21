@@ -17,10 +17,12 @@ codeunit 85013 "Purchase Event & Function"
     var
         L_PurchaseHeader: Record "Purchase Header";
     begin
-        Clear(G_PurchaseOrderNo);
-        L_PurchaseHeader.Reset();
-        RecRef.SetTable(L_PurchaseHeader);
-        G_PurchaseOrderNo := L_PurchaseHeader."No.";
+        if RecRef.Number = 38 then begin
+            Clear(G_PurchaseOrderNo);
+            L_PurchaseHeader.Reset();
+            RecRef.SetTable(L_PurchaseHeader);
+            G_PurchaseOrderNo := L_PurchaseHeader."No.";
+        end;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Batch Processing Mgt.", 'OnBatchProcessOnBeforeShowMessage', '', false, false)]
