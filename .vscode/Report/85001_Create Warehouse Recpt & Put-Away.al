@@ -17,9 +17,10 @@ report 85001 "Create Whs. Recpt & Put-Away"
                 L_Location: Record Location;
             begin
                 if L_Location.Get("Purchase Header"."Location Code") then begin
-                    if L_Location."Require Receive" = true then
-                        GetSourceDocInbound.CreateFromPurchOrderHideDialog("Purchase Header")
-                    else begin
+                    if L_Location."Require Receive" = true then begin
+                        "Create Whs. Recpt & Put-Away".SkiErrorMessage(true);
+                        GetSourceDocInbound.CreateFromPurchOrderHideDialog("Purchase Header");
+                    end else begin
                         if L_Location."Require Put-away" = true then begin
                             Custom_CreateInvtPutAwayPick("Purchase Header");
                         end;
@@ -89,6 +90,7 @@ report 85001 "Create Whs. Recpt & Put-Away"
     var
         myInt: Integer;
         G_Status: Enum "Purchase Document Status";
+        "Create Whs. Recpt & Put-Away": Codeunit "Create Whs. Recpt & Put-Away";
 
 }
 
