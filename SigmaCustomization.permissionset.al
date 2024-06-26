@@ -11,7 +11,6 @@ permissionset 85000 SigmaCustomization
         table "Temperature Range" = X,
         codeunit "Customer Price Group Changes" = X,
         codeunit "Export & Import Blanket SO" = X,
-        codeunit "Export & Import Purchase Order" = X,
         codeunit "Export & Import Sales Order" = X,
         codeunit "Export & Import Sales Quote" = X,
         codeunit "Export Import Sales Return" = X,
@@ -26,7 +25,6 @@ permissionset 85000 SigmaCustomization
         codeunit "WHP Based On BIN" = X,
         xmlport "Item Reclassification" = X,
         xmlport "Opning Stock_To Use" = X,
-        xmlport "Upload Purchase Order" = X,
         xmlport "Upload Sales Order" = X,
         page APIBinContent = X,
         page "Custom Variant List" = X,
@@ -42,5 +40,9 @@ permissionset 85000 SigmaCustomization
         query PostedTransferShipmentsPowerBI = X,
         query TransferOrderPowerBI = X,
         report "Create Whs. Recpt & Put-Away" = X,
-        codeunit "Export & Import Transfer Order" = X;
+        codeunit "Export & Import Transfer Order" = X,
+        codeunit "Batch Inventory Pick Post" = X,
+        codeunit "Create Whs. Recpt & Put-Away" = X,
+        codeunit "Export & Import Sales Price" = X,
+        page APIItemLedgerEntry = X;
 }

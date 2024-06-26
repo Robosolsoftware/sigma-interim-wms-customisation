@@ -308,6 +308,10 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                 end;
             end;
         }
+        field(85160; "Unit Price Approval"; Boolean)
+        {
+
+        }
 
     }
 
