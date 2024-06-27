@@ -104,13 +104,28 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -136,13 +151,28 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -168,13 +198,29 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -200,13 +246,29 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -232,13 +294,29 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -264,13 +342,29 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -296,13 +390,29 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -328,13 +438,29 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -360,13 +486,29 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -392,13 +534,29 @@ codeunit 85011 "Customer Price Group Changes"
                     repeat
                         if L_PriceListLine."Minimum Quantity" <> 0 then begin
                             if L_PriceListLine."Minimum Quantity" <= SalesLine.Quantity then begin
-                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", SalesLine."No.");
+                                    if L_Item.FindFirst() then
+                                        SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                                end else
+                                    SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                                 L_PriceFound := true;
                             end;
                         end else begin
-                            SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    SalesLine.Validate("Unit Price", L_Item."Unit Price");
+                            end else
+                                SalesLine.Validate("Unit Price", L_PriceListLine."Unit Price");
+
+
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 SalesLine.Validate("Line Discount %", L_PriceListLine."Line Discount %");
                             L_PriceFound := true;
@@ -763,10 +921,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -787,10 +957,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -811,10 +993,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -835,10 +1029,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -858,10 +1064,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -881,10 +1099,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -904,10 +1134,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -927,10 +1169,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -950,10 +1204,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -973,10 +1239,22 @@ codeunit 85011 "Customer Price Group Changes"
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _SalesLine.Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _SalesLine."No.");
+                                if L_Item.FindFirst() then
+                                    exit(L_Item."Unit Price")
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _SalesLine."No.");
+                            if L_Item.FindFirst() then
+                                exit(L_Item."Unit Price")
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;

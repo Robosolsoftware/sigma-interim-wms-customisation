@@ -20,6 +20,11 @@ pageextension 85079 POListExt extends "Purchase Order List"
         }
         addafter(Status)
         {
+            field("Inventory Put-away Exist"; Rec."Inventory Put-away Exist")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("Warehouse Receipt Exist"; Rec."Warehouse Receipt Exist")
             {
                 ApplicationArea = All;

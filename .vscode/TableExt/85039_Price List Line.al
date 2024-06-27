@@ -3,6 +3,28 @@ tableextension 85039 "SC Price List Line" extends "Price List Line"
     fields
     {
         // Add changes to table fields here
+        modify("Product No.")
+        {
+            trigger OnAfterValidate()
+            var
+                L_Item: Record Item;
+                L_PriceListHeader: Record "Price List Header";
+            begin
+                L_Item.Reset();
+                L_Item.SetRange("No.", Rec."Product No.");
+                if L_Item.FindFirst() then begin
+                    if L_Item."Special Product" = true then begin
+                        L_PriceListHeader.Reset();
+                        L_PriceListHeader.SetRange(Code, Rec."Price List Code");
+                        if L_PriceListHeader.FindFirst() then begin
+                            if L_PriceListHeader."Drug Special" = false then begin
+                                Error(StrSubstNo('Special Product is not allowed for this Contract Code %1.', L_PriceListHeader.Code, Rec));
+                            end;
+                        end;
+                    end;
+                end;
+            end;
+        }
         modify("Variant Code")
         {
             trigger OnAfterValidate()

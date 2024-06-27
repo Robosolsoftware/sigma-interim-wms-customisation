@@ -35,6 +35,9 @@ codeunit 85018 "Export & Import Sales Price"
         PriceListManagement: Codeunit "Price List Management";
         L_IfErrorExit: Boolean;
         Temp_PriceListLine: Record "Price List Line" temporary; //Dont Remove Temp Property++
+        L_PriceListLine: Record "Price List Line";
+        L_PriceListHeader: Record "Price List Header";
+        L_Item: Record Item;
     begin
         Temp_PriceListLine.DeleteAll();
         ErrorLog_excelbuffer.DeleteAll();
@@ -150,6 +153,28 @@ codeunit 85018 "Export & Import Sales Price"
                     L_IfErrorExit := true;
                 end;
             end;
+
+            L_Item.Reset();
+            L_Item.SetRange("No.", GetValueAtIndex(RowNo, 3));
+            if L_Item.FindFirst() then begin
+                if L_Item."Special Product" = true then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetRange("Price List Code", GetValueAtIndex(RowNo, 1));
+                    L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
+                    L_PriceListLine.SetRange("Product No.", GetValueAtIndex(RowNo, 3));
+                    if L_PriceListLine.FindFirst() then begin
+                        L_PriceListHeader.Reset();
+                        L_PriceListHeader.SetRange(Code, L_PriceListLine."Price List Code");
+                        if L_PriceListHeader.FindFirst() then begin
+                            if L_PriceListHeader."Drug Special" = false then begin
+                                ErrorLog_excelbuffer.AddColumn(StrSubstNo('Special Product is not allowed for this Contract Code %1. Row Number: %2', GetValueAtIndex(RowNo, 1), RowNo), false, '', false, false, false, '', ErrorLog_excelbuffer."Cell Type"::Text);
+                                L_ErrorFound := true;
+                                L_IfErrorExit := true;
+                            end;
+                        end;
+                    end;
+                end;
+            end;
             #EndRegion Check Basic Error--
 
             if (SalesPriceHeaderExit(GetValueAtIndex(RowNo, 1)) = true) AND (L_ErrorFound = false) then begin
@@ -217,7 +242,6 @@ codeunit 85018 "Export & Import Sales Price"
                         end;
                     end else begin
                         //Insert New Price Line++
-
                         //Clear Filter++
                         L_SalesPriceListLine.Reset();
 

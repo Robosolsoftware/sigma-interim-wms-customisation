@@ -75,6 +75,11 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
             FieldClass = FlowField;
             CalcFormula = exist("Warehouse Receipt Line" where("Source Document" = filter("Purchase Order"), "Source No." = field("No.")));
         }
+        field(70144; "Inventory Put-away Exist"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Warehouse Activity Header" where("Source Document" = filter("Purchase Order"), "Source No." = field("No.")));
+        }
     }
 
     var
