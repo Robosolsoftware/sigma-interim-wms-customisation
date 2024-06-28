@@ -17,6 +17,7 @@ tableextension 85028 "SC User Setup" extends "User Setup"
         field(85006; "Edit Master Data QAU Approved"; Boolean)
         {
             DataClassification = ToBeClassified;
+            Caption = 'QAU Approval';
         }
         field(85007; "Edit Unit/RRP Price on Item"; Boolean)
         {

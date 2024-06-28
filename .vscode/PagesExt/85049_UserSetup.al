@@ -21,7 +21,8 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             field("Edit Master Data QAU Approved"; Rec."Edit Master Data QAU Approved")
             {
                 ApplicationArea = All;
-                ToolTip = 'Master Data consists of Customers, Items, Vendors, Shipment Agent, Shipping Agent Service Code';
+                //ToolTip = 'Master Data consists of Customers, Items, Vendors, Shipment Agent, Shipping Agent Service Code';
+                ToolTip = 'Edit Master Data QAU Approved/Warehouse Class Code/Item Attribute';
             }
             field("Edit Unit/RRP Price on Item"; Rec."Edit Unit/RRP Price on Item")
             {
