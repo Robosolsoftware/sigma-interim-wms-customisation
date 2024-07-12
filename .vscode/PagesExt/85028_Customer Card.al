@@ -288,6 +288,16 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
             }
+            field("Market Code"; Rec."Market Code")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
+            field("Shop Group"; Rec."Shop Group")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
         }
         addafter(Statistics)
         {

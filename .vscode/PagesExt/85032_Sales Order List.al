@@ -49,58 +49,6 @@ pageextension 85032 "SC Sales Order List" extends "Sales Order List"
             //     end;
             // }
         }
-        addafter("P&osting")
-        {
-            group("Import/Export SO")
-            {
-                Caption = 'Import/Export Sales Order';
-                action("Export Sales Order Template")
-                {
-                    ApplicationArea = All;
-                    Image = Export;
-                    Caption = 'Export Sales Order Template';
-
-                    trigger OnAction()
-                    var
-                        OpningStock: Codeunit "Export & Import Sales Order";
-                    begin
-                        OpningStock.SampleSOTemplate();
-
-                    end;
-                }
-                action("Import Sales Order")
-                {
-                    ApplicationArea = All;
-                    Image = Import;
-
-                    trigger OnAction()
-                    var
-                        ImportSO: codeunit "Export & Import Sales Order";
-                    begin
-                        ImportSO.Run();
-                        Message('Completed..');
-                    end;
-                }
-
-            }
-        }
-
-        addbefore(Category_Category7)
-        {
-            group(Category_Category77)
-            {
-                Caption = 'Import/Export Sales Order';
-                actionref(ExportSalesOrderTemplate; "Export Sales Order Template")
-                {
-                }
-                actionref(ImportSalesOrder; "Import Sales Order")
-                {
-                }
-
-            }
-        }
-        // Add changes to page actions here
-
     }
 
     var

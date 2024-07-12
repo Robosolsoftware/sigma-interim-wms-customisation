@@ -27,6 +27,16 @@ pageextension 85059 "Req. Worksheet" extends "Req. Worksheet"
     }
     actions
     {
+        modify(Action53)
+        {
+            //Caption = 'Get Special Order';
+            CaptionML = ENU = 'Get Special Order', ENG = 'Get Special Order';
+        }
+        modify("Get &Sales Orders")
+        {
+            //Caption = 'Get Drop Shipment';
+            CaptionML = ENU = 'Get Drop Shipment', ENG = 'Get Drop Shipment';
+        }
         addafter(CarryOutActionMessage)
         {
             // action("Create Combine PO")

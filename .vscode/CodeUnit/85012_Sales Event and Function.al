@@ -179,6 +179,7 @@ codeunit 85012 "Sales Event & Function"
                             ShippingAgentRestrictItem.SetRange("Shipping Agent Service Code", _ShippingAgentServiceCode);
                             ShippingAgentRestrictItem.SetRange("Attribute ID", L_ItemAttribute.ID);
                             ShippingAgentRestrictItem.SetRange("Attribute value ID", L_RecItemAttValMap."Item Attribute Value ID");
+                            ShippingAgentRestrictItem.SetRange("QAU Approved", true);
                             if ShippingAgentRestrictItem.FindFirst() then begin
                                 Error('CD and Fridge items are not allowed for Shipping agent service code %1.Item No. %2', _ShippingAgentServiceCode, _ItemNo);
                             end;

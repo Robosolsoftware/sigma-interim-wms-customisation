@@ -10,10 +10,6 @@ permissionset 85000 SigmaCustomization
         table "Shipping Agent Restrict Item" = X,
         table "Temperature Range" = X,
         codeunit "Customer Price Group Changes" = X,
-        codeunit "Export & Import Blanket SO" = X,
-        codeunit "Export & Import Sales Order" = X,
-        codeunit "Export & Import Sales Quote" = X,
-        codeunit "Export Import Sales Return" = X,
         codeunit "Manage Dimension Caption" = X,
         codeunit "Miscellaneous Charges" = X,
         codeunit "Purchase Event & Function" = X,
@@ -40,9 +36,6 @@ permissionset 85000 SigmaCustomization
         query PostedTransferShipmentsPowerBI = X,
         query TransferOrderPowerBI = X,
         report "Create Whs. Recpt & Put-Away" = X,
-        codeunit "Export & Import Transfer Order" = X,
         codeunit "Batch Inventory Pick Post" = X,
-        codeunit "Create Whs. Recpt & Put-Away" = X,
-        codeunit "Export & Import Sales Price" = X,
-        page APIItemLedgerEntry = X;
+        codeunit "Create Whs. Recpt & Put-Away" = X;
 }

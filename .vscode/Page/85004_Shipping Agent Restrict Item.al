@@ -36,6 +36,11 @@ page 85004 "Shipping Agent Restrict Item"
                     TableRelation = "Item Attribute Value".Value WHERE("Attribute ID" = FIELD("Attribute ID"), Blocked = CONST(false));
                     ToolTip = 'Specifies the value of the item attribute.';
                 }
+                field("QAU Approved"; Rec."QAU Approved")
+                {
+                    ApplicationArea = All;
+                    Editable = L_EditableQUAApproved;
+                }
             }
         }
         area(Factboxes)
@@ -43,5 +48,43 @@ page 85004 "Shipping Agent Restrict Item"
 
         }
     }
+
+    var
+        L_EditableQUAApproved: Boolean;
+
+
+    trigger OnAfterGetRecord()
+    var
+        L_UserSetup: Record "User Setup";
+    begin
+        Clear(L_EditableQUAApproved);
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Edit Master Data QAU Approved" = true then
+                L_EditableQUAApproved := true
+            else
+                L_EditableQUAApproved := false;
+        end else
+            L_EditableQUAApproved := false;
+
+    end;
+
+    trigger OnOpenPage()
+    var
+        L_UserSetup: Record "User Setup";
+    begin
+        Clear(L_EditableQUAApproved);
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Edit Master Data QAU Approved" = true then
+                L_EditableQUAApproved := true
+            else
+                L_EditableQUAApproved := false;
+        end else
+            L_EditableQUAApproved := false;
+
+    end;
 
 }

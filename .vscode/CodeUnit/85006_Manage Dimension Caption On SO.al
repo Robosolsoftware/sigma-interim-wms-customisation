@@ -80,9 +80,11 @@ codeunit 85006 "Manage Dimension Caption"
     begin
         L_SalesHeader.Reset();
         RecordRef.GetTable(RecVariant);
-        RecordRef.SetTable(L_SalesHeader);
-        Clear(G_DocumentType);
-        G_DocumentType := L_SalesHeader."Document Type";
+        if RecordRef.Number = 36 then begin
+            RecordRef.SetTable(L_SalesHeader);
+            Clear(G_DocumentType);
+            G_DocumentType := L_SalesHeader."Document Type";
+        end;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::DimensionManagement, 'OnEditDimensionSetOnBeforeEditDimEntries', '', false, false)]

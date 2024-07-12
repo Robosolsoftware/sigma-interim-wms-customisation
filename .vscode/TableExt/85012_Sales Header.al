@@ -312,6 +312,13 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         {
 
         }
+        field(85161; "Total Order Qty"; Decimal)
+        {
+            FieldClass = FlowField;
+            CalcFormula = sum("Sales Line".Quantity where(Type = filter(Item), "Document No." = field("No."), "Document Type" = field("Document Type")));
+            Editable = false;
+            DecimalPlaces = 0 : 5;
+        }
 
     }
 

@@ -64,6 +64,10 @@ table 85002 "Shipping Agent Restrict Item"
         {
             Caption = 'Attribute value ID';
         }
+        field(85146; "QAU Approved"; Boolean)
+        {
+
+        }
 
     }
 

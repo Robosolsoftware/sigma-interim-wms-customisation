@@ -160,11 +160,15 @@ codeunit 85016 "Tariff Price Management"
         CustomerPriceGroupText: Text[20000];
         PriceLineList2: Record "Price List Line";
         L_SalesHeader: Record "Sales Header";
+        L_Item: Record Item;
     begin
         CLEAR(DiffVolume);
         CLEAR(DiffVolumePrice);
         CLEAR(FinalPrice);
         Clear(CustomerPriceGroupText);
+
+        if Rec.Type <> Rec.Type::Item then
+            exit;
 
         L_SalesHeader.Reset();
         IF L_SalesHeader.get(Rec."Document Type", Rec."Document No.") then begin
@@ -207,13 +211,30 @@ codeunit 85016 "Tariff Price Management"
                     if Rec."Unit Volume" >= PriceLineList2."Base Volume" then begin
                         DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
                         DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
-                        IF L_SalesHeader."Currency Factor" <> 0 THEN
-                            FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / L_SalesHeader."Currency Factor"
-                        ELSE
+                        if PriceLineList2."Unit Price" <> 0 then begin
                             FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
+                        end else begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", Rec."No.");
+                            if L_Item.FindFirst() then begin
+                                FinalPrice := (DiffVolumePrice + L_Item."Unit Price");
+                            end;
+                        end;
+                        // IF L_SalesHeader."Currency Factor" <> 0 THEN
+                        //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / L_SalesHeader."Currency Factor"
+                        // ELSE
+                        //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
 
                     end else begin
-                        FinalPrice := PriceLineList2."Unit Price";
+                        if PriceLineList2."Unit Price" <> 0 then
+                            FinalPrice := PriceLineList2."Unit Price"
+                        else begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", Rec."No.");
+                            if L_Item.FindFirst() then begin
+                                FinalPrice := L_Item."Unit Price"
+                            end;
+                        end;
                     end;
 
                     Rec.Validate("Unit Price", FinalPrice);
@@ -236,6 +257,7 @@ codeunit 85016 "Tariff Price Management"
         CustomerPriceGroupText: Text[20000];
         PriceLineList2: Record "Price List Line";
         L_SalesHeader: Record "Sales Header";
+        L_Item: Record Item;
     begin
         CLEAR(DiffVolume);
         CLEAR(DiffVolumePrice);
@@ -286,13 +308,34 @@ codeunit 85016 "Tariff Price Management"
                     if Rec."Unit Volume" > PriceLineList2."Base Volume" then begin
                         DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
                         DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
-                        IF L_SalesHeader."Currency Factor" <> 0 THEN
-                            FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / L_SalesHeader."Currency Factor"
-                        ELSE
+                        DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
+                        DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
+                        if PriceLineList2."Unit Price" <> 0 then begin
                             FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
+                        end else begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", Rec."No.");
+                            if L_Item.FindFirst() then begin
+                                FinalPrice := (DiffVolumePrice + L_Item."Unit Price");
+                            end;
+                        end;
+                        // IF L_SalesHeader."Currency Factor" <> 0 THEN
+                        //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / L_SalesHeader."Currency Factor"
+                        // ELSE
+                        //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
                     end else begin
-                        FinalPrice := PriceLineList2."Unit Price";
+                        if PriceLineList2."Unit Price" <> 0 then
+                            FinalPrice := PriceLineList2."Unit Price"
+                        else begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", Rec."No.");
+                            if L_Item.FindFirst() then begin
+                                FinalPrice := L_Item."Unit Price"
+                            end;
+                        end;
                     end;
+
+
                     Rec.Validate("Unit Price", FinalPrice);
                     Rec.Validate(Rebate, PriceLineList2.Rebate);
                     Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");

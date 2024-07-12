@@ -104,6 +104,11 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                 Editable = false;
                 Caption = 'Modified By';
             }
+            field("Total Order Qty"; Rec."Total Order Qty")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
         }
         addafter(SalesLines)
         {
@@ -182,22 +187,22 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
 
     actions
     {
-        addafter(Release)
-        {
-            action(CalculateTariff)
-            {
-                ApplicationArea = All;
-                Caption = 'Calculate Tariff';
-                Image = Calculate;
-                Promoted = True;
-                PromotedCategory = Process;
-                RunObject = codeunit "Tariff Price Management";
-                trigger OnAction()
-                begin
+        // addafter(Release)
+        // {
+        //     action(CalculateTariff)
+        //     {
+        //         ApplicationArea = All;
+        //         Caption = 'Calculate Tariff';
+        //         Image = Calculate;
+        //         Promoted = True;
+        //         PromotedCategory = Process;
+        //         RunObject = codeunit "Tariff Price Management";
+        //         trigger OnAction()
+        //         begin
 
-                end;
-            }
-        }
+        //         end;
+        //     }
+        // }
     }
 
 

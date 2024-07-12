@@ -3,6 +3,14 @@ pageextension 85041 "SC Vendor List" extends "Vendor List"
     layout
     {
         // Add changes to page layout here
+        addafter(Name)
+        {
+            field("Pay-to Vendor No."; Rec."Pay-to Vendor No.")
+            {
+                ApplicationArea = ALl;
+                Editable = false;
+            }
+        }
         addafter("Location Code")
         {
             field(Status; Rec.Status)

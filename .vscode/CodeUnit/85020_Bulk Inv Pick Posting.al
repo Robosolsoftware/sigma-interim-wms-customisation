@@ -21,6 +21,7 @@ codeunit 85020 "Batch Inventory Pick Post"
     begin
         if G_BatchPostRequire = true then begin
             HideDialog := true;
+            Clear(G_BatchPostRequire);
         end;
     end;
 }

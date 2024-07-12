@@ -93,6 +93,10 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
             Editable = L_CurrPageEditable;
         }
         //Editable Condition++
+        modify("Pay-to Vendor No.")
+        {
+            Visible = true;
+        }
 
 
         addlast(General)

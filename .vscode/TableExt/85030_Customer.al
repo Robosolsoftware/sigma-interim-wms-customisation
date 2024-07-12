@@ -249,6 +249,14 @@ tableextension 85030 "SC Customer" extends Customer
                     Validate("Weekend Ship. Agnt. Serv. Code", '');
             end;
         }
+        field(85168; "Market Code"; Text[50])
+        {
+
+        }
+        field(85169; "Shop Group"; Text[50])
+        {
+
+        }
 
         modify("Ship-to Code")
         {
