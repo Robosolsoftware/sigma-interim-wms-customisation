@@ -109,6 +109,11 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = all;
                 Editable = false;
             }
+            field("Drop/Special Order"; Rec."Drop/Special Order")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
         addafter(SalesLines)
         {
