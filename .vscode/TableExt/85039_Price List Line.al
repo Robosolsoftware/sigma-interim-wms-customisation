@@ -29,7 +29,8 @@ tableextension 85039 "SC Price List Line" extends "Price List Line"
         {
             trigger OnAfterValidate()
             begin
-                Rec.TestField("Variant Code", '');
+                if Rec."Price Type" = Rec."Price Type"::Sale then
+                    Rec.TestField("Variant Code", '');
             end;
         }
 

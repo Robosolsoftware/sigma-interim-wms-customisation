@@ -17,6 +17,10 @@ query 85003 "TransferOrderPowerBI"
             column(SystemCreatedAt; SystemCreatedAt)
             {
             }
+            column(Comments; Comments)
+            {
+
+            }
 
             dataitem(Transfer_Line; "Transfer Line")
             {

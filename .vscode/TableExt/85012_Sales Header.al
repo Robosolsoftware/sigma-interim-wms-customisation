@@ -326,8 +326,15 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         }
         field(85162; "Drop/Special Order"; Boolean)
         {
+            Caption = 'Drop Shipment Order';
             FieldClass = FlowField;
             CalcFormula = exist("Sales Line" where("Document Type" = field("Document Type"), "Document No." = field("No."), "Purchase Order No." = filter(<> '')));
+        }
+        field(85163; "Special Order"; Boolean)
+        {
+            Caption = 'Special Order';
+            FieldClass = FlowField;
+            CalcFormula = exist("Sales Line" where("Document Type" = field("Document Type"), "Document No." = field("No."), "Special Order Purchase No." = filter(<> '')));
         }
 
     }

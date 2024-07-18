@@ -4,6 +4,7 @@ tableextension 85037 "SC Warehouse Class" extends "Warehouse Class"
     {
         field(85155; "CD"; Boolean)
         {
+            Caption = 'SF';
             trigger OnValidate()
             begin
                 if Rec.CD = true then

@@ -8,6 +8,7 @@ pageextension 85053 "SC Warehouse Classes" extends "Warehouse Classes"
             field(CD; Rec.CD)
             {
                 ApplicationArea = all;
+                Caption = 'SF';
             }
             field(Fridge; Rec.Fridge)
             {
