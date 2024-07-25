@@ -59,15 +59,27 @@ pageextension 85011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                         Caption = 'Location Code.';
                         Editable = false;
                     }
-                    field("No. of Items"; Rec."No. of Items")
+                    // field("No. of Items"; Rec."No. of Items")
+                    // {
+                    //     ApplicationArea = all;
+                    //     Editable = false;
+                    // }
+                    // field("Total Order Qty"; Rec."Total Order Qty")
+                    // {
+                    //     ApplicationArea = all;
+                    //     Editable = false;
+                    // }
+                    field("Posted Whs. Recpt No. of Items"; Rec."Posted Whs. Recpt No. of Items")
                     {
                         ApplicationArea = all;
                         Editable = false;
+                        Caption = 'No. Of Items';
                     }
-                    field("Total Order Qty"; Rec."Total Order Qty")
+                    field("Posted Whs. Recpt Total Qty"; Rec."Posted Whs. Recpt Total Qty")
                     {
                         ApplicationArea = all;
                         Editable = false;
+                        Caption = 'Total Order Qty';
                     }
                 }
                 group("Sales Return Order Details")

@@ -257,7 +257,6 @@ tableextension 85030 "SC Customer" extends Customer
         {
 
         }
-
         modify("Ship-to Code")
         {
             trigger OnAfterValidate()

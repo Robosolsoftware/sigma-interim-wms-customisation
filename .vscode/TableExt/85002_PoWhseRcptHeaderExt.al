@@ -17,10 +17,12 @@ tableextension 85002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         field(85005; "No. of Items"; Decimal)
         {
             DataClassification = ToBeClassified;
+            Caption = 'No. Of Items On PO';
         }
         field(85006; "Total Order Qty"; Decimal)
         {
             DataClassification = ToBeClassified;
+            Caption = 'Total Order Qty On PO';
         }
         field(85008; "Locationcode"; Code[20])
         {
@@ -112,6 +114,18 @@ tableextension 85002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         field(85029; "Customer Name"; Text[100])
         {
 
+        }
+        field(85031; "Posted Whs. Recpt No. of Items"; Integer)
+        {
+            Caption = 'No. Of Items';
+            FieldClass = FlowField;
+            CalcFormula = count("Posted Whse. Receipt Line" where("No." = field("No.")));
+        }
+        field(85032; "Posted Whs. Recpt Total Qty"; Decimal)
+        {
+            Caption = 'Total Order Qty';
+            FieldClass = FlowField;
+            CalcFormula = sum("Posted Whse. Receipt Line".Quantity where("No." = field("No.")));
         }
 
     }

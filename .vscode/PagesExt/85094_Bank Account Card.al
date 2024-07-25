@@ -13,6 +13,10 @@ pageextension 85094 "SC Bank Account Card" extends "Bank Account Card"
             {
                 ApplicationArea = All;
             }
+            field("Fin Option"; Rec."Fin Option")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 
@@ -23,4 +27,5 @@ pageextension 85094 "SC Bank Account Card" extends "Bank Account Card"
 
     var
         myInt: Integer;
+        tes: Page "Customer Ledger Entries";
 }

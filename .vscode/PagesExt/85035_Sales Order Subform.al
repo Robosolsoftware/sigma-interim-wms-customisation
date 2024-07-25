@@ -3,6 +3,24 @@ pageextension 85035 "SC Sales Order Subform" extends "Sales Order Subform"
     layout
     {
         // Add changes to page layout here
+        modify(ShortcutDimCode5)
+        {
+            ShowMandatory = true;
+        }
+        modify("No.")
+        {
+            trigger OnAfterValidate()
+            begin
+                //Issue Log D190 - For special orders, can the quantity default to 1 when the customer is prompted to enter the "Unit Volume"?
+                if Rec."Special Product" = true then begin
+                    Rec.Validate(Quantity, 1);
+                    Rec.Modify();
+                end;
+            end;
+        }
+
+
+
         modify("Location Code")
         {
             trigger OnAfterValidate()

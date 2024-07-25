@@ -11,6 +11,11 @@ tableextension 85053 "SC Bank Account" extends "Bank Account"
         {
 
         }
+        field(85055; "Fin Option"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = " ","DD Notified","DD Non-Notified";
+        }
     }
 
     keys

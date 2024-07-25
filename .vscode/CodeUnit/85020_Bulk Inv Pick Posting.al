@@ -21,6 +21,14 @@ codeunit 85020 "Batch Inventory Pick Post"
     begin
         if G_BatchPostRequire = true then begin
             HideDialog := true;
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Activity-Post", 'OnAfterSetInvoiceSourceDoc', '', false, false)]
+    local procedure OnAfterSetInvoiceSourceDoc(var InvoiceSourceDocument: Boolean)
+    begin
+        if G_BatchPostRequire = true then begin
+            InvoiceSourceDocument := true;
             Clear(G_BatchPostRequire);
         end;
     end;

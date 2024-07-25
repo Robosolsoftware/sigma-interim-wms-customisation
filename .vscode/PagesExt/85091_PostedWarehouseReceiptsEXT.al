@@ -36,15 +36,27 @@ pageextension 85091 PostedWarehouseReceiptsEXT extends "Posted Whse. Receipt Lis
                 ApplicationArea = all;
                 Visible = false;
             }
-            field("No. of Items"; Rec."No. of Items")
+            // field("No. of Items"; Rec."No. of Items")
+            // {
+            //     ApplicationArea = all;
+            //     Editable = false;
+            // }
+            // field("Total Order Qty"; Rec."Total Order Qty")
+            // {
+            //     ApplicationArea = all;
+            //     Editable = false;
+            // }
+            field("Posted Whs. Recpt No. of Items"; Rec."Posted Whs. Recpt No. of Items")
             {
                 ApplicationArea = all;
                 Editable = false;
+                Caption = 'No. Of Items';
             }
-            field("Total Order Qty"; Rec."Total Order Qty")
+            field("Posted Whs. Recpt Total Qty"; Rec."Posted Whs. Recpt Total Qty")
             {
                 ApplicationArea = all;
                 Editable = false;
+                Caption = 'Total Order Qty';
             }
         }
         modify("Assigned User ID")

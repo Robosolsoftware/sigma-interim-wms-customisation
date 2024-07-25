@@ -17,10 +17,12 @@ tableextension 85000 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         field(85005; "No. of Items"; Decimal)
         {
             DataClassification = ToBeClassified;
+            Caption = 'No. Of Items On PO';
         }
         field(85006; "Total Order Qty"; Decimal)
         {
             DataClassification = ToBeClassified;
+            Caption = 'Total Order Qty On PO';
         }
         field(85008; "Locationcode"; Code[20])
         {
@@ -120,6 +122,18 @@ tableextension 85000 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         {
             FieldClass = FlowField;
             CalcFormula = lookup("Warehouse Receipt Line"."Source Document" where("No." = field("No.")));
+        }
+        field(85031; "Whs. Receipt No. of Items"; Integer)
+        {
+            Caption = 'No. Of Items';
+            FieldClass = FlowField;
+            CalcFormula = count("Warehouse Receipt Line" where("No." = field("No.")));
+        }
+        field(85032; "Whs. Receipt Total Order Qty"; Decimal)
+        {
+            Caption = 'Total Order Qty';
+            FieldClass = FlowField;
+            CalcFormula = sum("Warehouse Receipt Line".Quantity where("No." = field("No.")));
         }
 
     }

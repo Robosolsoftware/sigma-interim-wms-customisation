@@ -347,7 +347,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
 
             }
         }
-
     }
 
     actions

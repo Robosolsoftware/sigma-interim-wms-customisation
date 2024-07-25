@@ -3,6 +3,23 @@ pageextension 85093 "SC Default Dimensions" extends "Default Dimensions"
     layout
     {
         // Add changes to page layout here
+        addafter("Dimension Value Code")
+        {
+            field("Dimension Value Name"; Rec."Dimension Value Name")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("No."; Rec."No.")
+            {
+                Caption = 'Customer No.';
+                ApplicationArea = All;
+                Editable = false;
+                Visible = G_No;
+            }
+
+        }
+
     }
 
     actions
@@ -12,6 +29,7 @@ pageextension 85093 "SC Default Dimensions" extends "Default Dimensions"
 
     var
         myInt: Integer;
+        G_No: Boolean;
 
     trigger OnOpenPage()
     var
@@ -25,6 +43,9 @@ pageextension 85093 "SC Default Dimensions" extends "Default Dimensions"
                     CurrPage.Editable(false);
             end;
         end;
+        Clear(G_No);
+        if Rec."Table ID" = 18 then
+            G_No := true;
     end;
 
     trigger OnAfterGetRecord()
@@ -39,6 +60,11 @@ pageextension 85093 "SC Default Dimensions" extends "Default Dimensions"
                     CurrPage.Editable(false);
             end;
         end;
+
+        Clear(G_No);
+        if Rec."Table ID" = 18 then
+            G_No := true;
+
 
     end;
 }

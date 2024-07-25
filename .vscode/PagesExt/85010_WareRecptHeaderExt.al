@@ -45,15 +45,27 @@ pageextension 85010 WareRcptHeaderExt extends "Warehouse Receipt"
                         Caption = 'Location Code.';
                         Editable = false;
                     }
-                    field("No. of Items"; Rec."No. of Items")
+                    // field("No. of Items"; Rec."No. of Items")
+                    // {
+                    //     ApplicationArea = all;
+                    //     Editable = false;
+                    // }
+                    // field("Total Order Qty"; Rec."Total Order Qty")
+                    // {
+                    //     ApplicationArea = all;
+                    //     Editable = false;
+                    // }
+                    field("Whs. Receipt No. of Items"; Rec."Whs. Receipt No. of Items")
                     {
                         ApplicationArea = all;
                         Editable = false;
+                        Caption = 'No. Of Items';
                     }
-                    field("Total Order Qty"; Rec."Total Order Qty")
+                    field("Whs. Receipt Total Order Qty"; Rec."Whs. Receipt Total Order Qty")
                     {
                         ApplicationArea = all;
                         Editable = false;
+                        Caption = 'Total Order Qty';
                     }
                     field(CD; Rec.CD)
                     {

@@ -80,6 +80,10 @@ tableextension 85039 "SC Price List Line" extends "Price List Line"
         {
 
         }
+        field(85164; ARI; Boolean)
+        {
+
+        }
     }
 
     keys
