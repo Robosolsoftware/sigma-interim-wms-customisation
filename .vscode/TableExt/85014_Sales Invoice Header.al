@@ -121,9 +121,15 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
                 end;
             end;
         }
+        field(85164; "Shipping Agent Service Code"; Code[10])
+        {
+            Caption = 'Shipping Agent Service Code';
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+        }
     }
 
 
     var
         myInt: Integer;
+        tes: Codeunit 80;
 }

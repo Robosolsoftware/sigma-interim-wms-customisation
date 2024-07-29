@@ -24,7 +24,6 @@ permissionset 85000 SigmaCustomization
         xmlport "Upload Sales Order" = X,
         page APIBinContent = X,
         page "Custom Variant List" = X,
-        page "Item Variants Details" = X,
         page ItemAttributecustomFactbox = X,
         page "Promotional Item List" = X,
         page "Sales Order warning Mng. Setup" = X,

@@ -1,6 +1,6 @@
 codeunit 85012 "Sales Event & Function"
 {
-    Permissions = tabledata 7320 = m, tabledata 7322 = m;
+    Permissions = tabledata 7320 = m, tabledata 7322 = m, tabledata 112 = m;
     SingleInstance = true;
     trigger OnRun()
     begin
@@ -657,4 +657,18 @@ codeunit 85012 "Sales Event & Function"
     end;
     #endregion Check Duplicate Customer Price+++
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
+    local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; SalesInvHdrNo: Code[20])
+    var
+        L_SalesInvoiceHeader: Record "Sales Invoice Header";
+    begin
+        if (SalesHeader."Document Type" = SalesHeader."Document Type"::Order) OR (SalesHeader."Document Type" = SalesHeader."Document Type"::Invoice) then begin
+            L_SalesInvoiceHeader.Reset();
+            L_SalesInvoiceHeader.SetRange("No.", SalesInvHdrNo);
+            if L_SalesInvoiceHeader.FindFirst() then begin
+                L_SalesInvoiceHeader.Validate("Shipping Agent Service Code", SalesHeader."Shipping Agent Service Code");
+                L_SalesInvoiceHeader.Modify();
+            end;
+        end;
+    end;
 }

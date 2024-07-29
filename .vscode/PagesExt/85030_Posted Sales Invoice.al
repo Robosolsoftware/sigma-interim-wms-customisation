@@ -3,6 +3,24 @@ pageextension 85030 "SC Posted Sales Invoice" extends "Posted Sales Invoice"
     layout
     {
         //Add changes to page layout here
+        addlast("Shipping Details")
+        {
+            field("Shipping Agent Service Code"; Rec."Shipping Agent Service Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Weekend Shipping Agent Code"; Rec."Weekend Shipping Agent Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Weekend Ship. Agnt. Serv. Code"; Rec."Weekend Ship. Agnt. Serv. Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
         addlast("Invoice Details")
         {
             field("Default Bank"; Rec."Default Bank")

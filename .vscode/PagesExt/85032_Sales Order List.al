@@ -2,6 +2,33 @@ pageextension 85032 "SC Sales Order List" extends "Sales Order List"
 {
     layout
     {
+        addlast(Control1)
+        {
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'Created At';
+            }
+            field(SystemCreatedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemCreatedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'Created By';
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'Modified At';
+            }
+            field(SystemModifiedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = all;
+                Editable = false;
+                Caption = 'Modified By';
+            }
+        }
         addafter("Sell-to Customer Name")
         {
             field("Shortcut Dimension 3 Code"; Rec."Shortcut Dimension 3 Code")
@@ -54,6 +81,7 @@ pageextension 85032 "SC Sales Order List" extends "Sales Order List"
     var
         myInt: Integer;
         PartiallyShipped: Boolean;
+        G_MiscellaneousCharges: Codeunit "Miscellaneous Charges";
 
     trigger OnAfterGetRecord()
     var

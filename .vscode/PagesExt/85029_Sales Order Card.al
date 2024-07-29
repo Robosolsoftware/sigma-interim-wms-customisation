@@ -36,12 +36,6 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
         }
         addfirst(factboxes)
         {
-            part("Item Variants Details"; "Item Variants Details")
-            {
-                ApplicationArea = All;
-                Provider = SalesLines;
-                SubPageLink = "Item No." = field("No.");
-            }
             part(ItemAttributecustomFactbox; ItemAttributecustomFactbox)
             {
                 SubPageLink = "Item No." = field("No.");

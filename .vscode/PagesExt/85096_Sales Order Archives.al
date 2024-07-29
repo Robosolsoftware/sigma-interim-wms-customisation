@@ -3,6 +3,19 @@ pageextension 85096 "SC Sales Order Archives" extends "Sales Order Archives"
     layout
     {
         // Add changes to page layout here
+        addafter("Archived By")
+        {
+            field("Sales Order Created By"; Rec."Sales Order Created By")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Web Order"; Rec."Web Order")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
     }
 
     actions
