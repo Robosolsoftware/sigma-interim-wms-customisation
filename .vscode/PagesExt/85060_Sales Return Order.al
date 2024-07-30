@@ -10,6 +10,19 @@ pageextension 85060 "SC Sales Return Order" extends "Sales Return Order"
                 ApplicationArea = All;
             }
         }
+        addafter("Shipping Agent Service Code")
+        {
+            field("Weekend Shipping Agent Code"; Rec."Weekend Shipping Agent Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Weekend Ship. Agnt. Serv. Code"; Rec."Weekend Ship. Agnt. Serv. Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
     }
 
     actions
@@ -19,4 +32,5 @@ pageextension 85060 "SC Sales Return Order" extends "Sales Return Order"
 
     var
         myInt: Integer;
+        tes: Page "Posted Sales Document Lines";
 }

@@ -95,4 +95,25 @@ codeunit 85009 SalesReturnOrderChanges
         SalesLine."Return Order Line No." := ReturnReceiptLine."Return Order Line No.";
         SalesLine.Modify();
     end;
+
+
+
+    //As discussed with team - Sigma will use sigle invoice to return order+++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnAfterCopySalesLinesToDoc', '', false, false)]
+    local procedure OnAfterCopySalesLinesToDoc(var ToSalesHeader: Record "Sales Header"; var FromSalesInvoiceLine: Record "Sales Invoice Line")
+    var
+        L_SalesInvoiceHeader: Record "Sales Invoice Header";
+    begin
+        if ToSalesHeader."Document Type" = ToSalesHeader."Document Type"::"Return Order" then begin
+            L_SalesInvoiceHeader.Reset();
+            L_SalesInvoiceHeader.SetRange("No.", FromSalesInvoiceLine."Document No.");
+            if L_SalesInvoiceHeader.FindFirst() then begin
+                ToSalesHeader.Validate("Shipping Agent Code", L_SalesInvoiceHeader."Shipping Agent Code");
+                ToSalesHeader.Validate("Shipping Agent Service Code", L_SalesInvoiceHeader."Shipping Agent Service Code");
+                ToSalesHeader.Validate("Weekend Shipping Agent Code", L_SalesInvoiceHeader."Weekend Shipping Agent Code");
+                ToSalesHeader.Validate("Weekend Ship. Agnt. Serv. Code", L_SalesInvoiceHeader."Weekend Ship. Agnt. Serv. Code");
+                ToSalesHeader.Modify();
+            end;
+        end;
+    end;
 }
