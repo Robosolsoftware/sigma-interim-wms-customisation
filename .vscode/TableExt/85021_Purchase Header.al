@@ -80,6 +80,11 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
             FieldClass = FlowField;
             CalcFormula = exist("Warehouse Activity Header" where("Source Document" = filter("Purchase Order"), "Source No." = field("No.")));
         }
+        field(85021; "Invoice Type"; Option)
+        {
+            OptionMembers = " ",Opex,Stock;
+
+        }
     }
 
     var

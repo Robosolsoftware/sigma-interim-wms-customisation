@@ -10,6 +10,10 @@ pageextension 85100 "SC Purchase Invoice" extends "Purchase Invoice"
                 Caption = 'Approval Required';
                 ApplicationArea = All;
             }
+            field("Invoice Type"; Rec."Invoice Type")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 
