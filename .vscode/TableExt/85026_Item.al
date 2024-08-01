@@ -131,6 +131,14 @@ tableextension 85026 "Item_Extension" extends Item
             Caption = 'Ops Purchase Blocked';
             DataClassification = CustomerContent;
         }
+        field(85119; "EDI Description"; Text[40])
+        {
+
+        }
+        field(85120; "EDI Pack size"; Decimal)
+        {
+
+        }
         modify("Unit Price")
         {
             trigger OnAfterValidate()

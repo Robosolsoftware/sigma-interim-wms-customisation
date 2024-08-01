@@ -69,6 +69,7 @@ pageextension 85010 WareRcptHeaderExt extends "Warehouse Receipt"
                     }
                     field(CD; Rec.CD)
                     {
+                        Caption = 'SF';
                         ApplicationArea = all;
                         Editable = false;
                     }
@@ -76,6 +77,7 @@ pageextension 85010 WareRcptHeaderExt extends "Warehouse Receipt"
                     {
                         ApplicationArea = all;
                         Editable = false;
+                        Caption = 'SF Qty.';
                     }
 
                     group("Sales Return Order Details")

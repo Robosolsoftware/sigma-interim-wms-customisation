@@ -94,10 +94,12 @@ tableextension 85002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
         {
             DataClassification = ToBeClassified;
             OptionMembers = " ",Yes,No;
+            Caption = 'SF';
         }
         field(85025; "CD Qty"; Integer)
         {
             DataClassification = ToBeClassified;
+            Caption = 'SF Qty.';
         }
         field(85026; "Requested Receipt Date"; Date)
         {

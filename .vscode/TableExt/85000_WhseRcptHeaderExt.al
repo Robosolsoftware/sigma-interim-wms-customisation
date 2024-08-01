@@ -95,11 +95,13 @@ tableextension 85000 WhseRcptHeaderExt extends "Warehouse Receipt Header"
 
         field(85024; CD; Option)
         {
+            Caption = 'SF';
             DataClassification = ToBeClassified;
             OptionMembers = "",Yes,No;
         }
         field(85025; "CD Qty"; Integer)
         {
+            Caption = 'SF Qty.';
             DataClassification = ToBeClassified;
         }
         field(85026; "Requested Receipt Date"; Date)

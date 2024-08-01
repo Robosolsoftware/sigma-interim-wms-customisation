@@ -336,6 +336,11 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
             FieldClass = FlowField;
             CalcFormula = exist("Sales Line" where("Document Type" = field("Document Type"), "Document No." = field("No."), "Special Order Purchase No." = filter(<> '')));
         }
+        field(85165; "SO Min Order Approval Required"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Sales Line" where("Document Type" = field("Document Type"), "Document No." = field("No."), "SO Min Order Approval Required" = const(true)));
+        }
 
     }
 

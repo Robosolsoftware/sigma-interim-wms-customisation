@@ -46,12 +46,13 @@ pageextension 85011 PoWareRcptHeaderExt extends "Posted Whse. Receipt"
                     {
                         ApplicationArea = all;
                         Editable = false;
-
+                        Caption = 'SF';
                     }
                     field("CD Qty"; Rec."CD Qty")
                     {
                         ApplicationArea = all;
                         Editable = false;
+                        Caption = 'SF Qty.';
                     }
                     field(Locationcode; Rec.Locationcode)
                     {

@@ -64,11 +64,13 @@ pageextension 85000 WarehouseReceiptsExt extends "Warehouse Receipts"
             {
                 ApplicationArea = all;
                 Editable = false;
+                Caption = 'SF';
             }
             field("CD Qty"; Rec."CD Qty")
             {
                 ApplicationArea = all;
                 Editable = false;
+                Caption = 'SF Qty.';
             }
             field("Source Document"; Rec."Source Document")
             {

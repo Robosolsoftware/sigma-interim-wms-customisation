@@ -96,6 +96,16 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 ApplicationArea = all;
                 Editable = L_CurrPageEditable;
             }
+            field("EDI Description"; Rec."EDI Description")
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
+            field("EDI Pack size"; Rec."EDI Pack size")
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
         }
 
         addafter(Description)

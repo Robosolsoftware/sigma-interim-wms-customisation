@@ -158,6 +158,30 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
             Description = 'Relation with Pack Code in Table Strength Master';
             //TableRelation = "Strength Master".Code;
         }
+        field(85030; "SO Min Order Approval Required"; Boolean)
+        {
+
+        }
+        modify("Line Amount")
+        {
+            trigger OnAfterValidate()
+            var
+                L_SalesHeader: Record "Sales Header";
+            begin
+                L_SalesHeader.Reset();
+                L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+                L_SalesHeader.SetRange("No.", Rec."Document No.");
+                if L_SalesHeader.FindFirst() then begin
+                    if L_SalesHeader."Min Order Value" > Rec.Amount then begin
+                        Rec."SO Min Order Approval Required" := true;
+                        Rec.Modify();
+                    end else begin
+                        Rec."SO Min Order Approval Required" := false;
+                        Rec.Modify();
+                    end;
+                end;
+            end;
+        }
 
         modify("Unit Price")
         {
@@ -170,6 +194,21 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                 L_CustomerPriceGroupChanges: Codeunit "Customer Price Group Changes";
                 L_SalesHeader: Record "Sales Header";
             begin
+                L_SalesHeader.Reset();
+                L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+                L_SalesHeader.SetRange("No.", Rec."Document No.");
+                if L_SalesHeader.FindFirst() then begin
+                    if L_SalesHeader."Min Order Value" > Rec.Amount then begin
+                        Rec."SO Min Order Approval Required" := true;
+                        Rec.Modify();
+                    end
+                    else begin
+                        Rec."SO Min Order Approval Required" := false;
+                        Rec.Modify();
+                    end;
+                end;
+
+
                 //Check Min Sell Price Validation++
                 if Rec."Special Product" = false then begin
                     if CurrFieldNo = 22 then begin

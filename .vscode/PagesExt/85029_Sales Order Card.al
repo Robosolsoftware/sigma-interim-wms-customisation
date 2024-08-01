@@ -74,6 +74,11 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("SO Min Order Approval Required"; Rec."SO Min Order Approval Required")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
