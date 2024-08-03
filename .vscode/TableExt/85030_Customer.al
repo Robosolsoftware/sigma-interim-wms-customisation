@@ -257,6 +257,10 @@ tableextension 85030 "SC Customer" extends Customer
         {
 
         }
+        field(85170; Bluechip; Boolean)
+        {
+
+        }
         modify("Ship-to Code")
         {
             trigger OnAfterValidate()

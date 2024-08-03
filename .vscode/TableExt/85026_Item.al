@@ -2,6 +2,22 @@ tableextension 85026 "Item_Extension" extends Item
 {
     fields
     {
+        modify("No.")
+        {
+            trigger OnBeforeValidate()
+            begin
+                No_CheckSpecialChars("No.");
+            end;
+        }
+        modify(Description)
+        {
+            trigger OnBeforeValidate()
+            begin
+                Description_CheckSpecialChars(Description);
+            end;
+        }
+
+
         modify(Inventory)
         {
             Caption = 'Total Physical';
@@ -139,6 +155,10 @@ tableextension 85026 "Item_Extension" extends Item
         {
 
         }
+        field(85121; Rebatable; Boolean)
+        {
+
+        }
         modify("Unit Price")
         {
             trigger OnAfterValidate()
@@ -161,8 +181,7 @@ tableextension 85026 "Item_Extension" extends Item
     }
     var
         myInt: Integer;
-        tes: Record "Price List Header";
-        teee: Page "Sales Price List";
+        SpecialCharsErr: Label 'You can not enter the special characters!';
 
     // local procedure CalculatePORDisc()
     // begin
@@ -213,4 +232,27 @@ tableextension 85026 "Item_Extension" extends Item
     //             exit(L_InventorySetup."Inner Unit of Measure");
     //     End;
     // end;
+
+
+    local procedure No_CheckSpecialChars(Var _Value: Code[100])
+    var
+        SpecialChars: Label '!|@|#|$|%|&|*|(|)|_|-|+|=|/|?';
+        Len: Integer;
+    begin
+        Clear(Len);
+        Len := StrLen(DelChr(_Value, '=', DelChr(_Value, '=', SpecialChars)));
+        if Len > 0 then
+            Error(SpecialCharsErr);
+    end;
+
+    local procedure Description_CheckSpecialChars(Var _Value: Text[100])
+    var
+        SpecialChars: Label '!|@|#|$|%|&|*|(|)|_|-|+|=|/|?';
+        Len: Integer;
+    begin
+        Clear(Len);
+        Len := StrLen(DelChr(_Value, '=', DelChr(_Value, '=', SpecialChars)));
+        if Len > 0 then
+            Error(SpecialCharsErr);
+    end;
 }

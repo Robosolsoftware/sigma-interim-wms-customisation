@@ -106,6 +106,11 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 ApplicationArea = all;
                 Editable = L_CurrPageEditable;
             }
+            field(Rebatable; Rec.Rebatable)
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
         }
 
         addafter(Description)
