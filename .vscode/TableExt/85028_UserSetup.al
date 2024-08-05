@@ -39,6 +39,10 @@ tableextension 85028 "SC User Setup" extends "User Setup"
         {
 
         }
+        field(85012; "Edit Customer Bank Accounts"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

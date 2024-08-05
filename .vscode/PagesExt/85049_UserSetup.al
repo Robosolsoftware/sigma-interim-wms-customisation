@@ -8,6 +8,10 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+            field("Edit Customer Bank Accounts"; Rec."Edit Customer Bank Accounts")
+            {
+                ApplicationArea = All;
+            }
             field("Allow to change unit price"; Rec."Allow to change unit price")
             {
                 ApplicationArea = All;
