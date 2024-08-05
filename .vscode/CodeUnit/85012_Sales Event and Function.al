@@ -1,6 +1,6 @@
 codeunit 85012 "Sales Event & Function"
 {
-    Permissions = tabledata 7320 = m, tabledata 7322 = m, tabledata 112 = m;
+    Permissions = tabledata 7320 = m, tabledata 7322 = m, tabledata 112 = m, tabledata 110 = m;
     SingleInstance = true;
     trigger OnRun()
     begin
@@ -668,6 +668,21 @@ codeunit 85012 "Sales Event & Function"
             if L_SalesInvoiceHeader.FindFirst() then begin
                 L_SalesInvoiceHeader.Validate("Shipping Agent Service Code", SalesHeader."Shipping Agent Service Code");
                 L_SalesInvoiceHeader.Modify();
+            end;
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Activity-Post", 'OnAfterPostWhseActivityLine', '', false, false)]
+    local procedure OnAfterPostWhseActivityLine(WhseActivHeader: Record "Warehouse Activity Header"; PostedSourceNo: Code[20]; PostedSourceType: Integer)
+    var
+        L_PostedSalesShipmentHeader: Record "Sales Shipment Header";
+    begin
+        if PostedSourceType = 110 then begin
+            L_PostedSalesShipmentHeader.Reset();
+            L_PostedSalesShipmentHeader.SetRange("No.", PostedSourceNo);
+            if L_PostedSalesShipmentHeader.FindFirst() then begin
+                L_PostedSalesShipmentHeader."Inv. Pick No." := WhseActivHeader."No.";
+                L_PostedSalesShipmentHeader.Modify();
             end;
         end;
     end;

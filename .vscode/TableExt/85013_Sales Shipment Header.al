@@ -119,6 +119,10 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
                 end;
             end;
         }
+        field(85166; "Inv. Pick No."; Code[20])
+        {
+
+        }
     }
 
     var

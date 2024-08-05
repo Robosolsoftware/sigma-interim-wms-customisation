@@ -6,6 +6,7 @@ codeunit 85021 "Custom Calc.Running Balance"
         CustLedgerEntry2: Record "Cust. Ledger Entry";
         ClientTypeManagement: Codeunit System.Environment."Client Type Management";
         EntryValuesLCY: Dictionary of [Integer, Decimal];
+        tes: Codeunit 80;
 
     procedure GetCustomerBalanceLCY(var CustLedgerEntry: Record "Cust. Ledger Entry"): Decimal
     var
