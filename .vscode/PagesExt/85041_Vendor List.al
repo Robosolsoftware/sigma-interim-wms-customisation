@@ -33,9 +33,25 @@ pageextension 85041 "SC Vendor List" extends "Vendor List"
 
     actions
     {
-        // Add changes to page actions here
+        modify("Bank Accounts")
+        {
+            Visible = USEditable;
+        }
     }
+    trigger OnOpenPage()
+    var
+        usersetup: Record "User Setup";
+    begin
+        usersetup.Reset();
+        usersetup.SetRange("User ID", UserId);
+        usersetup.SetRange("Edit Vendor Bank Accounts", true);
+        if usersetup.FindFirst() then begin
+            USEditable := true;
+        end else
+            USEditable := false;
+
+    end;
 
     var
-        myInt: Integer;
+        USEditable: Boolean;
 }

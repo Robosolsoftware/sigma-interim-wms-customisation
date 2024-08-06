@@ -356,7 +356,10 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
 
     actions
     {
-        // Add changes to page actions here
+        modify("Bank Accounts")
+        {
+            Visible = USEditable;
+        }
     }
 
     var
@@ -365,11 +368,13 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         L_EditableQUAApproved: Boolean;
         L_EditableStatus: Boolean;
         L_CustomerPriceEditable: Boolean;
+        USEditable: Boolean;
 
 
     trigger OnAfterGetRecord()
     var
         L_UserSetup: Record "User Setup";
+        usersetup: Record "User Setup";
     begin
         if Rec.Type = Rec.Type::Site then
             L_CustomerPriceEditable := false
@@ -419,6 +424,15 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 L_EditableQUAApproved := false;
         end else
             L_EditableQUAApproved := false;
+
+        usersetup.Reset();
+        usersetup.SetRange("User ID", UserId);
+        usersetup.SetRange("Edit Customer Bank Accounts", true);
+        if usersetup.FindFirst() then begin
+            USEditable := true;
+        end else
+            USEditable := false;
+
     end;
 
     trigger OnOpenPage()

@@ -154,7 +154,10 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
 
     actions
     {
-        // Add changes to page actions here
+        modify("Bank Accounts")
+        {
+            Visible = USEditable;
+        }
     }
 
     var
@@ -163,6 +166,7 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
         L_CurrPageEditable: Boolean;
         L_EditableQUAApproved: Boolean;
         L_EditableStatus: Boolean;
+        USEditable: Boolean;
 
     trigger OnAfterGetRecord()
     var
@@ -216,7 +220,7 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
     trigger OnOpenPage()
     var
         L_UserSetup: Record "User Setup";
-
+        usersetup: Record "User Setup";
     begin
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
@@ -260,5 +264,14 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                 L_EditableQUAApproved := false;
         end else
             L_EditableQUAApproved := false;
+
+        usersetup.Reset();
+        usersetup.SetRange("User ID", UserId);
+        usersetup.SetRange("Edit Vendor Bank Accounts", true);
+        if usersetup.FindFirst() then begin
+            USEditable := true;
+        end else
+            USEditable := false;
+
     end;
 }
