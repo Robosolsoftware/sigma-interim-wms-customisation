@@ -36,5 +36,9 @@ permissionset 85000 SigmaCustomization
         query TransferOrderPowerBI = X,
         report "Create Whs. Recpt & Put-Away" = X,
         codeunit "Batch Inventory Pick Post" = X,
-        codeunit "Create Whs. Recpt & Put-Away" = X;
+        codeunit "Create Whs. Recpt & Put-Away" = X,
+        codeunit "Custom Calc.Running Balance" = X,
+        xmlport "Import General Journal" = X,
+        page APIItemLedgerEntry = X,
+        page "Open Payment Application" = X;
 }

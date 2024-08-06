@@ -236,7 +236,7 @@ tableextension 85026 "Item_Extension" extends Item
 
     local procedure No_CheckSpecialChars(Var _Value: Code[100])
     var
-        SpecialChars: Label '!|@|#|$|%|&|*|(|)|_|-|+|=|/|?';
+        SpecialChars: Label '!|@|#|$|%|&|*|(|)|_|+|=|/|?|)|(';
         Len: Integer;
     begin
         Clear(Len);
@@ -247,7 +247,7 @@ tableextension 85026 "Item_Extension" extends Item
 
     local procedure Description_CheckSpecialChars(Var _Value: Text[100])
     var
-        SpecialChars: Label '!|@|#|$|%|&|*|(|)|_|-|+|=|/|?';
+        SpecialChars: Label '!|@|#|$|%|&|*|(|)|_|+|=|/|?|)|(';
         Len: Integer;
     begin
         Clear(Len);

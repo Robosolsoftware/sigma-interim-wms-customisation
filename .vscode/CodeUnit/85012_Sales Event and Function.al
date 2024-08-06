@@ -9,6 +9,7 @@ codeunit 85012 "Sales Event & Function"
 
     var
         myInt: Integer;
+        G_InvePickNo: Code[20]; //It is for Posted Sales Invoice Header++
 
 
 
@@ -657,6 +658,8 @@ codeunit 85012 "Sales Event & Function"
     end;
     #endregion Check Duplicate Customer Price+++
 
+
+    //Update Shipping agenet service code on posted sales invoice header++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
     local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; SalesInvHdrNo: Code[20])
     var
@@ -672,10 +675,13 @@ codeunit 85012 "Sales Event & Function"
         end;
     end;
 
+
+    //Update Inv. Pick No. on Posted Sales Shipment+++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Activity-Post", 'OnAfterPostWhseActivityLine', '', false, false)]
     local procedure OnAfterPostWhseActivityLine(WhseActivHeader: Record "Warehouse Activity Header"; PostedSourceNo: Code[20]; PostedSourceType: Integer)
     var
         L_PostedSalesShipmentHeader: Record "Sales Shipment Header";
+        tes: Page "Inventory Pick";
     begin
         if PostedSourceType = 110 then begin
             L_PostedSalesShipmentHeader.Reset();
@@ -686,4 +692,35 @@ codeunit 85012 "Sales Event & Function"
             end;
         end;
     end;
+
+
+
+    #Region Update Inv. Pick No on posted sales Invoice No +++
+    //Step1++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Activity-Post", 'OnPostSourceDocumentOnBeforeSalesPostRun', '', false, false)]
+    local procedure OnPostSourceDocumentOnBeforeSalesPostRun(var SalesHeader: Record "Sales Header"; WarehouseActivityHeader: Record "Warehouse Activity Header")
+    begin
+        Clear(G_InvePickNo);
+        G_InvePickNo := WarehouseActivityHeader."No.";
+    end;
+
+    //Step2++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
+    local procedure UpdateInvPickNo_OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; SalesInvHdrNo: Code[20])
+    var
+        L_SalesInvoiceHeader: Record "Sales Invoice Header";
+    begin
+        if G_InvePickNo <> '' then begin
+            L_SalesInvoiceHeader.Reset();
+            L_SalesInvoiceHeader.SetRange("No.", SalesInvHdrNo);
+            if L_SalesInvoiceHeader.FindFirst() then begin
+                L_SalesInvoiceHeader."Inv. Pick No." := G_InvePickNo;
+                L_SalesInvoiceHeader.Modify();
+            end;
+        end;
+
+        Clear(G_InvePickNo);
+    end;
+
+    #endregion Update Inv. Pick No on posted sales Invoice No +++
 }
