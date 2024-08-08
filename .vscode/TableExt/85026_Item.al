@@ -9,13 +9,13 @@ tableextension 85026 "Item_Extension" extends Item
                 No_CheckSpecialChars("No.");
             end;
         }
-        modify(Description)
-        {
-            trigger OnBeforeValidate()
-            begin
-                Description_CheckSpecialChars(Description);
-            end;
-        }
+        // modify(Description)
+        // {
+        //     trigger OnBeforeValidate()
+        //     begin
+        //         Description_CheckSpecialChars(Description);
+        //     end;
+        // }
 
 
         modify(Inventory)
