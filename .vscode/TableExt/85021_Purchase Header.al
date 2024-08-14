@@ -56,6 +56,7 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
         {
             DataClassification = ToBeClassified;
             OptionMembers = No,Yes;
+            Caption = 'Approval required';
         }
         // field(70141; "PO Approval Value"; Decimal)
         // {
