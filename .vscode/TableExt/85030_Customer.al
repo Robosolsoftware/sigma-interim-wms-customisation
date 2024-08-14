@@ -3,6 +3,15 @@ tableextension 85030 "SC Customer" extends Customer
     fields
     {
         // Add changes to table fields here
+
+        modify(Blocked)
+        {
+            trigger OnAfterValidate()
+            begin
+                if Rec.Blocked = Rec.Blocked::" " then
+                    Rec.TestField("Block Reason", '');
+            end;
+        }
         field(85131; "Delivery Note"; Boolean)
         {
             DataClassification = ToBeClassified;
@@ -260,6 +269,18 @@ tableextension 85030 "SC Customer" extends Customer
         field(85170; Bluechip; Boolean)
         {
 
+        }
+        field(85171; "Block Reason"; Code[20])
+        {
+            TableRelation = "Cust. Block Reason Code".Code;
+
+            trigger OnValidate()
+            begin
+                if Rec."Block Reason" <> '' then begin
+                    if Rec.Blocked = Rec.Blocked::" " then
+                        Error('Field Blocked must have a value. Current value is blank');
+                end;
+            end;
         }
         modify("Ship-to Code")
         {

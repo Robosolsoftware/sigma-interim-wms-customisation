@@ -115,6 +115,14 @@ tableextension 85007 "SC Sales Shipment Line" extends "Sales Shipment Line"
             Description = 'Relation with Pack Code in Table Strength Master';
             //TableRelation = "Strength Master".Code;
         }
+        field(85030; "SO Min Order Approval Required"; Boolean)
+        {
+
+        }
+        field(85031; "Unable to Pick"; Text[100])
+        {
+
+        }
     }
     keys
     {

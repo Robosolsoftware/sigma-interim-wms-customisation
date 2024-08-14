@@ -159,6 +159,22 @@ tableextension 85026 "Item_Extension" extends Item
         {
 
         }
+        field(85122; "Business Sensitive"; Boolean)
+        {
+
+        }
+        field(85123; Ari; Boolean)
+        {
+
+        }
+        field(85124; "Signature required"; Boolean)
+        {
+
+        }
+        field(85125; "Zero Discount"; Boolean)
+        {
+
+        }
         modify("Unit Price")
         {
             trigger OnAfterValidate()

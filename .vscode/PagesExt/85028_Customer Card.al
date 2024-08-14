@@ -303,6 +303,11 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
             }
+            field("Block Reason"; Rec."Block Reason")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
         }
         addafter(Statistics)
         {

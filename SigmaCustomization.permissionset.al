@@ -40,5 +40,8 @@ permissionset 85000 SigmaCustomization
         codeunit "Custom Calc.Running Balance" = X,
         xmlport "Import General Journal" = X,
         page APIItemLedgerEntry = X,
-        page "Open Payment Application" = X;
+        page "Open Payment Application" = X,
+        tabledata "Cust. Block Reason Code" = RIMD,
+        table "Cust. Block Reason Code" = X,
+        page "Cust. Block Reason Code" = X;
 }

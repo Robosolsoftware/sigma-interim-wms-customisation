@@ -12,6 +12,11 @@ pageextension 85005 InventoryPickCardExt extends "Inventory Pick"
                 //Note:- Value comming from Sales header. Check the code in KNAPP extension
 
             }
+            // field("Allowed to Pick"; Rec."Allowed to Pick")
+            // {
+            //     ApplicationArea = All;
+            //     Editable = false;
+            // }
         }
         addafter("Shipment Date")
         {

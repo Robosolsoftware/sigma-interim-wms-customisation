@@ -14,8 +14,10 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                     L_Customer.Reset();
                     L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                     if L_Customer.FindFirst() then begin
-                        L_Customer.TestField("QAU Approved");
-                        L_Customer.TestField(Status, L_Customer.Status::Released);
+                        if Rec."IRP Order" = false then begin //As discussed with Adesh+++
+                            L_Customer.TestField("QAU Approved");
+                            L_Customer.TestField(Status, L_Customer.Status::Released);
+                        end;
 
 
                         Rec.Validate("Delivery Note", L_Customer."Delivery Note");
@@ -54,6 +56,11 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                                 //As discussed shipment date shoud be next day all condistion++
                                 Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()));
                             end;
+
+                        if Rec."Document Type" = Rec."Document Type"::"Return Order" then begin
+                            Rec.Validate("Shipping Agent Code", L_Customer."Shipping Agent Code");
+                            Rec.Validate("Shipping Agent Service Code", L_Customer."Shipping Agent Service Code");
+                        end;
                     end;
 
 
@@ -77,8 +84,10 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                     L_Customer.Reset();
                     L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                     if L_Customer.FindFirst() then begin
-                        L_Customer.TestField("QAU Approved");
-                        L_Customer.TestField(Status, L_Customer.Status::Released);
+                        if Rec."IRP Order" = false then begin //As discussed with Adesh+++
+                            L_Customer.TestField("QAU Approved");
+                            L_Customer.TestField(Status, L_Customer.Status::Released);
+                        end;
 
                         Rec.Validate("Delivery Note", L_Customer."Delivery Note");
                         Rec.Validate("Collection Note", L_Customer."Collection Note");
@@ -116,6 +125,12 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                                 //As discussed shipment date shoud be next day all condistion++
                                 Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()));
                             end;
+
+
+                        if Rec."Document Type" = Rec."Document Type"::"Return Order" then begin
+                            Rec.Validate("Shipping Agent Code", L_Customer."Shipping Agent Code");
+                            Rec.Validate("Shipping Agent Service Code", L_Customer."Shipping Agent Service Code");
+                        end;
                     end;
 
 

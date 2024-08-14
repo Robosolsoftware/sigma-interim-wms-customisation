@@ -162,6 +162,10 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
         {
 
         }
+        field(85031; "Unable to Pick"; Text[100])
+        {
+
+        }
         modify("Line Amount")
         {
             trigger OnAfterValidate()
@@ -366,8 +370,10 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     if L_SalesHeader.FindFirst() then begin
                         L_SalesHeader.TestField("Shipping Agent Service Code"); //User Story 18274
 
-                        if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
-                            L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
+                        if L_SalesHeader."IRP Order" = false then begin //As discussed with Adesh+++
+                            if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
+                                L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
+                            end;
                         end;
 
                         //++Sales Order warning message(15813)
@@ -380,10 +386,17 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     L_Item.SetRange("No.", Rec."No.");
                     if L_Item.FindFirst() then begin
                         //Check Master Restriction++
-                        L_Item.TestField("QAU Approved");
-                        L_Item.TestField(Status, L_Item.Status::Released);
-                        L_Item.TestField("Sales Blocked", false);
-                        L_Item.TestField("Ops Sales Blocked", false);
+                        L_SalesHeader.Reset();
+                        L_SalesHeader.SetRange("No.", Rec."Document No.");
+                        L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+                        if L_SalesHeader.FindFirst() then begin
+                            if L_SalesHeader."IRP Order" = false then begin //As discussed with Adesh+++
+                                L_Item.TestField("QAU Approved");
+                                L_Item.TestField(Status, L_Item.Status::Released);
+                                L_Item.TestField("Sales Blocked", false);
+                                L_Item.TestField("Ops Sales Blocked", false);
+                            end;
+                        end;
 
                         Rec."Min Sell Price" := L_Item."Min Sell Price";
                         Rec."Parent Category" := L_Item."Parent Category";

@@ -14,6 +14,21 @@ pageextension 85100 "SC Purchase Invoice" extends "Purchase Invoice"
             {
                 ApplicationArea = All;
             }
+
+
+
+        }
+
+        addafter("Attached Documents")
+        {
+            part(AttachedDocuments; "Document Attachment Factbox")
+            {
+                ApplicationArea = All;
+                Caption = 'Attachments';
+                SubPageLink = "Table ID" = const(Database::"Purchase Header"),
+                              "No." = field("No."),
+                              "Document Type" = field("Document Type");
+            }
         }
     }
 

@@ -115,7 +115,15 @@ tableextension 85008 "SC Sales Invoice Line" extends "Sales Invoice Line"
             Description = 'Relation with Pack Code in Table Strength Master';
             //TableRelation = "Strength Master".Code;
         }
-        field(85030; "Qty on Return"; Decimal) // Rehan++
+        field(85030; "SO Min Order Approval Required"; Boolean)
+        {
+
+        }
+        field(85031; "Unable to Pick"; Text[100])
+        {
+
+        }
+        field(85032; "Qty on Return"; Decimal) // Rehan++
         {
             FieldClass = FlowField;
             CalcFormula = lookup("Warehouse Receipt Line".Quantity where("Return Invoice No." = field("Document No."), "Return Invoice Line No." = field("Line No."), "Source Document" = filter("Sales Return Order")));

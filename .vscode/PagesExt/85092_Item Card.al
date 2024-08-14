@@ -111,6 +111,27 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 ApplicationArea = all;
                 Editable = L_CurrPageEditable;
             }
+            field("Business Sensitive"; Rec."Business Sensitive")
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
+            field(Ari; Rec.Ari)
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
+            field("Signature required"; Rec."Signature required")
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
+            field("Zero Discount"; Rec."Zero Discount")
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
+
         }
 
         addafter(Description)
