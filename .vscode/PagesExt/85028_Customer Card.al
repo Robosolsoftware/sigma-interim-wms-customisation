@@ -2,154 +2,122 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
 {
     layout
     {
-        // Add changes to page layout here
         //Editable Condition++
         modify("No.")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(Name)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Name 2")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Search Name")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("IC Partner Code")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Balance (LCY)")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(BalanceAsVendor)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Balance Due (LCY)")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Credit Limit (LCY)")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(Blocked)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Privacy Blocked")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Salesperson Code")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Responsibility Center")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Service Zone Code")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Document Sending Profile")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(TotalSales2)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("CustSalesLCY - CustProfit - AdjmtCostLCY")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(AdjCustProfit)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(AdjProfitPct)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Last Date Modified")
         {
             Editable = L_CurrPageEditable;
-
-
         }
         modify("Disable Search by Name")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(Priority)
         {
             Editable = L_CurrPageEditable;
-
         }
-
 
         //Group++
         modify("Address & Contact")
         {
-
             Editable = L_CurrPageEditable;
         }
         modify(Invoicing)
         {
-
             Editable = L_CurrPageEditable;
         }
         modify(Payments)
         {
-
             Editable = L_CurrPageEditable;
         }
         modify(Shipping)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(Statistics)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(Intrastat)
         {
             Editable = L_CurrPageEditable;
-
         }
         //Editable Condition++
-
 
         addafter("Shipping Agent Service Code")
         {
@@ -162,8 +130,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
             }
         }
-
-
         modify("Customer Price Group")
         {
             Caption = 'Customer Price Group 1';
@@ -308,6 +274,34 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
             }
+            field("Drop Number"; Rec."Drop Number")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
+            field("Assigned Credit Controller"; Rec."Assigned Credit Controller")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+                trigger OnValidate()
+                var
+                    L_User: Record User;
+                begin
+                    if Rec."Assigned Credit Controller" <> '' then begin
+                        L_User.Reset();
+                        if L_User.Get(Rec."Assigned Credit Controller") then
+                            Rec."Assigned Credit Controller" := L_User."User Name";
+                    end;
+                end;
+
+                trigger OnDrillDown()
+                var
+                    UserMgt: Codeunit "User Management";
+                begin
+                    if Rec."Assigned Credit Controller" <> '' then
+                        UserMgt.DisplayUserInformation(Rec."Assigned Credit Controller");
+                end;
+            }
         }
         addafter(Statistics)
         {
@@ -317,44 +311,35 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 field("Delivery Note"; Rec."Delivery Note")
                 {
                     ApplicationArea = All;
-
                 }
                 field("Collection Note"; Rec."Collection Note")
                 {
                     ApplicationArea = All;
-
                 }
                 field(Invoice; Rec.Invoice)
                 {
                     ApplicationArea = All;
-
                 }
                 field("Packing list"; Rec."Packing list")
                 {
                     ApplicationArea = All;
-
                 }
                 field("Export Checklist"; Rec."Export Checklist")
                 {
                     ApplicationArea = All;
-
                 }
                 field("Data Logger Sheet"; Rec."Data Logger Sheet")
                 {
                     ApplicationArea = All;
-
                 }
                 field(Labels; Rec.Labels)
                 {
                     ApplicationArea = All;
-
                 }
                 field("Extra Documents"; Rec."Extra Documents")
                 {
                     ApplicationArea = All;
-
                 }
-
             }
         }
     }
@@ -368,7 +353,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
     }
 
     var
-        myInt: Integer;
         L_CurrPageEditable: Boolean;
         L_EditableQUAApproved: Boolean;
         L_EditableStatus: Boolean;
@@ -385,7 +369,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             L_CustomerPriceEditable := false
         else
             L_CustomerPriceEditable := true;
-
 
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
@@ -437,19 +420,16 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             USEditable := true;
         end else
             USEditable := false;
-
     end;
 
     trigger OnOpenPage()
     var
         L_UserSetup: Record "User Setup";
-
     begin
         if Rec.Type = Rec.Type::Site then
             L_CustomerPriceEditable := false
         else
             L_CustomerPriceEditable := true;
-
 
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
@@ -481,8 +461,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                     L_EditableStatus := false;
             end else
                 L_EditableStatus := false;
-
-
         end;
 
         L_UserSetup.Reset();
@@ -495,5 +473,4 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         end else
             L_EditableQUAApproved := false;
     end;
-
 }

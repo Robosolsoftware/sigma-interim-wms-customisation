@@ -327,7 +327,15 @@ tableextension 85030 "SC Customer" extends Customer
                 end;
             end;
         }
-
+        field(85000; "Drop Number"; Text[5])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85001; "Assigned Credit Controller"; Code[50])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = User;
+        }
     }
 
     fieldgroups
@@ -343,6 +351,5 @@ tableextension 85030 "SC Customer" extends Customer
     }
 
     var
-        myInt: Integer;
         SalesEventFunction: Codeunit "Sales Event & Function";
 }
