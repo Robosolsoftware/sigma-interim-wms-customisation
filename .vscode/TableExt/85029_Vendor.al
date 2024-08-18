@@ -26,7 +26,11 @@ tableextension 85029 "SC Vendor" extends Vendor
         {
 
         }
-
+        field(85147; "Vendor Group"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = " ","Week 1","Week 2","Week 3","Week 4","Week 5";
+        }
         // field(85140; "PO Approval Value"; Decimal)
         // {
         //     DataClassification = ToBeClassified;

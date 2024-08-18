@@ -126,6 +126,11 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                 ApplicationArea = All;
                 Editable = L_EditableQUAApproved;
             }
+            field("Vendor Group"; Rec."Vendor Group")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
         }
         addafter("Purchaser Code")
         {

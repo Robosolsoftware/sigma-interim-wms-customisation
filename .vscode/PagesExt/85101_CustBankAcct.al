@@ -4,6 +4,18 @@ pageextension 85101 CustBankAccountCard extends "Customer Bank Account Card"
     layout
     {
         // Add changes to page layout here
+        addlast(General)
+        {
+            field(Active; Rec.Active)
+            {
+                ApplicationArea = All;
+            }
+            field("DD Mandate Generated"; Rec."DD Mandate Generated")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
     }
 
     actions
