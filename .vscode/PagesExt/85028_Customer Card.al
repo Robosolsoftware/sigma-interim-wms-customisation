@@ -283,24 +283,24 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
-                trigger OnValidate()
-                var
-                    L_User: Record User;
-                begin
-                    if Rec."Assigned Credit Controller" <> '' then begin
-                        L_User.Reset();
-                        if L_User.Get(Rec."Assigned Credit Controller") then
-                            Rec."Assigned Credit Controller" := L_User."User Name";
-                    end;
-                end;
+                // trigger OnValidate()
+                // var
+                //     L_User: Record User;
+                // begin
+                //     if Rec."Assigned Credit Controller" <> '' then begin
+                //         L_User.Reset();
+                //         if L_User.Get(Rec."Assigned Credit Controller") then
+                //             Rec."Assigned Credit Controller" := L_User."User Name";
+                //     end;
+                // end;
 
-                trigger OnDrillDown()
-                var
-                    UserMgt: Codeunit "User Management";
-                begin
-                    if Rec."Assigned Credit Controller" <> '' then
-                        UserMgt.DisplayUserInformation(Rec."Assigned Credit Controller");
-                end;
+                // trigger OnDrillDown()
+                // var
+                //     UserMgt: Codeunit "User Management";
+                // begin
+                //     if Rec."Assigned Credit Controller" <> '' then
+                //         UserMgt.DisplayUserInformation(Rec."Assigned Credit Controller");
+                // end;
             }
         }
         addafter(Statistics)

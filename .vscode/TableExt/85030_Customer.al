@@ -334,7 +334,8 @@ tableextension 85030 "SC Customer" extends Customer
         field(85001; "Assigned Credit Controller"; Code[50])
         {
             DataClassification = ToBeClassified;
-            TableRelation = User;
+            TableRelation = User."User Name";
+            ValidateTableRelation = false;
         }
     }
 

@@ -13,8 +13,11 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
                     L_Vendor.Reset();
                     L_Vendor.SetRange("No.", Rec."Buy-from Vendor No.");
                     if L_Vendor.FindFirst() then begin
-                        L_Vendor.TestField("QAU Approved");
-                        L_Vendor.TestField(Status, L_Vendor.Status::Released);
+                        //Check Master Restriction++
+                        if L_Vendor.Type = L_Vendor.Type::Stock then begin
+                            L_Vendor.TestField("QAU Approved");
+                            L_Vendor.TestField(Status, L_Vendor.Status::Released);
+                        end;
 
 
 

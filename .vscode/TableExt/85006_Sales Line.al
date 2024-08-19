@@ -411,6 +411,9 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
 
                             if L_WarhouseClass.CD = true then
                                 Rec."Whs. Calss Code type" := 'CD';
+
+                            if (L_WarhouseClass.Fridge = false) AND (L_WarhouseClass.CD = false) then
+                                Rec."Whs. Calss Code type" := 'Blank';
                         end else
                             Rec."Whs. Calss Code type" := 'Blank'
                     end;

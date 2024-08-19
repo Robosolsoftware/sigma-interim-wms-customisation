@@ -36,6 +36,11 @@ tableextension 85029 "SC Vendor" extends Vendor
         //     DataClassification = ToBeClassified;
         //     DecimalPlaces = 0 : 5;
         // }
+        field(85148; Type; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Stock,"Non-Stock";
+        }
     }
 
     fieldgroups

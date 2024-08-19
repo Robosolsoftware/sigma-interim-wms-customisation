@@ -13,6 +13,11 @@ pageextension 85041 "SC Vendor List" extends "Vendor List"
         }
         addafter("Location Code")
         {
+            field(Type; Rec.Type)
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;
