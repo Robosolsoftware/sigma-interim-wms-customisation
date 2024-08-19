@@ -8,7 +8,7 @@ page 85009 "Open Payment Application"
     PageType = List;
     Permissions = TableData "Cust. Ledger Entry" = m;
     SourceTable = "Cust. Ledger Entry";
-    SourceTableView = sorting("Customer No.", "Posting Date") order(descending) where("Document Type" = filter(Payment), Open = const(true));
+    SourceTableView = sorting("Customer No.", "Posting Date") order(descending) where("Document Type" = filter(Payment), Open = const(true), "Direct Debit Mandate ID" = filter(= ''));
     UsageCategory = History;
 
     layout
@@ -310,6 +310,12 @@ page 85009 "Open Payment Application"
                     Editable = false;
                     ToolTip = 'Specifies the number of the original entry that was undone by the reverse transaction.';
                     Visible = false;
+                }
+                field(CreditController; CreditController)
+                {
+                    Caption = 'Assigned Credit Controller';
+                    ApplicationArea = Basic, Suite;
+                    Editable = false;
                 }
                 field("Entry No."; Rec."Entry No.")
                 {
@@ -854,8 +860,15 @@ page 85009 "Open Payment Application"
     end;
 
     trigger OnAfterGetRecord()
+    var
+        L_Cust: Record Customer;
     begin
         StyleTxt := Rec.SetStyle();
+        L_Cust.Reset();
+        L_Cust.SetRange("No.", Rec."Customer No.");
+        if L_Cust.FindFirst() then begin
+            CreditController := L_Cust."Assigned Credit Controller";
+        end;
     end;
 
     trigger OnInit()
@@ -902,6 +915,7 @@ page 85009 "Open Payment Application"
         Dim7Visible: Boolean;
         Dim8Visible: Boolean;
         StyleTxt: Text;
+        CreditController: Code[50];
 
     local procedure SetDimVisibility()
     var
