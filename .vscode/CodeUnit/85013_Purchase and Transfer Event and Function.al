@@ -272,6 +272,12 @@ codeunit 85013 "Purchase Event & Function"
                             WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes;
                             WhseReceiptHeader."CD Qty" += L_WarehouseRecptLine.Quantity;
                         end;
+
+                        if L_WarehouseClasses.Fridge = true then begin
+                            WhseReceiptHeader.Fridge := WhseReceiptHeader.Fridge::Yes;
+                            WhseReceiptHeader."Fridge Qty." += L_WarehouseRecptLine.Quantity;
+                        end;
+
                     end;
                 until L_WarehouseRecptLine.Next() = 0;
             end;

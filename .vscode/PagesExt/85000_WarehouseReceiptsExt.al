@@ -72,6 +72,16 @@ pageextension 85000 WarehouseReceiptsExt extends "Warehouse Receipts"
                 Editable = false;
                 Caption = 'SF Qty.';
             }
+            field(Fridge; Rec.Fridge)
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+            field("Fridge Qty."; Rec."Fridge Qty.")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
             field("Source Document"; Rec."Source Document")
             {
                 ApplicationArea = All;

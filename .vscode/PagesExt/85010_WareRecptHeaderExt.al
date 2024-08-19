@@ -79,6 +79,16 @@ pageextension 85010 WareRcptHeaderExt extends "Warehouse Receipt"
                         Editable = false;
                         Caption = 'SF Qty.';
                     }
+                    field(Fridge; Rec.Fridge)
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+                    }
+                    field("Fridge Qty."; Rec."Fridge Qty.")
+                    {
+                        ApplicationArea = all;
+                        Editable = false;
+                    }
 
                     group("Sales Return Order Details")
                     {

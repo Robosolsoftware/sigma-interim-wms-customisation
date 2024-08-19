@@ -57,6 +57,11 @@ page 85011 "DD Mandate reversal"
                     ToolTip = 'Specifies the customer name that the entry is linked to.';
                     Visible = CustNameVisible;
                 }
+                field("Assigned Credit Controller"; Rec."Assigned Credit Controller")
+                {
+                    ApplicationArea = Basic, Suite;
+                    Editable = false;
+                }
                 field("Direct Debit Mandate ID"; Rec."Direct Debit Mandate ID")
                 {
                     ApplicationArea = Basic, Suite;

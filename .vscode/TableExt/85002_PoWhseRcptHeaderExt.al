@@ -129,6 +129,16 @@ tableextension 85002 PoWhseRcptHeaderExt extends "Posted Whse. Receipt Header"
             FieldClass = FlowField;
             CalcFormula = sum("Posted Whse. Receipt Line".Quantity where("No." = field("No.")));
         }
+        field(85033; Fridge; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = "",Yes,No;
+        }
+        field(85034; "Fridge Qty."; Integer)
+        {
+            Caption = 'Fridge Qty.';
+            DataClassification = ToBeClassified;
+        }
 
     }
 
