@@ -16,6 +16,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         modify("Name 2")
         {
             Editable = L_CurrPageEditable;
+            ShowMandatory = true;
         }
         modify("Search Name")
         {
@@ -121,6 +122,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         {
             ShowMandatory = true;
         }
+
 
 
 
@@ -242,7 +244,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                     CurrPage.Update();
 
                     if Rec.Status = Rec.Status::Released then begin
-                        if (Rec."No." = '') or (Rec."Phone No." = '') OR (Rec.Address = '') OR (Rec."Address 2" = '') OR (Rec."Post Code" = '') OR (Rec.Address = '') OR (Rec.Name = '') OR (Rec."Territory Code" = '') OR (Rec."Payment Terms Code" = '') OR (Rec."Name 2" = '') OR (Rec."Shipping Agent Code" = '') OR (Rec."Shipping Agent Service Code" = '') OR (Rec."Location Code" = '') then begin
+                        if (Rec."No." = '') or (Rec."Phone No." = '') OR (Rec.Address = '') OR (Rec.Type = 0) OR (Rec."Post Code" = '') OR (Rec.Name = '') OR (Rec."Territory Code" = '') OR (Rec."Payment Terms Code" = '') OR (Rec."Name 2" = '') OR (Rec."Shipping Agent Code" = '') OR (Rec."Shipping Agent Service Code" = '') OR (Rec."Location Code" = '') then begin
                             Error('Mandatory Fields Must Not Be Blank');
                         end;
                     end;

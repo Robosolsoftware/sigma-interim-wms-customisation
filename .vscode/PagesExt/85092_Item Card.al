@@ -91,6 +91,11 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         {
             ShowMandatory = true;
         }
+        // modify("Variant Mandatory if Exists")
+        // {
+        //     ShowMandatory = true;
+        // }
+
 
         addlast(Item)
         {

@@ -89,7 +89,14 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
         {
             ShowMandatory = true;
         }
-
+        modify("Vendor Posting Group")
+        {
+            ShowMandatory = true;
+        }
+        modify("Payment Terms Code")
+        {
+            ShowMandatory = true;
+        }
 
 
         //Group++
@@ -117,6 +124,7 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
         modify("Pay-to Vendor No.")
         {
             Visible = true;
+            ShowMandatory = true;
         }
 
 
@@ -179,7 +187,7 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                     CurrPage.Update();
 
                     if Rec.Status = Rec.Status::Released then begin
-                        if (Rec."No." = '') or (Rec."Phone No." = '') OR (Rec.Address = '') OR (Rec."Address 2" = '') OR (Rec."Post Code" = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') then begin
+                        if (Rec."No." = '') or (Rec."Phone No." = '') OR (Rec.Address = '') OR (Rec."Address 2" = '') OR (Rec."Post Code" = '') OR (Rec."Vendor Posting Group" = '') OR (Rec."Payment Terms Code" = '') OR (Rec."Pay-to Vendor No." = '') then begin
                             Error('Mandatory Fields Must Not Be Blank');
                         end;
                     end;
