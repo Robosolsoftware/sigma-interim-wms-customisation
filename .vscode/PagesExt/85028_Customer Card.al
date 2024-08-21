@@ -6,10 +6,12 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         modify("No.")
         {
             Editable = L_CurrPageEditable;
+            ShowMandatory = true;
         }
         modify(Name)
         {
             Editable = L_CurrPageEditable;
+            ShowMandatory = true;
         }
         modify("Name 2")
         {
@@ -91,6 +93,36 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         {
             Editable = L_CurrPageEditable;
         }
+        modify(Address)
+        {
+            ShowMandatory = true;
+        }
+        modify("Post Code")
+        {
+            ShowMandatory = true;
+        }
+        modify("Phone No.")
+        {
+            ShowMandatory = true;
+        }
+        modify("Payment Terms Code")
+        {
+            ShowMandatory = true;
+        }
+        modify("Shipping Agent Code")
+        {
+            ShowMandatory = true;
+        }
+        modify("Shipping Agent Service Code")
+        {
+            ShowMandatory = true;
+        }
+        modify("Location Code")
+        {
+            ShowMandatory = true;
+        }
+
+
 
         //Group++
         modify("Address & Contact")
@@ -208,6 +240,12 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                         Error('You do not have permission to edit');
 
                     CurrPage.Update();
+
+                    if Rec.Status = Rec.Status::Released then begin
+                        if (Rec."No." = '') or (Rec."Phone No." = '') OR (Rec.Address = '') OR (Rec."Address 2" = '') OR (Rec."Post Code" = '') OR (Rec.Address = '') OR (Rec.Name = '') OR (Rec."Territory Code" = '') OR (Rec."Payment Terms Code" = '') OR (Rec."Name 2" = '') OR (Rec."Shipping Agent Code" = '') OR (Rec."Shipping Agent Service Code" = '') OR (Rec."Location Code" = '') then begin
+                            Error('Mandatory Fields Must Not Be Blank');
+                        end;
+                    end;
                 end;
             }
             field("QAU Approved"; Rec."QAU Approved")
@@ -239,6 +277,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
+                ShowMandatory = true;
 
                 trigger OnValidate()
                 begin
@@ -253,6 +292,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
+                ShowMandatory = true;
             }
             field("Market Code"; Rec."Market Code")
             {

@@ -7,10 +7,12 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
         modify("No.")
         {
             Editable = L_CurrPageEditable;
+            ShowMandatory = true;
         }
         modify(Name)
         {
             Editable = L_CurrPageEditable;
+            ShowMandatory = true;
         }
         modify("Name 2")
         {
@@ -67,6 +69,25 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
         modify("Company Size Code")
         {
             Editable = L_CurrPageEditable;
+        }
+
+        //Mark Mandatory
+
+        modify(Address)
+        {
+            ShowMandatory = true;
+        }
+        modify("Address 2")
+        {
+            ShowMandatory = true;
+        }
+        modify("Post Code")
+        {
+            ShowMandatory = true;
+        }
+        modify("Phone No.")
+        {
+            ShowMandatory = true;
         }
 
 
@@ -156,6 +177,13 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                         Error('You do not have permission to edit');
 
                     CurrPage.Update();
+
+                    if Rec.Status = Rec.Status::Released then begin
+                        if (Rec."No." = '') or (Rec."Phone No." = '') OR (Rec.Address = '') OR (Rec."Address 2" = '') OR (Rec."Post Code" = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') OR (Rec.Address = '') then begin
+                            Error('Mandatory Fields Must Not Be Blank');
+                        end;
+                    end;
+
                 end;
             }
 

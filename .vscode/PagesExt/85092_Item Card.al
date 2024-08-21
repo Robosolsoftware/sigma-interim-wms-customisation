@@ -6,10 +6,12 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         modify("No.")
         {
             Editable = L_CurrPageEditable;
+            ShowMandatory = true;
         }
         modify(Description)
         {
             Editable = L_CurrPageEditable;
+            ShowMandatory = true;
         }
         modify("Description 2")
         {
@@ -26,6 +28,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         modify("Base Unit of Measure")
         {
             Editable = L_CurrPageEditable;
+            ShowMandatory = true;
         }
         modify(GTIN)
         {
@@ -67,6 +70,27 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         {
             Editable = L_CurrPageEditable;
         }
+        //Show mandatory
+        modify("Inventory Posting Group")
+        {
+            ShowMandatory = true;
+        }
+        modify("VAT Prod. Posting Group")
+        {
+            ShowMandatory = true;
+        }
+        modify("Over-Receipt Code")
+        {
+            ShowMandatory = true;
+        }
+        modify("Costing Method")
+        {
+            ShowMandatory = true;
+        }
+        modify("Item Tracking Code")
+        {
+            ShowMandatory = true;
+        }
 
         addlast(Item)
         {
@@ -75,6 +99,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
                 ToolTip = 'If Min Sell is 0, then system will not allow to change the unit price less than 10%';
+                ShowMandatory = true;
             }
             field("QAU Approved"; Rec."QAU Approved")
             {
@@ -151,6 +176,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
+                ShowMandatory = true;
             }
             field(Status; Rec.Status)
             {
@@ -167,6 +193,12 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                     if not L_UserSetup.FindFirst() then
                         Error('You do not have permission to edit');
                     CurrPage.Update();
+
+                    if Rec.Status = Rec.Status::Released then begin
+                        if (Rec."No." = '') or (Rec.Description = '') OR (Rec."Item Category Code" = '') OR (Rec."Unit Price" = 0) OR (Rec.RRP = 0) OR (Rec."VAT Prod. Posting Group" = '') OR (Rec.Storage = '') OR (Rec."Min Sell Price" = 0) OR (Rec."Inventory Posting Group" = '') OR (Rec."Variant Mandatory if Exists" = 0) OR (Rec."Over-Receipt Code" = '') OR (Rec."Costing Method" = 0) OR (Rec."Base Unit of Measure" = '') OR (Rec."Item Tracking Code" = '') then begin
+                            Error('Mandatory Fields Must Not Be Blank');
+                        end;
+                    end;
                 end;
             }
         }
@@ -175,6 +207,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         {
             Caption = 'Sub-Child Category';
             Editable = L_CurrPageEditable;
+            ShowMandatory = true;
         }
 
         addbefore("Item Category Code")
@@ -304,6 +337,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         modify("Unit Price")
         {
             Editable = L_EditableUnitandRRP;// AND L_CurrPageEditable;
+            ShowMandatory = true;
         }
         modify(CalcUnitPriceExclVAT)
         {
@@ -377,6 +411,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             {
                 ApplicationArea = All;
                 Editable = L_EditableUnitandRRP;//AND L_CurrPageEditable;
+                ShowMandatory = true;
             }
         }
 
