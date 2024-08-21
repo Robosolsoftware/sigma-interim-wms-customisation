@@ -2,6 +2,15 @@ pageextension 85004 InventoryPickListExt extends "Inventory Picks"
 {
     layout
     {
+        addafter("Location Code")
+        {
+            field("Whs. Class Code type"; Rec."Whs. Class Code type")
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Caption = 'Warehouse Class Code Type';
+            }
+        }
         addafter("No. of Lines")
         {
             field("System CreatedAt"; rec.SystemCreatedAt)

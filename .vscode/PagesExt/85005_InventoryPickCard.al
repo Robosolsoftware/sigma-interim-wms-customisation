@@ -43,7 +43,22 @@ pageextension 85005 InventoryPickCardExt extends "Inventory Pick"
                 Editable = false;
                 Caption = 'Modified By';
             }
-
+            field("Shipping Agent Code"; Rec."Shipping Agent Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Shipping Agent Service Code"; Rec."Shipping Agent Service Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Whs. Class Code type"; Rec."Whs. Class Code type")
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Caption = 'Warehouse Class Code Type';
+            }
         }
     }
 
