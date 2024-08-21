@@ -239,7 +239,7 @@ codeunit 85016 "Tariff Price Management"
 
                     Rec.Validate("Unit Price", FinalPrice);
                     Rec.Validate(Rebate, PriceLineList2.Rebate);
-                    Rec.Validate("Line Amount", PriceLineList2."Line Discount %");
+                    Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
                 end;
             end;
         end;

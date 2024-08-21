@@ -26,7 +26,6 @@ report 85001 "Create Whs. Recpt & Put-Away"
                         end;
                     end;
                 end;
-
             end;
 
             trigger OnPreDataItem()
