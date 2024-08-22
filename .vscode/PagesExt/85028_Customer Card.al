@@ -244,9 +244,18 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                     CurrPage.Update();
 
                     if Rec.Status = Rec.Status::Released then begin
-                        if (Rec."No." = '') or (Rec."Phone No." = '') OR (Rec.Address = '') OR (Rec.Type = 0) OR (Rec."Post Code" = '') OR (Rec.Name = '') OR (Rec."Territory Code" = '') OR (Rec."Payment Terms Code" = '') OR (Rec."Name 2" = '') OR (Rec."Shipping Agent Code" = '') OR (Rec."Shipping Agent Service Code" = '') OR (Rec."Location Code" = '') then begin
-                            Error('Mandatory Fields Must Not Be Blank');
-                        end;
+                        rec.TestField("No.");
+                        rec.TestField("Phone No.");
+                        rec.TestField(Address);
+                        rec.TestField(Type);
+                        rec.TestField("Post Code");
+                        rec.TestField(Name);
+                        rec.TestField("Territory Code");
+                        rec.TestField("Payment Terms Code");
+                        rec.TestField("Name 2");
+                        rec.TestField("Shipping Agent Code");
+                        rec.TestField("Shipping Agent Service Code");
+                        rec.TestField("Location Code");
                     end;
                 end;
             }

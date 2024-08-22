@@ -200,9 +200,21 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                     CurrPage.Update();
 
                     if Rec.Status = Rec.Status::Released then begin
-                        if (Rec."No." = '') or (Rec.Description = '') OR (Rec."Item Category Code" = '') OR (Rec."Unit Price" = 0) OR (Rec.RRP = 0) OR (Rec."VAT Prod. Posting Group" = '') OR (Rec.Storage = '') OR (Rec."Min Sell Price" = 0) OR (Rec."Inventory Posting Group" = '') OR (Rec."Variant Mandatory if Exists" = 0) OR (Rec."Over-Receipt Code" = '') OR (Rec."Costing Method" = 0) OR (Rec."Base Unit of Measure" = '') OR (Rec."Item Tracking Code" = '') then begin
-                            Error('Mandatory Fields Must Not Be Blank');
-                        end;
+                        rec.TestField("No.");
+                        Rec.TestField(Description);
+                        Rec.TestField("Item Category Code");
+                        Rec.TestField("Unit Price");
+                        Rec.TestField(RRP);
+                        Rec.TestField("VAT Prod. Posting Group");
+                        Rec.TestField(Storage);
+                        Rec.TestField("Min Sell Price");
+                        Rec.TestField("Inventory Posting Group");
+                        Rec.TestField("Variant Mandatory if Exists");
+                        Rec.TestField("Over-Receipt Code");
+                        Rec.TestField("Costing Method");
+                        Rec.TestField("Base Unit of Measure");
+                        Rec.TestField("Item Tracking Code");
+
                     end;
                 end;
             }

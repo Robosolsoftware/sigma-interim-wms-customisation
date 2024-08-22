@@ -187,9 +187,14 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                     CurrPage.Update();
 
                     if Rec.Status = Rec.Status::Released then begin
-                        if (Rec."No." = '') or (Rec."Phone No." = '') OR (Rec.Address = '') OR (Rec."Address 2" = '') OR (Rec."Post Code" = '') OR (Rec."Vendor Posting Group" = '') OR (Rec."Payment Terms Code" = '') OR (Rec."Pay-to Vendor No." = '') then begin
-                            Error('Mandatory Fields Must Not Be Blank');
-                        end;
+                        rec.TestField("No.");
+                        rec.TestField("Phone No.");
+                        rec.TestField(Address);
+                        rec.TestField("Address 2");
+                        rec.TestField("Post Code");
+                        rec.TestField("Vendor Posting Group");
+                        rec.TestField("Payment Terms Code");
+                        rec.TestField("Pay-to Vendor No.");
                     end;
 
                 end;
