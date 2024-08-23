@@ -128,6 +128,14 @@ tableextension 85008 "SC Sales Invoice Line" extends "Sales Invoice Line"
             FieldClass = FlowField;
             CalcFormula = lookup("Warehouse Receipt Line".Quantity where("Return Invoice No." = field("Document No."), "Return Invoice Line No." = field("Line No."), "Source Document" = filter("Sales Return Order")));
         }
+        field(85033; "Back Order"; Boolean)
+        {
+
+        }
+        field(85034; "Changed UnitPrice"; Boolean)
+        {
+
+        }
 
 
     }

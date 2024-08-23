@@ -123,6 +123,14 @@ tableextension 85007 "SC Sales Shipment Line" extends "Sales Shipment Line"
         {
 
         }
+        field(85033; "Back Order"; Boolean)
+        {
+
+        }
+        field(85034; "Changed UnitPrice"; Boolean)
+        {
+
+        }
     }
     keys
     {

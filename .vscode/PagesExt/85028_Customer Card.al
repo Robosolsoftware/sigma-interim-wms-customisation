@@ -247,7 +247,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                         rec.TestField("No.");
                         rec.TestField("Phone No.");
                         rec.TestField(Address);
-                        rec.TestField(Type);
+                        // rec.TestField(Type);
                         rec.TestField("Post Code");
                         rec.TestField(Name);
                         rec.TestField("Territory Code");

@@ -166,6 +166,18 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
         {
 
         }
+        field(85033; "Back Order"; Boolean)
+        {
+            trigger OnValidate()
+            begin
+                //Isuue Log Number D297
+                Rec.TestField("Quantity Shipped", 0);
+            end;
+        }
+        field(85034; "Changed UnitPrice"; Boolean)
+        {
+
+        }
         modify("Line Amount")
         {
             trigger OnAfterValidate()

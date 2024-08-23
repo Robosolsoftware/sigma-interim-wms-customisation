@@ -45,6 +45,14 @@ pageextension 85035 "SC Sales Order Subform" extends "Sales Order Subform"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Back Order"; Rec."Back Order")
+            {
+                ApplicationArea = All;
+                trigger OnValidate()
+                begin
+                    Rec.TestField(Quantity, 0);
+                end;
+            }
         }
         addafter(Quantity)
         {
