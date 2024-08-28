@@ -20,18 +20,19 @@ codeunit 85012 "Sales Event & Function"
         L_SalesLine: Record "Sales Line";
         L_UserSetup: Record "User Setup";
     begin
-        L_UserSetup.Reset();
-        L_UserSetup.SetRange("User ID", UserId);
-        L_UserSetup.SetRange("SO Override Min Order Value", true);
-        if not L_UserSetup.FindFirst() then begin
-            if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
-                if SalesHeader."Min Order Value" > 0 then begin
-                    SalesHeader.CalcFields(Amount);
-                    if SalesHeader.Amount < SalesHeader."Min Order Value" then
-                        Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
-                end;
-            end;
-        end;
+        //This code added into KNAPP extension++
+        // L_UserSetup.Reset();
+        // L_UserSetup.SetRange("User ID", UserId);
+        // L_UserSetup.SetRange("SO Override Min Order Value", true);
+        // if not L_UserSetup.FindFirst() then begin
+        //     if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+        //         if SalesHeader."Min Order Value" > 0 then begin
+        //             SalesHeader.CalcFields(Amount);
+        //             if SalesHeader.Amount < SalesHeader."Min Order Value" then
+        //                 Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
+        //         end;
+        //     end;
+        // end;
 
         if SalesHeader."Document Type" = SalesHeader."Document Type"::"Return Order" then begin
             L_SalesLine.Reset();

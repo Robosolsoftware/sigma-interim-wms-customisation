@@ -161,6 +161,11 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 ApplicationArea = all;
                 Editable = L_CurrPageEditable;
             }
+            field("Non Tele Sales"; Rec."Non Tele Sales")
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
 
         }
 

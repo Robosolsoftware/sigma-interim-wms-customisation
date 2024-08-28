@@ -247,7 +247,11 @@ codeunit 85013 "Purchase Event & Function"
     var
         L_WarehouseRecptLine: Record "Warehouse Receipt Line";
         L_WarehouseClasses: Record "Warehouse Class";
+        L_CDFound: Boolean;
+        L_FridgeFound: Boolean;
     begin
+        Clear(L_CDFound);
+        Clear(L_FridgeFound);
         if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
             if WhseReceiptHeader."No." = '' then
                 exit;
@@ -261,6 +265,7 @@ codeunit 85013 "Purchase Event & Function"
                 WhseReceiptHeader."Total Order Qty" := L_WarehouseRecptLine.Quantity;
             end;
 
+
             L_WarehouseRecptLine.Reset();
             L_WarehouseRecptLine.SetRange("No.", WhseReceiptHeader."No.");
             if L_WarehouseRecptLine.FindSet() then begin
@@ -271,15 +276,23 @@ codeunit 85013 "Purchase Event & Function"
                         if L_WarehouseClasses.CD = true then begin
                             WhseReceiptHeader.CD := WhseReceiptHeader.CD::Yes;
                             WhseReceiptHeader."CD Qty" += L_WarehouseRecptLine.Quantity;
+                            L_CDFound := true;
                         end;
 
                         if L_WarehouseClasses.Fridge = true then begin
                             WhseReceiptHeader.Fridge := WhseReceiptHeader.Fridge::Yes;
                             WhseReceiptHeader."Fridge Qty." += L_WarehouseRecptLine.Quantity;
+                            L_FridgeFound := true;
                         end;
 
                     end;
                 until L_WarehouseRecptLine.Next() = 0;
+
+                //Update if Not CD and Fridge Product found++
+                if L_CDFound = false then
+                    WhseReceiptHeader.CD := WhseReceiptHeader.CD::No;
+                if L_FridgeFound = false then
+                    WhseReceiptHeader.Fridge := WhseReceiptHeader.Fridge::No;
             end;
 
             WhseReceiptHeader.Modify();

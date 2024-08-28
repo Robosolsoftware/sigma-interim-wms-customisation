@@ -131,6 +131,14 @@ tableextension 85007 "SC Sales Shipment Line" extends "Sales Shipment Line"
         {
 
         }
+        field(85035; "MLD %"; Decimal)
+        {
+
+        }
+        field(85036; "Original Line Discount"; Decimal)
+        {
+
+        }
     }
     keys
     {

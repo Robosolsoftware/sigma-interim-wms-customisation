@@ -175,6 +175,10 @@ tableextension 85026 "Item_Extension" extends Item
         {
 
         }
+        field(85126; "Non Tele Sales"; Boolean)
+        {
+
+        }
         modify("Unit Price")
         {
             trigger OnAfterValidate()

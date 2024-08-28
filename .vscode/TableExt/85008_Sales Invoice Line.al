@@ -136,6 +136,14 @@ tableextension 85008 "SC Sales Invoice Line" extends "Sales Invoice Line"
         {
 
         }
+        field(85035; "MLD %"; Decimal)
+        {
+
+        }
+        field(85036; "Original Line Discount"; Decimal)
+        {
+
+        }
 
 
     }

@@ -43,5 +43,6 @@ permissionset 85000 SigmaCustomization
         page "Open Payment Application" = X,
         tabledata "Cust. Block Reason Code" = RIMD,
         table "Cust. Block Reason Code" = X,
-        page "Cust. Block Reason Code" = X;
+        page "Cust. Block Reason Code" = X,
+        page "DD Mandate reversal" = X;
 }

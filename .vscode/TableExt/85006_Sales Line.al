@@ -178,6 +178,14 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
         {
 
         }
+        field(85035; "MLD %"; Decimal)
+        {
+
+        }
+        field(85036; "Original Line Discount"; Decimal)
+        {
+
+        }
         modify("Line Amount")
         {
             trigger OnAfterValidate()
