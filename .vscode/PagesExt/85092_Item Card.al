@@ -196,6 +196,9 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 trigger OnValidate()
                 var
                     L_UserSetup: Record "User Setup";
+                    ItemAttrValueMapp: Record "Item Attribute Value Mapping";
+                    ItemattributesValues: Record "Item Attribute Value";
+                    Itemattributevalueblank: Integer;
                 begin
                     L_UserSetup.Reset();
                     L_UserSetup.SetRange("User ID", UserId);
@@ -212,7 +215,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                         Rec.TestField(RRP);
                         Rec.TestField("VAT Prod. Posting Group");
                         Rec.TestField(Storage);
-                        Rec.TestField("Min Sell Price");
+                        Rec.TestField("Min Sell Price");//
                         Rec.TestField("Inventory Posting Group");
                         Rec.TestField("Variant Mandatory if Exists");
                         Rec.TestField("Over-Receipt Code");
@@ -220,6 +223,28 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                         Rec.TestField("Base Unit of Measure");
                         Rec.TestField("Item Tracking Code");
 
+                        Clear(Itemattributevalueblank);
+                        ItemAttrValueMapp.Reset();
+                        ItemAttrValueMapp.SetRange("Table ID", 27);
+                        ItemAttrValueMapp.SetRange("No.", Rec."No.");
+                        if not ItemAttrValueMapp.FindFirst() then begin
+                            Error('Item Attribute Must Not Be Blank');
+                        end;
+                        if ItemAttrValueMapp.FindSet() then begin
+                            repeat
+                                ItemattributesValues.Reset();
+                                ItemattributesValues.SetRange("Attribute ID", ItemAttrValueMapp."Item Attribute ID");
+                                ItemattributesValues.SetRange(ID, ItemAttrValueMapp."Item Attribute Value ID");
+                                if ItemattributesValues.FindSet() then begin
+                                    if ItemattributesValues.Value = '' then begin
+                                        Itemattributevalueblank += 1;
+                                    end;
+                                end;
+                            until ItemAttrValueMapp.Next() = 0;
+                        end;
+                        if Itemattributevalueblank > 0 then begin
+                            Error('Value In Item Attributes Must Not Be Blank');
+                        end;
                     end;
                 end;
             }

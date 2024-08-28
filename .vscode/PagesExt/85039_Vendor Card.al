@@ -126,7 +126,10 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
             Visible = true;
             ShowMandatory = true;
         }
-
+        modify("E-Mail")
+        {
+            ShowMandatory = true;
+        }
 
         addlast(General)
         {
@@ -165,6 +168,7 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
             }
+
         }
         addafter("Purchaser Code")
         {
@@ -195,6 +199,7 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                         rec.TestField("Vendor Posting Group");
                         rec.TestField("Payment Terms Code");
                         rec.TestField("Pay-to Vendor No.");
+                        rec.TestField("E-Mail");
                     end;
 
                 end;

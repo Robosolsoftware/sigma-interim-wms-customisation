@@ -234,6 +234,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 trigger OnValidate()
                 var
                     L_UserSetup: Record "User Setup";
+                    DefaultDimention: Record "Default Dimension";
                 begin
                     L_UserSetup.Reset();
                     L_UserSetup.SetRange("User ID", UserId);
@@ -256,6 +257,20 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                         rec.TestField("Shipping Agent Code");
                         rec.TestField("Shipping Agent Service Code");
                         rec.TestField("Location Code");
+
+                        DefaultDimention.Reset();
+                        DefaultDimention.SetRange("Table ID", 18);
+                        DefaultDimention.SetRange("No.", rec."No.");
+                        DefaultDimention.SetRange("Dimension Code", 'CUSTOMER TYPE');
+                        DefaultDimention.SetRange("Dimension Code", 'SALES CHANNELS');
+                        if not DefaultDimention.FindFirst() then begin
+                            Error('Default Dimention "CUSTOMER TYPE","SALES CHANNELS" Is Missing');
+                        end;
+                        if DefaultDimention.FindSet() then begin
+                            repeat
+                                DefaultDimention.Validate("Dimension Value Code");
+                            until DefaultDimention.Next() = 0;
+                        end;
                     end;
                 end;
             }
