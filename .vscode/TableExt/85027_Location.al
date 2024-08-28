@@ -46,9 +46,21 @@ tableextension 85027 LocationExt extends Location
                     Error('Sales Return Location Should not be more than one');
             end;
         }
-
+        field(85006; "Knapp Location"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            trigger OnValidate()
+            var
+                L_Location: Record Location;
+            begin
+                if Rec."Knapp Location" = true then begin
+                    L_Location.Reset();
+                    L_Location.SetFilter(Code, '<>%1', Rec.Code);
+                    L_Location.SetRange("Knapp Location", true);
+                    if L_Location.FindFirst() then
+                        Error('Knapp Location Should not be more than one');
+                end;
+            end;
+        }
     }
-
-    var
-        myInt: Integer;
 }

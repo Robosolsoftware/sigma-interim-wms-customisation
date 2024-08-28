@@ -15,7 +15,10 @@ pageextension 85078 LocationExt extends "Location Card"
             field("Sales Return Location"; Rec."Sales Return Location")
             {
                 ApplicationArea = All;
-
+            }
+            field("Knapp Location"; Rec."Knapp Location")
+            {
+                ApplicationArea = All;
             }
         }
         addbefore("Home Page")
@@ -44,33 +47,22 @@ pageextension 85078 LocationExt extends "Location Card"
         modify("Address & Contact")
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(Warehouse)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify(Bins)
         {
             Editable = L_CurrPageEditable;
-
         }
         modify("Bin Policies")
         {
             Editable = L_CurrPageEditable;
-
         }
-
-    }
-
-    actions
-    {
-        // Add changes to page actions here
     }
 
     var
-        myInt: Integer;
         L_CurrPageEditable: Boolean;
 
     trigger OnOpenPage()
