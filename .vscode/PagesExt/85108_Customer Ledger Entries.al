@@ -11,12 +11,9 @@ pageextension 85108 "SC Customer Ledger Entries" extends "Customer Ledger Entrie
                 Editable = false;
             }
         }
+
     }
 
-    actions
-    {
-        // Add changes to page actions here
-    }
 
     var
         myInt: Integer;
