@@ -2,7 +2,6 @@ pageextension 85055 "SC Posted Sales Shipments" extends "Posted Sales Shipments"
 {
     layout
     {
-        // Add changes to page layout here
         addafter("Location Code")
         {
             field("Inv. Pick No."; Rec."Inv. Pick No.")
@@ -15,9 +14,18 @@ pageextension 85055 "SC Posted Sales Shipments" extends "Posted Sales Shipments"
 
     actions
     {
-        // Add changes to page actions here
-    }
+        addafter("Update Document")
+        {
+            action("Post Item Reclassification")
+            {
+                ApplicationArea = All;
+                Image = PostingEntries;
 
-    var
-        myInt: Integer;
+                trigger OnAction()
+                begin
+                    Codeunit.Run(Codeunit::"Post Item Reclassification");
+                end;
+            }
+        }
+    }
 }
