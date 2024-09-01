@@ -8,19 +8,19 @@ codeunit 85016 "Tariff Price Management"
     TableNo = 36;
     trigger OnRun()
     begin
-        //TESTFIELD("Sell-to Country/Region Code");
-        rec.TESTFIELD(Status, rec.Status::Open);
-        G_SalesHeader1 := Rec;
+        // //TESTFIELD("Sell-to Country/Region Code");
+        // rec.TESTFIELD(Status, rec.Status::Open);
+        // G_SalesHeader1 := Rec;
 
-        G_SalesLine.RESET;
-        G_SalesLine.SETRANGE("Document Type", rec."Document Type");
-        G_SalesLine.SETRANGE("Document No.", rec."No.");
-        G_SalesLine.SETRANGE(Type, G_SalesLine.Type::Item);
-        G_SalesLine.SETRANGE("Special Product", TRUE);
-        IF G_SalesLine.FINDSET THEN
-            REPEAT
-                CalculateTariff(G_SalesLine, G_SalesHeader1."Currency Factor");
-            UNTIL G_SalesLine.NEXT = 0;
+        // G_SalesLine.RESET;
+        // G_SalesLine.SETRANGE("Document Type", rec."Document Type");
+        // G_SalesLine.SETRANGE("Document No.", rec."No.");
+        // G_SalesLine.SETRANGE(Type, G_SalesLine.Type::Item);
+        // G_SalesLine.SETRANGE("Special Product", TRUE);
+        // IF G_SalesLine.FINDSET THEN
+        //     REPEAT
+        //         CalculateTariff(G_SalesLine, G_SalesHeader1."Currency Factor");
+        //     UNTIL G_SalesLine.NEXT = 0;
     end;
 
     var
@@ -28,97 +28,97 @@ codeunit 85016 "Tariff Price Management"
         Text001: Label 'Do you want to recalculate price for Sales Order No. %1?';
         G_SalesHeader1: Record 36;
 
-    procedure CalculateTariff(SalesLine2: Record "Sales Line"; Currencyfactor: Decimal)
-    var
-        //TariffSalesPrice: Record 71001; //"50014";
-        DiffVolume: Decimal;
-        DiffVolumePrice: Decimal;
-        FinalPrice: Decimal;
-        SalesLine3: Record "Sales Line";
-        statis: page 400;
-        Customer2: Record Customer;
-        CustomerPriceGroupText: Text[20000];
-        PriceLineList2: Record "Price List Line";
-        L_SalesHeader: Record "Sales Header";
-    begin
-        CLEAR(DiffVolume);
-        CLEAR(DiffVolumePrice);
-        CLEAR(FinalPrice);
-        Clear(CustomerPriceGroupText);
+    // procedure CalculateTariff(SalesLine2: Record "Sales Line"; Currencyfactor: Decimal)
+    // var
+    //     //TariffSalesPrice: Record 71001; //"50014";
+    //     DiffVolume: Decimal;
+    //     DiffVolumePrice: Decimal;
+    //     FinalPrice: Decimal;
+    //     SalesLine3: Record "Sales Line";
+    //     statis: page 400;
+    //     Customer2: Record Customer;
+    //     CustomerPriceGroupText: Text[20000];
+    //     PriceLineList2: Record "Price List Line";
+    //     L_SalesHeader: Record "Sales Header";
+    // begin
+    //     CLEAR(DiffVolume);
+    //     CLEAR(DiffVolumePrice);
+    //     CLEAR(FinalPrice);
+    //     Clear(CustomerPriceGroupText);
 
-        if SalesLine2."Special Product" then begin
-            if Customer2.get(SalesLine2."Bill-to Customer No.") then begin
-                if Customer2."Customer Price Group" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + Customer2."Customer Price Group";
-                if Customer2."Customer Price Group 2" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 2";
-                if Customer2."Customer Price Group 3" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 3";
-                if Customer2."Customer Price Group 4" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 4";
-                if Customer2."Customer Price Group 5" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 5";
-                if Customer2."Customer Price Group 6" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 6";
-                if Customer2."Customer Price Group 7" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 7";
-                if Customer2."Customer Price Group 8" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 8";
-                if Customer2."Customer Price Group 9" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 9";
-                if Customer2."Customer Price Group 10" <> '' then
-                    CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 10";
+    //     if SalesLine2."Special Product" then begin
+    //         if Customer2.get(SalesLine2."Bill-to Customer No.") then begin
+    //             if Customer2."Customer Price Group" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + Customer2."Customer Price Group";
+    //             if Customer2."Customer Price Group 2" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 2";
+    //             if Customer2."Customer Price Group 3" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 3";
+    //             if Customer2."Customer Price Group 4" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 4";
+    //             if Customer2."Customer Price Group 5" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 5";
+    //             if Customer2."Customer Price Group 6" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 6";
+    //             if Customer2."Customer Price Group 7" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 7";
+    //             if Customer2."Customer Price Group 8" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 8";
+    //             if Customer2."Customer Price Group 9" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 9";
+    //             if Customer2."Customer Price Group 10" <> '' then
+    //                 CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 10";
 
-            end;
+    //         end;
 
-            L_SalesHeader.Reset();
-            if L_SalesHeader.get(SalesLine2."Document Type"::Order, SalesLine2."Document No.") then begin
-                PriceLineList2.Reset();
-                PriceLineList2.SetRange(Status, PriceLineList2.Status::Active);
-                PriceLineList2.SetRange("Source Type", PriceLineList2."Source Type"::"Customer Price Group");
-                PriceLineList2.SetFilter("Source No.", CustomerPriceGroupText);
-                PriceLineList2.SetRange("Asset Type", PriceLineList2."Asset Type"::Item);
-                PriceLineList2.Setrange("Asset No.", SalesLine2."No.");
-                PriceLineList2.Setrange("Special Product", true);
-                PriceLineList2.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                PriceLineList2.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                PriceLineList2.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                IF PriceLineList2.FindFirst() then begin
-                    if SalesLine2."Unit Volume" >= PriceLineList2."Base Volume" then begin
-                        DiffVolume := SalesLine2."Unit Volume" - PriceLineList2."Base Volume";
-                        DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
-                        IF Currencyfactor <> 0 THEN
-                            FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / Currencyfactor
-                        ELSE
-                            FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
+    //         L_SalesHeader.Reset();
+    //         if L_SalesHeader.get(SalesLine2."Document Type"::Order, SalesLine2."Document No.") then begin
+    //             PriceLineList2.Reset();
+    //             PriceLineList2.SetRange(Status, PriceLineList2.Status::Active);
+    //             PriceLineList2.SetRange("Source Type", PriceLineList2."Source Type"::"Customer Price Group");
+    //             PriceLineList2.SetFilter("Source No.", CustomerPriceGroupText);
+    //             PriceLineList2.SetRange("Asset Type", PriceLineList2."Asset Type"::Item);
+    //             PriceLineList2.Setrange("Asset No.", SalesLine2."No.");
+    //             PriceLineList2.Setrange("Special Product", true);
+    //             PriceLineList2.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+    //             PriceLineList2.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+    //             PriceLineList2.SetRange("Currency Code", L_SalesHeader."Currency Code");
+    //             IF PriceLineList2.FindFirst() then begin
+    //                 if SalesLine2."Unit Volume" >= PriceLineList2."Base Volume" then begin
+    //                     DiffVolume := SalesLine2."Unit Volume" - PriceLineList2."Base Volume";
+    //                     DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
+    //                     IF Currencyfactor <> 0 THEN
+    //                         FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / Currencyfactor
+    //                     ELSE
+    //                         FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
 
-                        SalesLine3.RESET;
-                        SalesLine3.SETRANGE(SalesLine3."Document Type", SalesLine2."Document Type");
-                        SalesLine3.SETRANGE(SalesLine3."Document No.", SalesLine2."Document No.");
-                        SalesLine3.SETRANGE(SalesLine3."Line No.", SalesLine2."Line No.");
-                        IF SalesLine3.FINDFIRST THEN BEGIN
-                            SalesLine3.VALIDATE(SalesLine3."Unit Price", FinalPrice);
-                            SalesLine2.Validate(Rebate, PriceLineList2.Rebate);
-                            SalesLine2.Validate("Line Discount %", PriceLineList2."Line Discount %");
-                            SalesLine3.MODIFY;
-                        END;
+    //                     SalesLine3.RESET;
+    //                     SalesLine3.SETRANGE(SalesLine3."Document Type", SalesLine2."Document Type");
+    //                     SalesLine3.SETRANGE(SalesLine3."Document No.", SalesLine2."Document No.");
+    //                     SalesLine3.SETRANGE(SalesLine3."Line No.", SalesLine2."Line No.");
+    //                     IF SalesLine3.FINDFIRST THEN BEGIN
+    //                         SalesLine3.VALIDATE(SalesLine3."Unit Price", FinalPrice);
+    //                         SalesLine2.Validate(Rebate, PriceLineList2.Rebate);
+    //                         SalesLine2.Validate("Line Discount %", PriceLineList2."Line Discount %");
+    //                         SalesLine3.MODIFY;
+    //                     END;
 
-                    end else begin
-                        SalesLine3.RESET;
-                        SalesLine3.SETRANGE(SalesLine3."Document Type", SalesLine2."Document Type");
-                        SalesLine3.SETRANGE(SalesLine3."Document No.", SalesLine2."Document No.");
-                        SalesLine3.SETRANGE(SalesLine3."Line No.", SalesLine2."Line No.");
-                        IF SalesLine3.FINDFIRST THEN BEGIN
-                            SalesLine3.VALIDATE(SalesLine3."Unit Price", PriceLineList2."Unit Price");
-                            SalesLine2.Validate(Rebate, PriceLineList2.Rebate);
-                            SalesLine2.Validate("Line Discount %", PriceLineList2."Line Discount %");
-                            SalesLine3.MODIFY;
-                        end;
-                    end;
-                end;
-            end;
-        end;
-    end;
+    //                 end else begin
+    //                     SalesLine3.RESET;
+    //                     SalesLine3.SETRANGE(SalesLine3."Document Type", SalesLine2."Document Type");
+    //                     SalesLine3.SETRANGE(SalesLine3."Document No.", SalesLine2."Document No.");
+    //                     SalesLine3.SETRANGE(SalesLine3."Line No.", SalesLine2."Line No.");
+    //                     IF SalesLine3.FINDFIRST THEN BEGIN
+    //                         SalesLine3.VALIDATE(SalesLine3."Unit Price", PriceLineList2."Unit Price");
+    //                         SalesLine2.Validate(Rebate, PriceLineList2.Rebate);
+    //                         SalesLine2.Validate("Line Discount %", PriceLineList2."Line Discount %");
+    //                         SalesLine3.MODIFY;
+    //                     end;
+    //                 end;
+    //             end;
+    //         end;
+    //     end;
+    // end;
 
 
     [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterValidateEvent', 'No.', false, false)]
@@ -161,6 +161,7 @@ codeunit 85016 "Tariff Price Management"
         PriceLineList2: Record "Price List Line";
         L_SalesHeader: Record "Sales Header";
         L_Item: Record Item;
+        L_DiscountedUnitPrice: Decimal;
     begin
         CLEAR(DiffVolume);
         CLEAR(DiffVolumePrice);
@@ -212,12 +213,25 @@ codeunit 85016 "Tariff Price Management"
                         DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
                         DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
                         if PriceLineList2."Unit Price" <> 0 then begin
-                            FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
+                            Clear(L_DiscountedUnitPrice);
+                            if PriceLineList2."Line Discount %" > 0 then begin
+                                L_DiscountedUnitPrice := (PriceLineList2."Unit Price") - ((PriceLineList2."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                            end else
+                                L_DiscountedUnitPrice := PriceLineList2."Unit Price";
+
+                            FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
                         end else begin
                             L_Item.Reset();
                             L_Item.SetRange("No.", Rec."No.");
                             if L_Item.FindFirst() then begin
-                                FinalPrice := (DiffVolumePrice + L_Item."Unit Price");
+                                Clear(L_DiscountedUnitPrice);
+                                if PriceLineList2."Line Discount %" > 0 then begin
+                                    L_DiscountedUnitPrice := (L_Item."Unit Price") - ((L_Item."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                                end else
+                                    L_DiscountedUnitPrice := L_Item."Unit Price";
+
+
+                                FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
                             end;
                         end;
                         // IF L_SalesHeader."Currency Factor" <> 0 THEN
@@ -226,20 +240,34 @@ codeunit 85016 "Tariff Price Management"
                         //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
 
                     end else begin
-                        if PriceLineList2."Unit Price" <> 0 then
-                            FinalPrice := PriceLineList2."Unit Price"
-                        else begin
+                        if PriceLineList2."Unit Price" <> 0 then begin
+                            Clear(L_DiscountedUnitPrice);
+                            if PriceLineList2."Line Discount %" > 0 then begin
+                                L_DiscountedUnitPrice := (PriceLineList2."Unit Price") - ((PriceLineList2."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                            end else
+                                L_DiscountedUnitPrice := PriceLineList2."Unit Price";
+
+                            FinalPrice := L_DiscountedUnitPrice;
+                        end else begin
                             L_Item.Reset();
                             L_Item.SetRange("No.", Rec."No.");
                             if L_Item.FindFirst() then begin
-                                FinalPrice := L_Item."Unit Price"
+                                Clear(L_DiscountedUnitPrice);
+                                if PriceLineList2."Line Discount %" > 0 then begin
+                                    L_DiscountedUnitPrice := (L_Item."Unit Price") - ((L_Item."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                                end else
+                                    L_DiscountedUnitPrice := L_Item."Unit Price";
+
+
+                                FinalPrice := L_DiscountedUnitPrice;
                             end;
                         end;
                     end;
 
                     Rec.Validate("Unit Price", FinalPrice);
                     Rec.Validate(Rebate, PriceLineList2.Rebate);
-                    Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
+                    //Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
+                    Rec."Discount Applied on BasePrice" := PriceLineList2."Line Discount %";
                 end;
             end;
         end;
@@ -258,6 +286,7 @@ codeunit 85016 "Tariff Price Management"
         PriceLineList2: Record "Price List Line";
         L_SalesHeader: Record "Sales Header";
         L_Item: Record Item;
+        L_DiscountedUnitPrice: Decimal;
     begin
         CLEAR(DiffVolume);
         CLEAR(DiffVolumePrice);
@@ -308,15 +337,25 @@ codeunit 85016 "Tariff Price Management"
                     if Rec."Unit Volume" > PriceLineList2."Base Volume" then begin
                         DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
                         DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
-                        DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
-                        DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
                         if PriceLineList2."Unit Price" <> 0 then begin
-                            FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
+                            Clear(L_DiscountedUnitPrice);
+                            if PriceLineList2."Line Discount %" > 0 then begin
+                                L_DiscountedUnitPrice := (PriceLineList2."Unit Price") - ((PriceLineList2."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                            end else
+                                L_DiscountedUnitPrice := PriceLineList2."Unit Price";
+
+                            FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
                         end else begin
                             L_Item.Reset();
                             L_Item.SetRange("No.", Rec."No.");
                             if L_Item.FindFirst() then begin
-                                FinalPrice := (DiffVolumePrice + L_Item."Unit Price");
+                                Clear(L_DiscountedUnitPrice);
+                                if PriceLineList2."Line Discount %" > 0 then begin
+                                    L_DiscountedUnitPrice := (L_Item."Unit Price") - ((L_Item."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                                end else
+                                    L_DiscountedUnitPrice := L_Item."Unit Price";
+
+                                FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
                             end;
                         end;
                         // IF L_SalesHeader."Currency Factor" <> 0 THEN
@@ -324,13 +363,25 @@ codeunit 85016 "Tariff Price Management"
                         // ELSE
                         //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
                     end else begin
-                        if PriceLineList2."Unit Price" <> 0 then
-                            FinalPrice := PriceLineList2."Unit Price"
-                        else begin
+                        if PriceLineList2."Unit Price" <> 0 then begin
+                            Clear(L_DiscountedUnitPrice);
+                            if PriceLineList2."Line Discount %" > 0 then begin
+                                L_DiscountedUnitPrice := (PriceLineList2."Unit Price") - ((PriceLineList2."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                            end else
+                                L_DiscountedUnitPrice := PriceLineList2."Unit Price";
+
+                            FinalPrice := L_DiscountedUnitPrice;
+                        end else begin
                             L_Item.Reset();
                             L_Item.SetRange("No.", Rec."No.");
                             if L_Item.FindFirst() then begin
-                                FinalPrice := L_Item."Unit Price"
+                                Clear(L_DiscountedUnitPrice);
+                                if PriceLineList2."Line Discount %" > 0 then begin
+                                    L_DiscountedUnitPrice := (L_Item."Unit Price") - ((L_Item."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                                end else
+                                    L_DiscountedUnitPrice := L_Item."Unit Price";
+
+                                FinalPrice := L_DiscountedUnitPrice;
                             end;
                         end;
                     end;
@@ -338,7 +389,8 @@ codeunit 85016 "Tariff Price Management"
 
                     Rec.Validate("Unit Price", FinalPrice);
                     Rec.Validate(Rebate, PriceLineList2.Rebate);
-                    Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
+                    //Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
+                    Rec."Discount Applied on BasePrice" := PriceLineList2."Line Discount %";
                 end;
             end;
         end;

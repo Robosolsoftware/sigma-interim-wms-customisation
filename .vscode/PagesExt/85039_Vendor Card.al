@@ -189,19 +189,6 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                         Error('You do not have permission to edit');
 
                     CurrPage.Update();
-
-                    if Rec.Status = Rec.Status::Released then begin
-                        rec.TestField("No.");
-                        rec.TestField("Phone No.");
-                        rec.TestField(Address);
-                        rec.TestField("Address 2");
-                        rec.TestField("Post Code");
-                        rec.TestField("Vendor Posting Group");
-                        rec.TestField("Payment Terms Code");
-                        rec.TestField("Pay-to Vendor No.");
-                        rec.TestField("E-Mail");
-                    end;
-
                 end;
             }
 

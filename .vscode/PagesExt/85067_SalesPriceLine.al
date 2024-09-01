@@ -43,7 +43,7 @@ pageextension 85067 DT_SalesPriceList extends "Price List Lines"
             field(Rebate; Rec.Rebate)
             {
                 ApplicationArea = All;
-                Visible = DrugTariffVisibility;
+                //Visible = DrugTariffVisibility;
             }
 
         }

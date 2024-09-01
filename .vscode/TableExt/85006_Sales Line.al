@@ -184,7 +184,21 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
         }
         field(85036; "Original Line Discount"; Decimal)
         {
-
+            Caption = 'Original Line Discount %';
+        }
+        field(85037; Reclassified; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85038; "TO Discount %"; Decimal)
+        {
+            Editable = false;
+            DecimalPlaces = 0 : 5;
+        }
+        field(85039; "Discount Applied on BasePrice"; Decimal)
+        {
+            Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         modify("Line Amount")
         {
@@ -254,7 +268,6 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                                 UserSetup.SetRange("User ID", UserId);
                                 UserSetup.SetRange("Allow to change unit price", true);
                                 if not UserSetup.FindFirst() then begin
-
                                     if Rec."Min Sell Price" > 0 then begin
                                         if Rec."Unit Price" < Rec."Min Sell Price" then begin
                                             Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."No.");
@@ -422,6 +435,7 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                         Rec."Parent Category" := L_Item."Parent Category";
                         Rec."Warehouse Class Code" := L_Item."Warehouse Class Code";
                         Rec.RRP := L_Item.RRP;
+                        Rec."TO Discount %" := L_Item."TO Discount %";
 
                         L_WarhouseClass.Reset();
                         L_WarhouseClass.SetRange(Code, L_Item."Warehouse Class Code");

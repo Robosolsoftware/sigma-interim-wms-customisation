@@ -9,6 +9,10 @@ pageextension 85097 "SC Purchase Price List Lines" extends "Purchase Price List 
             {
                 ApplicationArea = All;
             }
+            field("Order Volume"; Rec."Order Volume")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

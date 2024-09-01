@@ -80,6 +80,14 @@ pageextension 85035 "SC Sales Order Subform" extends "Sales Order Subform"
                 Rec.TestField("MLD %", 0);
             end;
         }
+        addafter("Line Discount %")
+        {
+            field("Original Line Discount"; Rec."Original Line Discount")
+            {
+                ApplicationArea = All;
+                Caption = 'Original Line Discount %';
+            }
+        }
         addafter(Quantity)
         {
             field("Shipper Qty."; Rec."Shipper Qty.")
@@ -153,6 +161,11 @@ pageextension 85035 "SC Sales Order Subform" extends "Sales Order Subform"
                 ToolTip = 'Last sales unit price';
             }
             field(RRP; Rec.RRP)
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("TO Discount %"; Rec."TO Discount %")
             {
                 ApplicationArea = All;
                 Editable = false;

@@ -137,7 +137,21 @@ tableextension 85007 "SC Sales Shipment Line" extends "Sales Shipment Line"
         }
         field(85036; "Original Line Discount"; Decimal)
         {
-
+            Caption = 'Original Line Discount %';
+        }
+        field(85037; Reclassified; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85038; "TO Discount %"; Decimal)
+        {
+            Editable = false;
+            DecimalPlaces = 0 : 5;
+        }
+        field(85039; "Discount Applied on BasePrice"; Decimal)
+        {
+            Editable = false;
+            DecimalPlaces = 0 : 5;
         }
     }
     keys

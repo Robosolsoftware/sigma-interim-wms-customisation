@@ -84,6 +84,10 @@ tableextension 85039 "SC Price List Line" extends "Price List Line"
         {
 
         }
+        field(85165; "Order Volume"; Text[100])
+        {
+
+        }
     }
 
     keys

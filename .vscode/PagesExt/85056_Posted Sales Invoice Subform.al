@@ -3,6 +3,23 @@ pageextension 85056 "SC Posted SalesInvoice Subform" extends "Posted Sales Invoi
     layout
     {
         // Add changes to page layout here
+        addbefore("Line Discount %")
+        {
+            field("MLD %"; Rec."MLD %")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
+        addafter("Line Discount %")
+        {
+            field("Original Line Discount"; Rec."Original Line Discount")
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Caption = 'Original Line Discount %';
+            }
+        }
         addafter("Unit Price")
         {
             field(RRP; Rec.RRP)

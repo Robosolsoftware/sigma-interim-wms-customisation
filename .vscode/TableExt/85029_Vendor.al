@@ -21,6 +21,21 @@ tableextension 85029 "SC Vendor" extends Vendor
         {
             DataClassification = ToBeClassified;
             OptionMembers = Open,Released;
+
+            trigger OnValidate()
+            begin
+                if Rec.Status = Rec.Status::Released then begin
+                    rec.TestField("No.");
+                    rec.TestField("Phone No.");
+                    rec.TestField(Address);
+                    rec.TestField("Address 2");
+                    rec.TestField("Post Code");
+                    rec.TestField("Vendor Posting Group");
+                    rec.TestField("Payment Terms Code");
+                    rec.TestField("Pay-to Vendor No.");
+                    rec.TestField("E-Mail");
+                end;
+            end;
         }
         field(85146; "QAU Approved"; Boolean)
         {
