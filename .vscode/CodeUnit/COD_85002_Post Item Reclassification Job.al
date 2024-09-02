@@ -5,17 +5,16 @@ codeunit 85002 "Post Item Reclassification"
     trigger OnRun()
     var
         L_KnappLocation: Record Location;
-        L_SaleableLocation: Record Location;
     begin
         L_KnappLocation.Reset();
         L_KnappLocation.SetRange("Knapp Location", true);
-        if L_KnappLocation.FindSet() then begin
-            repeat
-                L_SaleableLocation.Reset();
-                L_SaleableLocation.SetRange("Saleable Location", true);
-                if L_SaleableLocation.FindFirst() then
-                    PostItemReclassification(L_KnappLocation.Code, L_SaleableLocation.Code);
-            until L_KnappLocation.Next() = 0;
+        if L_KnappLocation.FindFirst() then begin
+            G_Zone.Reset();
+            G_Zone.SetFilter("Replenishment Priority", '<>0');
+            G_Zone.SetCurrentKey("Replenishment Priority");
+            G_Zone.Ascending(true);
+            if G_Zone.FindFirst() then
+                PostItemReclassification(L_KnappLocation.Code, G_Zone."Location Code");
         end;
     end;
 
@@ -50,78 +49,71 @@ codeunit 85002 "Post Item Reclassification"
                 Clear(RequiredQuantity);
                 RequiredQuantity := L_SalesShipmentLine.Quantity;
 
-                L_BinContent.Reset();
-                L_BinContent.SetRange("Location Code", P_SaleableLocation);
-                L_BinContent.SetRange("Zone Code", 'HDH');
-                L_BinContent.SetRange("Item No.", L_SalesShipmentLine."No.");
-                if L_SalesShipmentLine."Variant Code" <> '' then
-                    L_BinContent.SetRange("Variant Code", L_SalesShipmentLine."Variant Code");
-                if L_BinContent.FindSet() then begin
+                G_Zone.Reset();
+                G_Zone.SetFilter("Replenishment Priority", '<>0');
+                G_Zone.SetCurrentKey("Replenishment Priority");
+                G_Zone.Ascending(true);
+                if G_Zone.FindSet() then begin
                     repeat
-                        Clear(AvailableQuantity);
-                        L_BinContent.CalcFields(Quantity);
-                        AvailableQuantity := L_BinContent.Quantity;
-
                         Clear(BinCode);
-                        if RequiredQuantity <= AvailableQuantity then begin
-                            BinCode := L_BinContent."Bin Code";
-                            break;
+                        L_BinContent.Reset();
+                        L_BinContent.SetRange("Location Code", P_SaleableLocation);
+                        L_BinContent.SetRange("Zone Code", G_Zone.Code);
+                        L_BinContent.SetRange("Item No.", L_SalesShipmentLine."No.");
+                        if L_SalesShipmentLine."Variant Code" <> '' then
+                            L_BinContent.SetRange("Variant Code", L_SalesShipmentLine."Variant Code");
+                        if L_BinContent.FindSet() then begin
+                            repeat
+                                Clear(AvailableQuantity);
+                                L_BinContent.CalcFields(Quantity);
+                                AvailableQuantity := L_BinContent.Quantity;
+
+                                Clear(BinCode);
+                                if RequiredQuantity <= AvailableQuantity then begin
+                                    BinCode := L_BinContent."Bin Code";
+                                    break;
+                                end;
+                            until L_BinContent.Next() = 0;
                         end;
-                    until L_BinContent.Next() = 0;
+
+                        if BinCode <> '' then
+                            break;
+                    until G_Zone.Next() = 0;
                 end;
 
                 if BinCode <> '' then begin
-                    L_ItemJournalLine.Reset();
-                    L_ItemJournalLine.SetRange("Journal Template Name", 'TRANSFER');
-                    L_ItemJournalLine.SetRange("Journal Batch Name", 'KNAPP');
-                    L_ItemJournalLine.SetRange("Item No.", L_SalesShipmentLine."No.");
+                    G_ItemJournalLine.Reset();
+                    G_ItemJournalLine.Init();
+                    G_ItemJournalLine.Validate("Journal Template Name", 'TRANSFER');
+                    G_ItemJournalLine.Validate("Journal Batch Name", 'KNAPP');
+                    G_ItemJournalLine.Validate("Line No.", GetLastLineNo());
+                    G_ItemJournalLine.Validate("Entry Type", G_ItemJournalLine."Entry Type"::Transfer);
+
+                    // ItemJournalBatch.Reset();
+                    // ItemJournalBatch.SetRange("Journal Template Name", 'TRANSFER');
+                    // ItemJournalBatch.SetRange(Name, 'KNAPP');
+                    // if ItemJournalBatch.FindFirst() then begin
+                    //     G_ItemJournalLine."Document No." := NoSeriesManagement.GetNextNo(ItemJournalBatch."No. Series", WorkDate());
+                    // end;
+
+                    G_ItemJournalLine."Document No." := L_SalesShipmentLine."Document No.";
+                    G_ItemJournalLine."Document Line No." := L_SalesShipmentLine."Line No.";
+                    G_ItemJournalLine.Validate("Item No.", L_SalesShipmentLine."No.");
                     if L_SalesShipmentLine."Variant Code" <> '' then
-                        L_ItemJournalLine.SetRange("Variant Code", L_SalesShipmentLine."Variant Code");
-                    L_ItemJournalLine.SetRange("Location Code", P_SaleableLocation);
-                    L_ItemJournalLine.SetRange("New Location Code", P_KnappLocation);
-                    L_ItemJournalLine.SetRange("Bin Code", BinCode);
-                    L_ItemJournalLine.SetRange("External Document No.", L_SalesShipmentLine."Order No.");
-                    L_ItemJournalLine.SetRange(Quantity, L_SalesShipmentLine.Quantity);
-                    if L_ItemJournalLine.FindFirst() then begin
-                        if Codeunit.Run(Codeunit::"Item Jnl.-Post", L_ItemJournalLine) then begin
-                            L_SalesShipmentLine.Reclassified := true;
-                            L_SalesShipmentLine.Modify();
-                        end;
-                    end
-                    else begin
-                        G_ItemJournalLine.Reset();
-                        G_ItemJournalLine.Init();
-                        G_ItemJournalLine.Validate("Journal Template Name", 'TRANSFER');
-                        G_ItemJournalLine.Validate("Journal Batch Name", 'KNAPP');
-                        G_ItemJournalLine.Validate("Entry Type", G_ItemJournalLine."Entry Type"::Transfer);
+                        G_ItemJournalLine.Validate("Variant Code", L_SalesShipmentLine."Variant Code");
+                    G_ItemJournalLine.Validate(Quantity, L_SalesShipmentLine.Quantity);
+                    G_ItemJournalLine.Validate("Location Code", P_SaleableLocation);
+                    G_ItemJournalLine.Validate("New Location Code", P_KnappLocation);
+                    G_ItemJournalLine.Validate("Bin Code", BinCode);
+                    G_ItemJournalLine.Validate("External Document No.", L_SalesShipmentLine."Order No.");
+                    G_ItemJournalLine.Validate("Posting Date", Today);
+                    G_ItemJournalLine.Validate("Source Code", 'RECLASSJNL');
+                    G_ItemJournalLine.Insert(true);
+                    Commit();
 
-                        // ItemJournalBatch.Reset();
-                        // ItemJournalBatch.SetRange("Journal Template Name", 'TRANSFER');
-                        // ItemJournalBatch.SetRange(Name, 'KNAPP');
-                        // if ItemJournalBatch.FindFirst() then begin
-                        //     G_ItemJournalLine."Document No." := NoSeriesManagement.GetNextNo(ItemJournalBatch."No. Series", WorkDate());
-                        // end;
-
-                        G_ItemJournalLine."Document No." := L_SalesShipmentLine."Document No.";
-                        G_ItemJournalLine."Document Line No." := L_SalesShipmentLine."Line No.";
-                        G_ItemJournalLine.Validate("Line No.", GetLastLineNo());
-                        G_ItemJournalLine.Validate("Item No.", L_SalesShipmentLine."No.");
-                        if L_SalesShipmentLine."Variant Code" <> '' then
-                            G_ItemJournalLine.Validate("Variant Code", L_SalesShipmentLine."Variant Code");
-                        G_ItemJournalLine.Validate(Quantity, L_SalesShipmentLine.Quantity);
-                        G_ItemJournalLine.Validate("Location Code", P_SaleableLocation);
-                        G_ItemJournalLine.Validate("New Location Code", P_KnappLocation);
-                        G_ItemJournalLine.Validate("Bin Code", BinCode);
-                        G_ItemJournalLine.Validate("External Document No.", L_SalesShipmentLine."Order No.");
-                        G_ItemJournalLine.Validate("Posting Date", Today);
-                        G_ItemJournalLine.Validate("Source Code", 'RECLASSJNL');
-                        G_ItemJournalLine.Insert(true);
-                        Commit();
-
-                        if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then begin
-                            L_SalesShipmentLine.Reclassified := true;
-                            L_SalesShipmentLine.Modify();
-                        end;
+                    if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then begin
+                        L_SalesShipmentLine.Reclassified := true;
+                        L_SalesShipmentLine.Modify();
                     end;
                 end;
 
@@ -143,13 +135,7 @@ codeunit 85002 "Post Item Reclassification"
             exit(10000);
     end;
 
-    local procedure PostItemJournalLine(var P_ItemJournalLine: Record "Item Journal Line")
-    var
-
-    begin
-        CODEUNIT.Run(CODEUNIT::"Item Jnl.-Post", P_ItemJournalLine);
-    end;
-
     var
         G_ItemJournalLine: Record "Item Journal Line";
+        G_Zone: Record Zone;
 }
