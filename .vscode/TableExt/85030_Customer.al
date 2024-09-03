@@ -140,6 +140,7 @@ tableextension 85030 "SC Customer" extends Customer
             trigger OnValidate()
             var
                 DefaultDimention: Record "Default Dimension";
+                L_Dimension: Record Dimension;
             begin
                 if Rec.Status = Rec.Status::Released then begin
                     rec.TestField("No.");
@@ -155,20 +156,20 @@ tableextension 85030 "SC Customer" extends Customer
                     rec.TestField("Shipping Agent Service Code");
                     rec.TestField("Location Code");
 
-                    // DefaultDimention.Reset();
-                    // DefaultDimention.SetRange("Table ID", 18);
-                    // DefaultDimention.SetRange("No.", rec."No.");
-                    // DefaultDimention.SetRange("Dimension Code", 'CUSTOMER TYPE');
-                    // DefaultDimention.SetRange("Dimension Code", 'SALES CHANNELS');
-                    // if not DefaultDimention.FindFirst() then begin
-                    //     Error('Default Dimention "CUSTOMER TYPE","SALES CHANNELS" Is Missing');
-                    // end;
 
-                    // if DefaultDimention.FindSet() then begin
-                    //     repeat
-                    //         DefaultDimention.Validate("Dimension Value Code");
-                    //     until DefaultDimention.Next() = 0;
-                    // end;
+                    L_Dimension.Reset();
+                    L_Dimension.SetRange("Mandatory For Customer", true);
+                    if L_Dimension.FindSet() then begin
+                        repeat
+                            DefaultDimention.Reset();
+                            DefaultDimention.SetRange("Table ID", 18);
+                            DefaultDimention.SetRange("No.", Rec."No.");
+                            DefaultDimention.SetRange("Dimension Code", L_Dimension.Code);
+                            if not DefaultDimention.FindFirst() then begin
+                                Error('Default Dimention %1 Is Missing.', L_Dimension.Code);
+                            end;
+                        until L_Dimension.Next() = 0;
+                    end;
                 end;
             end;
         }
