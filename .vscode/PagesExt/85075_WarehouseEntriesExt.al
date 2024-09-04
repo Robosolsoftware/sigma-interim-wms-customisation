@@ -12,6 +12,10 @@ pageextension 85075 WarehouseEntriesExt extends "Warehouse Entries"
             // {
             //     ApplicationArea = all;
             // }
+            field("Saleable Location"; Rec."Saleable Location")
+            {
+                ApplicationArea = All;
+            }
             field(SystemCreatedBy; GetUserName(rec.SystemCreatedBy))
             {
                 ApplicationArea = all;

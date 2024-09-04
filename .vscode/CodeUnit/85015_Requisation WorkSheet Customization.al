@@ -35,4 +35,24 @@ codeunit 85015 "Requisation WorkSheet Cust."
         end;
     end;
 
+
+    //Update Customer Number and Name on PO line
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", 'OnAfterPurchOrderLineInsert', '', false, false)]
+    local procedure OnAfterPurchOrderLineInsert(var PurchOrderLine: Record "Purchase Line"; var RequisitionLine: Record "Requisition Line")
+    begin
+        RequisitionLine.CalcFields("Customer Name");
+        PurchOrderLine."Sell-to Customer No." := RequisitionLine."Sell-to Customer No.";
+        PurchOrderLine."Sell-to Customer Name" := RequisitionLine."Customer Name";
+        PurchOrderLine."Unit Volume" := RequisitionLine."Unit Volume";
+        PurchOrderLine.Modify();
+    end;
+
+    //Update Unit Volum on Requi. Line+++
+    [EventSubscriber(ObjectType::Report, Report::"Get Sales Orders", 'OnAfterInsertReqWkshLine', '', false, false)]
+    local procedure OnAfterInsertReqWkshLine(SalesLine: Record "Sales Line"; var ReqLine: Record "Requisition Line")
+    begin
+        ReqLine."Unit Volume" := SalesLine."Unit Volume";
+        ReqLine.Modify();
+    end;
+
 }

@@ -2,6 +2,14 @@ pageextension 85059 "Req. Worksheet" extends "Req. Worksheet"
 {
     layout
     {
+        addafter("Direct Unit Cost")
+        {
+            field("Unit Volume"; Rec."Unit Volume")
+            {
+                Editable = false;
+                ApplicationArea = All;
+            }
+        }
         addafter("Location Code")
         {
             field("Sales Order No."; Rec."Sales Order No.")

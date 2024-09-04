@@ -10,6 +10,13 @@ pageextension 85071 PurcahseOrderSubformExt extends "Purchase Order Subform"
                 Editable = false;
             }
         }
+        modify("Unit Volume")
+        {
+            Visible = true;
+        }
+        moveafter("Net Unit Cost"; "Unit Volume")
+
+
         addafter("Quantity Invoiced")
         {
             field("Sales Order No."; Rec."Sales Order No.")

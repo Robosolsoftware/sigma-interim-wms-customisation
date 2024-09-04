@@ -9,6 +9,11 @@ tableextension 85042 "SC Requisition Line" extends "Requisition Line"
             CalcFormula = lookup(Customer.Name where("No." = field("Sell-to Customer No.")));
             Editable = false;
         }
+        field(85001; "Unit Volume"; Decimal)
+        {
+            Caption = 'Unit Volume';
+            DecimalPlaces = 0 : 5;
+        }
     }
 
     keys

@@ -32,8 +32,8 @@ tableextension 85029 "SC Vendor" extends Vendor
                     rec.TestField("Post Code");
                     rec.TestField("Vendor Posting Group");
                     rec.TestField("Payment Terms Code");
-                    rec.TestField("Pay-to Vendor No.");
-                    rec.TestField("E-Mail");
+                    //rec.TestField("Pay-to Vendor No.");
+                    //rec.TestField("E-Mail");
                 end;
             end;
         }
