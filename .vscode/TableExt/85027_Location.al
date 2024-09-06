@@ -20,18 +20,18 @@ tableextension 85027 LocationExt extends Location
         }
         field(85004; "Saleable Location"; Boolean)
         {
-            trigger OnValidate()
-            var
-                L_Location: Record Location;
-            begin
-                if Rec."Saleable Location" = true then begin
-                    L_Location.Reset();
-                    L_Location.SetFilter(Code, '<>%1', Rec.Code);
-                    L_Location.SetRange("Saleable Location", true);
-                    if L_Location.FindFirst() then
-                        Error('Saleable Location should not be more than one');
-                end;
-            end;
+            // trigger OnValidate()
+            // var
+            //     L_Location: Record Location;
+            // begin
+            //     if Rec."Saleable Location" = true then begin
+            //         L_Location.Reset();
+            //         L_Location.SetFilter(Code, '<>%1', Rec.Code);
+            //         L_Location.SetRange("Saleable Location", true);
+            //         if L_Location.FindFirst() then
+            //             Error('Saleable Location should not be more than one');
+            //     end;
+            // end;
         }
         field(85005; "Sales Return Location"; Boolean)
         {
