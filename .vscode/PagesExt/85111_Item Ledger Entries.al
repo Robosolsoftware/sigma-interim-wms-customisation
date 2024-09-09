@@ -7,6 +7,14 @@ pageextension 85111 "SC Item Ledger Entries" extends "Item Ledger Entries"
         {
             Visible = true;
         }
+        addafter("Return Reason Code")
+        {
+            field("Reason Code"; GetReasonCode(Rec))
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
     }
 
     actions
@@ -16,4 +24,16 @@ pageextension 85111 "SC Item Ledger Entries" extends "Item Ledger Entries"
 
     var
         myInt: Integer;
+
+    local procedure GetReasonCode(_ItemLedgerEntry: Record "Item Ledger Entry"): Code[20]
+    var
+        L_WarehouseEntry: Record "Warehouse Entry";
+    begin
+        L_WarehouseEntry.Reset();
+        L_WarehouseEntry.SetRange("Registering Date", _ItemLedgerEntry."Posting Date");
+        L_WarehouseEntry.SetRange("Reference No.", _ItemLedgerEntry."Document No.");
+        if L_WarehouseEntry.FindFirst() then
+            exit(L_WarehouseEntry."Reason Code");
+    end;
+
 }

@@ -20,7 +20,6 @@ codeunit 85012 "Sales Event & Function"
         L_SalesLine: Record "Sales Line";
         L_UserSetup: Record "User Setup";
     begin
-        //This code added into KNAPP extension++
         // L_UserSetup.Reset();
         // L_UserSetup.SetRange("User ID", UserId);
         // L_UserSetup.SetRange("SO Override Min Order Value", true);
@@ -724,4 +723,18 @@ codeunit 85012 "Sales Event & Function"
     end;
 
     #endregion Update Inv. Pick No on posted sales Invoice No +++
+
+
+
+    [EventSubscriber(ObjectType::Table, Database::"Cust. Ledger Entry", 'OnAfterCopyCustLedgerEntryFromGenJnlLine', '', false, false)]
+    local procedure OnAfterCopyCustLedgerEntryFromGenJnlLine(GenJournalLine: Record "Gen. Journal Line"; var CustLedgerEntry: Record "Cust. Ledger Entry")
+    var
+        L_Customer: Record Customer;
+    begin
+        L_Customer.Reset();
+        L_Customer.SetRange("No.", CustLedgerEntry."Customer No.");
+        if L_Customer.FindFirst() then begin
+            CustLedgerEntry."Assigned Credit Controller" := L_Customer."Assigned Credit Controller";
+        end;
+    end;
 }

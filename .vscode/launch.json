@@ -6,7 +6,7 @@
             "request": "launch",
             "type": "al",
             "environmentType": "Sandbox",
-            "environmentName": "Copy_01092024",
+            "environmentName": "Copy_04092024",
             //"environmentName": "Sigma_Beta_UAT",
             //"environmentName": "SIGCONNECT_DEV",
             "tenant": "55614040-8b3d-41a1-bae8-2140b06bd0c3",
@@ -16,7 +16,7 @@
             "launchBrowser": true,
             "enableLongRunningSqlStatements": true,
             "enableSqlInformationDebugger": true,
-            "schemaUpdateMode": "ForceSync"
+            "schemaUpdateMode": "Synchronize"
         }
     ]
 }

@@ -124,12 +124,8 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
         modify("Pay-to Vendor No.")
         {
             Visible = true;
-            ShowMandatory = true;
         }
-        modify("E-Mail")
-        {
-            ShowMandatory = true;
-        }
+
 
         addlast(General)
         {

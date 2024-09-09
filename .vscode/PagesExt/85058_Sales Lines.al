@@ -3,6 +3,14 @@ pageextension 85058 "SC Sales Lines" extends "Sales Lines"
     layout
     {
         // Add changes to page layout here
+        addafter(Quantity)
+        {
+            field("Back Order"; Rec."Back Order")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
         addlast(Control1)
         {
             field(SystemCreatedAt; Rec.SystemCreatedAt)

@@ -205,13 +205,25 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
             trigger OnAfterValidate()
             var
                 L_SalesHeader: Record "Sales Header";
+                L_SalesLine: Record "Sales Line";
+                ExistingLineAmount: Decimal;
             begin
                 if Rec.Amount <> 0 then begin
                     L_SalesHeader.Reset();
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     if L_SalesHeader.FindFirst() then begin
-                        if L_SalesHeader."Min Order Value" > Rec.Amount then begin
+                        //For Overall amount
+                        L_SalesLine.Reset();
+                        L_SalesLine.SetRange("Document Type", Rec."Document Type");
+                        L_SalesLine.SetRange("Document No.", Rec."Document No.");
+                        L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                        if L_SalesLine.FindSet() then begin
+                            L_SalesLine.CalcSums(Amount);
+                            ExistingLineAmount := L_SalesLine.Amount;
+                        end;
+
+                        if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
                             Rec."SO Min Order Approval Required" := true;
                             //Rec.Modify();
                         end else begin
@@ -233,17 +245,29 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                 L_SalesPriceHeader: Record "Price List Header";
                 L_CustomerPriceGroupChanges: Codeunit "Customer Price Group Changes";
                 L_SalesHeader: Record "Sales Header";
+                L_SalesLine: Record "Sales Line";
+                ExistingLineAmount: Decimal;
             begin
+                Clear(ExistingLineAmount);
                 if Rec.Amount <> 0 then begin
                     L_SalesHeader.Reset();
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     if L_SalesHeader.FindFirst() then begin
-                        if L_SalesHeader."Min Order Value" > Rec.Amount then begin
+                        //For Overall amount
+                        L_SalesLine.Reset();
+                        L_SalesLine.SetRange("Document Type", Rec."Document Type");
+                        L_SalesLine.SetRange("Document No.", Rec."Document No.");
+                        L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                        if L_SalesLine.FindSet() then begin
+                            L_SalesLine.CalcSums(Amount);
+                            ExistingLineAmount := L_SalesLine.Amount;
+                        end;
+
+                        if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
                             Rec."SO Min Order Approval Required" := true;
                             //Rec.Modify();
-                        end
-                        else begin
+                        end else begin
                             Rec."SO Min Order Approval Required" := false;
                             //Rec.Modify();
                         end;
