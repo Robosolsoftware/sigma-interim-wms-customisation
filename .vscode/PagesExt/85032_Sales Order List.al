@@ -91,7 +91,7 @@ pageextension 85032 "SC Sales Order List" extends "Sales Order List"
         L_SalesLine.Reset();
         L_SalesLine.SetRange("Document Type", Rec."Document Type");
         L_SalesLine.SetRange("Document No.", Rec."No.");
-        L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+        //L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
         if L_SalesLine.FindSet() then begin
             L_SalesLine.CalcSums("Quantity Shipped", Quantity);
             if (L_SalesLine."Quantity Shipped" > 0) AND (L_SalesLine."Quantity Shipped" < L_SalesLine.Quantity) then begin

@@ -2,6 +2,29 @@ pageextension 85004 InventoryPickListExt extends "Inventory Picks"
 {
     layout
     {
+        addafter("Shipment Date")
+        {
+            field("Shipping Agent Code"; Rec."Shipping Agent Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Shipping Agent Service Code"; Rec."Shipping Agent Service Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("No. Printed"; Rec."No. Printed")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
+        modify("Shipment Date")
+        {
+            Visible = true;
+        }
+
         addafter("Location Code")
         {
             field("Whs. Class Code type"; Rec."Whs. Class Code type")
@@ -33,6 +56,48 @@ pageextension 85004 InventoryPickListExt extends "Inventory Picks"
         // Add changes to page actions here
         addlast(processing)
         {
+            action("Assign User")
+            {
+                ApplicationArea = Warehouse;
+                Caption = 'Assign User';
+                Image = User;
+                Gesture = LeftSwipe;
+                Scope = Repeater;
+                ToolTip = 'Assigns this pick document to the user.';
+
+                trigger OnAction()
+                var
+                    UpdateAssignedUserID: Report "Update Assigned User ID";
+                    L_WarehouseActivityHeader: Record "Warehouse Activity Header";
+                    L_LocationFilter: Code[10];
+                begin
+                    Clear(L_LocationFilter);
+                    L_WarehouseActivityHeader.Reset();
+                    CurrPage.SetSelectionFilter(L_WarehouseActivityHeader);
+                    if L_WarehouseActivityHeader.FindSet() then begin
+                        repeat
+                            if L_LocationFilter <> '' then begin
+                                if L_LocationFilter <> L_WarehouseActivityHeader."Location Code" then begin
+                                    Error('You cannot select two differenet order');
+                                end;
+                            end else
+                                L_LocationFilter := L_WarehouseActivityHeader."Location Code";
+                        until L_WarehouseActivityHeader.Next() = 0;
+                    end;
+
+                    Clear(UpdateAssignedUserID);
+                    L_WarehouseActivityHeader.Reset();
+                    CurrPage.SetSelectionFilter(L_WarehouseActivityHeader);
+                    if L_WarehouseActivityHeader.FindSet() then begin
+                        UpdateAssignedUserID.GetLocationFilter(L_WarehouseActivityHeader."Location Code");
+                        UpdateAssignedUserID.SetTableView(L_WarehouseActivityHeader);
+                        UpdateAssignedUserID.Run();
+                    end;
+
+                    CurrPage.Update();
+                end;
+
+            }
             action(AutofillQtyToHandle)
             {
                 ApplicationArea = Warehouse;
