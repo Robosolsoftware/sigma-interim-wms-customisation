@@ -30,6 +30,11 @@ pageextension 85030 "SC Posted Sales Invoice" extends "Posted Sales Invoice"
         }
         addlast(General)
         {
+            field(RXFarma; Rec.RXFarma)
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("Inv. Pick No."; Rec."Inv. Pick No.")
             {
                 ApplicationArea = All;

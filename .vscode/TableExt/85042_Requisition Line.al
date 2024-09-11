@@ -28,4 +28,5 @@ tableextension 85042 "SC Requisition Line" extends "Requisition Line"
 
     var
         myInt: Integer;
+        tes: Record Item;
 }

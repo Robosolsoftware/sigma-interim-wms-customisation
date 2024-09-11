@@ -130,6 +130,10 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
         {
 
         }
+        field(85168; RXFarma; Boolean)
+        {
+
+        }
     }
 
 

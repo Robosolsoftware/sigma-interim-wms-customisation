@@ -31,6 +31,11 @@ pageextension 85059 "Req. Worksheet" extends "Req. Worksheet"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Item Category Code"; Rec."Item Category Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
     }
     actions

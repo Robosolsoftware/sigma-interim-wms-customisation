@@ -5,6 +5,11 @@ pageextension 85031 "SC Posted Sales Shipment" extends "Posted Sales Shipment"
         // Add changes to page layout here
         addafter(General)
         {
+            field(RXFarma; Rec.RXFarma)
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("Inv. Pick No."; Rec."Inv. Pick No.")
             {
                 ApplicationArea = All;

@@ -123,6 +123,10 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
         {
 
         }
+        field(85168; RXFarma; Boolean)
+        {
+
+        }
     }
 
     var

@@ -47,5 +47,6 @@ permissionset 85000 SigmaCustomization
         query "LotNumber WarehouseEntry New" = X,
         query PostedTransferReceiptsPowerBI = X,
         query PostedTransferShipmentsPowerBI = X,
-        query TransferOrderPowerBI = X;
+        query TransferOrderPowerBI = X,
+        report "Update Assigned User ID" = X;
 }

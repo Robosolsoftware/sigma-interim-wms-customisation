@@ -120,6 +120,10 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                 Caption = 'Special Order';
                 Editable = false;
             }
+            field(RXFarma; Rec.RXFarma)
+            {
+                ApplicationArea = All;
+            }
         }
         addafter(SalesLines)
         {
