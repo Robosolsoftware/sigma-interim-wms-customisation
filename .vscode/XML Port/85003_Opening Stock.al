@@ -242,6 +242,7 @@ xmlport 85003 "Opning Stock_To Use"
         Csvbuffer.InsertEntry(1, 10, 'Location');
         Csvbuffer.InsertEntry(1, 11, 'Bin');
         Csvbuffer.InsertEntry(1, 12, 'Reason Code');
+        Csvbuffer.InsertEntry(1, 13, 'Unit Cost');
 
         Csvbuffer.SaveDataToBlob(TempBLOB, ',');
         TempBLOB.CreateOutStream(outs);

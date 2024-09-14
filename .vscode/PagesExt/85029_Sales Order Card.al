@@ -79,6 +79,11 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Zero Price Approval"; Rec."Zero Price Approval")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
