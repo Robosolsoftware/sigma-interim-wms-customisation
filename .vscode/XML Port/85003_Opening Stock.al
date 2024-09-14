@@ -51,7 +51,6 @@ xmlport 85003 "Opning Stock_To Use"
                 {
                     XmlName = 'Quantity';
                 }
-
                 textelement(expirationdatet)
                 {
                     XmlName = 'ExpirationDate';
@@ -68,11 +67,11 @@ xmlport 85003 "Opning Stock_To Use"
                 {
                     XmlName = 'ReasonCode';
                 }
-                // textelement(unitcostt)
-                // {
-                //     MinOccurs = Zero;
-                //     XmlName = 'UnitCost';
-                // }
+                textelement(UnitCostT)
+                {
+                    MinOccurs = Zero;
+                    XmlName = 'UnitCost';
+                }
                 trigger OnAfterInsertRecord()
                 begin
                     if Headerfound = false then begin
@@ -82,12 +81,12 @@ xmlport 85003 "Opning Stock_To Use"
 
                     CLEAR(ExpirationDateD);
                     CLEAR(QtyD);
-                    //Clear(UnitCostD);
+                    Clear(UnitCostD);
                     Clear(LotNo);
                     Clear(Document_Date);
 
-                    // IF (UnitCostT <> '') THEN
-                    //     EVALUATE(UnitCostD, UnitCostT);
+                    IF (UnitCostT <> '') THEN
+                        EVALUATE(UnitCostD, UnitCostT);
 
                     If (Document <> '') then
                         Evaluate(DocumentNoD, Document);
@@ -270,25 +269,15 @@ xmlport 85003 "Opning Stock_To Use"
         QtyD: Decimal;
         ExpirationDateD: Date;
         ItemTrackingLines: Record 337;
-        ItemtrackingLine2: Record 336;
         Item: Record Item;
         UnitCostD: Decimal;
-        ItemUnitOfMeasure: Record 5404;
         PostingDateD: Date;
         DocumentNoD: Code[20];
         Document_Date: Date;
-        Posting_Date: Date;
         Salesperson_code: Code[20];
-
-        CoseCenterD: Code[20];
         ExternalDocNoD: Code[20];
-        DocumentNoT: Code[20];
         LotNo: Code[20];
         Entry_Type: Enum "Item Ledger Entry Type";
-
-
-        NoSeriesManagement: Codeunit NoSeriesManagement;
-        Salesreceivalsetup: Record "Sales & Receivables Setup";
         Headerfound: Boolean;
 }
 

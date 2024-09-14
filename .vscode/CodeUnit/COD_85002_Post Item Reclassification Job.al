@@ -43,7 +43,7 @@ codeunit 85002 "Post Item Reclassification"
         L_SalesShipmentLine.SetFilter(Quantity, '>0');
         L_SalesShipmentLine.SetRange("Location Code", P_KnappLocation);
         L_SalesShipmentLine.SetRange(Reclassified, false);
-        //L_SalesShipmentLine.SetFilter("Document No.", '%1|%2|%3', '171014', '171013', '171012');
+        //L_SalesShipmentLine.SetFilter("Document No.", '%1', '177184');
         if L_SalesShipmentLine.FindSet() then begin
             repeat
                 Clear(RequiredQuantity);
@@ -229,6 +229,13 @@ codeunit 85002 "Post Item Reclassification"
             exit(Rec_ItemJournalLine."Line No." + 10000)
         else
             exit(10000);
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post", 'OnBeforeCode', '', false, false)]
+    local procedure OnBeforeItemJnlPostCode(var HideDialog: Boolean)
+    begin
+        if GuiAllowed = false then
+            HideDialog := true;
     end;
 
     var
