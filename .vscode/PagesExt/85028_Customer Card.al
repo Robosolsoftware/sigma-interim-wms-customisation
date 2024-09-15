@@ -234,7 +234,15 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 trigger OnValidate()
                 var
                     L_UserSetup: Record "User Setup";
+                    L_Dimension: Record "Default Dimension";
                 begin
+                    L_Dimension.Reset();
+                    L_Dimension.SetRange("No.", Rec."No.");
+                    L_Dimension.SetRange("Table ID", 18);
+                    if NOT L_Dimension.FindFirst() then
+                        Error('Dimesion must have a value. It should not be empty');
+
+
                     L_UserSetup.Reset();
                     L_UserSetup.SetRange("User ID", UserId);
                     L_UserSetup.SetRange("Edit Master Data", true);

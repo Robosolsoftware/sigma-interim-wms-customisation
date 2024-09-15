@@ -51,7 +51,7 @@ codeunit 85012 "Sales Event & Function"
         L_SalesLine: Record "Sales Line";
         L_UserSetup: Record "User Setup";
     begin
-        L_UserSetup.Reset();
+        /*L_UserSetup.Reset();
         L_UserSetup.SetRange("User ID", UserId);
         L_UserSetup.SetRange("SO Override Min Order Value", true);
         if not L_UserSetup.FindFirst() then begin
@@ -62,7 +62,7 @@ codeunit 85012 "Sales Event & Function"
                         Error('Total order amount %1 is less than Min Order Value %2', SalesHeader.Amount, SalesHeader."Min Order Value");
                 end;
             end;
-        end;
+        end;*///
 
 
         if SalesHeader."Document Type" = SalesHeader."Document Type"::"Return Order" then begin
