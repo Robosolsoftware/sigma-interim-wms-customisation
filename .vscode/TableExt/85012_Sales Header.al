@@ -409,7 +409,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         field(85169; "Zero Price Approval"; Boolean)
         {
             FieldClass = FlowField;
-            CalcFormula = exist("Sales Line" where("Document Type" = field("Document Type"), "Document No." = field("No."), "Unit Price" = filter(0)));
+            CalcFormula = exist("Sales Line" where("Document Type" = field("Document Type"), "Document No." = field("No."), "Unit Price" = filter(0), Type = filter(Item | "Charge (Item)"), Quantity = filter(> 0)));
         }
     }
 
