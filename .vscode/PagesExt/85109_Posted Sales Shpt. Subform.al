@@ -2,6 +2,14 @@ pageextension 85109 "SC Posted Sales Shpt. Subform" extends "Posted Sales Shpt. 
 {
     layout
     {
+        addafter(Description)
+        {
+            field("Unable to Pick"; Rec."Unable to Pick")
+            {
+                ApplicationArea = ALl;
+                Editable = false;
+            }
+        }
         addlast(Control1)
         {
             field(Reclassified; Rec.Reclassified)

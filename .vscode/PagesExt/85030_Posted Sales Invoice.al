@@ -3,6 +3,10 @@ pageextension 85030 "SC Posted Sales Invoice" extends "Posted Sales Invoice"
     layout
     {
         //Add changes to page layout here
+        modify("Shipment Date")
+        {
+            Visible = true;
+        }
         addlast("Shipping Details")
         {
             field("Shipping Agent Service Code"; Rec."Shipping Agent Service Code")
@@ -20,6 +24,7 @@ pageextension 85030 "SC Posted Sales Invoice" extends "Posted Sales Invoice"
                 ApplicationArea = All;
                 Editable = false;
             }
+
         }
         addlast("Invoice Details")
         {

@@ -8,6 +8,7 @@ pageextension 85103 "SC Invt. Pick Subform" extends "Invt. Pick Subform"
             field("Unable to Pick"; Rec."Unable to Pick")
             {
                 ApplicationArea = All;
+                Editable = false;
             }
         }
     }

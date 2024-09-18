@@ -4,6 +4,11 @@ pageextension 85004 InventoryPickListExt extends "Inventory Picks"
     {
         addafter("Shipment Date")
         {
+            field("Contains TOS"; Rec."Contains TOS")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("Shipping Agent Code"; Rec."Shipping Agent Code")
             {
                 ApplicationArea = All;

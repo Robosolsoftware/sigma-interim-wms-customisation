@@ -5,6 +5,11 @@ pageextension 85056 "SC Posted SalesInvoice Subform" extends "Posted Sales Invoi
         // Add changes to page layout here
         addbefore("Line Discount %")
         {
+            field("Unable to Pick"; Rec."Unable to Pick")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("MLD %"; Rec."MLD %")
             {
                 ApplicationArea = All;

@@ -52,6 +52,11 @@ tableextension 85045 "SI Warehouse Activity Header" extends "Warehouse Activity 
         {
             Editable = false;
         }
+        field(85007; "Contains TOS"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Warehouse Activity Line" where("Activity Type" = field(Type), "No." = field("No."), "Unable to Pick" = filter(<> '')));
+        }
     }
 
     keys

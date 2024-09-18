@@ -40,6 +40,11 @@ pageextension 85035 "SC Sales Order Subform" extends "Sales Order Subform"
         }
         addafter(Description)
         {
+            field("Unable to Pick"; Rec."Unable to Pick")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("Warehouse Class Code"; Rec."Warehouse Class Code")
             {
                 ApplicationArea = All;

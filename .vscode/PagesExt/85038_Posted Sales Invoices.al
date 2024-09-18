@@ -20,6 +20,10 @@ pageextension 85038 "SC Posted Sales Invoices" extends "Posted Sales Invoices"
                 Editable = false;
             }
         }
+        modify("Shipment Date")
+        {
+            Visible = true;
+        }
     }
 
     actions
