@@ -8,7 +8,21 @@ pageextension 85103 "SC Invt. Pick Subform" extends "Invt. Pick Subform"
             field("Unable to Pick"; Rec."Unable to Pick")
             {
                 ApplicationArea = All;
-                Editable = false;
+                trigger OnValidate()
+                var
+                    L_SalesLine: Record "Sales Line";
+                begin
+                    L_SalesLine.Reset();
+                    L_SalesLine.SetRange("Document Type", L_SalesLine."Document Type"::Order);
+                    L_SalesLine.SetRange("Document No.", Rec."Source No.");
+                    L_SalesLine.SetRange("Line No.", Rec."Source Line No.");
+                    if L_SalesLine.FindFirst() then begin
+                        if L_SalesLine."Unable to Pick" <> '' then begin
+                            Clear(L_SalesLine."Unable to Pick");
+                            L_SalesLine.Modify();
+                        end;
+                    end;
+                end;
             }
         }
     }
