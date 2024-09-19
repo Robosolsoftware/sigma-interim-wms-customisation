@@ -84,6 +84,11 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Credit Limit Approval"; Rec."Credit Limit Approval")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;

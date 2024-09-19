@@ -11,11 +11,6 @@ tableextension 85035 "SC Item Variant" extends "Item Variant"
             var
                 L_ItemVariant: Record "Item Variant";
             begin
-                //if Rec.Priority <> 0 then
-                // if TotalAvailableQtyForSaleable(Rec) <= 0 then
-                //     Error('Free Quantity should be greater than 0');
-
-
                 if Rec.Priority > 0 then begin
                     L_ItemVariant.Reset();
                     L_ItemVariant.SetRange("Item No.", Rec."Item No.");
@@ -86,18 +81,5 @@ tableextension 85035 "SC Item Variant" extends "Item Variant"
 
     var
         myInt: Integer;
-
-    local procedure TotalAvailableQtyForSaleable(_Rec: Record "Item Variant"): Decimal
-    begin
-        _Rec.CalcFields("Qty on SO(Saleable)", "Saleable Inventory");
-        if _Rec."Saleable Inventory" > 0 then
-            if (_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)") > 0 then
-                exit(_Rec."Saleable Inventory" - _Rec."Qty on SO(Saleable)")
-            else
-                exit(0)
-        else
-            exit(0);
-    end;
-
 
 }

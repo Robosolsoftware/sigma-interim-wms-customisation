@@ -11,6 +11,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                 L_Date: Record Date;
                 L_ShipingAgentService: Record "Shipping Agent Services";
                 L_BlankDatFormula: DateFormula;
+                CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
             begin
                 if Rec."Sell-to Customer No." <> '' then begin
                     L_Customer.Reset();
@@ -19,6 +20,12 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         if Rec."IRP Order" = false then begin //As discussed with Adesh+++
                             L_Customer.TestField("QAU Approved");
                             L_Customer.TestField(Status, L_Customer.Status::Released);
+
+                            //Credit Limit++
+                            Rec."Credit Limit Approval" := CheckCreditLimit.SalesHeaderCheck(Rec);
+                            // if L_Customer."Credit Amount" <> 0 then
+                            //     if (L_Customer."Credit Limit (LCY)" - L_Customer."Balance (LCY)") <= 0 then
+                            //         Rec."Credit Limit Approval" := true;
                         end;
 
 
@@ -410,6 +417,10 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         {
             FieldClass = FlowField;
             CalcFormula = exist("Sales Line" where("Document Type" = field("Document Type"), "Document No." = field("No."), "Unit Price" = filter(0), Type = filter(Item | "Charge (Item)"), Quantity = filter(> 0)));
+        }
+        field(85170; "Credit Limit Approval"; Boolean)
+        {
+
         }
     }
 

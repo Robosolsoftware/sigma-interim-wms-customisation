@@ -127,6 +127,10 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
         {
 
         }
+        field(85170; "Credit Limit Approval"; Boolean)
+        {
+
+        }
     }
 
     var

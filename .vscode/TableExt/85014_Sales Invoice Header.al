@@ -134,6 +134,10 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
         {
 
         }
+        field(85170; "Credit Limit Approval"; Boolean)
+        {
+
+        }
     }
 
 

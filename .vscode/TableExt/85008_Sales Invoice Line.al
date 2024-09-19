@@ -158,9 +158,7 @@ tableextension 85008 "SC Sales Invoice Line" extends "Sales Invoice Line"
             Editable = false;
             DecimalPlaces = 0 : 5;
         }
-
     }
-
     keys
     {
         // Add changes to keys here
