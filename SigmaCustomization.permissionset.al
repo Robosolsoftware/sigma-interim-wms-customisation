@@ -48,5 +48,16 @@ permissionset 85000 SigmaCustomization
         query PostedTransferReceiptsPowerBI = X,
         query PostedTransferShipmentsPowerBI = X,
         query TransferOrderPowerBI = X,
-        report "Update Assigned User ID" = X;
+        report "Update Assigned User ID" = X,
+        tabledata "Buying Worksheet" = RIMD,
+        tabledata "Knapp Replenishment" = RIMD,
+        table "Buying Worksheet" = X,
+        table "Knapp Replenishment" = X,
+        report "Buying Report" = X,
+        report "Post Direct Debit Collection2" = X,
+        codeunit "Post Direct Debit" = X,
+        codeunit "Post Inv. Cost to G/L-Job" = X,
+        page "Knapp Stock to Replenish" = X,
+        query "Item Ledger Enteries-Qty" = X,
+        query "Item Ledger Enteries-Qty Knapp" = X;
 }
