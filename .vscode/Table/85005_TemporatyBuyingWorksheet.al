@@ -98,6 +98,18 @@ table 85005 "Buying Worksheet"
         {
             DataClassification = ToBeClassified;
         }
+        field(25; "Total Inventory"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(26; "Total Free Stock"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(27; "Current Month Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

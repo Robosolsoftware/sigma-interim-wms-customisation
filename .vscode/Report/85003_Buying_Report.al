@@ -26,6 +26,25 @@ report 85003 "Buying Report"
             {
 
             }
+            column(Item_Category_Code; "Item Category Code")
+            {
+
+
+            }
+            column(Sub_Category_Code; "Sub Category Code")
+            {
+
+
+            }
+            column(Unit_Cost; "Unit Cost")
+            {
+
+            }
+            column(Unit_Price; "Unit Price")
+            {
+
+            }
+
             column(Inventory_Depot1; "Inventory Depot1")
             {
                 DecimalPlaces = 0 : 5;
@@ -86,22 +105,21 @@ report 85003 "Buying Report"
                 DecimalPlaces = 0 : 5;
 
             }
-            column(Item_Category_Code; "Item Category Code")
+            column(Total_Inventory; "Total Inventory")
             {
-
-
+                DecimalPlaces = 0 : 5;
             }
-            column(Sub_Category_Code; "Sub Category Code")
-            {
-
-
-            }
-            column(Qty_On_PO; "Qty On PO")
+            column(Qty__On_SO; "Qty. On SO")
             {
                 DecimalPlaces = 0 : 5;
 
             }
-            column(Qty__On_SO; "Qty. On SO")
+            column(Total_Free_Stock; "Total Free Stock")
+            {
+                DecimalPlaces = 0 : 5;
+            }
+
+            column(Qty_On_PO; "Qty On PO")
             {
                 DecimalPlaces = 0 : 5;
 
@@ -110,6 +128,10 @@ report 85003 "Buying Report"
             {
                 DecimalPlaces = 0 : 5;
 
+            }
+            column(Current_Month_Sales; "Current Month Sales")
+            {
+                DecimalPlaces = 0 : 5;
             }
         }
     }
@@ -170,6 +192,7 @@ report 85003 "Buying Report"
         L_Item12: Record Item;
         L_item13: Record item;
         L_Item14: Record Item;
+        L_Item15: Record Item;
         Progress: Dialog;
         Counter: Integer;
         Text000: Label 'Processing-- #1';
@@ -191,14 +214,18 @@ report 85003 "Buying Report"
                 "Buying Worksheet"."Item No." := L_ILEQuery.Item_No_;
 
                 if L_Item.Get(L_ILEQuery.Item_No_) then
-                    L_Item.CalcFields("Qty. on Purch. Order", "Qty. on Sales Order", "Child Category");
+                    L_Item.CalcFields("Qty. on Purch. Order", "Qty. on Sales Order", "Child Category", L_Item.Inventory);
 
                 "Buying Worksheet"."Item Description" := L_Item.Description;
                 "Buying Worksheet"."Variant Code" := L_ILEQuery.Variant_Code;
                 "Buying Worksheet"."Qty On PO" := L_Item."Qty. on Purch. Order";
                 "Buying Worksheet"."Qty. On SO" := L_Item."Qty. on Sales Order";
+                "Buying Worksheet"."Unit Cost" := L_Item."Unit Cost";
+                "Buying Worksheet"."Unit Price" := L_Item."Unit Price";
                 "Buying Worksheet"."Item Category Code" := L_Item."Item Category Code";
                 "Buying Worksheet"."Sub Category Code" := L_Item."Child Category";
+                "Buying Worksheet"."Total Inventory" := L_Item.Inventory;
+                "Buying Worksheet"."Total Free Stock" := L_Item.Inventory - L_Item."Qty. on Sales Order";
 
                 L_ItemVariant.Reset();
                 L_ItemVariant.SetRange("Item No.", L_ILEQuery.Item_No_);
@@ -359,8 +386,24 @@ report 85003 "Buying Report"
                 L_Item14.Reset();
                 L_Item14.SetRange("No.", L_ILEQuery.Item_No_);
                 L_Item14.SetRange("Date Filter", WorkDate());
-                If L_Item14.FindFirst() then
+                If L_Item14.FindFirst() then begin
                     L_Item14.CalcFields("Sales (Qty.)");
+                    "Buying Worksheet"."Today Sales Qty" := L_Item14."Sales (Qty.)";
+
+                end;
+
+
+                L_Item15.Reset();
+                L_Item15.SetRange("No.", L_ILEQuery.Item_No_);
+                L_Item15.SetFilter("Date Filter", '%1..%2', CalcDate('-CM'), CalcDate('CM'));
+                if L_Item15.FindFirst() then begin
+                    L_Item15.CalcFields("Sales (Qty.)");
+                    "Buying Worksheet"."Current Month Sales" := L_Item15."Sales (Qty.)";
+
+                end;
+
+
+
 
                 "Buying Worksheet".Insert();
 
