@@ -96,6 +96,16 @@ report 85003 "Buying Report"
 
 
             }
+            column(Qty_On_PO; "Qty On PO")
+            {
+                DecimalPlaces = 0 : 5;
+
+            }
+            column(Qty__On_SO; "Qty. On SO")
+            {
+                DecimalPlaces = 0 : 5;
+
+            }
             column(Today_Sales_Qty; "Today Sales Qty")
             {
                 DecimalPlaces = 0 : 5;
