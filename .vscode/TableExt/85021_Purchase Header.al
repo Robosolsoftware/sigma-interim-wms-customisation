@@ -2,6 +2,10 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
 {
     fields
     {
+        field(85000; "Purchase Order No."; Text[100])
+        {
+            DataClassification = ToBeClassified;
+        }
         // Add changes to table fields here
         modify("Buy-from Vendor No.")
         {

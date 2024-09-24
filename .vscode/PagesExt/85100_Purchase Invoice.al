@@ -15,7 +15,13 @@ pageextension 85100 "SC Purchase Invoice" extends "Purchase Invoice"
                 ApplicationArea = All;
             }
 
-
+        }
+        addafter("Vendor Order No.")
+        {
+            field("Purchase Order No."; Rec."Purchase Order No.")
+            {
+                ApplicationArea = All;
+            }
 
         }
 
