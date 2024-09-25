@@ -1,6 +1,7 @@
 //This CodeUnit Used for Sales Price changes on SO line+++
 codeunit 85011 "Customer Price Group Changes"
 {
+    SingleInstance = true;
     trigger OnRun()
     begin
 
@@ -8,6 +9,7 @@ codeunit 85011 "Customer Price Group Changes"
 
     var
         myInt: Integer;
+        G_CalledByFieldNo: Integer;
 
     [EventSubscriber(ObjectType::Table, Database::"Price Source", 'OnBeforeVerifyAmountTypeForSourceType', '', false, false)]
     local procedure OnBeforeVerifyAmountTypeForSourceType(var IsHandled: Boolean)
@@ -55,6 +57,15 @@ codeunit 85011 "Customer Price Group Changes"
 
 
     //Multiple Customer Price Group++
+    [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnBeforeUpdateUnitPrice', '', false, false)]
+    local procedure OnBeforeUpdateUnitPrice(CalledByFieldNo: Integer)
+    begin
+        Clear(G_CalledByFieldNo);
+        G_CalledByFieldNo := CalledByFieldNo;
+    end;
+
+
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Line - Price", 'OnAfterSetPrice', '', false, false)]
     local procedure OnAfterSetPrice(AmountType: Enum "Price Amount Type"; PriceListLine: Record "Price List Line"; var SalesLine: Record "Sales Line")
     var
@@ -66,6 +77,11 @@ codeunit 85011 "Customer Price Group Changes"
         L_Item: Record Item;
         L_PriceFound: Boolean;
     begin
+        //If Validate from Variant code++
+        if G_CalledByFieldNo = 5402 then
+            exit;
+
+
         //Get Sales Header++
         If L_SalesHeader.Get(SalesLine."Document Type", SalesLine."Document No.") then;
 
@@ -575,6 +591,8 @@ codeunit 85011 "Customer Price Group Changes"
                         SalesLine.Validate("Unit Price", L_Item."Unit Price")
                 end;
             end;
+
+            Clear(G_CalledByFieldNo);
         end;
 
 
