@@ -24,6 +24,7 @@ pageextension 85055 "SC Posted Sales Shipments" extends "Posted Sales Shipments"
                 PromotedIsBig = true;
                 PromotedOnly = true;
                 PromotedCategory = Process;
+                Visible = false;
 
                 trigger OnAction()
                 var

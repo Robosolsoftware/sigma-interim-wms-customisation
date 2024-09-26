@@ -293,7 +293,6 @@ xmlport 85000 "Item Reclassification"
         ExternalDocNoD: Code[20];
         DocumentNoT: Code[20];
         LotNo: Code[20];
-        NoSeriesManagement: Codeunit NoSeriesManagement;
         Salesreceivalsetup: Record "Sales & Receivables Setup";
         Headerfound: Boolean;
 }
