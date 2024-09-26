@@ -173,6 +173,18 @@ codeunit 85013 "Purchase Event & Function"
             end;
         end;
     end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", 'OnAfterPostInvoice', '', false, false)]
+    local procedure OnAfterPostInvoice(var PurchHeader: Record "Purchase Header"; var VendorLedgerEntry: Record "Vendor Ledger Entry")
+    var
+
+    begin
+
+        VendorLedgerEntry."Purchase Order No." := PurchHeader."Purchase Order No.";
+        VendorLedgerEntry.Modify();
+
+    end;
+
     #endregion Check Min Order Validation on PO+++
 
     #Region Update Transfer Line Fields to Posted Document++++
