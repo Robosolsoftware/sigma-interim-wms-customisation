@@ -661,16 +661,34 @@ codeunit 85012 "Sales Event & Function"
 
     //Update Shipping agenet service code on posted sales invoice header++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
-    local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; SalesInvHdrNo: Code[20])
+    local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; SalesInvHdrNo: Code[20]; SalesShptHdrNo: Code[20])
     var
         L_SalesInvoiceHeader: Record "Sales Invoice Header";
+        L_SalesShipmentHeader: Record "Sales Shipment Header";
+        SalesRecSetup: Record "Sales & Receivables Setup";
     begin
+        SalesRecSetup.Get();
         if (SalesHeader."Document Type" = SalesHeader."Document Type"::Order) OR (SalesHeader."Document Type" = SalesHeader."Document Type"::Invoice) then begin
             L_SalesInvoiceHeader.Reset();
             L_SalesInvoiceHeader.SetRange("No.", SalesInvHdrNo);
             if L_SalesInvoiceHeader.FindFirst() then begin
                 L_SalesInvoiceHeader.Validate("Shipping Agent Service Code", SalesHeader."Shipping Agent Service Code");
+                if SalesRecSetup."Inv./Ship Default Posting Date" = SalesRecSetup."Inv./Ship Default Posting Date"::"Work Date" then begin
+                    if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then
+                        L_SalesInvoiceHeader."Posting Date" := WorkDate();
+                end;
                 L_SalesInvoiceHeader.Modify();
+            end;
+
+            if SalesRecSetup."Inv./Ship Default Posting Date" = SalesRecSetup."Inv./Ship Default Posting Date"::"Work Date" then begin
+                if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+                    L_SalesShipmentHeader.Reset();
+                    L_SalesShipmentHeader.SetRange("No.", SalesShptHdrNo);
+                    if L_SalesShipmentHeader.FindFirst() then begin
+                        L_SalesShipmentHeader."Posting Date" := WorkDate();
+                        L_SalesShipmentHeader.Modify();
+                    end;
+                end;
             end;
         end;
     end;

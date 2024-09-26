@@ -138,6 +138,11 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
         {
 
         }
+        field(85171; "Drop Number"; Text[5])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Customer."Drop Number" where("No." = field("Sell-to Customer No.")));
+        }
     }
 
 

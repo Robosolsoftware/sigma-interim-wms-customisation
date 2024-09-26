@@ -131,6 +131,11 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
         {
 
         }
+        field(85171; "Drop Number"; Text[5])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Customer."Drop Number" where("No." = field("Sell-to Customer No.")));
+        }
     }
 
     var
