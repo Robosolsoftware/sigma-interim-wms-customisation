@@ -26,21 +26,7 @@ pageextension 85090 "Cash Receipt Journal Ext" extends "Cash Receipt Journal"
                 end;
             }
 
-            action("Export Direct Debit Payments")
-            {
-                ApplicationArea = All;
-                Caption = 'Export Direct Debit Payments';
-                Image = Export;
-                Promoted = true;
-                PromotedCategory = Process;
 
-                trigger OnAction()
-                var
-
-                begin
-
-                end;
-            }
         }
     }
 }
