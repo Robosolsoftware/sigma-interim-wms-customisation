@@ -47,3 +47,17 @@ pageextension 85096 "SC Sales Order Archives" extends "Sales Order Archives"
     var
         myInt: Integer;
 }
+
+pageextension 85119 "Ext Order Archive Subform" extends "Sales Order Archive Subform"
+{
+    layout
+    {
+        addafter(Description)
+        {
+            field("Unable to Pick"; Rec."Unable to Pick")
+            {
+                ApplicationArea = All;
+            }
+        }
+    }
+}
