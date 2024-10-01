@@ -59,5 +59,6 @@ permissionset 85000 SigmaCustomization
         codeunit "Post Inv. Cost to G/L-Job" = X,
         page "Knapp Stock to Replenish" = X,
         query "Item Ledger Enteries-Qty" = X,
-        query "Item Ledger Enteries-Qty Knapp" = X;
+        query "Item Ledger Enteries-Qty Knapp" = X,
+        report "Direct Debit Payments" = X;
 }

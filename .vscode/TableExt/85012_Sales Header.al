@@ -49,73 +49,82 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         L_Date.Reset();
                         L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
                         L_Date.SetRange(L_Date."Period Start", WorkDate());
-                        if L_Date.FindFirst() then
+                        if L_Date.FindFirst() then begin
                             if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
                                 Rec."Weekend Shipping Agent Code" := L_Customer."Weekend Shipping Agent Code";
                                 Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
-                                if Rec."Weekend Ship. Agnt. Serv. Code" <> '' then
-                                    //Update Saturday++
-                                    Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()))
-                                else begin
-                                    //Update Monday
-                                    Rec.Validate("Shipment Date", CalcDate('<+3D>', WorkDate()));
-                                end;
-                            end else begin
-                                //As discussed shipment date shoud be next day all condistion++
-                                Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()));
-
-                                // //New Code based on calendar+++
-                                // if UpperCase(L_Date."Period Name") = UpperCase('SATURDAY') then begin
-                                //     if L_Customer."Base Calendar Code" <> '' then
-                                //         Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
-                                //     else begin
-                                //         L_ShipingAgentService.Reset();
-                                //         L_ShipingAgentService.SetRange("Shipping Agent Code", L_Customer."Shipping Agent Code");
-                                //         L_ShipingAgentService.SetRange(Code, L_Customer."Shipping Agent Service Code");
-                                //         if L_ShipingAgentService.FindFirst() then begin
-                                //             if L_ShipingAgentService."Base Calendar Code" <> '' then
-                                //                 Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
-                                //             else
-                                //                 //Update Monday
-                                //                 Rec.Validate("Shipment Date", CalcDate('<+2D>', WorkDate()));
-                                //         end;
-                                //     end;
-                                // end else begin
-                                //     if L_Customer."Base Calendar Code" <> '' then
-                                //         Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
-                                //     else begin
-                                //         L_ShipingAgentService.Reset();
-                                //         L_ShipingAgentService.SetRange("Shipping Agent Code", L_Customer."Shipping Agent Code");
-                                //         L_ShipingAgentService.SetRange(Code, L_Customer."Shipping Agent Service Code");
-                                //         if L_ShipingAgentService.FindFirst() then begin
-                                //             if L_ShipingAgentService."Base Calendar Code" <> '' then
-                                //                 Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
-                                //             else begin
-                                //                 if L_Customer."Shipping Time" <> L_BlankDatFormula then begin
-                                //                     Rec.Validate("Shipment Date", CalcDate(L_Customer."Shipping Time", Rec."Shipment Date"))
-                                //                 end else begin
-                                //                     L_ShipingAgentService.Reset();
-                                //                     L_ShipingAgentService.SetRange("Shipping Agent Code", L_Customer."Shipping Agent Code");
-                                //                     L_ShipingAgentService.SetRange(Code, L_Customer."Shipping Agent Service Code");
-                                //                     if L_ShipingAgentService.FindFirst() then begin
-                                //                         if L_ShipingAgentService."Shipping Time" <> L_BlankDatFormula then
-                                //                             Rec.Validate("Shipment Date", CalcDate(L_ShipingAgentService."Shipping Time", Rec."Shipment Date"));
-                                //                     end;
-                                //                 end;
-                                //             end;
-                                //         end;
-                                //     end;
-                                // end;
                             end;
+                        end;
 
+                        //This code moved into Ochannel Extension [For Manual, and Web Order all process]
+                        // L_Date.Reset();
+                        // L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
+                        // L_Date.SetRange(L_Date."Period Start", WorkDate());
+                        // if L_Date.FindFirst() then
+                        //     if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
+                        //         Rec."Weekend Shipping Agent Code" := L_Customer."Weekend Shipping Agent Code";
+                        //         Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
+                        //         if Rec."Weekend Ship. Agnt. Serv. Code" <> '' then
+                        //             //Update Saturday++
+                        //             Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()))
+                        //         else begin
+                        //             //Update Monday
+                        //             Rec.Validate("Shipment Date", CalcDate('<+3D>', WorkDate()));
+                        //         end;
+                        //     end else begin
+                        //         //As discussed shipment date shoud be next day all condistion++
+                        //         Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()));
 
+                        //         // //New Code based on calendar+++
+                        //         // if UpperCase(L_Date."Period Name") = UpperCase('SATURDAY') then begin
+                        //         //     if L_Customer."Base Calendar Code" <> '' then
+                        //         //         Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
+                        //         //     else begin
+                        //         //         L_ShipingAgentService.Reset();
+                        //         //         L_ShipingAgentService.SetRange("Shipping Agent Code", L_Customer."Shipping Agent Code");
+                        //         //         L_ShipingAgentService.SetRange(Code, L_Customer."Shipping Agent Service Code");
+                        //         //         if L_ShipingAgentService.FindFirst() then begin
+                        //         //             if L_ShipingAgentService."Base Calendar Code" <> '' then
+                        //         //                 Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
+                        //         //             else
+                        //         //                 //Update Monday
+                        //         //                 Rec.Validate("Shipment Date", CalcDate('<+2D>', WorkDate()));
+                        //         //         end;
+                        //         //     end;
+                        //         // end else begin
+                        //         //     if L_Customer."Base Calendar Code" <> '' then
+                        //         //         Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
+                        //         //     else begin
+                        //         //         L_ShipingAgentService.Reset();
+                        //         //         L_ShipingAgentService.SetRange("Shipping Agent Code", L_Customer."Shipping Agent Code");
+                        //         //         L_ShipingAgentService.SetRange(Code, L_Customer."Shipping Agent Service Code");
+                        //         //         if L_ShipingAgentService.FindFirst() then begin
+                        //         //             if L_ShipingAgentService."Base Calendar Code" <> '' then
+                        //         //                 Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
+                        //         //             else begin
+                        //         //                 if L_Customer."Shipping Time" <> L_BlankDatFormula then begin
+                        //         //                     Rec.Validate("Shipment Date", CalcDate(L_Customer."Shipping Time", Rec."Shipment Date"))
+                        //         //                 end else begin
+                        //         //                     L_ShipingAgentService.Reset();
+                        //         //                     L_ShipingAgentService.SetRange("Shipping Agent Code", L_Customer."Shipping Agent Code");
+                        //         //                     L_ShipingAgentService.SetRange(Code, L_Customer."Shipping Agent Service Code");
+                        //         //                     if L_ShipingAgentService.FindFirst() then begin
+                        //         //                         if L_ShipingAgentService."Shipping Time" <> L_BlankDatFormula then
+                        //         //                             Rec.Validate("Shipment Date", CalcDate(L_ShipingAgentService."Shipping Time", Rec."Shipment Date"));
+                        //         //                     end;
+                        //         //                 end;
+                        //         //             end;
+                        //         //         end;
+                        //         //     end;
+                        //         // end;
+                        //     end;
+                        //This code moved into Ochannel Extension [For Manual, and Web Order all process]
 
                         if Rec."Document Type" = Rec."Document Type"::"Return Order" then begin
                             Rec.Validate("Shipping Agent Code", L_Customer."Shipping Agent Code");
                             Rec.Validate("Shipping Agent Service Code", L_Customer."Shipping Agent Service Code");
                         end;
                     end;
-
 
                     // "Special Price Daily" should be only one++
                     L_SalesPriceHeader.Reset();
@@ -158,8 +167,17 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         // Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
                         Rec."SO Approval Required" := L_Customer."SO Approval Required";
 
+                        L_Date.Reset();
+                        L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
+                        L_Date.SetRange(L_Date."Period Start", WorkDate());
+                        if L_Date.FindFirst() then begin
+                            if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
+                                Rec."Weekend Shipping Agent Code" := L_Customer."Weekend Shipping Agent Code";
+                                Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
+                            end;
+                        end;
 
-                        // //Update Shipment Date++if 
+                        //This code moved into Ochannel Extension [For Manual, and Web Order all process]
                         // L_Date.Reset();
                         // L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
                         // L_Date.SetRange(L_Date."Period Start", WorkDate());
@@ -177,7 +195,53 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         //     end else begin
                         //         //As discussed shipment date shoud be next day all condistion++
                         //         Rec.Validate("Shipment Date", CalcDate('<+1D>', WorkDate()));
-                        //    end;
+
+                        //         // //New Code based on calendar+++
+                        //         // if UpperCase(L_Date."Period Name") = UpperCase('SATURDAY') then begin
+                        //         //     if L_Customer."Base Calendar Code" <> '' then
+                        //         //         Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
+                        //         //     else begin
+                        //         //         L_ShipingAgentService.Reset();
+                        //         //         L_ShipingAgentService.SetRange("Shipping Agent Code", L_Customer."Shipping Agent Code");
+                        //         //         L_ShipingAgentService.SetRange(Code, L_Customer."Shipping Agent Service Code");
+                        //         //         if L_ShipingAgentService.FindFirst() then begin
+                        //         //             if L_ShipingAgentService."Base Calendar Code" <> '' then
+                        //         //                 Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
+                        //         //             else
+                        //         //                 //Update Monday
+                        //         //                 Rec.Validate("Shipment Date", CalcDate('<+2D>', WorkDate()));
+                        //         //         end;
+                        //         //     end;
+                        //         // end else begin
+                        //         //     if L_Customer."Base Calendar Code" <> '' then
+                        //         //         Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
+                        //         //     else begin
+                        //         //         L_ShipingAgentService.Reset();
+                        //         //         L_ShipingAgentService.SetRange("Shipping Agent Code", L_Customer."Shipping Agent Code");
+                        //         //         L_ShipingAgentService.SetRange(Code, L_Customer."Shipping Agent Service Code");
+                        //         //         if L_ShipingAgentService.FindFirst() then begin
+                        //         //             if L_ShipingAgentService."Base Calendar Code" <> '' then
+                        //         //                 Rec.Validate("Shipment Date", Rec.CalcPlannedShptDate(21))
+                        //         //             else begin
+                        //         //                 if L_Customer."Shipping Time" <> L_BlankDatFormula then begin
+                        //         //                     Rec.Validate("Shipment Date", CalcDate(L_Customer."Shipping Time", Rec."Shipment Date"))
+                        //         //                 end else begin
+                        //         //                     L_ShipingAgentService.Reset();
+                        //         //                     L_ShipingAgentService.SetRange("Shipping Agent Code", L_Customer."Shipping Agent Code");
+                        //         //                     L_ShipingAgentService.SetRange(Code, L_Customer."Shipping Agent Service Code");
+                        //         //                     if L_ShipingAgentService.FindFirst() then begin
+                        //         //                         if L_ShipingAgentService."Shipping Time" <> L_BlankDatFormula then
+                        //         //                             Rec.Validate("Shipment Date", CalcDate(L_ShipingAgentService."Shipping Time", Rec."Shipment Date"));
+                        //         //                     end;
+                        //         //                 end;
+                        //         //             end;
+                        //         //         end;
+                        //         //     end;
+                        //         // end;
+                        //     end;
+                        //This code moved into Ochannel Extension [For Manual, and Web Order all process]
+
+
 
 
                         if Rec."Document Type" = Rec."Document Type"::"Return Order" then begin
