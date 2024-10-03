@@ -513,10 +513,11 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                             if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
                                 L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
                             end;
-                        end;
 
-                        //++Sales Order warning message(15813)
-                        L_SalesEventandFuncion.SalesOrderWarningMessage(L_SalesHeader, Rec);
+
+                            //++Sales Order warning message(15813)
+                            L_SalesEventandFuncion.SalesOrderWarningMessage(L_SalesHeader, Rec);
+                        end;
                     end;
 
 
@@ -542,6 +543,8 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                         Rec."Warehouse Class Code" := L_Item."Warehouse Class Code";
                         Rec.RRP := L_Item.RRP;
                         Rec."TO Discount %" := L_Item."TO Discount %";
+                        Rec.Strength := L_Item.Strength;
+                        Rec."Special Product" := L_Item."Special Product";
 
                         L_WarhouseClass.Reset();
                         L_WarhouseClass.SetRange(Code, L_Item."Warehouse Class Code");

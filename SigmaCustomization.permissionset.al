@@ -25,7 +25,6 @@ permissionset 85000 SigmaCustomization
         codeunit "Sales Event & Function" = X,
         codeunit SalesReturnOrderChanges = X,
         codeunit "Send SO Approval" = X,
-        codeunit "Tariff Price Management" = X,
         codeunit "WHP Based On BIN" = X,
         xmlport "Import General Journal" = X,
         xmlport "Item Reclassification" = X,
