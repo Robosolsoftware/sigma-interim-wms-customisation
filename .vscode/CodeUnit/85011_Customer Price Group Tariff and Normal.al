@@ -1223,8 +1223,6 @@ codeunit 85011 "Customer Price Group Changes"
     end;
 
 
-
-
     [EventSubscriber(ObjectType::Table, Database::"Price List Line", 'OnAfterValidateEvent', 'Asset No.', false, false)]
     local procedure OnafterValidateEventItemNoOnPriceList(CurrFieldNo: Integer; var Rec: Record "Price List Line"; var xRec: Record "Price List Line")
     var

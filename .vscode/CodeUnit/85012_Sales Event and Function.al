@@ -43,6 +43,19 @@ codeunit 85012 "Sales Event & Function"
                 L_SalesLine.TestField("Return Reason Code");
 
         end;
+
+        if (SalesHeader."Document Type" = SalesHeader."Document Type"::Order) AND (SalesHeader."IRP Order" <> true) then begin
+            L_SalesLine.Reset();
+            L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+            L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+            L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+            if L_SalesLine.FindSet() then begin
+                repeat
+                    L_SalesLine."Custom Unit Price" := L_SalesLine."Unit Price";
+                    L_SalesLine.Modify();
+                until L_SalesLine.Next() = 0;
+            end;
+        end;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnBeforeCheckSalesApprovalPossible', '', false, false)]
@@ -75,6 +88,20 @@ codeunit 85012 "Sales Event & Function"
                 L_SalesLine.TestField("Return Reason Code");
 
         end;
+
+        if (SalesHeader."Document Type" = SalesHeader."Document Type"::Order) AND (SalesHeader."IRP Order" <> true) then begin
+            L_SalesLine.Reset();
+            L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+            L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+            L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+            if L_SalesLine.FindSet() then begin
+                repeat
+                    L_SalesLine."Custom Unit Price" := L_SalesLine."Unit Price";
+                    L_SalesLine.Modify();
+                until L_SalesLine.Next() = 0;
+            end;
+        end;
+
     end;
     #endregion Checking Min Order Validation on Sales Order and Return Reason Code on Sales Return Order+++ 
 
@@ -688,7 +715,6 @@ codeunit 85012 "Sales Event & Function"
             end;
         end;
     end;
-
 
     //Update Inv. Pick No. on Posted Sales Shipment+++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Activity-Post", 'OnAfterPostWhseActivityLine', '', false, false)]

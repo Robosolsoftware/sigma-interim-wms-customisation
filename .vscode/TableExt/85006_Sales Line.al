@@ -200,6 +200,11 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
             Editable = false;
             DecimalPlaces = 0 : 5;
         }
+        field(85040; "Custom Unit Price"; Decimal)
+        {
+            Editable = false;
+            DecimalPlaces = 0 : 5;
+        }
         modify(Quantity)
         {
             trigger OnAfterValidate()

@@ -158,6 +158,11 @@ tableextension 85008 "SC Sales Invoice Line" extends "Sales Invoice Line"
             Editable = false;
             DecimalPlaces = 0 : 5;
         }
+        field(85040; "Custom Unit Price"; Decimal)
+        {
+            Editable = false;
+            DecimalPlaces = 0 : 5;
+        }
     }
     keys
     {

@@ -7,6 +7,7 @@ report 85000 "Direct Debit Payments"
     {
         dataitem(Customer; Customer)
         {
+            RequestFilterFields = Blocked, Balance, "Payment Method Code";
             dataitem("Cust. Ledger Entry"; "Cust. Ledger Entry")
             {
                 DataItemLink = "Customer No." = field("No.");
