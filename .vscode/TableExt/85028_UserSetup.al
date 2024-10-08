@@ -43,6 +43,18 @@ tableextension 85028 "SC User Setup" extends "User Setup"
         {
             DataClassification = ToBeClassified;
         }
+        field(85013; "Export Customer Release"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85014; "Credit Limit Release"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85015; "SO/MOV/Quota/ZeroPrice Release"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

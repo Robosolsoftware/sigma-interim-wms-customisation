@@ -261,10 +261,43 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         {
             Editable = L_CurrPageEditable;
         }
-        modify(Replenishment)
+        /*modify(Replenishment)
+        {
+            Editable = L_CurrPageEditable;
+        }*/
+        modify("Replenishment System")
         {
             Editable = L_CurrPageEditable;
         }
+        modify("Lead Time Calculation")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Vendor No.")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Vendor Item No.")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Purch. Unit of Measure")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Overhead Rate")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify("Assembly Policy")
+        {
+            Editable = L_CurrPageEditable;
+        }
+        modify(AssemblyBOM)
+        {
+            Editable = L_CurrPageEditable;
+        }
+
         addlast(Replenishment)
         {
             field("Ops Purchase Blocked"; Rec."Ops Purchase Blocked")
@@ -276,7 +309,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         modify("Purchasing Blocked")
         {
             ApplicationArea = All;
-            Editable = G_OpSOandPOBlocked;// AND   L_CurrPageEditable;
+            Editable = G_PurchaseBlocked;// AND   L_CurrPageEditable;
         }
         modify(Planning)
         {
@@ -344,6 +377,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 Editable = G_OpSOandPOBlocked;// AND  L_CurrPageEditable;
             }
         }
+
         modify("Unit Price")
         {
             Editable = L_EditableUnitandRRP;// AND L_CurrPageEditable;

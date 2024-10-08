@@ -48,6 +48,18 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+            field("Export Customer Release"; Rec."Export Customer Release")
+            {
+                ApplicationArea = All;
+            }
+            field("Credit Limit Release"; Rec."Credit Limit Release")
+            {
+                ApplicationArea = All;
+            }
+            field("SO/MOV/Quota/ZeroPrice Release"; Rec."SO/MOV/Quota/ZeroPrice Release")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 
