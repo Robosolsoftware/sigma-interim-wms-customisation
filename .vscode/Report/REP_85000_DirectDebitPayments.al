@@ -25,6 +25,7 @@ report 85000 "Direct Debit Payments"
                 begin
                     SetRange("Due Date", FromDate, ToDate);
                     SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
+                    SetRange(Open, true);
                     if OnlyCustomersWithMandate then
                         SetFilter("Direct Debit Mandate ID", '<>%1', '');
                     TotalCount := Count;
@@ -196,6 +197,7 @@ report 85000 "Direct Debit Payments"
             Rec_CustomerLedgerEntry.SetRange("Customer No.", "Cust. Ledger Entry"."Customer No.");
             Rec_CustomerLedgerEntry.SetRange("Due Date", FromDate, ToDate);
             Rec_CustomerLedgerEntry.SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
+            Rec_CustomerLedgerEntry.SetRange(Open, "Cust. Ledger Entry".Open);
             if OnlyCustomersWithMandate then
                 Rec_CustomerLedgerEntry.SetFilter("Direct Debit Mandate ID", '<>%1', '');
             if Rec_CustomerLedgerEntry.FindSet() then begin
@@ -238,6 +240,7 @@ report 85000 "Direct Debit Payments"
             Rec_CustomerLedgerEntry.SetRange("Customer No.", "Cust. Ledger Entry"."Customer No.");
             Rec_CustomerLedgerEntry.SetRange("Due Date", FromDate, ToDate);
             Rec_CustomerLedgerEntry.SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
+            Rec_CustomerLedgerEntry.SetRange(Open, "Cust. Ledger Entry".Open);
             if OnlyCustomersWithMandate then
                 Rec_CustomerLedgerEntry.SetFilter("Direct Debit Mandate ID", '<>%1', '');
             if Rec_CustomerLedgerEntry.FindSet() then begin
