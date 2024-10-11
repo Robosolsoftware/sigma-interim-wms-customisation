@@ -43,6 +43,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         Rec."SO Approval Required" := L_Customer."SO Approval Required";
 
 
+                        //Manul & Web Order+++
                         L_Date.Reset();
                         L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
                         L_Date.SetRange(L_Date."Period Start", WorkDate());
