@@ -141,4 +141,10 @@ pageextension 85052 ShippingAgentServices extends "Shipping Agent Services"
                 L_EditableStatus := false;
         end;
     end;
+
+    trigger OnNewRecord(BelowxRec: Boolean)
+    begin
+        L_EditableStatus := true;
+        L_CurrPageEditable := true;
+    end;
 }
