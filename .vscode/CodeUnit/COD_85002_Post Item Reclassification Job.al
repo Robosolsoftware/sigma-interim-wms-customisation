@@ -81,6 +81,13 @@ codeunit 85002 "Post Item Reclassification"
                                     if RequiredQuantity <= AvailableQuantity then begin
                                         BinCode := L_BinContent."Bin Code";
                                         break;
+                                    end
+                                    else begin
+                                        if AvailableQuantity > 0 then begin
+                                            RequiredQuantity := AvailableQuantity;
+                                            BinCode := L_BinContent."Bin Code";
+                                            break;
+                                        end;
                                     end;
                                 until L_BinContent.Next() = 0;
                             end;
