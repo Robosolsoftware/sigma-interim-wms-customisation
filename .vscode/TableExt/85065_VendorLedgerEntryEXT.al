@@ -2,7 +2,7 @@ tableextension 85065 VendorLedgerEntryExt extends "Vendor Ledger Entry"
 {
     fields
     {
-        field(85000; "Purchase Order No."; Text[25])
+        field(85000; "Purchase Order No."; Text[100])
         {
             DataClassification = ToBeClassified;
         }
