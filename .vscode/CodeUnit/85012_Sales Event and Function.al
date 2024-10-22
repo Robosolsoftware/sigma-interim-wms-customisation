@@ -710,8 +710,15 @@ codeunit 85012 "Sales Event & Function"
         SalesRecSetup.Get();
         if SalesRecSetup."Inv./Ship Default Posting Date" = SalesRecSetup."Inv./Ship Default Posting Date"::"Work Date" then begin
             if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
-                SalesHeader.Validate("Posting Date", WorkDate());
-                SalesHeader.Modify();
+                // SalesHeader.Validate("Posting Date", WorkDate());
+                // SalesHeader.Modify();
+                if WorkDate() > SalesHeader."Shipment Date" then begin
+                    SalesHeader.Validate("Posting Date", WorkDate());
+                    SalesHeader.Modify();
+                end else begin
+                    SalesHeader.Validate("Posting Date", SalesHeader."Shipment Date");
+                    SalesHeader.Modify();
+                end;
             end;
         end;
     end;

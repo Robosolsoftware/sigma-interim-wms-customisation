@@ -163,6 +163,24 @@ tableextension 85008 "SC Sales Invoice Line" extends "Sales Invoice Line"
             Editable = false;
             DecimalPlaces = 0 : 5;
         }
+        field(85041; "Item Is Blocked"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item.Blocked where("No." = field("No.")));
+            //This field is used for skip Line at the time of creating In pick++
+        }
+        field(85042; "Item Is Sales Blocked"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Sales Blocked" where("No." = field("No.")));
+            //This field is used for skip Line at the time of creating In pick++
+        }
+        field(85043; "Item Is OPS Blocked"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Ops Sales Blocked" where("No." = field("No.")));
+            //This field is used for skip Line at the time of creating In pick++
+        }
     }
     keys
     {

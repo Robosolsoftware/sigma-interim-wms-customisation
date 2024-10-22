@@ -56,6 +56,7 @@ tableextension 85045 "SI Warehouse Activity Header" extends "Warehouse Activity 
         {
             FieldClass = FlowField;
             CalcFormula = exist("Warehouse Activity Line" where("Activity Type" = field(Type), "No." = field("No."), "Unable to Pick" = filter(<> '')));
+
         }
     }
 
