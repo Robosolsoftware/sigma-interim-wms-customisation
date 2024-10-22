@@ -312,6 +312,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
+                Caption = 'Bluechain';
             }
             field("Block Reason"; Rec."Block Reason")
             {

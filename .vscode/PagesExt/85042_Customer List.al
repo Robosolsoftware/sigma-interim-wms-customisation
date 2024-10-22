@@ -29,6 +29,7 @@ pageextension 85042 "SC Customer List" extends "Customer List"
             {
                 ApplicationArea = All;
                 Editable = false;
+                Caption = 'Bluechain';
             }
         }
     }

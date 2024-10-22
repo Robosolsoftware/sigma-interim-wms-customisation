@@ -8,6 +8,15 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             Editable = L_CurrPageEditable;
             ShowMandatory = true;
         }
+        addafter("No.")
+        {
+            field("No. 2"; Rec."No. 2")
+            {
+                Editable = true;
+                ApplicationArea = All;
+            }
+
+        }
         modify(Description)
         {
             Editable = L_CurrPageEditable;
