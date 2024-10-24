@@ -324,6 +324,11 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
             }
+            field("Weekend Drop Number"; Rec."Weekend Drop Number")
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
             field("Assigned Credit Controller"; Rec."Assigned Credit Controller")
             {
                 ApplicationArea = All;

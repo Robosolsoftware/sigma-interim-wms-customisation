@@ -489,6 +489,11 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
             FieldClass = FlowField;
             CalcFormula = lookup(Customer."Drop Number" where("No." = field("Sell-to Customer No.")));
         }
+        field(85172; "Weekend Drop Number"; Text[5])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Customer."Weekend Drop Number" where("No." = field("Sell-to Customer No.")));
+        }
     }
 
     var

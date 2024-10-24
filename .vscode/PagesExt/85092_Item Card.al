@@ -12,7 +12,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         {
             field("No. 2"; Rec."No. 2")
             {
-                Editable = true;
+                Editable = L_CurrPageEditable;
                 ApplicationArea = All;
             }
 

@@ -373,6 +373,10 @@ tableextension 85030 "SC Customer" extends Customer
             TableRelation = User."User Name";
             ValidateTableRelation = false;
         }
+        field(85002; "Weekend Drop Number"; Text[5])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     fieldgroups
