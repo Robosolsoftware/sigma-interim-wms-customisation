@@ -99,10 +99,6 @@ tableextension 85026 "Item_Extension" extends Item
             OptionMembers = Open,Released;
 
             trigger OnValidate()
-            var
-                ItemAttrValueMapp: Record "Item Attribute Value Mapping";
-                ItemattributesValues: Record "Item Attribute Value";
-                Itemattributevalueblank: Integer;
             begin
                 if Rec.Status = Rec.Status::Released then begin
                     rec.TestField("No.");
@@ -111,7 +107,6 @@ tableextension 85026 "Item_Extension" extends Item
                     Rec.TestField("Unit Price");
                     Rec.TestField(RRP);
                     Rec.TestField("VAT Prod. Posting Group");
-                    Rec.TestField(Storage);
                     Rec.TestField("Min Sell Price");//
                     Rec.TestField("Inventory Posting Group");
                     Rec.TestField("Variant Mandatory if Exists");
@@ -119,7 +114,23 @@ tableextension 85026 "Item_Extension" extends Item
                     Rec.TestField("Costing Method");
                     Rec.TestField("Base Unit of Measure");
                     Rec.TestField("Item Tracking Code");
-
+                end;
+            end;
+        }
+        field(85107; Storage; Code[20])
+        {
+            TableRelation = "Temperature Range";
+        }
+        field(85109; "QAU Approved"; Boolean)
+        {
+            trigger OnValidate()
+            var
+                ItemAttrValueMapp: Record "Item Attribute Value Mapping";
+                ItemattributesValues: Record "Item Attribute Value";
+                Itemattributevalueblank: Integer;
+            begin
+                if Rec.Status = Rec.Status::Released then begin
+                    Rec.TestField(Storage);
                     Clear(Itemattributevalueblank);
                     ItemAttrValueMapp.Reset();
                     ItemAttrValueMapp.SetRange("Table ID", 27);
@@ -148,14 +159,6 @@ tableextension 85026 "Item_Extension" extends Item
                     end;
                 end;
             end;
-        }
-        field(85107; Storage; Code[20])
-        {
-            TableRelation = "Temperature Range";
-        }
-        field(85109; "QAU Approved"; Boolean)
-        {
-
         }
         field(85110; "Saleable Inventory"; Decimal)
         {

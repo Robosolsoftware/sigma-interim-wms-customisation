@@ -304,7 +304,7 @@ tableextension 85030 "SC Customer" extends Customer
         }
         field(85170; Bluechip; Boolean)
         {
-
+            Caption = 'Bluechain';
         }
         field(85171; "Block Reason"; Code[20])
         {
