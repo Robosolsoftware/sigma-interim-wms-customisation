@@ -235,9 +235,11 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     if L_SalesHeader.FindFirst() then begin
-                        //Credit Limit++
-                        L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                        L_SalesHeader.Modify();
+                        if L_SalesHeader."IRP Order" = false then begin
+                            //Credit Limit++
+                            L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
+                            L_SalesHeader.Modify();
+                        end;
                     end;
                 end;
             end;
@@ -255,9 +257,11 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     if L_SalesHeader.FindFirst() then begin
-                        //Credit Limit++
-                        L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                        L_SalesHeader.Modify();
+                        if L_SalesHeader."IRP Order" = false then begin
+                            //Credit Limit++
+                            L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
+                            L_SalesHeader.Modify();
+                        end;
                     end;
                 end;
             end;
@@ -278,42 +282,44 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     if L_SalesHeader.FindFirst() then begin
-                        L_SalesLine.Reset();
-                        L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                        L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                        L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                        if L_SalesLine.FindSet() then begin
-                            L_SalesLine.CalcSums(Amount);
-                            ExistingLineAmount := L_SalesLine.Amount;
-                        end;
-
-
-                        if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
-                            Rec."SO Min Order Approval Required" := true;
-
-                            //Update all Existing Line ++
+                        if L_SalesHeader."IRP Order" = false then begin
                             L_SalesLine.Reset();
                             L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
                             L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
                             L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                            if L_SalesLine.FindSet() then
-                                L_SalesLine.ModifyAll("SO Min Order Approval Required", true);
+                            if L_SalesLine.FindSet() then begin
+                                L_SalesLine.CalcSums(Amount);
+                                ExistingLineAmount := L_SalesLine.Amount;
+                            end;
 
-                        end else begin
-                            Rec."SO Min Order Approval Required" := false;
 
-                            //Update all Existing Line ++
-                            L_SalesLine.Reset();
-                            L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                            L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                            L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                            if L_SalesLine.FindSet() then
-                                L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
+                            if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
+                                Rec."SO Min Order Approval Required" := true;
+
+                                //Update all Existing Line ++
+                                L_SalesLine.Reset();
+                                L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                                L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                                L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                                if L_SalesLine.FindSet() then
+                                    L_SalesLine.ModifyAll("SO Min Order Approval Required", true);
+
+                            end else begin
+                                Rec."SO Min Order Approval Required" := false;
+
+                                //Update all Existing Line ++
+                                L_SalesLine.Reset();
+                                L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                                L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                                L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                                if L_SalesLine.FindSet() then
+                                    L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
+                            end;
+
+                            //Credit Limit++
+                            L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
+                            L_SalesHeader.Modify();
                         end;
-
-                        //Credit Limit++
-                        L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                        L_SalesHeader.Modify();
                     end;
                 end;
             end;
@@ -339,43 +345,45 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     if L_SalesHeader.FindFirst() then begin
-                        L_SalesLine.Reset();
-                        L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                        L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                        L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                        if L_SalesLine.FindSet() then begin
-                            L_SalesLine.CalcSums(Amount);
-                            ExistingLineAmount := L_SalesLine.Amount;
-                        end;
-
-
-                        if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
-                            Rec."SO Min Order Approval Required" := true;
-
-                            //Update all Existing Line ++
+                        if L_SalesHeader."IRP Order" = false then begin
                             L_SalesLine.Reset();
                             L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
                             L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
                             L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                            if L_SalesLine.FindSet() then
-                                L_SalesLine.ModifyAll("SO Min Order Approval Required", true);
+                            if L_SalesLine.FindSet() then begin
+                                L_SalesLine.CalcSums(Amount);
+                                ExistingLineAmount := L_SalesLine.Amount;
+                            end;
 
-                        end else begin
-                            Rec."SO Min Order Approval Required" := false;
 
-                            //Update all Existing Line ++
-                            L_SalesLine.Reset();
-                            L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                            L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                            L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                            if L_SalesLine.FindSet() then
-                                L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
+                            if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
+                                Rec."SO Min Order Approval Required" := true;
+
+                                //Update all Existing Line ++
+                                L_SalesLine.Reset();
+                                L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                                L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                                L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                                if L_SalesLine.FindSet() then
+                                    L_SalesLine.ModifyAll("SO Min Order Approval Required", true);
+
+                            end else begin
+                                Rec."SO Min Order Approval Required" := false;
+
+                                //Update all Existing Line ++
+                                L_SalesLine.Reset();
+                                L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                                L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                                L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                                if L_SalesLine.FindSet() then
+                                    L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
+                            end;
+
+
+                            //Credit Limit++
+                            L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
+                            L_SalesHeader.Modify();
                         end;
-
-
-                        //Credit Limit++
-                        L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                        L_SalesHeader.Modify();
                     end;
                 end;
 
@@ -535,11 +543,12 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                         if L_SalesHeader."IRP Order" = false then begin //As discussed with Adesh+++
                             if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
                                 L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
+
+
+
+                                //++Sales Order warning message(15813)
+                                L_SalesEventandFuncion.SalesOrderWarningMessage(L_SalesHeader, Rec);
                             end;
-
-
-                            //++Sales Order warning message(15813)
-                            L_SalesEventandFuncion.SalesOrderWarningMessage(L_SalesHeader, Rec);
                         end;
                     end;
 
