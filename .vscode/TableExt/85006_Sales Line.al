@@ -283,38 +283,42 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     if L_SalesHeader.FindFirst() then begin
                         if L_SalesHeader."IRP Order" = false then begin
-                            L_SalesLine.Reset();
-                            L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                            L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                            L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                            if L_SalesLine.FindSet() then begin
-                                L_SalesLine.CalcSums(Amount);
-                                ExistingLineAmount := L_SalesLine.Amount;
-                            end;
+                            //Move This Code on BeforeRelease Ochannel Extension+++ 
+                            // L_SalesLine.Reset();
+                            // L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                            // L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                            // L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                            // L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                            // if L_SalesLine.FindSet() then begin
+                            //     L_SalesLine.CalcSums(Amount);
+                            //     ExistingLineAmount := L_SalesLine.Amount;
+                            // end;
 
 
-                            if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
-                                Rec."SO Min Order Approval Required" := true;
+                            // if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
+                            //     Rec."SO Min Order Approval Required" := true;
 
-                                //Update all Existing Line ++
-                                L_SalesLine.Reset();
-                                L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                                L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                                L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                                if L_SalesLine.FindSet() then
-                                    L_SalesLine.ModifyAll("SO Min Order Approval Required", true);
+                            //     //Update all Existing Line ++
+                            //     L_SalesLine.Reset();
+                            //     L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                            //     L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                            //     L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                            //     L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                            //     if L_SalesLine.FindSet() then
+                            //         L_SalesLine.ModifyAll("SO Min Order Approval Required", true);
 
-                            end else begin
-                                Rec."SO Min Order Approval Required" := false;
+                            // end else begin
+                            //     Rec."SO Min Order Approval Required" := false;
 
-                                //Update all Existing Line ++
-                                L_SalesLine.Reset();
-                                L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                                L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                                L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                                if L_SalesLine.FindSet() then
-                                    L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
-                            end;
+                            //     //Update all Existing Line ++
+                            //     L_SalesLine.Reset();
+                            //     L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                            //     L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                            //     L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                            //     L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                            //     if L_SalesLine.FindSet() then
+                            //         L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
+                            // end;
 
                             //Credit Limit++
                             L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
@@ -346,38 +350,42 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     if L_SalesHeader.FindFirst() then begin
                         if L_SalesHeader."IRP Order" = false then begin
-                            L_SalesLine.Reset();
-                            L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                            L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                            L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                            if L_SalesLine.FindSet() then begin
-                                L_SalesLine.CalcSums(Amount);
-                                ExistingLineAmount := L_SalesLine.Amount;
-                            end;
+                            //Move This Code on BeforeRelease Ochannel Extension+++ 
+                            // L_SalesLine.Reset();
+                            // L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                            // L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                            // L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                            // L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                            // if L_SalesLine.FindSet() then begin
+                            //     L_SalesLine.CalcSums(Amount);
+                            //     ExistingLineAmount := L_SalesLine.Amount;
+                            // end;
 
 
-                            if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
-                                Rec."SO Min Order Approval Required" := true;
+                            // if L_SalesHeader."Min Order Value" > (ExistingLineAmount + Rec.Amount) then begin
+                            //     Rec."SO Min Order Approval Required" := true;
 
-                                //Update all Existing Line ++
-                                L_SalesLine.Reset();
-                                L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                                L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                                L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                                if L_SalesLine.FindSet() then
-                                    L_SalesLine.ModifyAll("SO Min Order Approval Required", true);
+                            //     //Update all Existing Line ++
+                            //     L_SalesLine.Reset();
+                            //     L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                            //     L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                            //     L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                            //     L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                            //     if L_SalesLine.FindSet() then
+                            //         L_SalesLine.ModifyAll("SO Min Order Approval Required", true);
 
-                            end else begin
-                                Rec."SO Min Order Approval Required" := false;
+                            // end else begin
+                            //     Rec."SO Min Order Approval Required" := false;
 
-                                //Update all Existing Line ++
-                                L_SalesLine.Reset();
-                                L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
-                                L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
-                                L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
-                                if L_SalesLine.FindSet() then
-                                    L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
-                            end;
+                            //     //Update all Existing Line ++
+                            //     L_SalesLine.Reset();
+                            //     L_SalesLine.SetRange("Document No.", L_SalesHeader."No.");
+                            //     L_SalesLine.SetRange("Document Type", L_SalesHeader."Document Type");
+                            //     L_SalesLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                            //     L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                            //     if L_SalesLine.FindSet() then
+                            //         L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
+                            // end;
 
 
                             //Credit Limit++

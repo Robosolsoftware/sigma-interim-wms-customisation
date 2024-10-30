@@ -706,6 +706,7 @@ codeunit 85012 "Sales Event & Function"
     local procedure OnBeforePostSalesDoc(var SalesHeader: Record "Sales Header")
     var
         SalesRecSetup: Record "Sales & Receivables Setup";
+
     begin
         SalesRecSetup.Get();
         if SalesRecSetup."Inv./Ship Default Posting Date" = SalesRecSetup."Inv./Ship Default Posting Date"::"Work Date" then begin
@@ -714,6 +715,7 @@ codeunit 85012 "Sales Event & Function"
                 // SalesHeader.Modify();
                 if WorkDate() > SalesHeader."Shipment Date" then begin
                     SalesHeader.Validate("Posting Date", WorkDate());
+                    SalesHeader."Shipment Date" := WorkDate();
                     SalesHeader.Modify();
                 end else begin
                     SalesHeader.Validate("Posting Date", SalesHeader."Shipment Date");
