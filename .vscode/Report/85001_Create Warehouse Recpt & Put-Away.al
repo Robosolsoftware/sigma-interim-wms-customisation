@@ -15,7 +15,23 @@ report 85001 "Create Whs. Recpt & Put-Away"
             var
                 GetSourceDocInbound: Codeunit "Get Source Doc. Inbound";
                 L_Location: Record Location;
+                PartiallyReceived: Boolean;
+                L_PurchaseLine: Record "Purchase Line";
             begin
+                //code to manage partial receive
+                Clear(PartiallyReceived);
+                L_PurchaseLine.Reset();
+                L_PurchaseLine.SetRange("Document Type", "Purchase Header"."Document Type");
+                L_PurchaseLine.SetRange("Document No.", "Purchase Header"."No.");
+                L_PurchaseLine.SetRange(Type, L_PurchaseLine.Type::Item);
+                if L_PurchaseLine.FindSet() then begin
+                    L_PurchaseLine.CalcSums("Quantity Received", Quantity);
+                    if (L_PurchaseLine."Quantity Received" > 0) AND (L_PurchaseLine."Quantity Received" < L_PurchaseLine.Quantity) then begin
+                        PartiallyReceived := true;
+                        CurrReport.Skip();
+                    end;
+                end;
+                // --
                 if L_Location.Get("Purchase Header"."Location Code") then begin
                     if L_Location."Require Receive" = true then begin
                         "Create Whs. Recpt & Put-Away".SkiErrorMessage(true);

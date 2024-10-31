@@ -200,7 +200,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             field(Storage; Rec.Storage)
             {
                 ApplicationArea = All;
-                Editable = L_CurrPageEditable;
+                Editable = L_EditableQUAApproved;
                 ShowMandatory = true;
             }
             field(Status; Rec.Status)
