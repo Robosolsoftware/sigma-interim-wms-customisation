@@ -25,7 +25,7 @@ pageextension 85034 "SC Sales Hist. Sell-to FactBox" extends "Sales Hist. Sell-t
                     Evaluate(LatsyearFromDate, '0101' + Format(CurrentYear - 1));
 
                     Clear(LastyearEndDate);
-                    Evaluate(LastyearEndDate, '1231' + Format(CurrentYear - 1));
+                    Evaluate(LastyearEndDate, '3112' + Format(CurrentYear - 1));
 
                     L_SalesInvoiceLine.Reset();
                     L_SalesInvoiceLine.SetRange("Sell-to Customer No.", Rec."No.");
@@ -55,7 +55,7 @@ pageextension 85034 "SC Sales Hist. Sell-to FactBox" extends "Sales Hist. Sell-t
                     Evaluate(ThisyearFromDate, '0101' + Format(CurrentYear));
 
                     Clear(ThisyearEndDate);
-                    Evaluate(ThisyearEndDate, '1231' + Format(CurrentYear));
+                    Evaluate(ThisyearEndDate, '3112' + Format(CurrentYear));
 
                     L_SalesInvoiceLine.Reset();
                     L_SalesInvoiceLine.SetRange("Sell-to Customer No.", Rec."No.");

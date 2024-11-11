@@ -10,6 +10,11 @@ pageextension 85058 "SC Sales Lines" extends "Sales Lines"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Unable to Pick"; Rec."Unable to Pick")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
         addlast(Control1)
         {
