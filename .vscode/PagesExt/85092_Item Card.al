@@ -6,7 +6,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         modify("No.")
         {
             Editable = L_CurrPageEditable;
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
         addafter("No.")
         {
@@ -20,7 +20,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         modify(Description)
         {
             Editable = L_CurrPageEditable;
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
         modify("Description 2")
         {
@@ -37,7 +37,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         modify("Base Unit of Measure")
         {
             Editable = L_CurrPageEditable;
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
         modify(GTIN)
         {
@@ -82,23 +82,23 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         //Show mandatory
         modify("Inventory Posting Group")
         {
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
         modify("VAT Prod. Posting Group")
         {
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
         modify("Over-Receipt Code")
         {
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
         modify("Costing Method")
         {
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
         modify("Item Tracking Code")
         {
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
         // modify("Variant Mandatory if Exists")
         // {
@@ -113,7 +113,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
                 ToolTip = 'If Min Sell is 0, then system will not allow to change the unit price less than 10%';
-                ShowMandatory = true;
+                ShowMandatory = IsMandatory;
             }
             field("QAU Approved"; Rec."QAU Approved")
             {
@@ -201,7 +201,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             {
                 ApplicationArea = All;
                 Editable = L_EditableQUAApproved;
-                ShowMandatory = true;
+                ShowMandatory = IsMandatory;
             }
             field(Status; Rec.Status)
             {
@@ -226,7 +226,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         {
             Caption = 'Sub-Child Category';
             Editable = L_CurrPageEditable;
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
 
         addbefore("Item Category Code")
@@ -390,7 +390,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         modify("Unit Price")
         {
             Editable = L_EditableUnitandRRP;// AND L_CurrPageEditable;
-            ShowMandatory = true;
+            ShowMandatory = IsMandatory;
         }
         modify(CalcUnitPriceExclVAT)
         {
@@ -464,7 +464,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             {
                 ApplicationArea = All;
                 Editable = L_EditableUnitandRRP;//AND L_CurrPageEditable;
-                ShowMandatory = true;
+                ShowMandatory = IsMandatory;
             }
         }
 
@@ -531,6 +531,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         G_SalesBlocked: Boolean;
         G_PurchaseBlocked: Boolean;
         G_OpSOandPOBlocked: Boolean;
+        IsMandatory: Boolean;
 
 
     /*trigger OnOpenPage()
@@ -558,6 +559,13 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         Clear(G_SalesBlocked);
         Clear(G_PurchaseBlocked);
         Clear(G_OpSOandPOBlocked);
+
+        Clear(IsMandatory);
+        if Rec.Type = Rec.Type::"Non-Inventory" then
+            IsMandatory := false
+        else
+            IsMandatory := true;
+
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
             //L_EditableQUAApproved := true;

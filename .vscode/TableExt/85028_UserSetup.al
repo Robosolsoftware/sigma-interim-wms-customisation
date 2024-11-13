@@ -13,6 +13,7 @@ tableextension 85028 "SC User Setup" extends "User Setup"
         field(85005; "Allow to change unit price"; Boolean)
         {
             DataClassification = ToBeClassified;
+            Caption = 'SO Override MSP';
         }
         field(85006; "Edit Master Data QAU Approved"; Boolean)
         {

@@ -101,19 +101,21 @@ tableextension 85026 "Item_Extension" extends Item
             trigger OnValidate()
             begin
                 if Rec.Status = Rec.Status::Released then begin
-                    rec.TestField("No.");
-                    Rec.TestField(Description);
-                    Rec.TestField("Item Category Code");
-                    Rec.TestField("Unit Price");
-                    Rec.TestField(RRP);
-                    Rec.TestField("VAT Prod. Posting Group");
-                    Rec.TestField("Min Sell Price");//
-                    Rec.TestField("Inventory Posting Group");
-                    Rec.TestField("Variant Mandatory if Exists");
-                    Rec.TestField("Over-Receipt Code");
-                    Rec.TestField("Costing Method");
-                    Rec.TestField("Base Unit of Measure");
-                    Rec.TestField("Item Tracking Code");
+                    if Rec.Type <> Rec.Type::"Non-Inventory" then begin
+                        rec.TestField("No.");
+                        Rec.TestField(Description);
+                        Rec.TestField("Item Category Code");
+                        Rec.TestField("Unit Price");
+                        Rec.TestField(RRP);
+                        Rec.TestField("VAT Prod. Posting Group");
+                        Rec.TestField("Min Sell Price");//
+                        Rec.TestField("Inventory Posting Group");
+                        Rec.TestField("Variant Mandatory if Exists");
+                        Rec.TestField("Over-Receipt Code");
+                        Rec.TestField("Costing Method");
+                        Rec.TestField("Base Unit of Measure");
+                        Rec.TestField("Item Tracking Code");
+                    end;
                 end;
             end;
         }
