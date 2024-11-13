@@ -226,6 +226,11 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         }
         addlast(General)
         {
+            field("Last Statement Date"; Rec."Last Statement Date")
+            {
+                Editable = false;
+                ApplicationArea = All;
+            }
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;

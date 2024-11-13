@@ -377,6 +377,10 @@ tableextension 85030 "SC Customer" extends Customer
         {
             DataClassification = ToBeClassified;
         }
+        field(85003; "Last Statement Date"; Date)
+        {
+
+        }
     }
 
     fieldgroups
