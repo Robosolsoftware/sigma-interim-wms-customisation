@@ -539,85 +539,89 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                 L_SalesPriceHeader: Record "Price List Header";
                 L_SalesEventandFuncion: Codeunit "Sales Event & Function";
                 L_CustomerPriceGroupChanges: Codeunit "Customer Price Group Changes";
+                LocalItem: Record Item;
             begin
                 if (Rec.Type = Rec.Type::Item) then begin
                     //Check SHipping Agent Restriction and Sales Order Warning Mesage++
-                    L_SalesHeader.Reset();
-                    L_SalesHeader.SetRange("No.", Rec."Document No.");
-                    L_SalesHeader.SetRange("Document Type", Rec."Document Type");
-                    if L_SalesHeader.FindFirst() then begin
-                        L_SalesHeader.TestField("Shipping Agent Service Code"); //User Story 18274
-
-                        if L_SalesHeader."IRP Order" = false then begin //As discussed with Adesh+++
-                            if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
-                                L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
-
-
-
-                                //++Sales Order warning message(15813)
-                                L_SalesEventandFuncion.SalesOrderWarningMessage(L_SalesHeader, Rec);
-                            end;
-                        end;
-                    end;
-
-
-                    //Upadte Fields from Item++
-                    L_Item.Reset();
-                    L_Item.SetRange("No.", Rec."No.");
-                    if L_Item.FindFirst() then begin
-                        //Check Master Restriction++
+                    LocalItem.Get("No.");
+                    if LocalItem.Type <> LocalItem.Type::"Non-Inventory" then begin
                         L_SalesHeader.Reset();
                         L_SalesHeader.SetRange("No.", Rec."Document No.");
                         L_SalesHeader.SetRange("Document Type", Rec."Document Type");
                         if L_SalesHeader.FindFirst() then begin
+                            L_SalesHeader.TestField("Shipping Agent Service Code"); //User Story 18274
+
                             if L_SalesHeader."IRP Order" = false then begin //As discussed with Adesh+++
-                                L_Item.TestField("QAU Approved");
-                                L_Item.TestField(Status, L_Item.Status::Released);
-                                L_Item.TestField("Sales Blocked", false);
-                                L_Item.TestField("Ops Sales Blocked", false);
+                                if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
+                                    L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
+
+
+
+                                    //++Sales Order warning message(15813)
+                                    L_SalesEventandFuncion.SalesOrderWarningMessage(L_SalesHeader, Rec);
+                                end;
                             end;
                         end;
 
-                        Rec."Min Sell Price" := L_Item."Min Sell Price";
-                        Rec."Parent Category" := L_Item."Parent Category";
-                        Rec."Warehouse Class Code" := L_Item."Warehouse Class Code";
-                        Rec.RRP := L_Item.RRP;
-                        Rec."TO Discount %" := L_Item."TO Discount %";
-                        Rec.Strength := L_Item.Strength;
-                        Rec."Special Product" := L_Item."Special Product";
 
-                        L_WarhouseClass.Reset();
-                        L_WarhouseClass.SetRange(Code, L_Item."Warehouse Class Code");
-                        if L_WarhouseClass.FindFirst() then begin
-                            if L_WarhouseClass.Fridge = true then
-                                Rec."Whs. Class Code type" := 'Fridge';
+                        //Upadte Fields from Item++
+                        L_Item.Reset();
+                        L_Item.SetRange("No.", Rec."No.");
+                        if L_Item.FindFirst() then begin
+                            //Check Master Restriction++
+                            L_SalesHeader.Reset();
+                            L_SalesHeader.SetRange("No.", Rec."Document No.");
+                            L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+                            if L_SalesHeader.FindFirst() then begin
+                                if L_SalesHeader."IRP Order" = false then begin //As discussed with Adesh+++
+                                    L_Item.TestField("QAU Approved");
+                                    L_Item.TestField(Status, L_Item.Status::Released);
+                                    L_Item.TestField("Sales Blocked", false);
+                                    L_Item.TestField("Ops Sales Blocked", false);
+                                end;
+                            end;
 
-                            if L_WarhouseClass.CD = true then
-                                Rec."Whs. Class Code type" := 'SF';
+                            Rec."Min Sell Price" := L_Item."Min Sell Price";
+                            Rec."Parent Category" := L_Item."Parent Category";
+                            Rec."Warehouse Class Code" := L_Item."Warehouse Class Code";
+                            Rec.RRP := L_Item.RRP;
+                            Rec."TO Discount %" := L_Item."TO Discount %";
+                            Rec.Strength := L_Item.Strength;
+                            Rec."Special Product" := L_Item."Special Product";
 
-                            if (L_WarhouseClass.Fridge = false) AND (L_WarhouseClass.CD = false) then
-                                Rec."Whs. Class Code type" := 'Blank';
-                        end else
-                            Rec."Whs. Class Code type" := 'Blank'
+                            L_WarhouseClass.Reset();
+                            L_WarhouseClass.SetRange(Code, L_Item."Warehouse Class Code");
+                            if L_WarhouseClass.FindFirst() then begin
+                                if L_WarhouseClass.Fridge = true then
+                                    Rec."Whs. Class Code type" := 'Fridge';
+
+                                if L_WarhouseClass.CD = true then
+                                    Rec."Whs. Class Code type" := 'SF';
+
+                                if (L_WarhouseClass.Fridge = false) AND (L_WarhouseClass.CD = false) then
+                                    Rec."Whs. Class Code type" := 'Blank';
+                            end else
+                                Rec."Whs. Class Code type" := 'Blank'
+                        end;
+
+                        //Upadte Fields from Item Unit Of Measure++
+                        L_ItemUnitofMeasure.Reset();
+                        L_ItemUnitofMeasure.SetRange("Item No.", Rec."No.");
+                        L_ItemUnitofMeasure.SetRange(Code, Rec."Unit of Measure Code");
+                        if L_ItemUnitofMeasure.FindFirst() then begin
+                            Rec."Shipper Qty." := L_ItemUnitofMeasure."Shipper Qty.";
+                            Rec."Outer Qty." := L_ItemUnitofMeasure."Outer Qty.";
+                            Rec."Pallet Qty." := L_ItemUnitofMeasure."Pallet Qty.";
+                        end;
+
+                        //Upadte Last Unit Price from Shipment++ 
+                        CH_SShip.Reset();
+                        CH_SShip.SetRange("Sell-to Customer No.", Rec."Sell-to Customer No.");
+                        CH_SShip.SetRange("No.", Rec."No.");
+                        CH_SShip.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                        if CH_SShip.FindLast() then
+                            Rec."Last Price" := CH_SShip."Unit Price";
                     end;
-
-                    //Upadte Fields from Item Unit Of Measure++
-                    L_ItemUnitofMeasure.Reset();
-                    L_ItemUnitofMeasure.SetRange("Item No.", Rec."No.");
-                    L_ItemUnitofMeasure.SetRange(Code, Rec."Unit of Measure Code");
-                    if L_ItemUnitofMeasure.FindFirst() then begin
-                        Rec."Shipper Qty." := L_ItemUnitofMeasure."Shipper Qty.";
-                        Rec."Outer Qty." := L_ItemUnitofMeasure."Outer Qty.";
-                        Rec."Pallet Qty." := L_ItemUnitofMeasure."Pallet Qty.";
-                    end;
-
-                    //Upadte Last Unit Price from Shipment++ 
-                    CH_SShip.Reset();
-                    CH_SShip.SetRange("Sell-to Customer No.", Rec."Sell-to Customer No.");
-                    CH_SShip.SetRange("No.", Rec."No.");
-                    CH_SShip.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                    if CH_SShip.FindLast() then
-                        Rec."Last Price" := CH_SShip."Unit Price";
                 end;
             end;
         }

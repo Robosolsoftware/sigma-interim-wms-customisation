@@ -132,32 +132,34 @@ tableextension 85026 "Item_Extension" extends Item
                 Itemattributevalueblank: Integer;
             begin
                 if Rec.Status = Rec.Status::Released then begin
-                    Rec.TestField(Storage);
-                    Clear(Itemattributevalueblank);
-                    ItemAttrValueMapp.Reset();
-                    ItemAttrValueMapp.SetRange("Table ID", 27);
-                    ItemAttrValueMapp.SetRange("No.", Rec."No.");
-                    if not ItemAttrValueMapp.FindFirst() then
-                        Error('Item Attribute Must Not Be Blank');
+                    if Rec.Type <> Rec.Type::"Non-Inventory" then begin
+                        Rec.TestField(Storage);
+                        Clear(Itemattributevalueblank);
+                        ItemAttrValueMapp.Reset();
+                        ItemAttrValueMapp.SetRange("Table ID", 27);
+                        ItemAttrValueMapp.SetRange("No.", Rec."No.");
+                        if not ItemAttrValueMapp.FindFirst() then
+                            Error('Item Attribute Must Not Be Blank');
 
-                    ItemAttrValueMapp.Reset();
-                    ItemAttrValueMapp.SetRange("Table ID", 27);
-                    ItemAttrValueMapp.SetRange("No.", Rec."No.");
-                    if ItemAttrValueMapp.FindSet() then begin
-                        repeat
-                            ItemattributesValues.Reset();
-                            ItemattributesValues.SetRange("Attribute ID", ItemAttrValueMapp."Item Attribute ID");
-                            ItemattributesValues.SetRange(ID, ItemAttrValueMapp."Item Attribute Value ID");
-                            if ItemattributesValues.FindSet() then begin
-                                if ItemattributesValues.Value = '' then begin
-                                    Itemattributevalueblank += 1;
+                        ItemAttrValueMapp.Reset();
+                        ItemAttrValueMapp.SetRange("Table ID", 27);
+                        ItemAttrValueMapp.SetRange("No.", Rec."No.");
+                        if ItemAttrValueMapp.FindSet() then begin
+                            repeat
+                                ItemattributesValues.Reset();
+                                ItemattributesValues.SetRange("Attribute ID", ItemAttrValueMapp."Item Attribute ID");
+                                ItemattributesValues.SetRange(ID, ItemAttrValueMapp."Item Attribute Value ID");
+                                if ItemattributesValues.FindSet() then begin
+                                    if ItemattributesValues.Value = '' then begin
+                                        Itemattributevalueblank += 1;
+                                    end;
                                 end;
-                            end;
-                        until ItemAttrValueMapp.Next() = 0;
-                    end;
+                            until ItemAttrValueMapp.Next() = 0;
+                        end;
 
-                    if Itemattributevalueblank > 0 then begin
-                        Error('Value In Item Attributes Must Not Be Blank');
+                        if Itemattributevalueblank > 0 then begin
+                            Error('Value In Item Attributes Must Not Be Blank');
+                        end;
                     end;
                 end;
             end;
