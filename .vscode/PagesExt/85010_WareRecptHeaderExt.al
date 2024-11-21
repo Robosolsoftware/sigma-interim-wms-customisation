@@ -215,3 +215,39 @@ pageextension 85010 WareRcptHeaderExt extends "Warehouse Receipt"
 
     end;
 }
+pageextension 85121 "Ext Whse. Receipts" extends "Warehouse Receipts"
+{
+    layout
+    {
+        addafter("Location Code")
+        {
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = All;
+                Caption = 'Created At';
+                Editable = false;
+            }
+            field(SystemCreatedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemCreatedBy))
+            {
+                ApplicationArea = All;
+                Caption = 'Created By';
+                Editable = false;
+
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = All;
+                Caption = 'Modified At';
+                Editable = false;
+            }
+            field(SystemModifiedBy; G_MiscellaneousCharges.GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = All;
+                Caption = 'Modified By';
+                Editable = false;
+            }
+        }
+    }
+    var
+        G_MiscellaneousCharges: Codeunit "Miscellaneous Charges";
+}

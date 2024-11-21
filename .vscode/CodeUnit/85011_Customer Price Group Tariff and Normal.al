@@ -648,6 +648,8 @@ codeunit 85011 "Customer Price Group Changes"
 
                 end;
 
+                if CopyStr(CustomerPriceGroupText, 1, 1) = '|' then
+                    CustomerPriceGroupText := CopyStr(CustomerPriceGroupText, 2);
 
 
                 PriceLineList2.Reset();
