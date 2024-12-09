@@ -723,23 +723,23 @@ codeunit 85012 "Sales Event & Function"
                 end;
             end;
 
-            //For Credit Memo+++
-            if SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then begin
-                if SalesHeader."Shipment Date" = 0D then begin
-                    SalesHeader.Validate("Posting Date", WorkDate());
-                    SalesHeader."Shipment Date" := WorkDate();
-                    SalesHeader.Modify();
-                end else begin
-                    if WorkDate() > SalesHeader."Shipment Date" then begin
-                        SalesHeader.Validate("Posting Date", WorkDate());
-                        SalesHeader."Shipment Date" := WorkDate();
-                        SalesHeader.Modify();
-                    end else begin
-                        SalesHeader.Validate("Posting Date", SalesHeader."Shipment Date");
-                        SalesHeader.Modify();
-                    end;
-                end;
-            end;
+            // //For Credit Memo+++
+            // if SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then begin
+            //     if SalesHeader."Shipment Date" = 0D then begin
+            //         SalesHeader.Validate("Posting Date", WorkDate());
+            //         SalesHeader."Shipment Date" := WorkDate();
+            //         SalesHeader.Modify();
+            //     end else begin
+            //         if WorkDate() > SalesHeader."Shipment Date" then begin
+            //             SalesHeader.Validate("Posting Date", WorkDate());
+            //             SalesHeader."Shipment Date" := WorkDate();
+            //             SalesHeader.Modify();
+            //         end else begin
+            //             SalesHeader.Validate("Posting Date", SalesHeader."Shipment Date");
+            //             SalesHeader.Modify();
+            //         end;
+            //     end;
+            // end;
         end;
     end;
 
