@@ -14,6 +14,11 @@ pageextension 85053 "SC Warehouse Classes" extends "Warehouse Classes"
             {
                 ApplicationArea = All;
             }
+            field("Quota Restriction"; Rec."Quota Restriction")
+            {
+                ApplicationArea = All;
+                Caption = 'Quota Restriction';
+            }
         }
     }
 

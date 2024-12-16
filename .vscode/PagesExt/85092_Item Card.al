@@ -2,6 +2,29 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
 {
     layout
     {
+
+        #Region SBB-36+++
+        addafter(Warehouse)
+        {
+            group("Procurement Team")
+            {
+                Editable = G_ProcurementTeam;
+                field("Non Tele Sales"; Rec."Non Tele Sales")
+                {
+                    ApplicationArea = all;
+                }
+                field(Ari; Rec.Ari)
+                {
+                    ApplicationArea = all;
+                }
+                field("Business Sensitive"; Rec."Business Sensitive")
+                {
+                    ApplicationArea = all;
+                }
+            }
+        }
+        #EndRegion SBB-36+++
+
         #Region Item Tab Group+++
         modify("No.")
         {
@@ -150,27 +173,12 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 ApplicationArea = all;
                 Editable = L_CurrPageEditable;
             }
-            field("Business Sensitive"; Rec."Business Sensitive")
-            {
-                ApplicationArea = all;
-                Editable = L_CurrPageEditable;
-            }
-            field(Ari; Rec.Ari)
-            {
-                ApplicationArea = all;
-                Editable = L_CurrPageEditable;
-            }
             field("Signature required"; Rec."Signature required")
             {
                 ApplicationArea = all;
                 Editable = L_CurrPageEditable;
             }
             field("Zero Discount"; Rec."Zero Discount")
-            {
-                ApplicationArea = all;
-                Editable = L_CurrPageEditable;
-            }
-            field("Non Tele Sales"; Rec."Non Tele Sales")
             {
                 ApplicationArea = all;
                 Editable = L_CurrPageEditable;
@@ -532,7 +540,7 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         G_PurchaseBlocked: Boolean;
         G_OpSOandPOBlocked: Boolean;
         IsMandatory: Boolean;
-
+        G_ProcurementTeam: Boolean;
 
     /*trigger OnOpenPage()
     var
@@ -559,6 +567,18 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
         Clear(G_SalesBlocked);
         Clear(G_PurchaseBlocked);
         Clear(G_OpSOandPOBlocked);
+        Clear(G_ProcurementTeam);
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Procurement Team Permission" = true then
+                G_ProcurementTeam := true
+            else
+                G_ProcurementTeam := false;
+        end else
+            G_ProcurementTeam := false;
+
 
         Clear(IsMandatory);
         if Rec.Type = Rec.Type::"Non-Inventory" then
@@ -650,12 +670,26 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
     trigger OnOpenPage()
     var
         L_UserSetup: Record "User Setup";
-
     begin
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
         Clear(L_EditableUnitandRRP);
+        Clear(G_ProcurementTeam);
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Procurement Team Permission" = true then
+                G_ProcurementTeam := true
+            else
+                G_ProcurementTeam := false;
+        end else
+            G_ProcurementTeam := false;
+
+
+
+
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
             //L_EditableQUAApproved := true;

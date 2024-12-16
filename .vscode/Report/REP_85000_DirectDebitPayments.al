@@ -11,7 +11,7 @@ report 85000 "Direct Debit Payments"
             dataitem("Cust. Ledger Entry"; "Cust. Ledger Entry")
             {
                 DataItemLink = "Customer No." = field("No.");
-
+                DataItemLinkReference = Customer;
                 trigger OnAfterGetRecord()
                 var
                 begin
@@ -23,11 +23,11 @@ report 85000 "Direct Debit Payments"
 
                 trigger OnPreDataItem()
                 begin
-                    SetRange("Due Date", FromDate, ToDate);
-                    SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
-                    SetRange(Open, true);
+                    "Cust. Ledger Entry".SetFilter("Due Date", '%1..%2', FromDate, ToDate);
+                    "Cust. Ledger Entry".SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
+                    "Cust. Ledger Entry".SetRange(Open, true);
                     if OnlyCustomersWithMandate then
-                        SetFilter("Direct Debit Mandate ID", '<>%1', '');
+                        "Cust. Ledger Entry".SetFilter("Direct Debit Mandate ID", '<>%1', '');
                     TotalCount := Count;
                     Window.Open(ProgressMsg);
                 end;
@@ -188,6 +188,7 @@ report 85000 "Direct Debit Payments"
         Rec_CustomerLedgerEntry: Record "Cust. Ledger Entry";
         L_TransferAmount: Decimal;
         LastGenLine: Record "Gen. Journal Line";
+        L_DirectDebitMandate: Record "SEPA Direct Debit Mandate";
     begin
         // code added to add the totatl transfer Amount for 1 Customer ++
         IF L_CustomerNo <> CustomerLedgerEntry."Customer No." then begin
@@ -202,57 +203,65 @@ report 85000 "Direct Debit Payments"
                 Rec_CustomerLedgerEntry.SetFilter("Direct Debit Mandate ID", '<>%1', '');
             if Rec_CustomerLedgerEntry.FindSet() then begin
                 repeat
-                    Rec_CustomerLedgerEntry.CalcFields("Remaining Amount");
-                    L_TransferAmount := L_TransferAmount + Rec_CustomerLedgerEntry."Remaining Amount";
+                    L_DirectDebitMandate.Reset();
+                    L_DirectDebitMandate.SetRange(ID, CustomerLedgerEntry."Direct Debit Mandate ID");
+                    L_DirectDebitMandate.SetRange("Customer No.", CustomerLedgerEntry."Customer No.");
+                    L_DirectDebitMandate.SetRange(Blocked, false);
+                    if L_DirectDebitMandate.FindFirst() then begin
+                        Rec_CustomerLedgerEntry.CalcFields("Remaining Amount");
+                        L_TransferAmount := L_TransferAmount + Rec_CustomerLedgerEntry."Remaining Amount";
+                    end;
                 until Rec_CustomerLedgerEntry.Next() = 0;
             end;
 
-            L_CustomerNo := CustomerLedgerEntry."Customer No.";
-            LastLineNo += 10000;
-            LastGenLine := GenJnlLine;
-            Clear(GenJnlLine);
-            GenJnlLine."Journal Template Name" := GeneralJournalTemplateName;
-            GenJnlLine."Journal Batch Name" := GeneralJournalBatchName;
-            GenJnlLine."Line No." := LastLineNo;
-            if GenJnlBatch."No. Series" <> '' then begin
-                GenJnlLine.SetUpNewLine(LastGenLine, LastGenLine."Balance (LCY)", true)
+            if L_TransferAmount <> 0 then begin
+                L_CustomerNo := CustomerLedgerEntry."Customer No.";
+                LastLineNo += 10000;
+                LastGenLine := GenJnlLine;
+                Clear(GenJnlLine);
+                GenJnlLine."Journal Template Name" := GeneralJournalTemplateName;
+                GenJnlLine."Journal Batch Name" := GeneralJournalBatchName;
+                GenJnlLine."Line No." := LastLineNo;
+                if GenJnlBatch."No. Series" <> '' then begin
+                    GenJnlLine.SetUpNewLine(LastGenLine, LastGenLine."Balance (LCY)", true)
+                end;
+
+                GenJnlLine.SetSuppressCommit(true);
+                GenJnlLine.Validate("Document Type", GenJnlLine."Document Type"::Payment);
+                GenJnlLine.Validate("Account Type", GenJnlLine."Account Type"::Customer);
+                GenJnlLine.Validate("Account No.", CustomerLedgerEntry."Customer No.");
+                GenJnlLine.Validate("Bal. Account Type", GenJnlLine."Bal. Account Type"::"Bank Account");
+                GenJnlLine.Validate("Bal. Account No.", BankAccount."No.");
+                SetGenJnlLineDim(CustomerLedgerEntry);
+                GenJnlLine.Validate("Posting Date", WorkDate());
+                GenJnlLine.Description := StrSubstNo('Autopay BACS %1', WorkDate());
+                GenJnlLine.Validate("Currency Code", CustomerLedgerEntry."Currency Code");
+                GenJnlLine.Validate(Amount, -L_TransferAmount);
+                GenJnlLine."Applies-to ID" := GenJnlLine."Document No.";
+                GenJnlLine."Direct Debit Mandate ID" := "Cust. Ledger Entry"."Direct Debit Mandate ID";
+                GenJnlLine.SetSuppressCommit(false);
+                OnAfterCreateJnlLine(GenJnlLine, CustomerLedgerEntry);
+                GenJnlLine.Insert(true);
+                LastGenLine := GenJnlLine;
+
+                Rec_CustomerLedgerEntry.Reset();
+                Rec_CustomerLedgerEntry.SetRange("Customer No.", "Cust. Ledger Entry"."Customer No.");
+                Rec_CustomerLedgerEntry.SetRange("Due Date", FromDate, ToDate);
+                Rec_CustomerLedgerEntry.SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
+                Rec_CustomerLedgerEntry.SetRange(Open, "Cust. Ledger Entry".Open);
+                if OnlyCustomersWithMandate then
+                    Rec_CustomerLedgerEntry.SetFilter("Direct Debit Mandate ID", '<>%1', '');
+                if Rec_CustomerLedgerEntry.FindSet() then begin
+                    repeat
+                        Rec_CustomerLedgerEntry.CalcFields("Remaining Amount");
+                        Rec_CustomerLedgerEntry.Validate("Applies-to ID", GenJnlLine."Document No.");
+                        Rec_CustomerLedgerEntry.Validate("Amount to Apply", Rec_CustomerLedgerEntry."Remaining Amount");
+                        Rec_CustomerLedgerEntry.Modify(true);
+                    until Rec_CustomerLedgerEntry.Next() = 0;
+                end;
+
+                exit(true);
             end;
-
-            GenJnlLine.SetSuppressCommit(true);
-            GenJnlLine.Validate("Document Type", GenJnlLine."Document Type"::Payment);
-            GenJnlLine.Validate("Account Type", GenJnlLine."Account Type"::Customer);
-            GenJnlLine.Validate("Account No.", CustomerLedgerEntry."Customer No.");
-            GenJnlLine.Validate("Bal. Account Type", GenJnlLine."Bal. Account Type"::"Bank Account");
-            GenJnlLine.Validate("Bal. Account No.", BankAccount."No.");
-            SetGenJnlLineDim(CustomerLedgerEntry);
-            GenJnlLine.Validate("Posting Date", WorkDate());
-            GenJnlLine.Description := StrSubstNo('Autopay BACS %1', WorkDate());
-            GenJnlLine.Validate("Currency Code", CustomerLedgerEntry."Currency Code");
-            GenJnlLine.Validate(Amount, -L_TransferAmount);
-            GenJnlLine."Applies-to ID" := GenJnlLine."Document No.";
-            GenJnlLine."Direct Debit Mandate ID" := "Cust. Ledger Entry"."Direct Debit Mandate ID";
-            GenJnlLine.SetSuppressCommit(false);
-            OnAfterCreateJnlLine(GenJnlLine, CustomerLedgerEntry);
-            GenJnlLine.Insert(true);
-            LastGenLine := GenJnlLine;
-
-            Rec_CustomerLedgerEntry.Reset();
-            Rec_CustomerLedgerEntry.SetRange("Customer No.", "Cust. Ledger Entry"."Customer No.");
-            Rec_CustomerLedgerEntry.SetRange("Due Date", FromDate, ToDate);
-            Rec_CustomerLedgerEntry.SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
-            Rec_CustomerLedgerEntry.SetRange(Open, "Cust. Ledger Entry".Open);
-            if OnlyCustomersWithMandate then
-                Rec_CustomerLedgerEntry.SetFilter("Direct Debit Mandate ID", '<>%1', '');
-            if Rec_CustomerLedgerEntry.FindSet() then begin
-                repeat
-                    Rec_CustomerLedgerEntry.CalcFields("Remaining Amount");
-                    Rec_CustomerLedgerEntry.Validate("Applies-to ID", GenJnlLine."Document No.");
-                    Rec_CustomerLedgerEntry.Validate("Amount to Apply", Rec_CustomerLedgerEntry."Remaining Amount");
-                    Rec_CustomerLedgerEntry.Modify(true);
-                until Rec_CustomerLedgerEntry.Next() = 0;
-            end;
-
-            exit(true);
         end;
     end;
 

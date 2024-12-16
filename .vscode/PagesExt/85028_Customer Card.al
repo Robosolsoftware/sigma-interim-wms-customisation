@@ -2,6 +2,56 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
 {
     layout
     {
+        #Region SBB-36+++
+        addafter(Statistics)
+        {
+            group(Finance)
+            {
+                Editable = G_FinanceTeam;
+                field("Send By"; Rec."Send By")
+                {
+                    ApplicationArea = All;
+                }
+                field(Type; Rec.Type)
+                {
+                    ApplicationArea = All;
+                    ShowMandatory = true;
+                }
+                field("Assigned Credit Controller"; Rec."Assigned Credit Controller")
+                {
+                    ApplicationArea = All;
+                    // trigger OnValidate()
+                    // var
+                    //     L_User: Record User;
+                    // begin
+                    //     if Rec."Assigned Credit Controller" <> '' then begin
+                    //         L_User.Reset();
+                    //         if L_User.Get(Rec."Assigned Credit Controller") then
+                    //             Rec."Assigned Credit Controller" := L_User."User Name";
+                    //     end;
+                    // end;
+
+                    // trigger OnDrillDown()
+                    // var
+                    //     UserMgt: Codeunit "User Management";
+                    // begin
+                    //     if Rec."Assigned Credit Controller" <> '' then
+                    //         UserMgt.DisplayUserInformation(Rec."Assigned Credit Controller");
+                    // end;
+                }
+
+                group("Address And Contact")
+                {
+                    ShowCaption = true;
+                    Caption = 'Address & Contact';
+                }
+            }
+        }
+        moveafter("Address And Contact"; "Address & Contact")
+        moveafter("Address & Contact"; Invoicing)
+        moveafter(Invoicing; Payments)
+        #EndRegion SBB-36+++
+
         //Editable Condition++
         modify("No.")
         {
@@ -110,14 +160,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         {
             ShowMandatory = true;
         }
-        modify("Shipping Agent Code")
-        {
-            ShowMandatory = true;
-        }
-        modify("Shipping Agent Service Code")
-        {
-            ShowMandatory = true;
-        }
         modify("Location Code")
         {
             ShowMandatory = true;
@@ -127,18 +169,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
 
 
         //Group++
-        modify("Address & Contact")
-        {
-            Editable = L_CurrPageEditable;
-        }
-        modify(Invoicing)
-        {
-            Editable = L_CurrPageEditable;
-        }
-        modify(Payments)
-        {
-            Editable = L_CurrPageEditable;
-        }
         modify(Shipping)
         {
             Editable = L_CurrPageEditable;
@@ -152,71 +182,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             Editable = L_CurrPageEditable;
         }
         //Editable Condition++
-
-        addafter("Shipping Agent Service Code")
-        {
-            field("Weekend Shipping Agent Code"; Rec."Weekend Shipping Agent Code")
-            {
-                ApplicationArea = All;
-            }
-            field("Weekend Ship. Agnt. Serv. Code"; Rec."Weekend Ship. Agnt. Serv. Code")
-            {
-                ApplicationArea = All;
-            }
-        }
-        modify("Customer Price Group")
-        {
-            Caption = 'Customer Price Group 1';
-            Editable = L_CustomerPriceEditable;
-        }
-        addafter("Customer Price Group")
-        {
-            field("Customer Price Group 2"; Rec."Customer Price Group 2")
-            {
-                ApplicationArea = All;
-                Editable = L_CustomerPriceEditable;
-            }
-            field("Customer Price Group 3"; Rec."Customer Price Group 3")
-            {
-                ApplicationArea = All;
-                Editable = L_CustomerPriceEditable;
-            }
-            field("Customer Price Group 4"; Rec."Customer Price Group 4")
-            {
-                ApplicationArea = All;
-                Editable = L_CustomerPriceEditable;
-            }
-            field("Customer Price Group 5"; Rec."Customer Price Group 5")
-            {
-                ApplicationArea = All;
-                Editable = L_CustomerPriceEditable;
-            }
-            field("Customer Price Group 6"; Rec."Customer Price Group 6")
-            {
-                ApplicationArea = All;
-                Editable = L_CustomerPriceEditable;
-            }
-            field("Customer Price Group 7"; Rec."Customer Price Group 7")
-            {
-                ApplicationArea = All;
-                Editable = L_CustomerPriceEditable;
-            }
-            field("Customer Price Group 8"; Rec."Customer Price Group 8")
-            {
-                ApplicationArea = All;
-                Editable = L_CustomerPriceEditable;
-            }
-            field("Customer Price Group 9"; Rec."Customer Price Group 9")
-            {
-                ApplicationArea = All;
-                Editable = L_CustomerPriceEditable;
-            }
-            field("Customer Price Group 10"; Rec."Customer Price Group 10")
-            {
-                ApplicationArea = All;
-                Editable = L_CustomerPriceEditable;
-            }
-        }
         addlast(Payments)
         {
             field("Default Bank"; Rec."Default Bank")
@@ -262,53 +227,12 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
                 Editable = L_EditableQUAApproved;
             }
-            field("Send By"; Rec."Send By")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
             field("SO Approval Required"; Rec."SO Approval Required")
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
             }
-            field("Min Order Value"; Rec."Min Order Value")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
             field("Magazine Mailout"; Rec."Magazine Mailout")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
-            field(Type; Rec.Type)
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-                ShowMandatory = true;
-
-                trigger OnValidate()
-                begin
-                    if Rec.Type = Rec.Type::Site then
-                        L_CustomerPriceEditable := false
-                    else
-                        L_CustomerPriceEditable := true;
-                    CurrPage.Update();
-                end;
-            }
-            field("Territory Code"; Rec."Territory Code")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-                ShowMandatory = true;
-            }
-            field("Market Code"; Rec."Market Code")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
-            field("Shop Group"; Rec."Shop Group")
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
@@ -333,29 +257,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             {
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
-            }
-            field("Assigned Credit Controller"; Rec."Assigned Credit Controller")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-                // trigger OnValidate()
-                // var
-                //     L_User: Record User;
-                // begin
-                //     if Rec."Assigned Credit Controller" <> '' then begin
-                //         L_User.Reset();
-                //         if L_User.Get(Rec."Assigned Credit Controller") then
-                //             Rec."Assigned Credit Controller" := L_User."User Name";
-                //     end;
-                // end;
-
-                // trigger OnDrillDown()
-                // var
-                //     UserMgt: Codeunit "User Management";
-                // begin
-                //     if Rec."Assigned Credit Controller" <> '' then
-                //         UserMgt.DisplayUserInformation(Rec."Assigned Credit Controller");
-                // end;
             }
         }
         addafter(Statistics)
@@ -411,8 +312,8 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         L_CurrPageEditable: Boolean;
         L_EditableQUAApproved: Boolean;
         L_EditableStatus: Boolean;
-        L_CustomerPriceEditable: Boolean;
         USEditable: Boolean;
+        G_FinanceTeam: Boolean;
 
 
     trigger OnAfterGetRecord()
@@ -420,14 +321,22 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         L_UserSetup: Record "User Setup";
         usersetup: Record "User Setup";
     begin
-        if Rec.Type = Rec.Type::Site then
-            L_CustomerPriceEditable := false
-        else
-            L_CustomerPriceEditable := true;
-
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
+        Clear(G_FinanceTeam);
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Finance Team Permission" = true then
+                G_FinanceTeam := true
+            else
+                G_FinanceTeam := false;
+        end else
+            G_FinanceTeam := false;
+
+
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
             //L_EditableQUAApproved := true;
@@ -481,14 +390,24 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
     var
         L_UserSetup: Record "User Setup";
     begin
-        if Rec.Type = Rec.Type::Site then
-            L_CustomerPriceEditable := false
-        else
-            L_CustomerPriceEditable := true;
 
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
+        Clear(G_FinanceTeam);
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Finance Team Permission" = true then
+                G_FinanceTeam := true
+            else
+                G_FinanceTeam := false;
+        end else
+            G_FinanceTeam := false;
+
+
+
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
             //L_EditableQUAApproved := true;

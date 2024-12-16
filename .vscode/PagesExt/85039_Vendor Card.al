@@ -2,6 +2,48 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
 {
     layout
     {
+
+        #Region SBB-36+++
+        addafter(Intrastat)
+        {
+            group(Finance)
+            {
+                Editable = G_FinanceTeam;
+                field("PO Approval required"; Rec."PO Approval required")
+                {
+                    ApplicationArea = All;
+
+                    trigger OnValidate()
+                    begin
+                        Clear(G_EnableMinOrderValue);
+                        if Rec."PO Approval required" = Rec."PO Approval required"::Yes then
+                            G_EnableMinOrderValue := true
+                        else
+                            G_EnableMinOrderValue := false;
+                        CurrPage.Update();
+                    end;
+                }
+                field(Type; Rec.Type)
+                {
+                    ApplicationArea = All;
+                }
+                field("Vendor Group"; Rec."Vendor Group")
+                {
+                    ApplicationArea = All;
+                }
+
+                group("Address And Contact")
+                {
+                    ShowCaption = true;
+                    Caption = 'Address & Contact';
+                }
+            }
+        }
+        moveafter("Address And Contact"; "Address & Contact")
+        moveafter("Address & Contact"; Invoicing)
+        moveafter(Invoicing; Payments)
+        #EndRegion SBB-36+++
+
         // Add changes to page layout here
         //Editable Condition++
         modify("No.")
@@ -100,18 +142,6 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
 
 
         //Group++
-        modify("Address & Contact")
-        {
-            Editable = L_CurrPageEditable;
-        }
-        modify(Invoicing)
-        {
-            Editable = L_CurrPageEditable;
-        }
-        modify(Payments)
-        {
-            Editable = L_CurrPageEditable;
-        }
         modify(Receiving)
         {
             Editable = L_CurrPageEditable;
@@ -129,21 +159,6 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
 
         addlast(General)
         {
-            field("PO Approval required"; Rec."PO Approval required")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-
-                trigger OnValidate()
-                begin
-                    Clear(G_EnableMinOrderValue);
-                    if Rec."PO Approval required" = Rec."PO Approval required"::Yes then
-                        G_EnableMinOrderValue := true
-                    else
-                        G_EnableMinOrderValue := false;
-                    CurrPage.Update();
-                end;
-            }
             field("Min Order Value"; Rec."Min Order Value")
             {
                 ApplicationArea = All;
@@ -154,17 +169,6 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                 ApplicationArea = All;
                 Editable = L_EditableQUAApproved;
             }
-            field("Vendor Group"; Rec."Vendor Group")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
-            field(Type; Rec.Type)
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
-
         }
         addafter("Purchaser Code")
         {
@@ -206,6 +210,7 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
         L_EditableQUAApproved: Boolean;
         L_EditableStatus: Boolean;
         USEditable: Boolean;
+        G_FinanceTeam: Boolean;
 
     trigger OnAfterGetRecord()
     var
@@ -215,6 +220,19 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
+        Clear(G_FinanceTeam);
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Finance Team Permission" = true then
+                G_FinanceTeam := true
+            else
+                G_FinanceTeam := false;
+        end else
+            G_FinanceTeam := false;
+
+
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
             //L_EditableQUAApproved := true;
@@ -264,6 +282,19 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
+        Clear(G_FinanceTeam);
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Finance Team Permission" = true then
+                G_FinanceTeam := true
+            else
+                G_FinanceTeam := false;
+        end else
+            G_FinanceTeam := false;
+
+
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
             //L_EditableQUAApproved := true;

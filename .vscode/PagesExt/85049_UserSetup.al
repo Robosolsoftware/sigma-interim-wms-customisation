@@ -60,6 +60,21 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+            field("Procurement Team Permission"; Rec."Procurement Team Permission")
+            {
+                ApplicationArea = All;
+                ToolTip = 'The selected user has the ability to edit the fields within the Procurement Team tab on the item card.';
+            }
+            field("BDT Team Permission"; Rec."BDT Team Permission")
+            {
+                ApplicationArea = All;
+                ToolTip = 'The selected user has the ability to edit the fields within the BDT Team tab on the Customer Card.';
+            }
+            field("Finance Team Permission"; Rec."Finance Team Permission")
+            {
+                ApplicationArea = All;
+                ToolTip = 'The selected user has the ability to edit the fields within the Finance Team tab on the Vendor & Customer Card.';
+            }
         }
     }
 

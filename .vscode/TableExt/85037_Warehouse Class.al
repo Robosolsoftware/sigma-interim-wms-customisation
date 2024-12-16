@@ -19,6 +19,10 @@ tableextension 85037 "SC Warehouse Class" extends "Warehouse Class"
                     rec.TestField(CD, false);
             end;
         }
+        field(85157; "Quota Restriction"; Boolean)
+        {
+
+        }
     }
 
     keys
