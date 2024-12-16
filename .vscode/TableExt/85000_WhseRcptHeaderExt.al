@@ -149,17 +149,6 @@ tableextension 85000 WhseRcptHeaderExt extends "Warehouse Receipt Header"
         }
 
     }
-    trigger OnDelete()
-    var
-        myInt: Integer;
-    begin
-        if (rec."Transportation No." <> '') and (Rec."Receipt Status" <> 'Suspend') then
-            Error('Cannot Delete the Record because either Transportation No. is not blank or Receipt Status is not set to Suspend');
-    end;
-
-
-
-
     var
         myInt: Integer;
         Test: Record "Posted Whse. Receipt Header";
