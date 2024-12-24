@@ -54,6 +54,14 @@ tableextension 85011 "SC Purch. Inv. Line" extends "Purch. Inv. Line"
         {
             FieldClass = FlowFilter;
         }
+        field(85139; "Child Category"; Code[20])
+        {
+            Editable = false;
+        }
+        field(85140; "Parent Category"; Code[20])
+        {
+            Editable = false;
+        }
     }
 
     keys

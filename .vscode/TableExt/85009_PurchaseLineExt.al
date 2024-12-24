@@ -111,6 +111,14 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
         {
             FieldClass = FlowFilter;
         }
+        field(85139; "Child Category"; Code[20])
+        {
+            Editable = false;
+        }
+        field(85140; "Parent Category"; Code[20])
+        {
+            Editable = false;
+        }
         modify("Line Discount %")
         {
             trigger OnAfterValidate()
@@ -165,6 +173,9 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
                         Rec.Validate("Warehouse Class Code", Recitem."Warehouse Class Code");
                         Rec.Validate("Pack Size", Recitem."Pack Size");
                         Rec.Validate(Brand, Recitem.Brand);
+                        Recitem.CalcFields("Parent Category", "Child Category");
+                        Rec."Parent Category" := Recitem."Parent Category";
+                        Rec."Child Category" := Recitem."Child Category";
                     end;
 
                     //Update Net Unit Cose++

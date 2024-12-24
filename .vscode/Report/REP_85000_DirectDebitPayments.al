@@ -14,9 +14,22 @@ report 85000 "Direct Debit Payments"
                 DataItemLinkReference = Customer;
                 trigger OnAfterGetRecord()
                 var
+                    L_Cust: Record Customer;
                 begin
                     CurrCount += 1;
                     Window.Update(1, "Cust. Ledger Entry"."Customer No.");
+
+                    if "Cust. Ledger Entry"."Payment Method Code" = '' then begin
+                        L_Cust.Reset();
+                        L_Cust.SetRange("No.", "Cust. Ledger Entry"."Customer No.");
+                        if L_Cust.FindFirst() then begin
+                            if L_Cust."Payment Method Code" <> '' then begin
+                                "Cust. Ledger Entry".Validate("Payment Method Code", L_Cust."Payment Method Code");
+                                "Cust. Ledger Entry".Modify();
+                            end;
+
+                        end;
+                    end;
                     if CreateJnlLine("Cust. Ledger Entry") then begin
                     end;
                 end;

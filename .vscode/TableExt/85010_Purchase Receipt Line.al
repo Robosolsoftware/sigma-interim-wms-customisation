@@ -54,6 +54,14 @@ tableextension 85010 "SC Purch. Rcpt. Line" extends "Purch. Rcpt. Line"
         {
             FieldClass = FlowFilter;
         }
+        field(85139; "Child Category"; Code[20])
+        {
+            Editable = false;
+        }
+        field(85140; "Parent Category"; Code[20])
+        {
+            Editable = false;
+        }
     }
 
     keys

@@ -59,5 +59,7 @@ permissionset 85000 SigmaCustomization
         page "Knapp Stock to Replenish" = X,
         query "Item Ledger Enteries-Qty" = X,
         query "Item Ledger Enteries-Qty Knapp" = X,
-        report "Direct Debit Payments" = X;
+        report "Direct Debit Payments" = X,
+        codeunit "Manage Master Block" = X,
+        page "Posted Sales Invoices List" = X;
 }

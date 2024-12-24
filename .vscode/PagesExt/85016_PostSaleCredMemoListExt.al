@@ -8,6 +8,10 @@ pageextension 85016 PostSaleCreditMemoListExt extends "Posted Sales Credit Memos
             {
                 ApplicationArea = all;
             }
+            field("Email Sent"; Rec."Email Sent")
+            {
+                ApplicationArea = all;
+            }
         }
     }
 
