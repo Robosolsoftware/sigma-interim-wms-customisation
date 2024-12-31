@@ -141,6 +141,10 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
             FieldClass = FlowField;
             CalcFormula = lookup(Customer."Weekend Drop Number" where("No." = field("Sell-to Customer No.")));
         }
+        field(85174; "Check & Split Order"; Boolean)
+        {
+
+        }
     }
 
     var

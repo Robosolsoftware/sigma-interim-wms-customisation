@@ -148,6 +148,10 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
             FieldClass = FlowField;
             CalcFormula = lookup(Customer."Weekend Drop Number" where("No." = field("Sell-to Customer No.")));
         }
+        field(85174; "Check & Split Order"; Boolean)
+        {
+
+        }
     }
 
 

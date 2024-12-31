@@ -62,6 +62,12 @@ tableextension 85011 "SC Purch. Inv. Line" extends "Purch. Inv. Line"
         {
             Editable = false;
         }
+        field(85141; "Order Date"; Date)
+        {
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = lookup("Purch. Inv. Header"."Order Date" where("No." = field("Document No.")));
+        }
     }
 
     keys

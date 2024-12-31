@@ -62,6 +62,12 @@ tableextension 85010 "SC Purch. Rcpt. Line" extends "Purch. Rcpt. Line"
         {
             Editable = false;
         }
+        // field(85141; "Order Date"; Date)
+        // {
+        //     Editable = false;
+        //     FieldClass = FlowField;
+        //     CalcFormula = lookup("Purch. Rcpt. Header"."Order Date" where("No." = field("Document No.")));
+        // }
     }
 
     keys
