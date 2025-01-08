@@ -145,6 +145,10 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
         {
 
         }
+        field(85175; "Reference Sales Order"; Code[20])
+        {
+
+        }
     }
 
     var

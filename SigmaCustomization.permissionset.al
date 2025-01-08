@@ -61,5 +61,6 @@ permissionset 85000 SigmaCustomization
         query "Item Ledger Enteries-Qty Knapp" = X,
         report "Direct Debit Payments" = X,
         codeunit "Manage Master Block" = X,
-        page "Posted Sales Invoices List" = X;
+        page "Posted Sales Invoices List" = X,
+        codeunit "Adjust Cost Changes" = X;
 }

@@ -24,6 +24,16 @@ tableextension 85005 ILE extends "Item Ledger Entry"
         {
 
         }
+        field(85006; "Child Category"; Code[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Item Category"."Parent Category" where(Code = field("Item Category Code")));
+        }
+        field(85007; "Parent Category"; Code[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Item Category"."Parent Category" where(Code = field("Child Category")));
+        }
 
     }
 

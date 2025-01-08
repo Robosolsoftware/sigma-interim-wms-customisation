@@ -5,6 +5,26 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         #Region SBB-36+++
         addafter(Statistics)
         {
+            group("Transport Team")
+            {
+                Editable = G_TransportTeam;
+                field("Weekend Shipping Agent Code"; Rec."Weekend Shipping Agent Code")
+                {
+                    ApplicationArea = All;
+                }
+                field("Weekend Ship. Agnt. Serv. Code"; Rec."Weekend Ship. Agnt. Serv. Code")
+                {
+                    ApplicationArea = All;
+                }
+                field("Drop Number"; Rec."Drop Number")
+                {
+                    ApplicationArea = All;
+                }
+                field("Weekend Drop Number"; Rec."Weekend Drop Number")
+                {
+                    ApplicationArea = All;
+                }
+            }
             group(Finance)
             {
                 Editable = G_FinanceTeam;
@@ -17,29 +37,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                     ApplicationArea = All;
                     ShowMandatory = true;
                 }
-                field("Assigned Credit Controller"; Rec."Assigned Credit Controller")
-                {
-                    ApplicationArea = All;
-                    // trigger OnValidate()
-                    // var
-                    //     L_User: Record User;
-                    // begin
-                    //     if Rec."Assigned Credit Controller" <> '' then begin
-                    //         L_User.Reset();
-                    //         if L_User.Get(Rec."Assigned Credit Controller") then
-                    //             Rec."Assigned Credit Controller" := L_User."User Name";
-                    //     end;
-                    // end;
-
-                    // trigger OnDrillDown()
-                    // var
-                    //     UserMgt: Codeunit "User Management";
-                    // begin
-                    //     if Rec."Assigned Credit Controller" <> '' then
-                    //         UserMgt.DisplayUserInformation(Rec."Assigned Credit Controller");
-                    // end;
-                }
-
                 group("Address And Contact")
                 {
                     ShowCaption = true;
@@ -47,10 +44,18 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 }
             }
         }
+        //Finance Team++
+        moveafter(Type; "Credit Limit (LCY)")
         moveafter("Address And Contact"; "Address & Contact")
         moveafter("Address & Contact"; Invoicing)
-        moveafter(Invoicing; Payments)
+
+
+        //Transport Team++
+        movefirst("Transport Team"; "Shipping Agent Code")
+        moveafter("Shipping Agent Code"; "Shipping Agent Service Code")
         #EndRegion SBB-36+++
+
+
 
         //Editable Condition++
         modify("No.")
@@ -85,14 +90,6 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             Editable = L_CurrPageEditable;
         }
         modify("Balance Due (LCY)")
-        {
-            Editable = L_CurrPageEditable;
-        }
-        modify("Credit Limit (LCY)")
-        {
-            Editable = L_CurrPageEditable;
-        }
-        modify(Blocked)
         {
             Editable = L_CurrPageEditable;
         }
@@ -243,21 +240,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 Editable = L_CurrPageEditable;
                 Caption = 'Bluechain';
             }
-            field("Block Reason"; Rec."Block Reason")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
-            field("Drop Number"; Rec."Drop Number")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
-            field("Weekend Drop Number"; Rec."Weekend Drop Number")
-            {
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-            }
+
         }
         addafter(Statistics)
         {
@@ -314,6 +297,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         L_EditableStatus: Boolean;
         USEditable: Boolean;
         G_FinanceTeam: Boolean;
+        G_TransportTeam: Boolean;
 
 
     trigger OnAfterGetRecord()
@@ -325,6 +309,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
         Clear(G_FinanceTeam);
+        Clear(G_TransportTeam);
 
         L_UserSetup.Reset();
         L_UserSetup.SetRange("User ID", UserId);
@@ -335,6 +320,16 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 G_FinanceTeam := false;
         end else
             G_FinanceTeam := false;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Transport Team Permission" = true then
+                G_TransportTeam := true
+            else
+                G_TransportTeam := false;
+        end else
+            G_TransportTeam := false;
 
 
         if Rec.Status = Rec.Status::Open then begin
@@ -395,6 +390,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
         Clear(G_FinanceTeam);
+        Clear(G_TransportTeam);
 
         L_UserSetup.Reset();
         L_UserSetup.SetRange("User ID", UserId);
@@ -405,6 +401,16 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 G_FinanceTeam := false;
         end else
             G_FinanceTeam := false;
+
+        L_UserSetup.Reset();
+        L_UserSetup.SetRange("User ID", UserId);
+        if L_UserSetup.FindFirst() then begin
+            if L_UserSetup."Transport Team Permission" = true then
+                G_TransportTeam := true
+            else
+                G_TransportTeam := false;
+        end else
+            G_TransportTeam := false;
 
 
 

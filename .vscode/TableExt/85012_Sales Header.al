@@ -498,6 +498,10 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         {
 
         }
+        field(85175; "Reference Sales Order"; Code[20])
+        {
+
+        }
     }
 
     var

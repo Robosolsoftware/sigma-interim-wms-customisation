@@ -68,6 +68,14 @@ tableextension 85028 "SC User Setup" extends "User Setup"
         {
             DataClassification = ToBeClassified;
         }
+        field(85019; "Transport Team Permission"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85020; "Finance(AR)"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

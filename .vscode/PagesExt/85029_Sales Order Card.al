@@ -134,6 +134,11 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
             {
                 ApplicationArea = All;
             }
+            field("Reference Sales Order"; Rec."Reference Sales Order")
+            {
+                Editable = false;
+                ApplicationArea = All;
+            }
         }
         addafter(SalesLines)
         {

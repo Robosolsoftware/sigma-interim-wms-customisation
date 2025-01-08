@@ -75,6 +75,16 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
                 ApplicationArea = All;
                 ToolTip = 'The selected user has the ability to edit the fields within the Finance Team tab on the Vendor & Customer Card.';
             }
+            field("Transport Team Permission"; Rec."Transport Team Permission")
+            {
+                ApplicationArea = All;
+                ToolTip = 'The selected user has the ability to edit the fields within the Transport Team tab on the Customer Card.';
+            }
+            field("Finance(AR)"; Rec."Finance(AR)")
+            {
+                ApplicationArea = All;
+                ToolTip = 'The selected user has the ability to edit the fields within the Finance(AR) Team tab on the Vendor & Customer Card.';
+            }
         }
     }
 
