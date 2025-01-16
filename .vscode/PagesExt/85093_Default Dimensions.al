@@ -17,6 +17,10 @@ pageextension 85093 "SC Default Dimensions" extends "Default Dimensions"
                 Editable = false;
                 Visible = G_No;
             }
+            field("SO Approval Required"; Rec."SO Approval Required")
+            {
+                ApplicationArea = All;
+            }
 
         }
 

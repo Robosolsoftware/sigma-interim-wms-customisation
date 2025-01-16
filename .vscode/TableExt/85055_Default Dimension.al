@@ -8,6 +8,10 @@ tableextension 85055 "SC Default Dimension" extends "Default Dimension"
             FieldClass = FlowField;
             CalcFormula = lookup("Dimension Value".Name where(Code = field("Dimension Value Code")));
         }
+        field(85056; "SO Approval Required"; Boolean)
+        {
+
+        }
     }
 
     keys

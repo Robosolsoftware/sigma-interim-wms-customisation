@@ -2,6 +2,33 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
 {
     fields
     {
+        modify("Vendor Invoice No.")
+        {
+            trigger OnAfterValidate()
+            var
+                L_PurchaseHeader: Record "Purchase Header";
+                PurchInvHeader: Record "Purch. Inv. Header";
+            begin
+                if Rec."Vendor Invoice No." <> '' then begin
+                    L_PurchaseHeader.Reset();
+                    L_PurchaseHeader.SetRange("Vendor Invoice No.", Rec."Vendor Invoice No.");
+                    L_PurchaseHeader.SetRange("Pay-to Vendor No.", Rec."Pay-to Vendor No.");
+                    L_PurchaseHeader.SetRange("Document Type", Rec."Document Type");
+                    L_PurchaseHeader.SetFilter("No.", '<>%1', Rec."No.");
+                    if L_PurchaseHeader.FindFirst() then
+                        Error('Vendor Invoice No. %1 is already exist', Rec."Vendor Invoice No.");
+
+                    PurchInvHeader.Reset();
+                    PurchInvHeader.SetRange("Pay-to Vendor No.", Rec."Pay-to Vendor No.");
+                    PurchInvHeader.SetRange("Vendor Invoice No.", Rec."Vendor Invoice No.");
+                    if PurchInvHeader.FindFirst() then
+                        Error('Vendor Invoice No. %1 is already exist', Rec."Vendor Invoice No.");
+                end;
+
+
+            end;
+        }
+
         field(85000; "Purchase Order No."; Text[100])
         {
             DataClassification = ToBeClassified;

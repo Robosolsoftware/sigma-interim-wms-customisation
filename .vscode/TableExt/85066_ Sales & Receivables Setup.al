@@ -7,6 +7,10 @@ tableextension 85066 "SC Sales & Receivables Setup" extends "Sales & Receivables
         {
             Caption = 'Invoice/Shipment Default Posting Date';
         }
+        field(85067; "Due Date Buffer"; DateFormula)
+        {
+
+        }
     }
 
     keys

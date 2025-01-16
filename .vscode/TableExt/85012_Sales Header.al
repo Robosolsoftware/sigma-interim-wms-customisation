@@ -41,6 +41,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         // Rec."Weekend Shipping Agent Code" := L_Customer."Weekend Shipping Agent Code";
                         // Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
                         Rec."SO Approval Required" := L_Customer."SO Approval Required";
+                        Rec.Hospital := L_Customer.Hospital;
 
 
                         //Manul & Web Order+++
@@ -164,6 +165,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         // Rec."Weekend Shipping Agent Code" := L_Customer."Weekend Shipping Agent Code";
                         // Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
                         Rec."SO Approval Required" := L_Customer."SO Approval Required";
+                        Rec.Hospital := L_Customer.Hospital;
 
                         L_Date.Reset();
                         L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
@@ -499,6 +501,10 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
 
         }
         field(85175; "Reference Sales Order"; Code[20])
+        {
+
+        }
+        field(85176; "Hospital"; Boolean)
         {
 
         }

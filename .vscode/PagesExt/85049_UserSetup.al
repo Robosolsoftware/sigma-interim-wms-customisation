@@ -60,6 +60,14 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+            field("SO Release Specialist (Export)"; Rec."SO Release Specialist (Export)")
+            {
+                ApplicationArea = All;
+            }
+            field("SO Release spec. (NonExport)"; Rec."SO Release spec. (NonExport)")
+            {
+                ApplicationArea = All;
+            }
             field("Procurement Team Permission"; Rec."Procurement Team Permission")
             {
                 ApplicationArea = All;

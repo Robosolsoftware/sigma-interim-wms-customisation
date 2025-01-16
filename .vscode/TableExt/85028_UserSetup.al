@@ -47,14 +47,17 @@ tableextension 85028 "SC User Setup" extends "User Setup"
         field(85013; "Export Customer Release"; Boolean)
         {
             DataClassification = ToBeClassified;
+            Caption = 'Export Customer SO Release';
         }
         field(85014; "Credit Limit Release"; Boolean)
         {
             DataClassification = ToBeClassified;
+            Caption = 'Credit Limit SO Release';
         }
         field(85015; "SO/MOV/Quota/ZeroPrice Release"; Boolean)
         {
             DataClassification = ToBeClassified;
+            Caption = 'SO/MOV/Quota/ZeroPrice SO Release';
         }
         field(85016; "Procurement Team Permission"; Boolean)
         {
@@ -75,6 +78,15 @@ tableextension 85028 "SC User Setup" extends "User Setup"
         field(85020; "Finance(AR)"; Boolean)
         {
             DataClassification = ToBeClassified;
+        }
+        field(85022; "SO Release Specialist (Export)"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85023; "SO Release spec. (NonExport)"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'SO Release Specialist (Non Export)';
         }
     }
 

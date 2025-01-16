@@ -7,7 +7,8 @@ report 85000 "Direct Debit Payments"
     {
         dataitem(Customer; Customer)
         {
-            RequestFilterFields = Blocked, Balance, "Payment Method Code", "Balance Due (LCY)";
+            RequestFilterFields = "No.", Blocked, Balance, "Payment Method Code", "Balance Due (LCY)";
+
             dataitem("Cust. Ledger Entry"; "Cust. Ledger Entry")
             {
                 DataItemLink = "Customer No." = field("No.");
@@ -15,10 +16,12 @@ report 85000 "Direct Debit Payments"
                 trigger OnAfterGetRecord()
                 var
                     L_Cust: Record Customer;
+                    L_SEPADirectDebitMandate: Record "SEPA Direct Debit Mandate";
                 begin
                     CurrCount += 1;
                     Window.Update(1, "Cust. Ledger Entry"."Customer No.");
 
+                    //Update Payment Method Code+++
                     if "Cust. Ledger Entry"."Payment Method Code" = '' then begin
                         L_Cust.Reset();
                         L_Cust.SetRange("No.", "Cust. Ledger Entry"."Customer No.");
@@ -27,24 +30,50 @@ report 85000 "Direct Debit Payments"
                                 "Cust. Ledger Entry".Validate("Payment Method Code", L_Cust."Payment Method Code");
                                 "Cust. Ledger Entry".Modify();
                             end;
-
                         end;
                     end;
-                    if CreateJnlLine("Cust. Ledger Entry") then begin
+
+
+                    //Update DD Mandate ID+++
+                    if "Cust. Ledger Entry"."Direct Debit Mandate ID" = '' then begin
+                        L_Cust.Reset();
+                        L_Cust.SetRange("No.", "Cust. Ledger Entry"."Customer No.");
+                        if L_Cust.FindFirst() then begin
+                            L_SEPADirectDebitMandate.Reset();
+                            L_SEPADirectDebitMandate.SetRange("Customer No.", L_Cust."No.");
+                            L_SEPADirectDebitMandate.SetRange(Blocked, false);
+                            L_SEPADirectDebitMandate.SetFilter("Valid To", '>=%1', WorkDate());
+                            if L_SEPADirectDebitMandate.FindFirst() then begin
+                                "Cust. Ledger Entry".Validate("Direct Debit Mandate ID", L_SEPADirectDebitMandate.ID);
+                                "Cust. Ledger Entry".Modify();
+                            end;
+                        end;
                     end;
+
+                    //Create Cash Recpt journal++
+                    CreateJnlLine("Cust. Ledger Entry");
                 end;
 
                 trigger OnPreDataItem()
                 begin
                     "Cust. Ledger Entry".SetFilter("Due Date", '%1..%2', FromDate, ToDate);
-                    "Cust. Ledger Entry".SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
+                    //"Cust. Ledger Entry".SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
                     "Cust. Ledger Entry".SetRange(Open, true);
                     if OnlyCustomersWithMandate then
                         "Cust. Ledger Entry".SetFilter("Direct Debit Mandate ID", '<>%1', '');
                     TotalCount := Count;
+                    Clear(CheckDialog);
                     Window.Open(ProgressMsg);
+                    CheckDialog := true;
                 end;
             }
+            trigger OnAfterGetRecord()
+            begin
+                Customer.SetFilter("Date Filter", '%1..%2', FromDate, ToDate);
+                Customer.CalcFields("Balance Due (LCY)");
+                if Customer."Balance Due (LCY)" < 0 then
+                    CurrReport.Skip();
+            end;
         }
     }
 
@@ -155,12 +184,19 @@ report 85000 "Direct Debit Payments"
                 }
             }
         }
+        trigger OnOpenPage()
+        begin
+            OnlyCustomersWithMandate := false;
+        end;
     }
 
     trigger OnPostReport()
     begin
-        Window.Close();
-        Message('Journal Created');
+        if CheckDialog = true then begin
+            Window.Close();
+            Message('Journal Created');
+        end;
+
     end;
 
     trigger OnPreReport()
@@ -184,6 +220,7 @@ report 85000 "Direct Debit Payments"
         TotalCount: Integer;
         CurrCount: Integer;
         ProgressMsg: Label '#1##################';
+        CheckDialog: Boolean;
 
 
     procedure SetJnlBatch(NewGenJnlTemplateName: Code[10]; NewGenJnlBachName: Code[10])
@@ -210,7 +247,7 @@ report 85000 "Direct Debit Payments"
             Rec_CustomerLedgerEntry.Reset();
             Rec_CustomerLedgerEntry.SetRange("Customer No.", "Cust. Ledger Entry"."Customer No.");
             Rec_CustomerLedgerEntry.SetRange("Due Date", FromDate, ToDate);
-            Rec_CustomerLedgerEntry.SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
+            //Rec_CustomerLedgerEntry.SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
             Rec_CustomerLedgerEntry.SetRange(Open, "Cust. Ledger Entry".Open);
             if OnlyCustomersWithMandate then
                 Rec_CustomerLedgerEntry.SetFilter("Direct Debit Mandate ID", '<>%1', '');
@@ -260,7 +297,7 @@ report 85000 "Direct Debit Payments"
                 Rec_CustomerLedgerEntry.Reset();
                 Rec_CustomerLedgerEntry.SetRange("Customer No.", "Cust. Ledger Entry"."Customer No.");
                 Rec_CustomerLedgerEntry.SetRange("Due Date", FromDate, ToDate);
-                Rec_CustomerLedgerEntry.SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
+                //Rec_CustomerLedgerEntry.SetFilter("Document Type", '%1|%2', "Cust. Ledger Entry"."Document Type"::"Credit Memo", "Cust. Ledger Entry"."Document Type"::Invoice);
                 Rec_CustomerLedgerEntry.SetRange(Open, "Cust. Ledger Entry".Open);
                 if OnlyCustomersWithMandate then
                     Rec_CustomerLedgerEntry.SetFilter("Direct Debit Mandate ID", '<>%1', '');

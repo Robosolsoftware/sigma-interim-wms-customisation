@@ -12,6 +12,15 @@ pageextension 85108 "SC Customer Ledger Entries" extends "Customer Ledger Entrie
             }
         }
 
+        addbefore("Entry No.")
+        {
+            field("Closed By Doc. No."; Rec."Closed By Doc. No.")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
+
     }
 
 

@@ -89,6 +89,23 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field(Hospital; Rec.Hospital)
+            {
+                ApplicationArea = All;
+
+                trigger OnValidate()
+                var
+                    L_Customer: Record Customer;
+                begin
+                    if Rec.Hospital = true then begin
+                        L_Customer.Reset();
+                        L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
+                        if L_Customer.FindFirst() then begin
+                            L_Customer.TestField(Hospital);
+                        end;
+                    end;
+                end;
+            }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
@@ -233,6 +250,7 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
         //         end;
         //     }
         // }
+
     }
 
 

@@ -240,6 +240,11 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 Editable = L_CurrPageEditable;
                 Caption = 'Bluechain';
             }
+            field(Hospital; Rec.Hospital)
+            {
+                ApplicationArea = All;
+                Editable = L_CurrPageEditable;
+            }
 
         }
         addafter(Statistics)

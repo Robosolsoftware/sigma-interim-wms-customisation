@@ -381,6 +381,10 @@ tableextension 85030 "SC Customer" extends Customer
         {
 
         }
+        field(85004; "Hospital"; Boolean)
+        {
+
+        }
     }
 
     fieldgroups
