@@ -20,6 +20,7 @@ pageextension 85093 "SC Default Dimensions" extends "Default Dimensions"
             field("SO Approval Required"; Rec."SO Approval Required")
             {
                 ApplicationArea = All;
+                Editable = false;
             }
 
         }

@@ -33,6 +33,12 @@ pageextension 85004 InventoryPickListExt extends "Inventory Picks"
                 Editable = false;
                 Caption = 'Warehouse Class Code Type';
             }
+            field("Contains TOS"; Rec."Contains TOS")
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Caption = 'Pickable Items Exist';
+            }
         }
         addafter("No. of Lines")
         {
