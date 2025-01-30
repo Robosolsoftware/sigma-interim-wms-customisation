@@ -11,6 +11,15 @@ codeunit 85013 "Purchase Event & Function"
         G_LocationCode: Code[20];
         G_PurchaseOrderNo: Code[20];
 
+    #Region Skip to create warehouse Receive GNA purchase line++++
+    [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", OnBeforePurchaseLineOnAfterGetRecord, '', false, false)]
+    local procedure OnBeforePurchaseLineOnAfterGetRecord(PurchaseLine: Record "Purchase Line"; var IsHandled: Boolean)
+    begin
+        if PurchaseLine."Unable to Receive" <> '' then
+            IsHandled := true;
+    end;
+    #EndRegion Skip to create warehouse Receive GNA purchase line++++
+
     #Region Skip Error meesage at the time of Release Purchase order from Upload Template+++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Batch Processing Mgt.", 'OnBatchProcessOnBeforeResetBatchID', '', false, false)]
     local procedure OnBatchProcessOnBeforeResetBatchID(var RecRef: RecordRef)

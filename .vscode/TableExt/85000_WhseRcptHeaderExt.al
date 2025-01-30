@@ -147,6 +147,12 @@ tableextension 85000 WhseRcptHeaderExt extends "Warehouse Receipt Header"
             Caption = 'Fridge Qty.';
             DataClassification = ToBeClassified;
         }
+        field(85035; "Allowed to Receive"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Warehouse Receipt Line" where("Unable to Receive" = const(''), "No." = field("No.")));
+            //This field used to filter on tasklet Receive Screen++
+        }
 
     }
     var

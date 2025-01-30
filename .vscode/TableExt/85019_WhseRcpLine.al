@@ -28,6 +28,22 @@ tableextension 85019 WHSERcpLineRBE extends "Warehouse Receipt Line"
             DataClassification = ToBeClassified;
             TableRelation = "Item Category";
         }
+        field(85007; "Unable to Receive"; Text[100])
+        {
+            trigger OnValidate()
+            var
+                L_PurchaseLine: Record "Purchase Line";
+            begin
+                L_PurchaseLine.Reset();
+                L_PurchaseLine.SetRange("Document Type", L_PurchaseLine."Document Type"::Order);
+                L_PurchaseLine.SetRange("Document No.", Rec."Source No.");
+                L_PurchaseLine.SetRange("Line No.", Rec."Source Line No.");
+                if L_PurchaseLine.FindFirst() then begin
+                    L_PurchaseLine."Unable to Receive" := Rec."Unable to Receive";
+                    L_PurchaseLine.Modify();
+                end;
+            end;
+        }
     }
 
     var

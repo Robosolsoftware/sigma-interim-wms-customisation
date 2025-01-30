@@ -15,6 +15,10 @@ pageextension 85024 WhseRcpSubformRbe extends "Whse. Receipt Subform"
                 ApplicationArea = all;
                 Editable = false;
             }
+            field("Unable to Receive"; Rec."Unable to Receive")
+            {
+                ApplicationArea = all;
+            }
             field(Brand; Rec.Brand)
             {
                 ApplicationArea = all;

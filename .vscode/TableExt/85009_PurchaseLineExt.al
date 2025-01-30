@@ -125,6 +125,10 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
         //     FieldClass = FlowField;
         //     CalcFormula = lookup("Purchase Header"."Order Date" where("Document Type" = field("Document Type"), "No." = field("Document No.")));
         // }
+        field(85142; "Unable to Receive"; Text[100])
+        {
+
+        }
         modify("Line Discount %")
         {
             trigger OnAfterValidate()

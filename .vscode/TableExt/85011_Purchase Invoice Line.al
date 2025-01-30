@@ -68,6 +68,10 @@ tableextension 85011 "SC Purch. Inv. Line" extends "Purch. Inv. Line"
             FieldClass = FlowField;
             CalcFormula = lookup("Purch. Inv. Header"."Order Date" where("No." = field("Document No.")));
         }
+        field(85142; "Unable to Receive"; Text[100])
+        {
+
+        }
     }
 
     keys

@@ -10,7 +10,7 @@ tableextension 85059 "SC Cust. Ledger Entry" extends "Cust. Ledger Entry"
         field(85060; "Closed By Doc. No."; Code[50])
         {
             FieldClass = FlowField;
-            CalcFormula = lookup("Cust. Ledger Entry"."Document No." where("Closed by Entry No." = field("Closed by Entry No.")));
+            CalcFormula = lookup("Cust. Ledger Entry"."Document No." where("Entry No." = field("Closed by Entry No."))); //, "Remaining Amount" = const(0)
         }
     }
 

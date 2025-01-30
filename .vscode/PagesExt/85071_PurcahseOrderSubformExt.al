@@ -119,6 +119,11 @@ pageextension 85071 PurcahseOrderSubformExt extends "Purchase Order Subform"
                 ApplicationArea = all;
                 Editable = false;
             }
+            field("Unable to Receive"; Rec."Unable to Receive")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
         }
         addafter(Quantity)
         {

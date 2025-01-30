@@ -68,6 +68,10 @@ tableextension 85010 "SC Purch. Rcpt. Line" extends "Purch. Rcpt. Line"
         //     FieldClass = FlowField;
         //     CalcFormula = lookup("Purch. Rcpt. Header"."Order Date" where("No." = field("Document No.")));
         // }
+        field(85142; "Unable to Receive"; Text[100])
+        {
+
+        }
     }
 
     keys
