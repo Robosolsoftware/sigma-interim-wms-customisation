@@ -15,6 +15,11 @@ pageextension 85058 "SC Sales Lines" extends "Sales Lines"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field(Rebate; Rec.Rebate)
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
         addlast(Control1)
         {

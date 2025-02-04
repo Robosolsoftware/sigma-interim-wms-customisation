@@ -58,6 +58,11 @@ pageextension 85035 "SC Sales Order Subform" extends "Sales Order Subform"
                     Rec.TestField(Quantity, 0);
                 end;
             }
+            field(Rebate; Rec.Rebate)
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("MLD %"; Rec."MLD %")
             {
                 ApplicationArea = All;

@@ -116,8 +116,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -129,8 +131,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -163,8 +167,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -177,8 +183,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -210,8 +218,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -224,8 +234,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -258,8 +270,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -272,8 +286,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -306,8 +322,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -320,8 +338,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -354,8 +374,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -368,8 +390,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -402,8 +426,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -416,8 +442,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -450,8 +478,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -464,8 +494,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -498,8 +530,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -512,8 +546,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -546,8 +582,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -560,8 +598,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -752,8 +792,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -765,8 +807,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -799,8 +843,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -813,8 +859,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
                             if L_PriceListLine."Line Discount %" <> 0 then
                                 Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -846,8 +894,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -860,8 +910,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -894,8 +946,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -908,8 +962,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -942,8 +998,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -956,8 +1014,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -990,8 +1050,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -1004,8 +1066,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -1038,8 +1102,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -1052,8 +1118,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -1086,9 +1154,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
                                     Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
@@ -1100,8 +1169,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -1134,8 +1205,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -1148,8 +1221,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
@@ -1182,8 +1257,10 @@ codeunit 85011 "Customer Price Group Changes"
                                     L_Item.SetRange("No.", Rec."No.");
                                     if L_Item.FindFirst() then
                                         Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else
+                                end else begin
                                     Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
 
 
                                 if L_PriceListLine."Line Discount %" <> 0 then
@@ -1196,8 +1273,10 @@ codeunit 85011 "Customer Price Group Changes"
                                 L_Item.SetRange("No.", Rec."No.");
                                 if L_Item.FindFirst() then
                                     Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else
+                            end else begin
                                 Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                            end;
 
 
                             if L_PriceListLine."Line Discount %" <> 0 then
