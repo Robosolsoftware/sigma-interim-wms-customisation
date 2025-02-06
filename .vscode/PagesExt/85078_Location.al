@@ -2,6 +2,13 @@ pageextension 85078 LocationExt extends "Location Card"
 {
     layout
     {
+        addafter("Bin Mandatory")
+        {
+            field("Zone Mandatory"; Rec."Zone Mandatory")
+            {
+                ApplicationArea = All;
+            }
+        }
         addlast(General)
         {
             field("GLN Number"; Rec."GLN Number")

@@ -62,5 +62,33 @@ tableextension 85027 LocationExt extends Location
                 end;
             end;
         }
+        field(85007; "Zone Mandatory"; Boolean)
+        {
+            AccessByPermission = TableData "Warehouse Source Filter" = R;
+            Caption = 'Zone Mandatory';
+
+            trigger OnValidate()
+            var
+                L_Bin: Record Bin;
+            begin
+                if Rec."Zone Mandatory" = true then begin
+                    L_Bin.Reset();
+                    L_Bin.SetRange("Location Code", Rec.Code);
+                    L_Bin.SetRange("Zone Code", '');
+                    if L_Bin.FindFirst() then begin
+                        Error('You cannot make this mandatory because there is a bin (%1) without a zone code. Please delete it or add the zone code before making this mandatory', L_Bin.Code);
+                    end;
+                end;
+
+                if Rec."Zone Mandatory" = false then begin
+                    L_Bin.Reset();
+                    L_Bin.SetRange("Location Code", Rec.Code);
+                    L_Bin.SetFilter("Zone Code", '<>%1', '');
+                    if L_Bin.FindFirst() then begin
+                        Error('You cannot make this non-mandatory because there is a bin (%1) with a zone code. Please delete it or remove the zone code before making this non-mandatory', L_Bin.Code);
+                    end;
+                end;
+            end;
+        }
     }
 }
