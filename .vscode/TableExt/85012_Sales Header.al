@@ -17,11 +17,12 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                     L_Customer.Reset();
                     L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                     if L_Customer.FindFirst() then begin
+                        // if L_Customer."Type of Account" = L_Customer."Type of Account"::Stock then begin
                         if Rec."IRP Order" = false then begin //As discussed with Adesh+++
                             L_Customer.TestField("QAU Approved");
                             L_Customer.TestField(Status, L_Customer.Status::Released);
                         end;
-
+                        //end;*///SBB-194 waiting for the confirmation
                         //Credit Limit++
                         Rec."Credit Limit Approval" := CheckCreditLimit.SalesHeaderCheck(Rec);
 
@@ -119,7 +120,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         //     end;
                         //This code moved into Ochannel Extension [For Manual, and Web Order all process]
 
-                        if Rec."Document Type" = Rec."Document Type"::"Return Order" then begin
+                        if ((Rec."Document Type" = Rec."Document Type"::"Return Order") OR (Rec."Document Type" = Rec."Document Type"::"Credit Memo")) then begin //SBB-228
                             Rec.Validate("Shipping Agent Code", L_Customer."Shipping Agent Code");
                             Rec.Validate("Shipping Agent Service Code", L_Customer."Shipping Agent Service Code");
                         end;

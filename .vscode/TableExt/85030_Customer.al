@@ -385,6 +385,11 @@ tableextension 85030 "SC Customer" extends Customer
         {
 
         }
+        /*field(85005; "Type of Account"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Stock,"Non-Stock";
+        }*///SBB-194 waiting for the confirmation
     }
 
     fieldgroups

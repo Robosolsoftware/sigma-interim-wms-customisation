@@ -2,6 +2,13 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
 {
     layout
     {
+        /*addafter("Location Code")
+        {
+            field("Type of Account"; Rec."Type of Account")
+            {
+                ApplicationArea = All;
+            }
+        }*///SBB-194 waiting for the confirmation
         #Region SBB-36+++
         addafter(Statistics)
         {
