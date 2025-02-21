@@ -7,9 +7,10 @@ pageextension 85030 "SC Posted Sales Invoice" extends "Posted Sales Invoice"
         {
             Visible = true;
         }
+
         addlast("Shipping Details")
         {
-            field("Shipping Agent Service Code"; Rec."Shipping Agent Service Code")
+            field("Shipping Agent Service Code 2"; Rec."Shipping Agent Service Code 2")
             {
                 ApplicationArea = All;
                 Editable = false;

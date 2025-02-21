@@ -696,7 +696,7 @@ codeunit 85012 "Sales Event & Function"
             L_SalesInvoiceHeader.Reset();
             L_SalesInvoiceHeader.SetRange("No.", SalesInvHdrNo);
             if L_SalesInvoiceHeader.FindFirst() then begin
-                L_SalesInvoiceHeader.Validate("Shipping Agent Service Code", SalesHeader."Shipping Agent Service Code");
+                L_SalesInvoiceHeader.Validate("Shipping Agent Service Code 2", SalesHeader."Shipping Agent Service Code");
                 L_SalesInvoiceHeader.Modify();
             end;
         end;

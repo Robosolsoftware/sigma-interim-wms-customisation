@@ -5,7 +5,7 @@ pageextension 85093 "SC Default Dimensions" extends "Default Dimensions"
         // Add changes to page layout here
         addafter("Dimension Value Code")
         {
-            field("Dimension Value Name"; Rec."Dimension Value Name")
+            field("Dimension Value Name 2"; Rec."Dimension Value Name 2")
             {
                 ApplicationArea = All;
                 Editable = false;
