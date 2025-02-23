@@ -114,7 +114,7 @@ codeunit 85009 SalesReturnOrderChanges
                 L_ToSalesHeader.SetRange("No.", ToSalesHeader."No.");
                 if L_ToSalesHeader.FindFirst() then begin
                     L_ToSalesHeader.Validate("Shipping Agent Code", L_SalesInvoiceHeader."Shipping Agent Code");
-                    L_ToSalesHeader.Validate("Shipping Agent Service Code", L_SalesInvoiceHeader."Shipping Agent Service Code");
+                    L_ToSalesHeader.Validate("Shipping Agent Service Code", L_SalesInvoiceHeader."Shipping Agent Service Code 2");
                     L_ToSalesHeader.Validate("Weekend Shipping Agent Code", L_SalesInvoiceHeader."Weekend Shipping Agent Code");
                     L_ToSalesHeader.Validate("Weekend Ship. Agnt. Serv. Code", L_SalesInvoiceHeader."Weekend Ship. Agnt. Serv. Code");
                     L_ToSalesHeader.Modify();
