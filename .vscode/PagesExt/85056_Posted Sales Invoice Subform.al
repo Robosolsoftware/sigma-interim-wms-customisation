@@ -43,3 +43,14 @@ pageextension 85056 "SC Posted SalesInvoice Subform" extends "Posted Sales Invoi
     var
         myInt: Integer;
 }
+
+pageextension 85126 "Ext Posted Sales Inv Card" extends "Posted Sales Invoice"
+{
+    layout
+    {
+        modify("Shipping Agent Service Code")
+        {
+            Visible = false;
+        }
+    }
+}
