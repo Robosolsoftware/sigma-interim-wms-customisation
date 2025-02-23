@@ -294,6 +294,7 @@ page 85014 "Posted Sales Invoices List"
                     end;
                 end;
             }
+
         }
     }
 }
