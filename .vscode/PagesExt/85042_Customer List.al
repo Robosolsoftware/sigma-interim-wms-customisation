@@ -20,10 +20,10 @@ pageextension 85042 "SC Customer List" extends "Customer List"
                 ApplicationArea = All;
                 Editable = false;
             }
-            /*field("Type of Account"; Rec."Type of Account")
+            field("Type of Account"; Rec."Type of Account")
             {
                 ApplicationArea = All;
-            }*///SBB-194 waiting for the confirmation
+            }
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;
