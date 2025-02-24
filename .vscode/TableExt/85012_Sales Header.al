@@ -17,15 +17,23 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                     L_Customer.Reset();
                     L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                     if L_Customer.FindFirst() then begin
-                        // if L_Customer."Type of Account" = L_Customer."Type of Account"::Stock then begin
-                        if Rec."IRP Order" = false then begin //As discussed with Adesh+++
-                            L_Customer.TestField("QAU Approved");
-                            L_Customer.TestField(Status, L_Customer.Status::Released);
+                        L_Customer.CalcFields("Balance (LCY)");
+                        if L_Customer."Type of Account" = L_Customer."Type of Account"::Stock then begin
+                            if Rec."IRP Order" = false then begin //As discussed with Adesh+++
+                                L_Customer.TestField("QAU Approved");
+                                L_Customer.TestField(Status, L_Customer.Status::Released);
+                            end;
                         end;
-                        //end;*///SBB-194 waiting for the confirmation
                         //Credit Limit++
-                        Rec."Credit Limit Approval" := CheckCreditLimit.SalesHeaderCheck(Rec);
+                        //Rec."Credit Limit Approval" := CheckCreditLimit.SalesHeaderCheck(Rec);
+                        Rec."Overdue Balance" := CheckCreditLimit.SalesHeaderCheck(Rec);
 
+                        if L_Customer."Balance (LCY)" > L_Customer."Credit Limit (LCY)" then
+                            Rec."Credit limit Exceeded" := true;
+
+
+                        if ((Rec."Credit limit Exceeded" = true) or (Rec."Overdue Balance" = true)) then
+                            Rec."Credit Limit Approval" := true;
 
                         Rec.Validate("Delivery Note", L_Customer."Delivery Note");
                         Rec.Validate("Collection Note", L_Customer."Collection Note");
@@ -506,6 +514,14 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
 
         }
         field(85176; "Hospital"; Boolean)
+        {
+
+        }
+        field(85006; "Credit limit Exceeded"; Boolean)
+        {
+
+        }
+        field(85007; "Overdue Balance"; Boolean)
         {
 
         }

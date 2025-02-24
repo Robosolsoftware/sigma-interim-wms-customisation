@@ -237,8 +237,8 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     if L_SalesHeader.FindFirst() then begin
                         if L_SalesHeader."IRP Order" = false then begin
                             //Credit Limit++
-                            L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                            L_SalesHeader.Modify();
+                            /*L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
+                            L_SalesHeader.Modify();*///Testing
                         end;
                     end;
                 end;
@@ -259,8 +259,8 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     if L_SalesHeader.FindFirst() then begin
                         if L_SalesHeader."IRP Order" = false then begin
                             //Credit Limit++
-                            L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                            L_SalesHeader.Modify();
+                            /*   L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
+                               L_SalesHeader.Modify();*///Testing
                         end;
                     end;
                 end;
@@ -321,8 +321,8 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                             // end;
 
                             //Credit Limit++
-                            L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                            L_SalesHeader.Modify();
+                            /*  L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
+                              L_SalesHeader.Modify();*///Testing
                         end;
                     end;
                 end;
@@ -389,8 +389,8 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
 
 
                             //Credit Limit++
-                            L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                            L_SalesHeader.Modify();
+                            /*L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
+                            L_SalesHeader.Modify();*///Testing
                         end;
                     end;
                 end;
