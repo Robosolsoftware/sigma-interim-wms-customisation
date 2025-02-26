@@ -88,6 +88,12 @@ tableextension 85028 "SC User Setup" extends "User Setup"
             DataClassification = ToBeClassified;
             Caption = 'SO Release Specialist (Non Export)';
         }
+        field(85024; "Edit Credit/Overdue"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Edit Customer Credit Check/Overdue Check';
+        }
+
     }
 
     keys

@@ -249,7 +249,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             }
             field(Hospital; Rec.Hospital)
             {
-                Caption = 'Exempt from credit check';
+                // Caption = 'Exempt from credit check';
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
             }
