@@ -17,5 +17,9 @@ tableextension 85024 "Ext Request To Approve" extends 454
             FieldClass = FlowField;
             CalcFormula = lookup("Sales Header"."Shortcut Dimension 3 Code" where("No." = field("Document No.")));
         }
+        field(85027; "Running Total MOV"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }

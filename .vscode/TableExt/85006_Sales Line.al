@@ -2,6 +2,7 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
 {
     fields
     {
+
         field(85000; "Total Physical"; Decimal)
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("No."), "Unit of Measure Code" = FIELD("Unit of Measure Code")));
@@ -236,6 +237,9 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                     L_SalesHeader.SetRange("No.", Rec."Document No.");
                     if L_SalesHeader.FindFirst() then begin
                         if L_SalesHeader."IRP Order" = false then begin
+                            if Quantity <> Round(Quantity, 1) then begin
+                                Validate(Quantity, Round(Quantity, 1, '>'));
+                            end;
                             //Credit Limit++
                             /*L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
                             L_SalesHeader.Modify();*///Testing
