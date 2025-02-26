@@ -93,6 +93,10 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
                 ApplicationArea = All;
                 ToolTip = 'The selected user has the ability to edit the fields within the Finance(AR) Team tab on the Vendor & Customer Card.';
             }
+            field("Edit Credit/Overdue"; Rec."Edit Credit/Overdue")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

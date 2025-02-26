@@ -91,7 +91,9 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
             }
             field(Hospital; Rec.Hospital)
             {
+                Caption = 'Exempt from credit check';
                 ApplicationArea = All;
+
 
                 trigger OnValidate()
                 var
@@ -105,6 +107,16 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                         end;
                     end;
                 end;
+            }
+            field("Credit limit Exceeded"; Rec."Credit limit Exceeded")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Overdue Balance"; Rec."Overdue Balance")
+            {
+                ApplicationArea = All;
+                Editable = false;
             }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {

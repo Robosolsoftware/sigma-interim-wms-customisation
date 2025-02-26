@@ -2,13 +2,13 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
 {
     layout
     {
-        /*addafter("Location Code")
+        addafter("Location Code")
         {
             field("Type of Account"; Rec."Type of Account")
             {
                 ApplicationArea = All;
             }
-        }*///SBB-194 waiting for the confirmation
+        }
         #Region SBB-36+++
         addafter(Statistics)
         {
@@ -249,8 +249,19 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             }
             field(Hospital; Rec.Hospital)
             {
+                // Caption = 'Exempt from credit check';
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
+            }
+            field("Credit limit Exceeded"; Rec."Credit limit Exceeded")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Overdue Balance"; Rec."Overdue Balance")
+            {
+                ApplicationArea = All;
+                Editable = false;
             }
 
         }
@@ -310,6 +321,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         USEditable: Boolean;
         G_FinanceTeam: Boolean;
         G_TransportTeam: Boolean;
+        test: Codeunit 8800;
 
 
     trigger OnAfterGetRecord()
