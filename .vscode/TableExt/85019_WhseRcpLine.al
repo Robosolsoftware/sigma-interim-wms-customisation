@@ -44,6 +44,15 @@ tableextension 85019 WHSERcpLineRBE extends "Warehouse Receipt Line"
                 end;
             end;
         }
+        field(85006; "Transportation No."; Code[20])
+        {
+
+        }
+        field(85008; "Receipt Status"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Transportation Receipt Status';
+        }
     }
 
     var

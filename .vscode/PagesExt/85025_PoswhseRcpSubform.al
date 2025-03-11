@@ -25,6 +25,11 @@ pageextension 85025 POWhseRcpSubformRbe extends "Posted Whse. Receipt Subform"
                 ApplicationArea = all;
                 Editable = false;
             }
+            field("Receipt Status"; Rec."Receipt Status")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
 
         }
     }

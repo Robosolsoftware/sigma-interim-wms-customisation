@@ -21,5 +21,9 @@ tableextension 85024 "Ext Request To Approve" extends 454
         {
             DataClassification = ToBeClassified;
         }
+        field(85028; "Running Total Achieved"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }

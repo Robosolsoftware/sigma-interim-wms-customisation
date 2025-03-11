@@ -4,6 +4,16 @@ pageextension 85032 "SC Sales Order List" extends "Sales Order List"
     {
         addlast(Control1)
         {
+            field("Shipping No."; Rec."Shipping No.")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+            field("Posting No."; Rec."Posting No.")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
@@ -75,6 +85,18 @@ pageextension 85032 "SC Sales Order List" extends "Sales Order List"
             //         L_WarehouseshipmentLine.DeleteAll();
             //     end;
             // }
+            // action("Knaap")
+            // {
+            //     ApplicationArea = All;
+            //     trigger OnAction()
+            //     var
+            //         PostItemReclass: Codeunit "Post Item Reclassification";
+            //     begin
+            //         PostItemReclass.Run();
+
+            //     end;
+            // }
+
         }
     }
 

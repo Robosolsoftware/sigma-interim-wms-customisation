@@ -249,19 +249,22 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             }
             field(Hospital; Rec.Hospital)
             {
-                // Caption = 'Exempt from credit check';
+                Caption = 'Exempt from Credit check / Overdue check';
                 ApplicationArea = All;
                 Editable = L_CurrPageEditable;
+                //Editable = L_CreditCheckEditable;
             }
             field("Credit limit Exceeded"; Rec."Credit limit Exceeded")
             {
                 ApplicationArea = All;
                 Editable = false;
+                Visible = false;
             }
             field("Overdue Balance"; Rec."Overdue Balance")
             {
                 ApplicationArea = All;
                 Editable = false;
+                Visible = false;
             }
 
         }
@@ -322,18 +325,21 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         G_FinanceTeam: Boolean;
         G_TransportTeam: Boolean;
         test: Codeunit 8800;
+        L_CreditCheckEditable: Boolean;
 
 
     trigger OnAfterGetRecord()
     var
         L_UserSetup: Record "User Setup";
         usersetup: Record "User Setup";
+
     begin
         Clear(L_CurrPageEditable);
         Clear(L_EditableQUAApproved);
         Clear(L_EditableStatus);
         Clear(G_FinanceTeam);
         Clear(G_TransportTeam);
+        Clear(L_CreditCheckEditable);
 
         L_UserSetup.Reset();
         L_UserSetup.SetRange("User ID", UserId);
@@ -358,6 +364,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
 
         if Rec.Status = Rec.Status::Open then begin
             L_CurrPageEditable := true;
+            L_CreditCheckEditable := true;
             //L_EditableQUAApproved := true;
             L_EditableStatus := true;
         end else begin
@@ -367,6 +374,7 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 if L_UserSetup."Edit Master Data" = true then begin
                     if Rec.Status = Rec.Status::Open then
                         L_CurrPageEditable := true
+
                     else
                         L_CurrPageEditable := false;
                 end else
@@ -403,6 +411,14 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
             USEditable := true;
         end else
             USEditable := false;
+
+        usersetup.Reset();
+        usersetup.SetRange("User ID", UserId);
+        usersetup.SetRange("Edit Credit/Overdue", true);
+        if usersetup.FindFirst() then begin
+            L_CreditCheckEditable := true;
+        end else
+            L_CreditCheckEditable := false;
     end;
 
     trigger OnOpenPage()

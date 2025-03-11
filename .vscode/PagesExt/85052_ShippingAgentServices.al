@@ -39,7 +39,7 @@ pageextension 85052 ShippingAgentServices extends "Shipping Agent Services"
                 begin
                     L_UserSetup.Reset();
                     L_UserSetup.SetRange("User ID", UserId);
-                    L_UserSetup.SetRange("Edit Master Data", true);
+                    L_UserSetup.SetRange("Edit Shipping Agent", true);
                     if not L_UserSetup.FindFirst() then
                         Error('You do not have permission to edit');
 
@@ -85,7 +85,7 @@ pageextension 85052 ShippingAgentServices extends "Shipping Agent Services"
             L_UserSetup.Reset();
             L_UserSetup.SetRange("User ID", UserId);
             if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data" = true then begin
+                if L_UserSetup."Edit Shipping Agent" = true then begin
                     if Rec.Status = Rec.Status::Open then
                         L_CurrPageEditable := true
                     else
@@ -98,7 +98,7 @@ pageextension 85052 ShippingAgentServices extends "Shipping Agent Services"
             L_UserSetup.Reset();
             L_UserSetup.SetRange("User ID", UserId);
             if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data" = true then
+                if L_UserSetup."Edit Shipping Agent" = true then
                     L_EditableStatus := true
                 else
                     L_EditableStatus := false;
@@ -120,7 +120,7 @@ pageextension 85052 ShippingAgentServices extends "Shipping Agent Services"
             L_UserSetup.Reset();
             L_UserSetup.SetRange("User ID", UserId);
             if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data" = true then begin
+                if L_UserSetup."Edit Shipping Agent" = true then begin
                     if Rec.Status = Rec.Status::Open then
                         L_CurrPageEditable := true
                     else
@@ -133,7 +133,7 @@ pageextension 85052 ShippingAgentServices extends "Shipping Agent Services"
             L_UserSetup.Reset();
             L_UserSetup.SetRange("User ID", UserId);
             if L_UserSetup.FindFirst() then begin
-                if L_UserSetup."Edit Master Data" = true then
+                if L_UserSetup."Edit Shipping Agent" = true then
                     L_EditableStatus := true
                 else
                     L_EditableStatus := false;

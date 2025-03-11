@@ -10,6 +10,16 @@ pageextension 85024 WhseRcpSubformRbe extends "Whse. Receipt Subform"
 
         addafter(Description)
         {
+            // field("Transportation No."; Rec."Transportation No.")
+            // {
+            //     ApplicationArea = all;
+            //     Editable = false;
+            // }
+            field("Receipt Status"; Rec."Receipt Status")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
             field("Warehouse Class Code"; Rec."Warehouse Class Code")
             {
                 ApplicationArea = all;

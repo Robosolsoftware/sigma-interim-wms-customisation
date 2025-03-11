@@ -23,6 +23,11 @@ pageextension 85020 "Ext Request to Approve" extends "Requests to Approve"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Running Total Achieved"; Rec."Running Total Achieved")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("Customer Type"; Rec."Customer Type")
             {
                 ApplicationArea = All;
@@ -36,13 +41,16 @@ pageextension 85020 "Ext Request to Approve" extends "Requests to Approve"
     begin
         salesH.Reset();
         salesH.SetRange("Sell-to Customer No.", Rec."Customer No.");
-        salesH.SetRange(Status, salesH.Status::"Pending Approval");
+        salesH.SetFilter(Status, '%1|%2', salesH.Status::"Pending Approval", salesH.Status::Released);
         salesH.SetRange("Order Date", WorkDate());
         if salesH.FindSet() then begin
             repeat
                 salesH.CalcFields("Amount Including VAT");
                 Rec."Running Total MOV" += salesH."Amount Including VAT";
             until salesH.Next() = 0;
+
+            if rec."Running Total MOV" >= rec."Min Order Value" then
+                Rec."Running Total Achieved" := true;
 
         end;
 

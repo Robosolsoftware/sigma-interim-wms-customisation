@@ -88,10 +88,11 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
             {
                 ApplicationArea = All;
                 Editable = false;
+                Caption = 'Credit Limit/Overdue Approval';
             }
             field(Hospital; Rec.Hospital)
             {
-                Caption = 'Exempt from credit check';
+                Caption = 'Exempt from Credit check / Overdue check';
                 ApplicationArea = All;
 
 
@@ -104,6 +105,9 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
                         L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                         if L_Customer.FindFirst() then begin
                             L_Customer.TestField(Hospital);
+                            Rec."Credit limit Exceeded" := false;
+                            Rec."Overdue Balance" := false;
+                            Rec."Credit Limit Approval" := false;
                         end;
                     end;
                 end;
@@ -112,11 +116,13 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
             {
                 ApplicationArea = All;
                 Editable = false;
+                Visible = false;
             }
             field("Overdue Balance"; Rec."Overdue Balance")
             {
                 ApplicationArea = All;
                 Editable = false;
+                Visible = false;
             }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {

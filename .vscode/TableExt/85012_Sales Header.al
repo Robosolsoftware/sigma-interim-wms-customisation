@@ -12,6 +12,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                 L_ShipingAgentService: Record "Shipping Agent Services";
                 L_BlankDatFormula: DateFormula;
                 CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
+                L_BilltoCustomer: Record Customer;
             begin
                 if Rec."Sell-to Customer No." <> '' then begin
                     L_Customer.Reset();
@@ -25,15 +26,24 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                             end;
                         end;
                         //Credit Limit++
-                        //Rec."Credit Limit Approval" := CheckCreditLimit.SalesHeaderCheck(Rec);
-                        Rec."Overdue Balance" := CheckCreditLimit.SalesHeaderCheck(Rec);
+                        Rec."Credit Limit Approval" := CheckCreditLimit.SalesHeaderCheck(Rec);
+                        // Rec."Overdue Balance" := CheckCreditLimit.SalesHeaderCheck(Rec);
 
-                        if L_Customer."Balance (LCY)" > L_Customer."Credit Limit (LCY)" then
-                            Rec."Credit limit Exceeded" := true;
+                        // if L_Customer."Bill-to Customer No." <> '' then begin
+                        //     L_BilltoCustomer.Reset();
+                        //     L_BilltoCustomer.SetRange("No.", L_Customer."Bill-to Customer No.");
+                        //     if L_BilltoCustomer.FindFirst() then begin
+                        //         L_BilltoCustomer.CalcFields("Balance (LCY)");
+                        //         if L_BilltoCustomer."Balance (LCY)" > L_BilltoCustomer."Credit Limit (LCY)" then
+                        //             Rec."Credit limit Exceeded" := true;
+                        //     end;
+                        // end else begin
+                        //     if L_Customer."Balance (LCY)" > L_Customer."Credit Limit (LCY)" then
+                        //         Rec."Credit limit Exceeded" := true;
+                        // end;
 
-
-                        if ((Rec."Credit limit Exceeded" = true) or (Rec."Overdue Balance" = true)) then
-                            Rec."Credit Limit Approval" := true;
+                        // if ((Rec."Credit limit Exceeded" = true) or (Rec."Overdue Balance" = true)) then
+                        //     Rec."Credit Limit Approval" := true;
 
                         Rec.Validate("Delivery Note", L_Customer."Delivery Note");
                         Rec.Validate("Collection Note", L_Customer."Collection Note");

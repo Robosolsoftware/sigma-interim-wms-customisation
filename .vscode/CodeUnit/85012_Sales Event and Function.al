@@ -804,4 +804,42 @@ codeunit 85012 "Sales Event & Function"
             CustLedgerEntry."Assigned Credit Controller" := L_Customer."Assigned Credit Controller";
         end;
     end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnPostApprovalEntriesOnAfterApprovalEntrySetFilters', '', false, false)]
+    local procedure OnPostApprovalEntriesOnAfterApprovalEntrySetFilters(var ApprovalEntry: Record "Approval Entry")
+    var
+        SalesHeader: Record "Sales Header";
+        RemainingApprovals: Record "Approval Entry";
+        L_Date: Record Date;
+    begin
+        if ApprovalEntry."Table ID" = 36 then begin
+            SalesHeader.Reset();
+            SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
+            SalesHeader.SetRange("No.", ApprovalEntry."Document No.");
+            if SalesHeader.FindFirst() then begin
+                RemainingApprovals.Reset();
+                RemainingApprovals.SetRange("Table ID", Database::"Sales Header");
+                RemainingApprovals.SetRange("Document No.", SalesHeader."No.");
+                RemainingApprovals.SetRange(Status, RemainingApprovals.Status::Open);
+                if RemainingApprovals.IsEmpty() then begin
+                    L_Date.Reset();
+                    L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
+                    L_Date.SetRange(L_Date."Period Start", Today);
+                    if L_Date.FindFirst() then begin
+                        if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
+                            if SalesHeader."Weekend Ship. Agnt. Serv. Code" <> '' then
+                                //Update Saturday++
+                                SalesHeader.Validate("Shipment Date", CalcDate('<+1D>', Today))
+                            else begin
+                                //Update Monday
+                                SalesHeader.Validate("Shipment Date", CalcDate('<+3D>', Today))
+                            end;
+                        end else
+                            SalesHeader.Validate("Shipment Date", CalcDate('<+1D>', Today));
+                    end;
+                    SalesHeader.Modify();
+                end;
+            end;
+        end;
+    end;
 }

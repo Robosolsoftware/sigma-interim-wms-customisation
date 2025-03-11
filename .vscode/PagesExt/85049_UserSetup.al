@@ -20,7 +20,12 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             field("Edit Master Data"; Rec."Edit Master Data")
             {
                 ApplicationArea = All;
-                ToolTip = 'Master Data consists of Customers, Items, Vendors, Shipment Agent, Shipping Agent Service Code';
+                ToolTip = 'Master Data consists of Customers, Items, Vendors';
+            }
+            field("Edit Shipping Agent"; Rec."Edit Shipping Agent")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Edit Shipping Agent & Shipping Agent Service Code';
             }
             field("Edit Master Data QAU Approved"; Rec."Edit Master Data QAU Approved")
             {
@@ -97,6 +102,7 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+
         }
     }
 

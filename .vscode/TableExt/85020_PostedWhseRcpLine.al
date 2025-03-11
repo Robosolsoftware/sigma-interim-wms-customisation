@@ -28,6 +28,15 @@ tableextension 85020 POWHSERcpLineRBE extends "Posted Whse. Receipt Line"
             DataClassification = ToBeClassified;
             TableRelation = "Item Category";
         }
+        field(85006; "Transportation No."; Code[20])
+        {
+
+        }
+        field(85008; "Receipt Status"; Text[50])
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Transportation Receipt Status';
+        }
     }
 
     var

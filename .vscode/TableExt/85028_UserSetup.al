@@ -93,6 +93,12 @@ tableextension 85028 "SC User Setup" extends "User Setup"
             DataClassification = ToBeClassified;
             Caption = 'Edit Customer Credit Check/Overdue Check';
         }
+        field(85025; "Edit Shipping Agent"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Edit Shipping Agent Code/Service';
+        }
+
 
     }
 
