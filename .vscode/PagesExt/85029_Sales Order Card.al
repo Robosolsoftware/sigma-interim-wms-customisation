@@ -53,6 +53,14 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
         }
         addlast(General)
         {
+            field("Shipping No."; Rec."Shipping No.")
+            {
+                ApplicationArea = All;
+            }
+            field("Posting No."; Rec."Posting No.")
+            {
+                ApplicationArea = All;
+            }
             field("Shortcut Dimension 3 Code"; Rec."Shortcut Dimension 3 Code")
             {
                 ApplicationArea = All;
