@@ -9,14 +9,13 @@ codeunit 85009 SalesReturnOrderChanges
         myInt: Integer;
 
 
-
+    #Region Update Line Location+++
     [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnAfterGetPstdDocLinesToReverse', '', true, true)]
     local procedure UpdateLocationCode(var SalesHeader: Record "Sales Header")
     var
         L_SalesLine: Record "Sales Line";
         L_Location: Record Location;
     begin
-        //Update Line Location+++
         if SalesHeader."Document Type" = SalesHeader."Document Type"::"Return Order" then begin
             L_Location.Reset();
             L_Location.SetRange("Sales Return Location", true);
@@ -43,6 +42,21 @@ codeunit 85009 SalesReturnOrderChanges
             end;
         end;
     end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Sales Header", OnAfterValidateEvent, 'Sell-to Customer No.', false, false)]
+    local procedure OnAfterValidateEvent_SellCustomerNo(var Rec: Record "Sales Header")
+    var
+        L_Location: Record Location;
+    begin
+        if Rec."Document Type" = Rec."Document Type"::"Return Order" then begin
+            L_Location.Reset();
+            L_Location.SetRange("Sales Return Location", true);
+            if L_Location.FindFirst() then begin
+                Rec.Validate("Location Code", L_Location.Code);
+            end;
+        end;
+    end;
+    #EndRegion Update Line Location+++
 
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnAfterCopySalesInvLine', '', true, true)]

@@ -239,6 +239,7 @@ report 85000 "Direct Debit Payments"
         L_TransferAmount: Decimal;
         LastGenLine: Record "Gen. Journal Line";
         L_DirectDebitMandate: Record "SEPA Direct Debit Mandate";
+        L_CustomerBankAcc: Record "Customer Bank Account";
     begin
         // code added to add the totatl transfer Amount for 1 Customer ++
         IF L_CustomerNo <> CustomerLedgerEntry."Customer No." then begin
@@ -258,8 +259,17 @@ report 85000 "Direct Debit Payments"
                     L_DirectDebitMandate.SetRange("Customer No.", CustomerLedgerEntry."Customer No.");
                     L_DirectDebitMandate.SetRange(Blocked, false);
                     if L_DirectDebitMandate.FindFirst() then begin
-                        Rec_CustomerLedgerEntry.CalcFields("Remaining Amount");
-                        L_TransferAmount := L_TransferAmount + Rec_CustomerLedgerEntry."Remaining Amount";
+                        L_CustomerBankAcc.Reset();
+                        L_CustomerBankAcc.SetRange("Customer No.", L_DirectDebitMandate."Customer No.");
+                        L_CustomerBankAcc.SetRange(Code, L_DirectDebitMandate."Customer Bank Account Code");
+                        L_CustomerBankAcc.SetRange(Active, true);
+                        L_CustomerBankAcc.SetRange("DD Mandate Generated", true);
+                        if L_CustomerBankAcc.FindFirst() then begin
+                            Rec_CustomerLedgerEntry.CalcFields("Remaining Amount");
+                            L_TransferAmount := L_TransferAmount + Rec_CustomerLedgerEntry."Remaining Amount";
+                        end;
+                        // Rec_CustomerLedgerEntry.CalcFields("Remaining Amount");
+                        // L_TransferAmount := L_TransferAmount + Rec_CustomerLedgerEntry."Remaining Amount";
                     end;
                 until Rec_CustomerLedgerEntry.Next() = 0;
             end;

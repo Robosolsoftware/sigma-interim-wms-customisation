@@ -62,5 +62,8 @@ permissionset 85000 SigmaCustomization
         report "Direct Debit Payments" = X,
         codeunit "Manage Master Block" = X,
         page "Posted Sales Invoices List" = X,
-        codeunit "Adjust Cost Changes" = X;
+        codeunit "Adjust Cost Changes" = X,
+        codeunit "Auto Update Credit/Overdue" = X,
+        page "Bins By Location" = X,
+        query "Power BI Purchase List 1" = X;
 }
