@@ -84,7 +84,7 @@ codeunit 85002 "Post Item Reclassification"
                             if L_BinContent.FindSet() then begin
                                 repeat
                                     if RequiredQuantity = 0 then
-                                        exit;
+                                        break;
 
                                     Clear(AvailableQuantity);
                                     AvailableQuantity := L_BinContent.CalcQtyAvailToTakeUOM();
@@ -115,8 +115,10 @@ codeunit 85002 "Post Item Reclassification"
                                             G_ItemJournalLine.Insert(true);
                                             Commit();
 
-                                            if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then;
-                                            exit;
+                                            if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then
+                                                break
+                                            else
+                                                Error(GetLastErrorText());
                                         end
                                         //  break;
                                     end else begin
@@ -146,10 +148,11 @@ codeunit 85002 "Post Item Reclassification"
                                                 G_ItemJournalLine.Insert(true);
                                                 Commit();
 
+                                                if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then
+                                                    RequiredQuantity := RequiredQuantity - AvailableQuantity
+                                                else
+                                                    Error(GetLastErrorText());
 
-                                                RequiredQuantity := RequiredQuantity - AvailableQuantity;
-
-                                                if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then;
                                             end
                                             //  break;
                                         end;
