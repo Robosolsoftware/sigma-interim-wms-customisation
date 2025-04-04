@@ -51,79 +51,50 @@ codeunit 85002 "Post Item Reclassification"
 
         if KnappQuery.Open() then begin
             while KnappQuery.Read() do begin
-                Clear(RequiredQuantity);
-                RequiredQuantity := Abs(KnappQuery.Quantity);
+                if KnappQuery.Quantity < 0 then begin
+                    Clear(RequiredQuantity);
+                    RequiredQuantity := Abs(KnappQuery.Quantity);
 
-                IsItemVariantMandatory := false;
-                L_Item.Reset();
-                if L_Item.Get(KnappQuery.Item_No_) then begin
-                    L_Item.CalcFields("Variant Exist");
-                    if L_Item."Variant Exist" = true then begin
-                        if KnappQuery.Variant_Code <> '' then
-                            IsItemVariantMandatory := true;
-                    end
-                    else begin
-                        IsItemVariantMandatory := true;
-                    end;
-                end;
-
-                if (RequiredQuantity > 0) and (IsItemVariantMandatory = true) then begin
-                    G_Zone.Reset();
-                    G_Zone.SetFilter("Replenishment Priority", '<>0');
-                    G_Zone.SetCurrentKey("Replenishment Priority");
-                    G_Zone.Ascending(true);
-                    if G_Zone.FindSet() then begin
-                        repeat
-                            Clear(BinCode);
-                            L_BinContent.Reset();
-                            L_BinContent.SetRange("Location Code", P_SaleableLocation);
-                            L_BinContent.SetRange("Zone Code", G_Zone.Code);
-                            L_BinContent.SetRange("Item No.", KnappQuery.Item_No_);
+                    IsItemVariantMandatory := false;
+                    L_Item.Reset();
+                    if L_Item.Get(KnappQuery.Item_No_) then begin
+                        L_Item.CalcFields("Variant Exist");
+                        if L_Item."Variant Exist" = true then begin
                             if KnappQuery.Variant_Code <> '' then
-                                L_BinContent.SetRange("Variant Code", KnappQuery.Variant_Code);
-                            if L_BinContent.FindSet() then begin
-                                repeat
-                                    if RequiredQuantity = 0 then
-                                        break;
+                                IsItemVariantMandatory := true;
+                        end
+                        else begin
+                            IsItemVariantMandatory := true;
+                        end;
+                    end;
 
-                                    Clear(AvailableQuantity);
-                                    AvailableQuantity := L_BinContent.CalcQtyAvailToTakeUOM();
+                    if (RequiredQuantity > 0) and (IsItemVariantMandatory = true) then begin
+                        G_Zone.Reset();
+                        G_Zone.SetFilter("Replenishment Priority", '<>0');
+                        G_Zone.SetCurrentKey("Replenishment Priority");
+                        G_Zone.Ascending(true);
+                        if G_Zone.FindSet() then begin
+                            repeat
+                                if RequiredQuantity <= 0 then
+                                    break;
 
-                                    Clear(BinCode);
-                                    if RequiredQuantity <= AvailableQuantity then begin
-                                        BinCode := L_BinContent."Bin Code";
-                                        if BinCode <> '' then begin
-                                            G_ItemJournalLine.Reset();
-                                            G_ItemJournalLine.Init();
-                                            G_ItemJournalLine.Validate("Journal Template Name", 'TRANSFER');
-                                            G_ItemJournalLine.Validate("Journal Batch Name", 'KNAPP');
-                                            G_ItemJournalLine.Validate("Line No.", GetLastLineNo());
-                                            G_ItemJournalLine.Validate("Entry Type", G_ItemJournalLine."Entry Type"::Transfer);
+                                Clear(BinCode);
+                                L_BinContent.Reset();
+                                L_BinContent.SetRange("Location Code", P_SaleableLocation);
+                                L_BinContent.SetRange("Zone Code", G_Zone.Code);
+                                L_BinContent.SetRange("Item No.", KnappQuery.Item_No_);
+                                if KnappQuery.Variant_Code <> '' then
+                                    L_BinContent.SetRange("Variant Code", KnappQuery.Variant_Code);
+                                if L_BinContent.FindSet() then begin
+                                    repeat
+                                        if RequiredQuantity <= 0 then
+                                            break;
 
-                                            L_InventorySetup.Get();
-                                            G_ItemJournalLine."Document No." := NoSeriesManagement.GetNextNo(L_InventorySetup."Knapp Replenishment No. Series", WorkDate());
+                                        Clear(AvailableQuantity);
+                                        AvailableQuantity := L_BinContent.CalcQtyAvailToTakeUOM();
 
-                                            G_ItemJournalLine.Validate("Item No.", KnappQuery.Item_No_);
-                                            if KnappQuery.Variant_Code <> '' then
-                                                G_ItemJournalLine.Validate("Variant Code", KnappQuery.Variant_Code);
-                                            G_ItemJournalLine.Validate(Quantity, RequiredQuantity);
-                                            G_ItemJournalLine.Validate("Location Code", P_SaleableLocation);
-                                            G_ItemJournalLine.Validate("New Location Code", P_KnappLocation);
-                                            G_ItemJournalLine.Validate("Bin Code", BinCode);
-                                            G_ItemJournalLine.Validate("Posting Date", Today);
-                                            G_ItemJournalLine.Validate("Source Code", 'RECLASSJNL');
-                                            G_ItemJournalLine.Insert(true);
-                                            Commit();
-
-                                            if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then
-                                                break
-                                            else
-                                                Error(GetLastErrorText());
-                                        end
-                                        //  break;
-                                    end else begin
-                                        if AvailableQuantity > 0 then begin
-                                            //RequiredQuantity := AvailableQuantity;
+                                        Clear(BinCode);
+                                        if RequiredQuantity <= AvailableQuantity then begin
                                             BinCode := L_BinContent."Bin Code";
                                             if BinCode <> '' then begin
                                                 G_ItemJournalLine.Reset();
@@ -139,7 +110,7 @@ codeunit 85002 "Post Item Reclassification"
                                                 G_ItemJournalLine.Validate("Item No.", KnappQuery.Item_No_);
                                                 if KnappQuery.Variant_Code <> '' then
                                                     G_ItemJournalLine.Validate("Variant Code", KnappQuery.Variant_Code);
-                                                G_ItemJournalLine.Validate(Quantity, AvailableQuantity);
+                                                G_ItemJournalLine.Validate(Quantity, RequiredQuantity);
                                                 G_ItemJournalLine.Validate("Location Code", P_SaleableLocation);
                                                 G_ItemJournalLine.Validate("New Location Code", P_KnappLocation);
                                                 G_ItemJournalLine.Validate("Bin Code", BinCode);
@@ -148,71 +119,106 @@ codeunit 85002 "Post Item Reclassification"
                                                 G_ItemJournalLine.Insert(true);
                                                 Commit();
 
-                                                if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then
-                                                    RequiredQuantity := RequiredQuantity - AvailableQuantity
-                                                else
+                                                if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then begin
+                                                    RequiredQuantity := RequiredQuantity - AvailableQuantity;
+                                                    break;
+                                                end else
                                                     Error(GetLastErrorText());
-
                                             end
                                             //  break;
+                                        end else begin
+                                            if AvailableQuantity > 0 then begin
+                                                //RequiredQuantity := AvailableQuantity;
+                                                BinCode := L_BinContent."Bin Code";
+                                                if BinCode <> '' then begin
+                                                    G_ItemJournalLine.Reset();
+                                                    G_ItemJournalLine.Init();
+                                                    G_ItemJournalLine.Validate("Journal Template Name", 'TRANSFER');
+                                                    G_ItemJournalLine.Validate("Journal Batch Name", 'KNAPP');
+                                                    G_ItemJournalLine.Validate("Line No.", GetLastLineNo());
+                                                    G_ItemJournalLine.Validate("Entry Type", G_ItemJournalLine."Entry Type"::Transfer);
+
+                                                    L_InventorySetup.Get();
+                                                    G_ItemJournalLine."Document No." := NoSeriesManagement.GetNextNo(L_InventorySetup."Knapp Replenishment No. Series", WorkDate());
+
+                                                    G_ItemJournalLine.Validate("Item No.", KnappQuery.Item_No_);
+                                                    if KnappQuery.Variant_Code <> '' then
+                                                        G_ItemJournalLine.Validate("Variant Code", KnappQuery.Variant_Code);
+                                                    G_ItemJournalLine.Validate(Quantity, AvailableQuantity);
+                                                    G_ItemJournalLine.Validate("Location Code", P_SaleableLocation);
+                                                    G_ItemJournalLine.Validate("New Location Code", P_KnappLocation);
+                                                    G_ItemJournalLine.Validate("Bin Code", BinCode);
+                                                    G_ItemJournalLine.Validate("Posting Date", Today);
+                                                    G_ItemJournalLine.Validate("Source Code", 'RECLASSJNL');
+                                                    G_ItemJournalLine.Insert(true);
+                                                    Commit();
+
+                                                    if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then
+                                                        RequiredQuantity := RequiredQuantity - AvailableQuantity
+                                                    else
+                                                        Error(GetLastErrorText());
+
+                                                end
+                                                //  break;
+                                            end;
                                         end;
-                                    end;
-                                until L_BinContent.Next() = 0;
-                            end;
+                                    until L_BinContent.Next() = 0;
+                                end;
 
-                        //if BinCode <> '' then
-                        //  break;
-                        until G_Zone.Next() = 0;
+                            //if BinCode <> '' then
+                            //  break;
+                            until G_Zone.Next() = 0;
+                        end;
+
+                        /*if BinCode <> '' then begin
+                            G_ItemJournalLine.Reset();
+                            G_ItemJournalLine.Init();
+                            G_ItemJournalLine.Validate("Journal Template Name", 'TRANSFER');
+                            G_ItemJournalLine.Validate("Journal Batch Name", 'KNAPP');
+                            G_ItemJournalLine.Validate("Line No.", GetLastLineNo());
+                            G_ItemJournalLine.Validate("Entry Type", G_ItemJournalLine."Entry Type"::Transfer);
+
+                            L_InventorySetup.Get();
+                            G_ItemJournalLine."Document No." := NoSeriesManagement.GetNextNo(L_InventorySetup."Knapp Replenishment No. Series", WorkDate());
+
+                            G_ItemJournalLine.Validate("Item No.", KnappQuery.Item_No_);
+                            if KnappQuery.Variant_Code <> '' then
+                                G_ItemJournalLine.Validate("Variant Code", KnappQuery.Variant_Code);
+                            G_ItemJournalLine.Validate(Quantity, RequiredQuantity);
+                            G_ItemJournalLine.Validate("Location Code", P_SaleableLocation);
+                            G_ItemJournalLine.Validate("New Location Code", P_KnappLocation);
+                            G_ItemJournalLine.Validate("Bin Code", BinCode);
+                            G_ItemJournalLine.Validate("Posting Date", Today);
+                            G_ItemJournalLine.Validate("Source Code", 'RECLASSJNL');
+                            G_ItemJournalLine.Insert(true);
+                            Commit();
+
+                            if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then;
+                        end
+                        else begin
+
+                            NegativeItemJnlLine2.Reset();
+                            NegativeItemJnlLine2.Init();
+                            NegativeItemJnlLine2.Validate("Journal Template Name", 'ITEM');
+                            NegativeItemJnlLine2.Validate("Journal Batch Name", 'KNAPP');
+                            NegativeItemJnlLine2.Validate("Line No.", GetLastItemLineNo());
+                            NegativeItemJnlLine2.Validate("Entry Type", NegativeItemJnlLine2."Entry Type"::"Negative Adjmt.");
+                            L_InventorySetup.Get();
+                            NegativeItemJnlLine2."Document No." := 'KNAAP ITEM ADJ';
+                            NegativeItemJnlLine2.Validate("Item No.", KnappQuery.Item_No_);
+                            if KnappQuery.Variant_Code <> '' then
+                                NegativeItemJnlLine2.Validate("Variant Code", KnappQuery.Variant_Code);
+                            NegativeItemJnlLine2.Validate(Quantity, RequiredQuantity);
+                            NegativeItemJnlLine2.Validate("Location Code", P_KnappLocation);
+                            //NegativeItemJnlLine2.Validate("New Location Code", P_SaleableLocation);
+                            NegativeItemJnlLine2.Validate("Bin Code", BinCode);
+                            NegativeItemJnlLine2.Validate("Posting Date", Today);
+                            NegativeItemJnlLine2.Validate("Source Code", 'ITEMJNL');
+                            NegativeItemJnlLine2.Insert(true);
+                            Commit();
+                            Codeunit.Run(Codeunit::"Item Jnl.-Post", NegativeItemJnlLine2);
+                        end;*/
                     end;
-
-                    /*if BinCode <> '' then begin
-                        G_ItemJournalLine.Reset();
-                        G_ItemJournalLine.Init();
-                        G_ItemJournalLine.Validate("Journal Template Name", 'TRANSFER');
-                        G_ItemJournalLine.Validate("Journal Batch Name", 'KNAPP');
-                        G_ItemJournalLine.Validate("Line No.", GetLastLineNo());
-                        G_ItemJournalLine.Validate("Entry Type", G_ItemJournalLine."Entry Type"::Transfer);
- 
-                        L_InventorySetup.Get();
-                        G_ItemJournalLine."Document No." := NoSeriesManagement.GetNextNo(L_InventorySetup."Knapp Replenishment No. Series", WorkDate());
- 
-                        G_ItemJournalLine.Validate("Item No.", KnappQuery.Item_No_);
-                        if KnappQuery.Variant_Code <> '' then
-                            G_ItemJournalLine.Validate("Variant Code", KnappQuery.Variant_Code);
-                        G_ItemJournalLine.Validate(Quantity, RequiredQuantity);
-                        G_ItemJournalLine.Validate("Location Code", P_SaleableLocation);
-                        G_ItemJournalLine.Validate("New Location Code", P_KnappLocation);
-                        G_ItemJournalLine.Validate("Bin Code", BinCode);
-                        G_ItemJournalLine.Validate("Posting Date", Today);
-                        G_ItemJournalLine.Validate("Source Code", 'RECLASSJNL');
-                        G_ItemJournalLine.Insert(true);
-                        Commit();
- 
-                        if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then;
-                    end
-                    else begin
- 
-                        NegativeItemJnlLine2.Reset();
-                        NegativeItemJnlLine2.Init();
-                        NegativeItemJnlLine2.Validate("Journal Template Name", 'ITEM');
-                        NegativeItemJnlLine2.Validate("Journal Batch Name", 'KNAPP');
-                        NegativeItemJnlLine2.Validate("Line No.", GetLastItemLineNo());
-                        NegativeItemJnlLine2.Validate("Entry Type", NegativeItemJnlLine2."Entry Type"::"Negative Adjmt.");
-                        L_InventorySetup.Get();
-                        NegativeItemJnlLine2."Document No." := 'KNAAP ITEM ADJ';
-                        NegativeItemJnlLine2.Validate("Item No.", KnappQuery.Item_No_);
-                        if KnappQuery.Variant_Code <> '' then
-                            NegativeItemJnlLine2.Validate("Variant Code", KnappQuery.Variant_Code);
-                        NegativeItemJnlLine2.Validate(Quantity, RequiredQuantity);
-                        NegativeItemJnlLine2.Validate("Location Code", P_KnappLocation);
-                        //NegativeItemJnlLine2.Validate("New Location Code", P_SaleableLocation);
-                        NegativeItemJnlLine2.Validate("Bin Code", BinCode);
-                        NegativeItemJnlLine2.Validate("Posting Date", Today);
-                        NegativeItemJnlLine2.Validate("Source Code", 'ITEMJNL');
-                        NegativeItemJnlLine2.Insert(true);
-                        Commit();
-                        Codeunit.Run(Codeunit::"Item Jnl.-Post", NegativeItemJnlLine2);
-                    end;*/
                 end;
             end;
         end;
