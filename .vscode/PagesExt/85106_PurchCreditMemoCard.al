@@ -9,6 +9,10 @@ pageextension 85106 PurchCreditMemoCard extends "Purchase Credit Memo"
                 ApplicationArea = all;
                 Caption = 'Approval required';
             }
+            field("Purchase Order No."; Rec."Purchase Order No.")
+            {
+                ApplicationArea = all;
+            }
         }
     }
 

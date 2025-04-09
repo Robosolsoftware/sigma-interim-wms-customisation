@@ -5,7 +5,10 @@ pageextension 85082 POTransferShpListRBE extends "Posted Transfer Shipments"
         addafter("Posting Date")
 
         {
-
+            field("Transfer Order No."; Rec."Transfer Order No.")
+            {
+                ApplicationArea = all;
+            }
             field("System CreatedAt"; rec.SystemCreatedAt)
             {
                 ApplicationArea = all;

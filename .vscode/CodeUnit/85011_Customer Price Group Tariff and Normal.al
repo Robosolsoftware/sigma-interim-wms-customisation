@@ -652,6 +652,10 @@ codeunit 85011 "Customer Price Group Changes"
         PriceLineList2: Record "Price List Line";
         L_DiscountedUnitPrice: Decimal;
     begin
+
+        if Rec."Order Date" <> WorkDate() then
+            exit;
+
         CLEAR(DiffVolume);
         CLEAR(DiffVolumePrice);
         CLEAR(FinalPrice);
