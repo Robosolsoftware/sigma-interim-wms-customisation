@@ -653,8 +653,8 @@ codeunit 85011 "Customer Price Group Changes"
         L_DiscountedUnitPrice: Decimal;
     begin
 
-        if Rec."Order Date" <> WorkDate() then
-            exit;
+        // if Rec."Order Date" <> WorkDate() then
+        //     exit;
 
         CLEAR(DiffVolume);
         CLEAR(DiffVolumePrice);
