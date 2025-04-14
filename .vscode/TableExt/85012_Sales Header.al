@@ -11,7 +11,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                 L_Date: Record Date;
                 L_ShipingAgentService: Record "Shipping Agent Services";
                 L_BlankDatFormula: DateFormula;
-                CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
+                //CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
                 L_BilltoCustomer: Record Customer;
             begin
                 if Rec."Sell-to Customer No." <> '' then begin
@@ -23,27 +23,12 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                             if Rec."IRP Order" = false then begin //As discussed with Adesh+++
                                 L_Customer.TestField("QAU Approved");
                                 L_Customer.TestField(Status, L_Customer.Status::Released);
+
+                                // //Check Credit Limit & Balance Due+++
+                                // //Have managed all the conditions in default code (Codeunit 85007). But when we create sales order from customer card page (New Sales Order) then this default code not working as sigma process. to manage this scanrio have added the below code also.
+                                // CheckCreditLimit.SalesHeaderCheck(Rec);
                             end;
                         end;
-                        //Credit Limit++
-                        Rec."Credit Limit Approval" := CheckCreditLimit.SalesHeaderCheck(Rec);
-                        // Rec."Overdue Balance" := CheckCreditLimit.SalesHeaderCheck(Rec);
-
-                        // if L_Customer."Bill-to Customer No." <> '' then begin
-                        //     L_BilltoCustomer.Reset();
-                        //     L_BilltoCustomer.SetRange("No.", L_Customer."Bill-to Customer No.");
-                        //     if L_BilltoCustomer.FindFirst() then begin
-                        //         L_BilltoCustomer.CalcFields("Balance (LCY)");
-                        //         if L_BilltoCustomer."Balance (LCY)" > L_BilltoCustomer."Credit Limit (LCY)" then
-                        //             Rec."Credit limit Exceeded" := true;
-                        //     end;
-                        // end else begin
-                        //     if L_Customer."Balance (LCY)" > L_Customer."Credit Limit (LCY)" then
-                        //         Rec."Credit limit Exceeded" := true;
-                        // end;
-
-                        // if ((Rec."Credit limit Exceeded" = true) or (Rec."Overdue Balance" = true)) then
-                        //     Rec."Credit Limit Approval" := true;
 
                         Rec.Validate("Delivery Note", L_Customer."Delivery Note");
                         Rec.Validate("Collection Note", L_Customer."Collection Note");
@@ -60,7 +45,13 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         // Rec."Weekend Shipping Agent Code" := L_Customer."Weekend Shipping Agent Code";
                         // Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
                         Rec."SO Approval Required" := L_Customer."SO Approval Required";
-                        Rec.Hospital := L_Customer.Hospital;
+
+                        L_BilltoCustomer.Reset();
+                        L_BilltoCustomer.SetRange("No.", Rec."Bill-to Customer No.");
+                        if L_BilltoCustomer.FindFirst() then begin
+                            Rec.Hospital := L_BilltoCustomer.Hospital; //Exempt from Credit check
+                            Rec."Exempt from Overdue check" := L_BilltoCustomer."Exempt from Overdue check";
+                        end;
 
 
                         //Manul & Web Order+++
@@ -159,6 +150,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                 L_Customer: Record Customer;
                 L_SalesPriceHeader: Record "Price List Header";
                 L_Date: Record Date;
+                L_BilltoCustomer: Record Customer;
             begin
                 if Rec."Sell-to Customer Name" <> '' then begin
                     L_Customer.Reset();
@@ -184,7 +176,13 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                         // Rec."Weekend Shipping Agent Code" := L_Customer."Weekend Shipping Agent Code";
                         // Rec."Weekend Ship. Agnt. Serv. Code" := L_Customer."Weekend Ship. Agnt. Serv. Code";
                         Rec."SO Approval Required" := L_Customer."SO Approval Required";
-                        Rec.Hospital := L_Customer.Hospital;
+
+                        L_BilltoCustomer.Reset();
+                        L_BilltoCustomer.SetRange("No.", Rec."Bill-to Customer No.");
+                        if L_BilltoCustomer.FindFirst() then begin
+                            Rec.Hospital := L_BilltoCustomer.Hospital; //Exempt from Credit check
+                            Rec."Exempt from Overdue check" := L_BilltoCustomer."Exempt from Overdue check";
+                        end;
 
                         L_Date.Reset();
                         L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
@@ -525,13 +523,17 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         }
         field(85176; "Hospital"; Boolean)
         {
-
+            Caption = 'Exempt from Credit check';
         }
         field(85006; "Credit limit Exceeded"; Boolean)
         {
 
         }
         field(85007; "Overdue Balance"; Boolean)
+        {
+
+        }
+        field(85008; "Exempt from Overdue check"; Boolean)
         {
 
         }

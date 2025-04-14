@@ -154,12 +154,24 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
         }
         field(85176; "Hospital"; Boolean)
         {
-
+            Caption = 'Exempt from Credit check';
         }
         field(85177; "Shipping Agent Service Code 2"; Code[10])
         {
             Caption = 'Shipping Agent Service Code';
             TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+        }
+        field(85006; "Credit limit Exceeded"; Boolean)
+        {
+
+        }
+        field(85007; "Overdue Balance"; Boolean)
+        {
+
+        }
+        field(85008; "Exempt from Overdue check"; Boolean)
+        {
+
         }
     }
 

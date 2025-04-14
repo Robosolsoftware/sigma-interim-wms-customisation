@@ -151,6 +151,18 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
         }
         field(85176; "Hospital"; Boolean)
         {
+            Caption = 'Exempt from Credit check';
+        }
+        field(85006; "Credit limit Exceeded"; Boolean)
+        {
+
+        }
+        field(85007; "Overdue Balance"; Boolean)
+        {
+
+        }
+        field(85008; "Exempt from Overdue check"; Boolean)
+        {
 
         }
     }

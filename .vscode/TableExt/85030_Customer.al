@@ -383,7 +383,7 @@ tableextension 85030 "SC Customer" extends Customer
         }
         field(85004; "Hospital"; Boolean)
         {
-
+            Caption = 'Exempt from Credit check';
         }
         field(85005; "Type of Account"; Option)
         {
@@ -395,6 +395,10 @@ tableextension 85030 "SC Customer" extends Customer
 
         }
         field(85007; "Overdue Balance"; Boolean)
+        {
+
+        }
+        field(85008; "Exempt from Overdue check"; Boolean)
         {
 
         }

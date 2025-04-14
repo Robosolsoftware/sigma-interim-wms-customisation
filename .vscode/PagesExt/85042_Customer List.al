@@ -35,6 +35,28 @@ pageextension 85042 "SC Customer List" extends "Customer List"
                 Editable = false;
                 Caption = 'Bluechain';
             }
+            field("Credit limit Exceeded"; Rec."Credit limit Exceeded")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Overdue Balance"; Rec."Overdue Balance")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field(Hospital; Rec.Hospital)
+            {
+                Caption = 'Exempt from Credit check';
+                ApplicationArea = All;
+                Editable = false;
+
+            }
+            field("Exempt from Overdue check"; Rec."Exempt from Overdue check")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
     }
 

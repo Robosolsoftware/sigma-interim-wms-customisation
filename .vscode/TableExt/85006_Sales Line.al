@@ -229,7 +229,6 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
             trigger OnAfterValidate()
             var
                 L_SalesHeader: Record "Sales Header";
-                CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
             begin
                 if Rec.Quantity > 0 then begin
                     L_SalesHeader.Reset();
@@ -240,31 +239,6 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                             if Quantity <> Round(Quantity, 1) then begin
                                 Validate(Quantity, Round(Quantity, 1, '>'));
                             end;
-                            //Credit Limit++
-                            /*L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                            L_SalesHeader.Modify();*///FIN-80
-                        end;
-                    end;
-                end;
-            end;
-        }
-
-        modify("Variant Code")
-        {
-            trigger OnAfterValidate()
-            var
-                L_SalesHeader: Record "Sales Header";
-                CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
-            begin
-                if Rec."Variant Code" <> '' then begin
-                    L_SalesHeader.Reset();
-                    L_SalesHeader.SetRange("Document Type", Rec."Document Type");
-                    L_SalesHeader.SetRange("No.", Rec."Document No.");
-                    if L_SalesHeader.FindFirst() then begin
-                        if L_SalesHeader."IRP Order" = false then begin
-                            //Credit Limit++
-                            /*L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                            L_SalesHeader.Modify();*///FIN-80
                         end;
                     end;
                 end;
@@ -278,7 +252,6 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                 L_SalesHeader: Record "Sales Header";
                 L_SalesLine: Record "Sales Line";
                 ExistingLineAmount: Decimal;
-                CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
             begin
                 Clear(ExistingLineAmount);
                 if Rec.Amount <> 0 then begin
@@ -323,10 +296,6 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                             //     if L_SalesLine.FindSet() then
                             //         L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
                             // end;
-
-                            //Credit Limit++
-                            /*L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                            L_SalesHeader.Modify();*///FIN-80
                         end;
                     end;
                 end;
@@ -345,7 +314,6 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                 L_SalesHeader: Record "Sales Header";
                 L_SalesLine: Record "Sales Line";
                 ExistingLineAmount: Decimal;
-                CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
             begin
                 Clear(ExistingLineAmount);
                 if Rec.Amount <> 0 then begin
@@ -390,11 +358,6 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                             //     if L_SalesLine.FindSet() then
                             //         L_SalesLine.ModifyAll("SO Min Order Approval Required", false);
                             // end;
-
-
-                            //Credit Limit++
-                            /*L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-                            L_SalesHeader.Modify();*///FIN-80
                         end;
                     end;
                 end;
@@ -643,9 +606,7 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
         L_SalesHeader.SetRange("No.", Rec."Document No.");
         L_SalesHeader.SetRange("Document Type", Rec."Document Type");
         if L_SalesHeader.FindFirst() then begin
-            //Credit Limit++
-            L_SalesHeader."Credit Limit Approval" := CheckCreditLimit.SalesLineCheck(Rec);
-            L_SalesHeader.Modify();
+            CheckCreditLimit.SalesLineCheck(Rec);
         end;
     end;
 

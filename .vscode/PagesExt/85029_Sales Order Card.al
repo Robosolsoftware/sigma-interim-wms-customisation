@@ -100,37 +100,24 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
             }
             field(Hospital; Rec.Hospital)
             {
-                Caption = 'Exempt from Credit check / Overdue check';
+                Caption = 'Exempt from Credit check';
                 ApplicationArea = All;
-
-
-                trigger OnValidate()
-                var
-                    L_Customer: Record Customer;
-                begin
-                    if Rec.Hospital = true then begin
-                        L_Customer.Reset();
-                        L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
-                        if L_Customer.FindFirst() then begin
-                            L_Customer.TestField(Hospital);
-                            Rec."Credit limit Exceeded" := false;
-                            Rec."Overdue Balance" := false;
-                            Rec."Credit Limit Approval" := false;
-                        end;
-                    end;
-                end;
+                Editable = false;
+            }
+            field("Exempt from Overdue check"; Rec."Exempt from Overdue check")
+            {
+                ApplicationArea = All;
+                Editable = false;
             }
             field("Credit limit Exceeded"; Rec."Credit limit Exceeded")
             {
                 ApplicationArea = All;
                 Editable = false;
-                Visible = false;
             }
             field("Overdue Balance"; Rec."Overdue Balance")
             {
                 ApplicationArea = All;
                 Editable = false;
-                Visible = false;
             }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {

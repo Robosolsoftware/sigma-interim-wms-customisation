@@ -247,24 +247,27 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 Editable = L_CurrPageEditable;
                 Caption = 'Bluechain';
             }
-            field(Hospital; Rec.Hospital)
-            {
-                Caption = 'Exempt from Credit check / Overdue check';
-                ApplicationArea = All;
-                Editable = L_CurrPageEditable;
-                //Editable = L_CreditCheckEditable;
-            }
             field("Credit limit Exceeded"; Rec."Credit limit Exceeded")
             {
                 ApplicationArea = All;
                 Editable = false;
-                Visible = false;
             }
             field("Overdue Balance"; Rec."Overdue Balance")
             {
                 ApplicationArea = All;
                 Editable = false;
-                Visible = false;
+            }
+            field(Hospital; Rec.Hospital)
+            {
+                Caption = 'Exempt from Credit check';
+                ApplicationArea = All;
+                Editable = L_CreditCheckEditable;
+
+            }
+            field("Exempt from Overdue check"; Rec."Exempt from Overdue check")
+            {
+                ApplicationArea = All;
+                Editable = L_CreditCheckEditable;
             }
 
         }

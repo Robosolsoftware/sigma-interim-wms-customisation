@@ -24,7 +24,6 @@ permissionset 85000 SigmaCustomization
         codeunit "Requisation WorkSheet Cust." = X,
         codeunit "Sales Event & Function" = X,
         codeunit SalesReturnOrderChanges = X,
-        codeunit "Send SO Approval" = X,
         codeunit "WHP Based On BIN" = X,
         xmlport "Import General Journal" = X,
         xmlport "Item Reclassification" = X,
@@ -65,5 +64,6 @@ permissionset 85000 SigmaCustomization
         codeunit "Adjust Cost Changes" = X,
         codeunit "Auto Update Credit/Overdue" = X,
         page "Bins By Location" = X,
-        query "Power BI Purchase List 1" = X;
+        query "Power BI Purchase List 1" = X,
+        codeunit "Credit & OverDue Check on SO" = X;
 }
