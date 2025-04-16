@@ -20,6 +20,22 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
                 end;
             end;
         }
+        modify("Variant Code")
+        {
+            trigger OnAfterValidate()
+            var
+                L_ItemVariant: Record "Item Variant";
+            begin
+                L_ItemVariant.Reset();
+                L_ItemVariant.SetRange("Item No.", Rec."No.");
+                L_ItemVariant.SetRange(Code, Rec."Variant Code");
+                if L_ItemVariant.FindFirst() then begin
+                    Rec."Outer Qty." := L_ItemVariant."Outer Qty.";
+                    Rec."Shipper Qty." := L_ItemVariant."Shipper Qty.";
+                    Rec."Pallet Qty." := L_ItemVariant."Pallet Qty.";
+                end;
+            end;
+        }
 
         field(85103; "Pack"; Decimal)
         {
@@ -132,12 +148,25 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
         modify("Line Discount %")
         {
             trigger OnAfterValidate()
+            var
+                L_PurchaseHeader: Record "Purchase Header";
             begin
                 //Update Net Unit Cose++
                 if Rec."Line Discount %" <> 0 then begin
                     Rec."Net Unit Cost" := Rec."Direct Unit Cost" - (Rec."Direct Unit Cost" * Rec."Line Discount %" / 100);
-                end else
+                end else begin
                     Rec."Net Unit Cost" := Rec."Direct Unit Cost";
+                end;
+
+                If L_PurchaseHeader.Get(Rec."Document Type", Rec."Document No.") then;
+
+                if rec."Line Discount %" <> xRec."Line Discount %" then begin
+                    if L_PurchaseHeader."Currency Factor" > 0 then begin
+                        UnitPrice := Rec."Unit Price (LCY)" * L_PurchaseHeader."Currency Factor";
+                        rec."Direct Unit Cost" := UnitPrice - ((Rec."Line Discount %" * UnitPrice) / 100);
+                    end else
+                        rec."Direct Unit Cost" := (Rec."Unit Price (LCY)") - ((Rec."Line Discount %" * rec."Unit Price (LCY)") / 100);
+                end;
             end;
         }
         modify("No.")
@@ -196,6 +225,30 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
                 end;
             end;
         }
+        modify("Direct Unit Cost")
+        {
+            trigger OnAfterValidate()
+            var
+                L_PurchaseHeader: Record "Purchase Header";
+            begin
+                If L_PurchaseHeader.Get(Rec."Document Type", Rec."Document No.") then;
+
+                if rec."Direct Unit Cost" <> 0 then begin
+                    if rec."Unit Cost (LCY)" <> 0 then begin
+                        if L_PurchaseHeader."Currency Factor" > 0 then begin
+                            UnitPrice := Rec."Unit Price (LCY)" * L_PurchaseHeader."Currency Factor";
+                            Rec."Line Discount %" := ((UnitPrice - "Direct Unit Cost") / UnitPrice) * 100;
+                        end else
+                            Rec."Line Discount %" := ((Rec."Unit Price (LCY)" - "Direct Unit Cost") / Rec."Unit Price (LCY)") * 100;
+                    end else
+                        Rec."Line Discount %" := 0;
+                end;
+            end;
+        }
+
+
 
     }
+    var
+        UnitPrice: Decimal;
 }

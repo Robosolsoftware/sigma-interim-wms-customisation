@@ -9,6 +9,10 @@ pageextension 85059 "Req. Worksheet" extends "Req. Worksheet"
                 Editable = false;
                 ApplicationArea = All;
             }
+            field("Unit Cost"; Rec."Unit Cost")
+            {
+                ApplicationArea = All;
+            }
         }
         addafter("Location Code")
         {

@@ -77,6 +77,18 @@ tableextension 85035 "SC Item Variant" extends "Item Variant"
             FieldClass = FlowField;
             //GHST Customization++
         }
+        field(85148; "Outer Qty."; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85149; "Shipper Qty."; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85150; "Pallet Qty."; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     var

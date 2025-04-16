@@ -244,6 +244,22 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                 end;
             end;
         }
+        modify("Variant Code")
+        {
+            trigger OnAfterValidate()
+            var
+                L_ItemVariant: Record "Item Variant";
+            begin
+                L_ItemVariant.Reset();
+                L_ItemVariant.SetRange("Item No.", Rec."No.");
+                L_ItemVariant.SetRange(Code, Rec."Variant Code");
+                if L_ItemVariant.FindFirst() then begin
+                    Rec."Outer Qty." := L_ItemVariant."Outer Qty.";
+                    Rec."Shipper Qty." := L_ItemVariant."Shipper Qty.";
+                    Rec."Pallet Qty." := L_ItemVariant."Pallet Qty.";
+                end;
+            end;
+        }
 
         modify("Line Amount")
         {
