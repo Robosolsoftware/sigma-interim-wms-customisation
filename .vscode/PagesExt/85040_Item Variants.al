@@ -36,6 +36,21 @@ pageextension 85040 "SC Item Variants" extends "Item Variants"
         {
             Editable = L_CurrFieldEditable;
         }
+        addafter("Purchasing Blocked")
+        {
+            field("Outer Qty."; Rec."Outer Qty.")
+            {
+                ApplicationArea = All;
+            }
+            field("Shipper Qty."; Rec."Shipper Qty.")
+            {
+                ApplicationArea = All;
+            }
+            field("Pallet Qty."; Rec."Pallet Qty.")
+            {
+                ApplicationArea = All;
+            }
+        }
     }
 
     actions

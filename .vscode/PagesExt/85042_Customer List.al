@@ -57,6 +57,11 @@ pageextension 85042 "SC Customer List" extends "Customer List"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Net Change"; Rec."Net Change")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
     }
 

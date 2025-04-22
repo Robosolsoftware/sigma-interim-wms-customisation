@@ -1,5 +1,23 @@
 pageextension 85069 "Item Variant Card" extends "Item Variant Card"
 {
+    layout
+    {
+        addafter("Purchasing Blocked")
+        {
+            field("Outer Qty."; Rec."Outer Qty.")
+            {
+                ApplicationArea = All;
+            }
+            field("Shipper Qty."; Rec."Shipper Qty.")
+            {
+                ApplicationArea = All;
+            }
+            field("Pallet Qty."; Rec."Pallet Qty.")
+            {
+                ApplicationArea = All;
+            }
+        }
+    }
     trigger OnOpenPage()
     var
         L_Item: Record Item;

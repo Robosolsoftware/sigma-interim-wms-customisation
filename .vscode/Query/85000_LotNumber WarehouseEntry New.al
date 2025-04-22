@@ -32,5 +32,6 @@ query 85000 "LotNumber WarehouseEntry New"
         }
 
     }
+
 }
 
