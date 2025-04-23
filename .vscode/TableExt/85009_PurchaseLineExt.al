@@ -158,15 +158,15 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
                     Rec."Net Unit Cost" := Rec."Direct Unit Cost";
                 end;
 
-                If L_PurchaseHeader.Get(Rec."Document Type", Rec."Document No.") then;
+                // If L_PurchaseHeader.Get(Rec."Document Type", Rec."Document No.") then;
 
-                if rec."Line Discount %" <> xRec."Line Discount %" then begin
-                    if L_PurchaseHeader."Currency Factor" > 0 then begin
-                        UnitPrice := Rec."Unit Price (LCY)" * L_PurchaseHeader."Currency Factor";
-                        rec."Direct Unit Cost" := UnitPrice - ((Rec."Line Discount %" * UnitPrice) / 100);
-                    end else
-                        rec."Direct Unit Cost" := (Rec."Unit Price (LCY)") - ((Rec."Line Discount %" * rec."Unit Price (LCY)") / 100);
-                end;
+                // if rec."Line Discount %" <> xRec."Line Discount %" then begin
+                //     if L_PurchaseHeader."Currency Factor" > 0 then begin
+                //         UnitPrice := Rec."Unit Price (LCY)" * L_PurchaseHeader."Currency Factor";
+                //         rec."Direct Unit Cost" := UnitPrice - ((Rec."Line Discount %" * UnitPrice) / 100);
+                //     end else
+                //         rec."Direct Unit Cost" := (Rec."Unit Price (LCY)") - ((Rec."Line Discount %" * rec."Unit Price (LCY)") / 100);
+                // end;
             end;
         }
         modify("No.")
@@ -225,26 +225,26 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
                 end;
             end;
         }
-        modify("Direct Unit Cost")
-        {
-            trigger OnAfterValidate()
-            var
-                L_PurchaseHeader: Record "Purchase Header";
-            begin
-                If L_PurchaseHeader.Get(Rec."Document Type", Rec."Document No.") then;
+        // modify("Direct Unit Cost")
+        // {
+        //     trigger OnAfterValidate()
+        //     var
+        //         L_PurchaseHeader: Record "Purchase Header";
+        //     begin
+        //         If L_PurchaseHeader.Get(Rec."Document Type", Rec."Document No.") then;
 
-                if rec."Direct Unit Cost" <> 0 then begin
-                    if rec."Unit Cost (LCY)" <> 0 then begin
-                        if L_PurchaseHeader."Currency Factor" > 0 then begin
-                            UnitPrice := Rec."Unit Price (LCY)" * L_PurchaseHeader."Currency Factor";
-                            Rec."Line Discount %" := ((UnitPrice - "Direct Unit Cost") / UnitPrice) * 100;
-                        end else
-                            Rec."Line Discount %" := ((Rec."Unit Price (LCY)" - "Direct Unit Cost") / Rec."Unit Price (LCY)") * 100;
-                    end else
-                        Rec."Line Discount %" := 0;
-                end;
-            end;
-        }
+        //         if rec."Direct Unit Cost" <> 0 then begin
+        //             if rec."Unit Cost (LCY)" <> 0 then begin
+        //                 if L_PurchaseHeader."Currency Factor" > 0 then begin
+        //                     UnitPrice := Rec."Unit Price (LCY)" * L_PurchaseHeader."Currency Factor";
+        //                     Rec."Line Discount %" := ((UnitPrice - "Direct Unit Cost") / UnitPrice) * 100;
+        //                 end else
+        //                     Rec."Line Discount %" := ((Rec."Unit Price (LCY)" - "Direct Unit Cost") / Rec."Unit Price (LCY)") * 100;
+        //             end else
+        //                 Rec."Line Discount %" := 0;
+        //         end;
+        //     end;
+        // }
 
 
 

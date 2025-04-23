@@ -65,5 +65,10 @@ permissionset 85000 SigmaCustomization
         codeunit "Auto Update Credit/Overdue" = X,
         page "Bins By Location" = X,
         query "Power BI Purchase List 1" = X,
-        codeunit "Credit & OverDue Check on SO" = X;
+        codeunit "Credit & OverDue Check on SO" = X,
+        tabledata "TOS Page Temp Table" = RIMD,
+        table "TOS Page Temp Table" = X,
+        codeunit "TOS Query Loader" = X,
+        page "TOS Page" = X,
+        query TOSQuery = X;
 }
