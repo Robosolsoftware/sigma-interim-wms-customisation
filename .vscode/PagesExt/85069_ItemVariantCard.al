@@ -4,6 +4,11 @@ pageextension 85069 "Item Variant Card" extends "Item Variant Card"
     {
         addafter("Purchasing Blocked")
         {
+            field("Variant Approval"; Rec."Variant Approval")
+            {
+                ApplicationArea = All;
+                Visible = false;
+            }
             field("Outer Qty."; Rec."Outer Qty.")
             {
                 ApplicationArea = All;

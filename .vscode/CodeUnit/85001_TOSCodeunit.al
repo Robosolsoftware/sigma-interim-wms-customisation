@@ -12,6 +12,7 @@ codeunit 85001 "TOS Query Loader"
             TempRec."Order No." := TOSQuery.Order_No_;
             TempRec."Order Line No." := TOSQuery.Order_Line_No_;
             TempRec.Quantity := TOSQuery.Quantity;
+            TempRec."Posting Date" := TOSQuery.Posting_Date;
             TempTable := TempRec;
             TempTable.Insert();
         end;

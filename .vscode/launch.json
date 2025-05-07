@@ -6,9 +6,9 @@
             "request": "launch",
             "type": "al",
             "environmentType": "Sandbox",
-            //"environmentName": "Sigma_UAT",
-            //"environmentName": "SIGMA_DEV",
-            "environmentName": "SigmaCopy_160425",
+            "environmentName": "Copy_30042025",
+            //"environmentName": "SIGMA_DEV",4
+           // "environmentName": "ProdCopy_24042005",
             "tenant": "55614040-8b3d-41a1-bae8-2140b06bd0c3",
             "startupObjectId": 22,
             "startupObjectType": "Page",

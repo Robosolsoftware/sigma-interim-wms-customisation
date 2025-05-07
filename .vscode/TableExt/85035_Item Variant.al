@@ -89,6 +89,10 @@ tableextension 85035 "SC Item Variant" extends "Item Variant"
         {
             DataClassification = ToBeClassified;
         }
+        field(85151; "Variant Approval"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     var

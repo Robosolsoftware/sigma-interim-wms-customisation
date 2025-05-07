@@ -42,6 +42,10 @@ page 85007 "TOS Page"
                     ApplicationArea = all;
                     Caption = 'Shipped Qty.';
                 }
+                field("Posting Date"; Rec."Posting Date")
+                {
+                    ApplicationArea = all;
+                }
             }
         }
     }
@@ -60,6 +64,7 @@ page 85007 "TOS Page"
         L_SalesShipmentLine.Reset();
         L_SalesShipmentLine.SetRange("Order No.", Rec."Order No.");
         L_SalesShipmentLine.SetRange("Order Line No.", Rec."Order Line No.");
+        L_SalesShipmentLine.SetRange("Posting Date", WorkDate());
         if L_SalesShipmentLine.FindFirst() then begin
             Rec."Sell-to Customer No." := L_SalesShipmentLine."Sell-to Customer No.";
             Rec."No." := L_SalesShipmentLine."No.";

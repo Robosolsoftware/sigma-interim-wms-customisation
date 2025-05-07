@@ -18,6 +18,10 @@ query 85007 TOSQuery
             {
 
             }
+            column(Posting_Date; "Posting Date")
+            {
+
+            }
             column(Quantity; Quantity)
             {
                 Method = Sum;
@@ -25,5 +29,11 @@ query 85007 TOSQuery
 
         }
     }
+    trigger OnBeforeOpen()
+    var
+        myInt: Integer;
+    begin
+        CurrQuery.SetRange(CurrQuery.Posting_Date, WorkDate());
+    end;
 
 }

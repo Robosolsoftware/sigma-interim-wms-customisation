@@ -38,6 +38,12 @@ pageextension 85040 "SC Item Variants" extends "Item Variants"
         }
         addafter("Purchasing Blocked")
         {
+            field("Variant Approval"; Rec."Variant Approval")
+            {
+                ApplicationArea = All;
+                Visible = false;
+
+            }
             field("Outer Qty."; Rec."Outer Qty.")
             {
                 ApplicationArea = All;

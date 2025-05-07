@@ -4,6 +4,10 @@ pageextension 85071 PurcahseOrderSubformExt extends "Purchase Order Subform"
     {
         addafter("Direct Unit Cost")
         {
+            field("Discount %"; Rec."Discount %")
+            {
+                ApplicationArea = all;
+            }
             field("Net Unit Cost"; Rec."Net Unit Cost")
             {
                 ApplicationArea = All;

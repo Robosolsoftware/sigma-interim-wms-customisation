@@ -11,6 +11,7 @@ table 85007 "TOS Page Temp Table"
         field(5; Description; Text[100]) { }
         field(6; "Location Code"; Code[20]) { }
         field(7; Quantity; Decimal) { }
+        field(8; "Posting Date"; Date) { }
 
     }
 

@@ -451,4 +451,27 @@ codeunit 85013 "Purchase Event & Function"
     end;
     #endregion Clear Fields on Transfer Line++
 
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", 'OnInitPurchOrderLineOnBeforeValidateLineDiscount', '', false, false)]
+    local procedure OnInitPurchOrderLineOnBeforeValidateLineDiscount(RequisitionLine: Record "Requisition Line"; var PurchOrderLine: Record "Purchase Line")
+    begin
+        PurchOrderLine.Validate("Direct Unit Cost", RequisitionLine."Direct Unit Cost");
+        //PurchOrderLine.Modify();
+    end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Purch.-Post", 'OnRunOnBeforePostPurchLine', '', false, false)]
+    // local procedure CheckVariantQAUApproval(var PurchLine: Record "Purchase Line")
+    // var
+    //     ItemVariant: Record "Item Variant";
+    // begin
+    //     if PurchLine."Variant Code" <> '' then begin
+
+    //         if ItemVariant.Get(PurchLine."No.", PurchLine."Variant Code") then begin
+    //             if not ItemVariant."QAU Approved" then
+    //                 Error('Variant %1 for Item %2 is not QAU Approved. Receipt cannot be posted.', PurchLine."Variant Code", PurchLine."No.");
+    //         end;
+    //     end;
+    // end;
+
+
 }

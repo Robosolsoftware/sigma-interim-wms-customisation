@@ -19,7 +19,28 @@ pageextension 85111 "SC Item Ledger Entries" extends "Item Ledger Entries"
 
     actions
     {
-        // Add changes to page actions here
+        addlast(Processing)
+        {
+            action(CreateManualValueEntry)
+            {
+                ApplicationArea = All;
+                Caption = 'Manually Create Value Entry';
+                Image = CreateOrder;
+                trigger OnAction()
+                var
+                    ILE: Record "Item Ledger Entry";
+                    ValueEntry: Record "Value Entry";
+                    LastEntryNo: Integer;
+                    ManualCost: Decimal;
+                    vendor: Record Vendor;
+                    Item: Record Item;
+                    CreateVE: Codeunit CreateValueEntry;
+                begin
+                    ILE.Copy(Rec);
+                    CreateVE.CreatValueEntry(ILE);
+                end;
+            }
+        }
     }
 
     var
