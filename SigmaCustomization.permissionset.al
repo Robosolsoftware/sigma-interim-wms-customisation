@@ -70,5 +70,6 @@ permissionset 85000 SigmaCustomization
         table "TOS Page Temp Table" = X,
         codeunit "TOS Query Loader" = X,
         page "TOS Page" = X,
-        query TOSQuery = X;
+        query TOSQuery = X,
+        codeunit CreateValueEntry = X;
 }
