@@ -23,6 +23,10 @@ pageextension 85078 LocationExt extends "Location Card"
             {
                 ApplicationArea = All;
             }
+            field("Sigma South"; Rec."Sigma South")
+            {
+                ApplicationArea = All;
+            }
             field("Knapp Location"; Rec."Knapp Location")
             {
                 ApplicationArea = All;

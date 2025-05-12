@@ -35,7 +35,7 @@ pageextension 85020 "Ext Request to Approve" extends "Requests to Approve"
             }
         }
     }
-    trigger OnAfterGetRecord()
+    trigger OnOpenPage()
     var
         salesH: Record "Sales Header";
     begin
@@ -47,10 +47,12 @@ pageextension 85020 "Ext Request to Approve" extends "Requests to Approve"
             repeat
                 salesH.CalcFields("Amount Including VAT");
                 Rec."Running Total MOV" += salesH."Amount Including VAT";
+
             until salesH.Next() = 0;
 
             if rec."Running Total MOV" >= rec."Min Order Value" then
                 Rec."Running Total Achieved" := true;
+            Rec.Modify();
 
         end;
 

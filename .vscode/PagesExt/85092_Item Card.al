@@ -393,6 +393,11 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 ApplicationArea = All;
                 Editable = G_OpSOandPOBlocked;// AND  L_CurrPageEditable;
             }
+            field("Ops Sales Blocked - SS"; Rec."Ops Sales Blocked - SS")
+            {
+                ApplicationArea = All;
+                Editable = G_OpSOandPOBlocked;
+            }
         }
 
         modify("Unit Price")

@@ -35,6 +35,10 @@ page 85008 APIItemLedgerEntry
                 {
                     ApplicationArea = all;
                 }
+                field("Document_Type"; Rec."Document Type")
+                {
+                    ApplicationArea = all;
+                }
                 field(Lot_No; Rec."Lot No.")
                 {
                     ApplicationArea = all;
@@ -52,6 +56,7 @@ page 85008 APIItemLedgerEntry
                     DecimalPlaces = 0 : 5;
                     Editable = false;
                 }
+
 
             }
         }

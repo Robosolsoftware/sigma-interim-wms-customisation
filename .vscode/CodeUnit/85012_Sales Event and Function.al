@@ -879,4 +879,34 @@ codeunit 85012 "Sales Event & Function"
             end;
         end;
     end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnBeforeApproveApprovalRequests', '', true, true)]
+    // local procedure OnBeforeSendApprovalRequest()
+    // var
+    //     SalesH: Record "Sales Header";
+    // begin
+    //     // Only apply this logic to Sales Orders
+    //     if Rec."Document Type" <> Rec."Document Type"::Order then
+    //         exit;
+
+    //     SalesH.Reset();
+    //     SalesH.SetRange("Sell-to Customer No.", Rec."Sell-to Customer No.");
+    //     SalesH.SetFilter(Status, '%1|%2', SalesH.Status::"Pending Approval", SalesH.Status::Released);
+    //     SalesH.SetRange("Order Date", WorkDate());
+
+    //     if SalesH.FindSet() then begin
+    //         Rec."Running Total MOV" := 0; // Reset before calculation
+
+    //         repeat
+    //             SalesH.CalcFields("Amount Including VAT");
+    //             Rec."Running Total MOV" += SalesH."Amount Including VAT";
+    //         until SalesH.Next() = 0;
+
+    //         if Rec."Running Total MOV" >= Rec."Min Order Value" then
+    //             Rec."Running Total Achieved" := true;
+
+    //         Rec.Modify(true);
+    //     end;
+    // end;
 }
+

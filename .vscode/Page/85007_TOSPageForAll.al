@@ -46,6 +46,10 @@ page 85007 "TOS Page"
                 {
                     ApplicationArea = all;
                 }
+                field("SO Qty."; Rec."SO Qty.")
+                {
+                    ApplicationArea = all;
+                }
             }
         }
     }
@@ -60,6 +64,7 @@ page 85007 "TOS Page"
     trigger OnAfterGetRecord()
     var
         L_SalesShipmentLine: Record "Sales Shipment Line";
+        L_SalesLine: Record "Sales Line";
     begin
         L_SalesShipmentLine.Reset();
         L_SalesShipmentLine.SetRange("Order No.", Rec."Order No.");
@@ -72,6 +77,20 @@ page 85007 "TOS Page"
             Rec."Location Code" := L_SalesShipmentLine."Location Code";
 
         end;
+
+        L_SalesLine.Reset();
+        L_SalesLine.SetRange("Document No.", Rec."Order No.");
+        L_SalesLine.SetRange("Line No.", rec."Order Line No.");
+        L_SalesLine.SetRange("Posting Date", WorkDate());
+        if L_SalesLine.FindFirst() then begin
+            repeat
+                rec."SO Qty." += L_SalesLine.Quantity;
+            until L_SalesLine.Next() = 0;
+            if Rec."SO Qty." = 0 then begin
+                Rec."SO Qty." := Rec.Quantity;
+            end;
+        end;
+
 
     end;
 }
