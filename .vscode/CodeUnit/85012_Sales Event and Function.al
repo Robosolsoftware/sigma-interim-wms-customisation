@@ -880,33 +880,26 @@ codeunit 85012 "Sales Event & Function"
         end;
     end;
 
-    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnBeforeApproveApprovalRequests', '', true, true)]
-    // local procedure OnBeforeSendApprovalRequest()
-    // var
-    //     SalesH: Record "Sales Header";
-    // begin
-    //     // Only apply this logic to Sales Orders
-    //     if Rec."Document Type" <> Rec."Document Type"::Order then
-    //         exit;
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnBeforeApprovalEntryInsert', '', false, false)]
+    local procedure OnBeforeApprovalEntryInsert(ApprovalEntryArgument: Record "Approval Entry")
+    var
+        SalesHeader: Record "Sales Header";
+        SalesH: Record "Sales Header";
+    begin
+        salesH.Reset();
+        salesH.SetRange("Sell-to Customer No.", ApprovalEntryArgument."Customer No.");
+        salesH.SetFilter(Status, '%1|%2', salesH.Status::"Pending Approval", salesH.Status::Released);
+        salesH.SetRange("Order Date", WorkDate());
+        if salesH.FindSet() then begin
+            repeat
+                salesH.CalcFields("Amount Including VAT");
+                ApprovalEntryArgument."Running Total MOV" += salesH."Amount Including VAT";
+            until salesH.Next() = 0;
 
-    //     SalesH.Reset();
-    //     SalesH.SetRange("Sell-to Customer No.", Rec."Sell-to Customer No.");
-    //     SalesH.SetFilter(Status, '%1|%2', SalesH.Status::"Pending Approval", SalesH.Status::Released);
-    //     SalesH.SetRange("Order Date", WorkDate());
+            if ApprovalEntryArgument."Running Total MOV" >= ApprovalEntryArgument."Min Order Value" then
+                ApprovalEntryArgument."Running Total Achieved" := true;
+        end;
 
-    //     if SalesH.FindSet() then begin
-    //         Rec."Running Total MOV" := 0; // Reset before calculation
-
-    //         repeat
-    //             SalesH.CalcFields("Amount Including VAT");
-    //             Rec."Running Total MOV" += SalesH."Amount Including VAT";
-    //         until SalesH.Next() = 0;
-
-    //         if Rec."Running Total MOV" >= Rec."Min Order Value" then
-    //             Rec."Running Total Achieved" := true;
-
-    //         Rec.Modify(true);
-    //     end;
-    // end;
+    end;
 }
 
