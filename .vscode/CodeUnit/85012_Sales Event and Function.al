@@ -881,25 +881,51 @@ codeunit 85012 "Sales Event & Function"
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnBeforeApprovalEntryInsert', '', false, false)]
-    local procedure OnBeforeApprovalEntryInsert(ApprovalEntryArgument: Record "Approval Entry")
+    local procedure OnBeforeApprovalEntryInsert(var ApprovalEntry: Record "Approval Entry")
     var
-        SalesHeader: Record "Sales Header";
         SalesH: Record "Sales Header";
+        SalesH1: Record "Sales Header";
     begin
+        //if ApprovalEntry."Table ID" = 36 then begin
         salesH.Reset();
-        salesH.SetRange("Sell-to Customer No.", ApprovalEntryArgument."Customer No.");
-        salesH.SetFilter(Status, '%1|%2', salesH.Status::"Pending Approval", salesH.Status::Released);
-        salesH.SetRange("Order Date", WorkDate());
-        if salesH.FindSet() then begin
-            repeat
-                salesH.CalcFields("Amount Including VAT");
-                ApprovalEntryArgument."Running Total MOV" += salesH."Amount Including VAT";
-            until salesH.Next() = 0;
-
-            if ApprovalEntryArgument."Running Total MOV" >= ApprovalEntryArgument."Min Order Value" then
-                ApprovalEntryArgument."Running Total Achieved" := true;
+        SalesH.SetRange("No.", ApprovalEntry."Document No.");
+        if SalesH.FindFirst() then begin
+            ApprovalEntry."Sell-to Customer No." := SalesH."Sell-to Customer No.";
         end;
 
+        SalesH1.Reset();
+        SalesH1.SetRange("Sell-to Customer No.", ApprovalEntry."Sell-to Customer No.");
+        SalesH1.SetFilter(Status, '%1|%2|%3', SalesH1.Status::"Pending Approval", SalesH1.Status::Released, SalesH1.Status::Open);
+        SalesH1.SetRange("Order Date", WorkDate());
+        if SalesH1.FindSet() then begin
+            repeat
+                SalesH1.CalcFields("Amount Including VAT");
+                ApprovalEntry."Running Total MOV" += SalesH1."Amount Including VAT";
+            until SalesH1.Next() = 0;
+
+            if ApprovalEntry."Running Total MOV" >= ApprovalEntry."Min Order Value" then
+                ApprovalEntry."Running Total Achieved" := true;
+        end;
+
+        // if salesH.FindFirst() then begin
+        //     SalesH1.Reset();
+        //     SalesH1.SetRange("Sell-to Customer No.", SalesH."Sell-to Customer No.");
+        //     SalesH1.SetFilter(Status, '%1|%2|%3', SalesH1.Status::"Pending Approval", SalesH1.Status::Released, SalesH1.Status::Open);
+        //     SalesH1.SetRange("Order Date", WorkDate());
+        //     if SalesH1.FindSet() then begin
+        //         repeat
+        //             SalesH1.CalcFields("Amount Including VAT");
+        //             ApprovalEntry."Running Total MOV" += SalesH1."Amount Including VAT";
+        //         until SalesH1.Next() = 0;
+
+        //         if ApprovalEntry."Running Total MOV" >= ApprovalEntry."Min Order Value" then
+        //             ApprovalEntry."Running Total Achieved" := true;
+        //     end;
+        // end;
     end;
+    // end;
+
+    var
+        Cust: Code[50];
 }
 
