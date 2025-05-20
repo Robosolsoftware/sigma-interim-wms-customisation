@@ -895,7 +895,7 @@ codeunit 85012 "Sales Event & Function"
 
         SalesH1.Reset();
         SalesH1.SetRange("Sell-to Customer No.", ApprovalEntry."Sell-to Customer No.");
-        SalesH1.SetFilter(Status, '%1|%2|%3', SalesH1.Status::"Pending Approval", SalesH1.Status::Released, SalesH1.Status::Open);
+        SalesH1.SetFilter(Status, '%1|%2', SalesH1.Status::"Pending Approval", SalesH1.Status::Released);
         SalesH1.SetRange("Order Date", WorkDate());
         if SalesH1.FindSet() then begin
             repeat
@@ -923,7 +923,6 @@ codeunit 85012 "Sales Event & Function"
         //     end;
         // end;
     end;
-    // end;
 
     var
         Cust: Code[50];
