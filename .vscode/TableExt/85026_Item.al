@@ -197,7 +197,7 @@ tableextension 85026 "Item_Extension" extends Item
         }
         field(85117; "Ops Sales Blocked"; Boolean)
         {
-            Caption = 'Ops Sales Blocked';
+            Caption = 'Ops Sales Blocked - Watford';
             DataClassification = CustomerContent;
         }
         field(85118; "Ops Purchase Blocked"; Boolean)
@@ -240,6 +240,11 @@ tableextension 85026 "Item_Extension" extends Item
         field(85127; "TO Discount %"; Decimal)
         {
 
+        }
+        field(85128; "Ops Sales Blocked - SS"; Boolean)
+        {
+
+            DataClassification = CustomerContent;
         }
         modify("Unit Price")
         {

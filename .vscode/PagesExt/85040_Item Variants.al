@@ -41,7 +41,19 @@ pageextension 85040 "SC Item Variants" extends "Item Variants"
             field("Variant Approval"; Rec."Variant Approval")
             {
                 ApplicationArea = All;
-                Visible = false;
+                //Visible = false;
+                trigger OnValidate()
+                var
+                    L_UserSetup: Record "User Setup";
+                begin
+                    L_UserSetup.Reset();
+                    L_UserSetup.SetRange("User ID", UserId);
+                    L_UserSetup.SetRange("Variant Approval", true);
+                    if not L_UserSetup.FindFirst() then
+                        Error('You do not have permission to edit');
+
+                    CurrPage.Update();
+                end;
 
             }
             field("Outer Qty."; Rec."Outer Qty.")

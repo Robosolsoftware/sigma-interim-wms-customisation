@@ -25,5 +25,9 @@ tableextension 85024 "Ext Request To Approve" extends 454
         {
             DataClassification = ToBeClassified;
         }
+        field(85029; "Sell-to Customer No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }

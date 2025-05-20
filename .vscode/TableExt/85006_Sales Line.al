@@ -248,15 +248,15 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
         {
             trigger OnAfterValidate()
             var
-                L_ItemVariant: Record "Item Variant";
+                L_ShipperPallet: Record "Shipper/Pallet Data";
             begin
-                L_ItemVariant.Reset();
-                L_ItemVariant.SetRange("Item No.", Rec."No.");
-                L_ItemVariant.SetRange(Code, Rec."Variant Code");
-                if L_ItemVariant.FindFirst() then begin
-                    Rec."Outer Qty." := L_ItemVariant."Outer Qty.";
-                    Rec."Shipper Qty." := L_ItemVariant."Shipper Qty.";
-                    Rec."Pallet Qty." := L_ItemVariant."Pallet Qty.";
+                L_ShipperPallet.Reset();
+                L_ShipperPallet.SetRange("Item No.", Rec."No.");
+                L_ShipperPallet.SetRange("Variant Code", Rec."Variant Code");
+                if L_ShipperPallet.FindFirst() then begin
+                    Rec."Outer Qty." := L_ShipperPallet."Outer Qty.";
+                    Rec."Shipper Qty." := L_ShipperPallet."Shipper Qty.";
+                    Rec."Pallet Qty." := L_ShipperPallet."Pallet Qty.";
                 end;
             end;
         }
@@ -513,6 +513,7 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                 L_ItemVariant: Record "Item Variant";
                 CH_SShip: Record "Sales Shipment Line";
                 L_ItemUnitofMeasure: Record "Item Unit of Measure";
+                L_ShipperPalletData: Record "Shipper/Pallet Data";
                 ShippingAgent: Record "Shipping Agent";
                 UserSetup: Record "User Setup";
                 DisUnitPrice: Decimal;
@@ -588,13 +589,23 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                         end;
 
                         //Upadte Fields from Item Unit Of Measure++
-                        L_ItemUnitofMeasure.Reset();
-                        L_ItemUnitofMeasure.SetRange("Item No.", Rec."No.");
-                        L_ItemUnitofMeasure.SetRange(Code, Rec."Unit of Measure Code");
-                        if L_ItemUnitofMeasure.FindFirst() then begin
-                            Rec."Shipper Qty." := L_ItemUnitofMeasure."Shipper Qty.";
-                            Rec."Outer Qty." := L_ItemUnitofMeasure."Outer Qty.";
-                            Rec."Pallet Qty." := L_ItemUnitofMeasure."Pallet Qty.";
+                        // L_ItemUnitofMeasure.Reset();
+                        // L_ItemUnitofMeasure.SetRange("Item No.", Rec."No.");
+                        // L_ItemUnitofMeasure.SetRange(Code, Rec."Unit of Measure Code");
+                        // if L_ItemUnitofMeasure.FindFirst() then begin
+                        //     Rec."Shipper Qty." := L_ItemUnitofMeasure."Shipper Qty.";
+                        //     Rec."Outer Qty." := L_ItemUnitofMeasure."Outer Qty.";
+                        //     Rec."Pallet Qty." := L_ItemUnitofMeasure."Pallet Qty.";
+                        // end;
+                        L_ShipperPalletData.Reset();
+                        L_ShipperPalletData.SetRange("Item No.", Rec."No.");
+                        if L_ShipperPalletData.FindFirst() then begin
+                            L_ShipperPalletData.CalcFields("Variant Mandatory");
+                            if L_ShipperPalletData."Variant Mandatory" = false then begin
+                                Rec."Shipper Qty." := L_ShipperPalletData."Shipper Qty.";
+                                Rec."Pallet Qty." := L_ShipperPalletData."Pallet Qty.";
+                                Rec."Outer Qty." := L_ShipperPalletData."Outer Qty.";
+                            end;
                         end;
 
                         //Upadte Last Unit Price from Shipment++ 

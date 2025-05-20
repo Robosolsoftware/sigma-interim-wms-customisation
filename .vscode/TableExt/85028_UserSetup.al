@@ -98,6 +98,10 @@ tableextension 85028 "SC User Setup" extends "User Setup"
             DataClassification = ToBeClassified;
             Caption = 'Edit Shipping Agent Code/Service';
         }
+        field(85026; "Variant Approval"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
 
 
     }

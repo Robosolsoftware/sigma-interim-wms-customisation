@@ -33,6 +33,11 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
                 //ToolTip = 'Master Data consists of Customers, Items, Vendors, Shipment Agent, Shipping Agent Service Code';
                 ToolTip = 'Edit Master Data QAU Approved/Warehouse Class Code/Item Attribute';
             }
+            field("Variant Approval"; Rec."Variant Approval")
+            {
+                ApplicationArea = all;
+                ToolTip = 'Edit Variant Approval in Item Variant';
+            }
             field("Edit Unit/RRP Price on Item"; Rec."Edit Unit/RRP Price on Item")
             {
                 ApplicationArea = All;

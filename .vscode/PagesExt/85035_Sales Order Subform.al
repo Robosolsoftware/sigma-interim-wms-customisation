@@ -10,11 +10,22 @@ pageextension 85035 "SC Sales Order Subform" extends "Sales Order Subform"
         modify("No.")
         {
             trigger OnAfterValidate()
+            var
+                L_location: Record Location;
+                L_Item: Record Item;
+
             begin
                 //Issue Log D190 - For special orders, can the quantity default to 1 when the customer is prompted to enter the "Unit Volume"?
                 if Rec."Special Product" = true then begin
                     Rec.Validate(Quantity, 1);
                     Rec.Modify();
+                end;
+                if L_location.Get(Rec."Location Code") then;
+                if L_location."Sigma South" = true then begin
+                    if L_Item.Get(rec."No.") then;
+                    if L_Item."Ops Sales Blocked - SS" = true then begin
+                        Error('The Item %1 marked as Ops Sales Blocked for location %2', Rec."No.", Rec."Location Code");
+                    end;
                 end;
             end;
         }
