@@ -90,9 +90,9 @@ tableextension 85027 LocationExt extends Location
                 end;
             end;
         }
-        field(85008; "Sigma South"; Boolean)
-        {
-            DataClassification = ToBeClassified;
-        }
+        // field(85008; "Sigma South"; Boolean)
+        // {
+        //     DataClassification = ToBeClassified;
+        // }
     }
 }

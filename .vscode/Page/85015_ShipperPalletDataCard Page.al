@@ -1,61 +1,61 @@
-page 85015 ShipperPalletDataCard
+// page 85015 ShipperPalletDataCard
 
-{
-    PageType = Card;
-    Caption = 'Shipper/Pallet Data';
-    SourceTable = "Shipper/Pallet Data";
+// {
+//     PageType = Card;
+//     Caption = 'Shipper/Pallet Data';
+//     SourceTable = "Shipper/Pallet Data";
 
-    layout
-    {
-        area(Content)
-        {
-            group(General)
-            {
-                field("Item No."; Rec."Item No.")
-                {
-                    ApplicationArea = all;
-                    Editable = false;
-                }
-                field("Variant Code"; Rec."Variant Code")
-                {
-                    ApplicationArea = all;
-                    Editable = false;
-                }
-                field("Shipper Qty."; Rec."Shipper Qty.")
-                {
-                    ApplicationArea = all;
-                    Editable = true;
-                }
-                field("Pallet Qty."; Rec."Pallet Qty.")
-                {
-                    ApplicationArea = all;
-                    Editable = true;
-                }
-                field("Outer Qty."; Rec."Outer Qty.")
-                {
-                    ApplicationArea = all;
-                    Editable = true;
-                }
+//     layout
+//     {
+//         area(Content)
+//         {
+//             group(General)
+//             {
+//                 field("Item No."; Rec."Item No.")
+//                 {
+//                     ApplicationArea = all;
+//                     Editable = false;
+//                 }
+//                 field("Variant Code"; Rec."Variant Code")
+//                 {
+//                     ApplicationArea = all;
+//                     Editable = false;
+//                 }
+//                 field("Shipper Qty."; Rec."Shipper Qty.")
+//                 {
+//                     ApplicationArea = all;
+//                     Editable = true;
+//                 }
+//                 field("Pallet Qty."; Rec."Pallet Qty.")
+//                 {
+//                     ApplicationArea = all;
+//                     Editable = true;
+//                 }
+//                 field("Outer Qty."; Rec."Outer Qty.")
+//                 {
+//                     ApplicationArea = all;
+//                     Editable = true;
+//                 }
 
-            }
-        }
-    }
+//             }
+//         }
+//     }
 
-    actions
-    {
-        area(Processing)
-        {
-            action(ActionName)
-            {
+//     actions
+//     {
+//         area(Processing)
+//         {
+//             action(ActionName)
+//             {
 
-                trigger OnAction()
-                begin
+//                 trigger OnAction()
+//                 begin
 
-                end;
-            }
-        }
-    }
+//                 end;
+//             }
+//         }
+//     }
 
-    var
-        myInt: Integer;
-}
+//     var
+//         myInt: Integer;
+// }

@@ -80,12 +80,12 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
             field("SO Approval Required"; Rec."SO Approval Required")
             {
                 ApplicationArea = All;
-                // Editable = false;
+                Editable = false;
             }
             field("SO Min Order Approval Required"; Rec."SO Min Order Approval Required")
             {
                 ApplicationArea = All;
-                // Editable = false;
+                Editable = false;
             }
             field("Zero Price Approval"; Rec."Zero Price Approval")
             {
