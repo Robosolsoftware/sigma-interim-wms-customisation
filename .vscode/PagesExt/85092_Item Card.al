@@ -393,11 +393,11 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 ApplicationArea = All;
                 Editable = G_OpSOandPOBlocked;// AND  L_CurrPageEditable;
             }
-            // field("Ops Sales Blocked - SS"; Rec."Ops Sales Blocked - SS")
-            // {
-            //     ApplicationArea = All;
-            //     Editable = G_OpSOandPOBlocked;
-            // }
+            field("Ops Sales Blocked - SS"; Rec."Ops Sales Blocked - SS")
+            {
+                ApplicationArea = All;
+                Editable = G_OpSOandPOBlocked;
+            }
         }
 
         modify("Unit Price")
@@ -526,6 +526,17 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
 
     actions
     {
+        addlast(Availability)
+        {
+            action("Shipper/Pallet Data")
+            {
+                ApplicationArea = Planning;
+                Image = ItemVariant;
+                RunObject = Page SipperPalletList;
+                RunPageLink = "Item No." = field("No.");
+            }
+
+        }
         modify(PrintLabel)
         {
             Visible = false;

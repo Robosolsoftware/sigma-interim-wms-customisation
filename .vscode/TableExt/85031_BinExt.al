@@ -6,6 +6,11 @@ tableextension 85031 BinExt extends Bin
         {
             DataClassification = ToBeClassified;
         }
+        field(85001; "Exclude from free Qty."; Boolean)
+        {
+            Caption = 'Exclude from free Qty. Calculation';
+            DataClassification = ToBeClassified; //Prathamesh++ SBB-291
+        }
         modify(Code)
         {
             trigger OnAfterValidate()

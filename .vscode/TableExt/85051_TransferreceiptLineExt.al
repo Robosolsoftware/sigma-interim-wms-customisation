@@ -15,6 +15,11 @@ tableextension 85051 TransferReceiptLineExt extends "Transfer Receipt Line"
             Caption = 'Warehouse Class Code';
             TableRelation = "Warehouse Class";
         }
+        field(85003; "Orignial Transfer Order Qty"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 5;
+        }
     }
 
 

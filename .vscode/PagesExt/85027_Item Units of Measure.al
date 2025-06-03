@@ -8,14 +8,17 @@ pageextension 85027 "SC Item Units of Measure" extends "Item Units of Measure"
             field("Outer Qty."; Rec."Outer Qty.")
             {
                 ApplicationArea = All;
+                Visible = false;
             }
             field("Shipper Qty."; Rec."Shipper Qty.")
             {
                 ApplicationArea = All;
+                Visible = false;
             }
             field("Pallet Qty."; Rec."Pallet Qty.")
             {
                 ApplicationArea = All;
+                Visible = false;
             }
         }
     }

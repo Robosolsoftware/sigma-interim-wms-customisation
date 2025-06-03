@@ -9,6 +9,10 @@ pageextension 85026 MyExtension extends Bins
                 ApplicationArea = all;
                 Caption = 'Exclude from Fact box & Qty(Aval.)';
             }
+            field("Exclude from free Qty."; Rec."Exclude from free Qty.")
+            {
+                ApplicationArea = all;
+            }
         }
     }
 

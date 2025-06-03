@@ -24,14 +24,17 @@ pageextension 85069 "Item Variant Card" extends "Item Variant Card"
             field("Outer Qty."; Rec."Outer Qty.")
             {
                 ApplicationArea = All;
+                Visible = false;
             }
             field("Shipper Qty."; Rec."Shipper Qty.")
             {
                 ApplicationArea = All;
+                Visible = false;
             }
             field("Pallet Qty."; Rec."Pallet Qty.")
             {
                 ApplicationArea = All;
+                Visible = false;
             }
         }
     }

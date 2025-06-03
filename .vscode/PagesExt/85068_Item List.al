@@ -67,6 +67,17 @@ pageextension 85068 "Item Extended List" extends "Item List"
     }
     actions
     {
+        addlast("&Item Availability by")
+        {
+            action("Shipper/Pallet Data")
+            {
+                ApplicationArea = Planning;
+                Image = ItemVariant;
+                RunObject = Page SipperPalletList;
+                RunPageLink = "Item No." = field("No.");
+            }
+
+        }
         modify(PrintLabel)
         {
             Visible = false;

@@ -468,9 +468,21 @@ codeunit 85013 "Purchase Event & Function"
 
             if ItemVariant.Get(PurchLine."No.", PurchLine."Variant Code") then begin
                 if not ItemVariant."Variant Approval" then
-                    Error('Variant %1 for Item %2 is not QAU Approved. Receipt cannot be posted.', PurchLine."Variant Code", PurchLine."No.");
+                    Error('Variant %1 for Item %2 is not Variant Approved. Receipt cannot be posted.', PurchLine."Variant Code", PurchLine."No.");
             end;
         end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnBeforeInsertTransShptLine', '', false, false)]
+    local procedure OnBeforeInsertTransShptLine(var TransShptLine: Record "Transfer Shipment Line"; TransLine: Record "Transfer Line")
+    begin
+        TransShptLine."Orignial Transfer Order Qty" := TransLine.Quantity;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", 'OnBeforeInsertTransRcptLine', '', false, false)]
+    local procedure OnBeforeInsertTransRcptLine(var TransRcptLine: Record "Transfer Receipt Line"; TransLine: Record "Transfer Line")
+    begin
+        TransRcptLine."Orignial Transfer Order Qty" := TransLine.Quantity;
     end;
 
 

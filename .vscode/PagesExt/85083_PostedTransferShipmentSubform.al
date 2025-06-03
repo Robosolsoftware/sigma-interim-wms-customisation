@@ -4,6 +4,11 @@ pageextension 85083 PostedTransfershipment extends 5744
     {
         addafter(Quantity)
         {
+            field("Orignial Transfer Order Qty"; Rec."Orignial Transfer Order Qty")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
             field("Pack Size"; rec."Pack Size")
             {
                 ApplicationArea = all;

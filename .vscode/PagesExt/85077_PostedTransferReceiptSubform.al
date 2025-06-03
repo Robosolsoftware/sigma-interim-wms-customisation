@@ -4,6 +4,11 @@ pageextension 85077 PostedTransferReceiptSubExt extends "Posted Transfer Rcpt. S
     {
         addafter(Quantity)
         {
+            field("Orignial Transfer Order Qty"; Rec."Orignial Transfer Order Qty")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
             field("Pack Size"; rec."Pack Size")
             {
                 ApplicationArea = all;

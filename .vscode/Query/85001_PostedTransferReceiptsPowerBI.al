@@ -27,6 +27,10 @@ query 85001 PostedTransferReceiptsPowerBI
                 column(Quantity; Quantity)
                 {
                 }
+                column(Orignial_Transfer_Order_Qty; "Orignial Transfer Order Qty")
+                {
+
+                }
                 dataitem(User; User)
                 {
                     DataItemLink = "User Security ID" = Transfer_Receipt_Header.SystemCreatedBy;

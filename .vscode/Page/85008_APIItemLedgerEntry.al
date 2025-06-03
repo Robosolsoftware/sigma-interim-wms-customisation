@@ -47,6 +47,10 @@ page 85008 APIItemLedgerEntry
                 {
                     ApplicationArea = all;
                 }
+                field("Posting_Date"; Rec."Posting Date")
+                {
+                    ApplicationArea = all;
+                }
                 field(LocationCode; Rec."Location Code")
                 {
                     ApplicationArea = all;

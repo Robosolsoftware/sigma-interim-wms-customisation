@@ -27,6 +27,10 @@ query 85002 "PostedTransferShipmentsPowerBI"
                 column(Quantity; Quantity)
                 {
                 }
+                column(Orignial_Transfer_Order_Qty; "Orignial Transfer Order Qty")
+                {
+
+                }
                 dataitem(User; User)
                 {
                     DataItemLink = "User Security ID" = Transfer_Shipment_Header.SystemCreatedBy;
