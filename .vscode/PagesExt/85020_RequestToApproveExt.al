@@ -35,26 +35,24 @@ pageextension 85020 "Ext Request to Approve" extends "Requests to Approve"
             }
         }
     }
-    // trigger OnOpenPage()
-    // var
-    //     salesH: Record "Sales Header";
-    // begin
-    //     salesH.Reset();
-    //     salesH.SetRange("Sell-to Customer No.", Rec."Customer No.");
-    //     salesH.SetFilter(Status, '%1|%2', salesH.Status::"Pending Approval", salesH.Status::Released);
-    //     salesH.SetRange("Order Date", WorkDate());
-    //     if salesH.FindSet() then begin
-    //         repeat
-    //             salesH.CalcFields("Amount Including VAT");
-    //             Rec."Running Total MOV" += salesH."Amount Including VAT";
+    trigger OnAfterGetRecord()
+    var
+        salesH: Record "Sales Header";
+    begin
+        salesH.Reset();
+        salesH.SetRange("Sell-to Customer No.", Rec."Customer No.");
+        salesH.SetFilter(Status, '%1|%2', salesH.Status::"Pending Approval", salesH.Status::Released);
+        salesH.SetRange("Order Date", WorkDate());
+        if salesH.FindSet() then begin
+            repeat
+                salesH.CalcFields(Amount);
+                Rec."Running Total MOV" += salesH.Amount;
 
-    //         until salesH.Next() = 0;
+            until salesH.Next() = 0;
+            Rec.CalcFields("Min Order Value");
+            if rec."Running Total MOV" >= rec."Min Order Value" then
+                Rec."Running Total Achieved" := true;
+        end;
 
-    //         if rec."Running Total MOV" >= rec."Min Order Value" then
-    //             Rec."Running Total Achieved" := true;
-    //         Rec.Modify();
-
-    //     end;
-
-    // end;
+    end;
 }
