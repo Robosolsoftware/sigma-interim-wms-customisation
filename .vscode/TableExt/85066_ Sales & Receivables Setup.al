@@ -11,6 +11,10 @@ tableextension 85066 "SC Sales & Receivables Setup" extends "Sales & Receivables
         {
 
         }
+        field(85068; "ePOD Job Nos"; Code[20])
+        {
+            TableRelation = "No. Series".Code;
+        }
     }
 
     keys

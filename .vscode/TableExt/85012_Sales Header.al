@@ -13,8 +13,24 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                 L_BlankDatFormula: DateFormula;
                 //CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
                 L_BilltoCustomer: Record Customer;
+                L_UserSetp: Record "User Setup";
             begin
                 if Rec."Sell-to Customer No." <> '' then begin
+                    if Rec."IRP Order" = true then
+                        Rec."Order Category" := Rec."Order Category"::Web
+                    else begin
+                        Rec.CalcFields("Special Order", "Drop/Special Order");
+                        if (Rec."Special Order" = true) OR (Rec."Drop/Special Order" = true) then begin
+                            Rec."Order Category" := Rec."Order Category"::"Special/DropShipment";
+                        end else begin
+                            L_UserSetp.Reset();
+                            L_UserSetp.SetRange("User ID", UserId);
+                            if L_UserSetp.FindFirst() then begin
+                                Rec."Order Category" := L_UserSetp."Order Category";
+                            end;
+                        end;
+                    end;
+
                     L_Customer.Reset();
                     L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
                     if L_Customer.FindFirst() then begin
@@ -536,6 +552,44 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         field(85008; "Exempt from Overdue check"; Boolean)
         {
 
+        }
+        field(85009; "ePOD ID"; Integer)
+        {
+
+        }
+        field(85010; "ePOD Status"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = " ",Allocated,Unallocated,Pending,Deleted,Cancelled,On_Run,On_Handheld,Completed,Unknown;
+        }
+        field(85011; "ePOD RunID"; Integer)
+        {
+
+        }
+        field(85012; "ePOD Job Consolidated"; Boolean)
+        {
+
+        }
+        field(85013; "Order Category"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = " ",RX,Hospital,Web,Wholesale,Tender,"Special/DropShipment",Export;
+
+            trigger OnValidate()
+            var
+                L_WarehouseActivityHeader: Record "Warehouse Activity Header";
+            begin
+                if Rec."IRP Order" = true then
+                    Error('You cannot change Order Category of electronic Order')
+                else begin
+                    L_WarehouseActivityHeader.Reset();
+                    L_WarehouseActivityHeader.SetRange(Type, L_WarehouseActivityHeader.Type::"Invt. Pick");
+                    L_WarehouseActivityHeader.SetRange("Source No.", Rec."No.");
+                    if L_WarehouseActivityHeader.FindFirst() then begin
+                        Error('You cannot change Order Category if inventory pick is exist');
+                    end;
+                end;
+            end;
         }
     }
 

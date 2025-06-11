@@ -107,6 +107,10 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+            field("Order Category"; Rec."Order Category")
+            {
+                ApplicationArea = All;
+            }
 
         }
     }

@@ -402,6 +402,31 @@ tableextension 85030 "SC Customer" extends Customer
         {
 
         }
+        field(85009; "ePOD ID"; Integer)
+        {
+
+        }
+        field(85010; "Customer Site ID"; Integer)
+        {
+
+        }
+        field(85011; "Customer Synced"; Boolean)
+        {
+
+        }
+        field(85012; "Podfather Customer"; Boolean)
+        {
+
+        }
+        field(85013; "ePOD Status"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = Active,Inactive;
+        }
+        field(85014; "Loading ePOD Customer"; Boolean)
+        {
+
+        }
     }
 
     fieldgroups

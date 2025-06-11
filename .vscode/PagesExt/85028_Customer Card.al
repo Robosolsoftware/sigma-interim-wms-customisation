@@ -270,6 +270,47 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 Editable = L_CreditCheckEditable;
             }
 
+            group("Podfather")
+            {
+                field("ePOD ID"; Rec."ePOD ID")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Customer Site ID"; Rec."Customer Site ID")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Podfather Customer"; Rec."Podfather Customer")
+                {
+                    ApplicationArea = All;
+                }
+                field("Customer Synced"; Rec."Customer Synced")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Loading ePOD Customer"; Rec."Loading ePOD Customer")
+                {
+                    ApplicationArea = all;
+
+                    trigger OnValidate()
+                    var
+                        L_Customer: Record Customer;
+                    begin
+                        if Rec."Loading ePOD Customer" = true then begin
+                            L_Customer.Reset();
+                            L_Customer.SetFilter("No.", '<>%1', Rec."No.");
+                            L_Customer.SetRange("Loading ePOD Customer", true);
+                            L_Customer.SetRange("Shipping Agent Code", Rec."Shipping Agent Code");
+                            if L_Customer.FindFirst() then
+                                Error('Loadning ePOD customer should not be more than one');
+                        end;
+                    end;
+                }
+            }
+
         }
         addafter(Statistics)
         {

@@ -15,6 +15,10 @@ pageextension 85118 "SC Sales & Receivables Setup" extends "Sales & Receivables 
             {
                 ApplicationArea = All;
             }
+            field("ePOD Job Nos"; Rec."ePOD Job Nos")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

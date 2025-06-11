@@ -9,5 +9,10 @@ tableextension 85071 BinContExt extends "Bin Content"
             CalcFormula = lookup(Bin."Exclude from free Qty." where(Code = field("Bin Code"), "Location Code" = field("Location Code")));
             Editable = false;
         }
+        field(85001; "Daily Priority Exist"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Item Variant" where("Item No." = field("Item No."), Code = field("Variant Code"), Priority = filter(> 0)));
+        }
     }
 }

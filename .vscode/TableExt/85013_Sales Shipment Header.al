@@ -165,6 +165,29 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
         {
 
         }
+        field(85009; "ePOD ID"; Integer)
+        {
+
+        }
+        field(85010; "ePOD Status"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = " ",Allocated,Unallocated,Pending,Deleted,Cancelled,On_Run,On_Handheld,Completed,Unknown;
+        }
+        field(85011; "ePOD RunID"; Integer)
+        {
+
+        }
+        field(85012; "ePOD Job Consolidated"; Boolean)
+        {
+
+        }
+        field(85013; "Order Category"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = " ",RX,Hospital,Web,Wholesale,Tender,"Special/DropShipment",Export;
+            Editable = false;
+        }
     }
 
     var

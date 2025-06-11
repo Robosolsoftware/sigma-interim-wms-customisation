@@ -102,6 +102,11 @@ tableextension 85028 "SC User Setup" extends "User Setup"
         {
             DataClassification = ToBeClassified;
         }
+        field(85027; "Order Category"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = " ",RX,Hospital,Web,Wholesale,Tender,"Special/DropShipment",Export;
+        }
 
 
     }

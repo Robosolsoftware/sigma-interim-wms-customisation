@@ -3,6 +3,21 @@ pageextension 85048 "SC Shipping Agents" extends "Shipping Agents"
     layout
     {
         // Add changes to page layout here
+        addlast(Control1)
+        {
+            field("Podfather Depot"; Rec."Podfather Depot")
+            {
+                ApplicationArea = All;
+            }
+            field("ePOD ID"; Rec."ePOD ID")
+            {
+                ApplicationArea = All;
+            }
+            field("Depot Synced"; Rec."Depot Synced")
+            {
+                ApplicationArea = All;
+            }
+        }
         modify(Code)
         {
             Editable = L_CurrPageEditable;
