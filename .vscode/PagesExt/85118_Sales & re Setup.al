@@ -19,6 +19,10 @@ pageextension 85118 "SC Sales & Receivables Setup" extends "Sales & Receivables 
             {
                 ApplicationArea = All;
             }
+            field("Pick Date Filter"; Rec."Pick Date Filter")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 

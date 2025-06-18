@@ -14,5 +14,10 @@ tableextension 85071 BinContExt extends "Bin Content"
             FieldClass = FlowField;
             CalcFormula = exist("Item Variant" where("Item No." = field("Item No."), Code = field("Variant Code"), Priority = filter(> 0)));
         }
+        field(85002; "Saleable Location"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Location."Saleable Location" where(Code = field("Location Code")));
+        }
     }
 }

@@ -15,6 +15,10 @@ tableextension 85066 "SC Sales & Receivables Setup" extends "Sales & Receivables
         {
             TableRelation = "No. Series".Code;
         }
+        field(85069; "Pick Date Filter"; DateFormula)
+        {
+
+        }
     }
 
     keys
