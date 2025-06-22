@@ -33,7 +33,8 @@ table 85012 "Replenishment Worksheet"
         }
         field(6; "System Quantity"; Decimal)
         {
-
+            Caption = 'Depot1 Quantity';
+            Editable = false;
         }
         field(7; "Available Qty"; Decimal)
         {
@@ -41,7 +42,7 @@ table 85012 "Replenishment Worksheet"
         }
         field(8; "Demand Quantity"; Decimal)
         {
-
+            Caption = 'Replenishment Qty.';
         }
         field(9; "Qty to Move"; Decimal)
         {
@@ -62,10 +63,72 @@ table 85012 "Replenishment Worksheet"
         field(13; "From Location Code"; Code[20])
         {
             TableRelation = Location;
+
+            trigger OnValidate()
+            var
+                L_BinContent: Record "Bin Content";
+                L_Availabletotake: Decimal;
+                L_ReplenishmentReport: Report "Calculate _Bin Replenishment";
+            begin
+                if Rec."From Location Code" <> xRec."From Location Code" then begin
+                    Rec."From Bin Code" := '';
+                    Rec."Qty to Move" := 0;
+
+                    //Check Availibility qty++++
+                    Clear(L_Availabletotake);
+                    L_BinContent.Reset();
+                    L_BinContent.SetRange("Location Code", Rec."From Location Code");
+                    L_BinContent.SetRange("Item No.", Rec."Item No.");
+                    L_BinContent.SetRange("Variant Code", Rec."Variant Code");
+                    if L_BinContent.FindSet() then begin
+                        repeat
+                            if L_ReplenishmentReport.UseForReplenishment(L_BinContent) then begin
+                                L_Availabletotake := L_Availabletotake + L_BinContent.CalcQtyAvailToPick(0);
+                            end;
+                        until L_BinContent.Next() = 0;
+
+                        if L_Availabletotake = 0 then
+                            Error('Quantity not available in Item= %1, Variant= %2, Location= %3', Rec."Item No.", L_BinContent."Variant Code", L_BinContent."Location Code");
+
+                    end else
+                        Error('The field From Location Code contains a value (%1) that cannot be found in the related table (Bin Content).', Rec."From Location Code");
+                end;
+            end;
         }
         field(14; "From Bin Code"; Code[20])
         {
             TableRelation = Bin where("Location Code" = field("From Location Code"));
+
+            trigger OnValidate()
+            var
+                L_BinContent: Record "Bin Content";
+                L_Availabletotake: Decimal;
+                L_ReplenishmentReport: Report "Calculate _Bin Replenishment";
+            begin
+                if Rec."From Bin Code" <> xRec."From Bin Code" then begin
+                    Rec."Qty to Move" := 0;
+
+                    //Check Availibility qty++++
+                    Clear(L_Availabletotake);
+                    L_BinContent.Reset();
+                    L_BinContent.SetRange("Location Code", Rec."From Location Code");
+                    L_BinContent.SetRange("Item No.", Rec."Item No.");
+                    L_BinContent.SetRange("Variant Code", Rec."Variant Code");
+                    L_BinContent.SetRange("Bin Code", Rec."From Bin Code");
+                    if L_BinContent.FindSet() then begin
+                        repeat
+                            if L_ReplenishmentReport.UseForReplenishment(L_BinContent) then begin
+                                L_Availabletotake := L_Availabletotake + L_BinContent.CalcQtyAvailToPick(0);
+                            end;
+                        until L_BinContent.Next() = 0;
+
+                        if L_Availabletotake = 0 then
+                            Error('Quantity not available in Item= %1, Variant= %2, Bin= %3,Location= %4', Rec."Item No.", L_BinContent."Variant Code", L_BinContent."Bin Code", L_BinContent."Location Code");
+
+                    end else
+                        Error('The field From Location Code contains a value (%1) that cannot be found in the related table (Bin Content).', Rec."From Location Code");
+                end;
+            end;
         }
         field(15; "Posting Date"; Date)
         {
@@ -81,7 +144,10 @@ table 85012 "Replenishment Worksheet"
             Caption = 'Batch Name';
             TableRelation = "Item Journal Batch".Name where("Journal Template Name" = field("Template Name"));
         }
+        field(18; "Min. Qty."; Decimal)
+        {
 
+        }
     }
 
     keys

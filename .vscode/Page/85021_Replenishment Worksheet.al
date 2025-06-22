@@ -38,10 +38,12 @@ page 85021 "Replenishment Worksheet"
                 field("Posting Date"; Rec."Posting Date")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Item No."; Rec."Item No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field(Description; Rec.Description)
                 {
@@ -51,14 +53,23 @@ page 85021 "Replenishment Worksheet"
                 field("Variant Code"; Rec."Variant Code")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Location Code"; Rec."Location Code")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Bin Code"; Rec."Bin Code")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Min. Qty."; Rec."Min. Qty.")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    DecimalPlaces = 0 : 5;
                 }
                 field("Max. Qty."; Rec."Max. Qty.")
                 {
@@ -70,11 +81,15 @@ page 85021 "Replenishment Worksheet"
                 {
                     ApplicationArea = All;
                     DecimalPlaces = 0 : 5;
+                    Caption = 'Depot1 Quantity';
+                    Editable = false;
                 }
                 field("Demand Quantity"; Rec."Demand Quantity")
                 {
                     ApplicationArea = All;
                     DecimalPlaces = 0 : 5;
+                    Editable = false;
+                    Caption = 'Replenishment Qty.';
                 }
                 field("From Location Code"; Rec."From Location Code")
                 {

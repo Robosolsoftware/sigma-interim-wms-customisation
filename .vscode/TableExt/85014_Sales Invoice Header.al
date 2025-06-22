@@ -196,6 +196,16 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
             OptionMembers = " ",RX,Hospital,Web,Wholesale,Tender,"Special/DropShipment",Export;
             Editable = false;
         }
+        field(85014; "Customer Synced"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist(Customer where("No." = field("Bill-to Customer No."), "ePOD ID" = filter(> 0)));
+        }
+        field(85015; "Route Synced"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Shipping Agent" where(Code = field("Shipping Agent Code"), "ePOD ID" = filter(> 0)));
+        }
 
     }
 

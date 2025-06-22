@@ -12,9 +12,11 @@ report 85005 "Calculate _Bin Replenishment"
 
             trigger OnAfterGetRecord()
             begin
-                "Bin Content".CalcFields("Daily Priority Exist");
-                if "Bin Content"."Daily Priority Exist" = GetVariantSetup("Bin Content"."Item No.") then
+                if "Bin Content"."Min. Qty." > "Bin Content".CalcQtyAvailToTakeUOM() then begin
+                    // "Bin Content".CalcFields("Daily Priority Exist");
+                    // if "Bin Content"."Daily Priority Exist" = GetVariantSetup("Bin Content"."Item No.") then
                     ReplenishBin("Bin Content");
+                end;
             end;
 
             trigger OnPostDataItem()
@@ -28,6 +30,8 @@ report 85005 "Calculate _Bin Replenishment"
             begin
                 //Filter++
                 SetRange("Location Code", LocationCode);
+                SetFilter("Min. Qty.", '>%1', 0);
+
 
                 //Set record++
                 SetWhseWorksheet(WhseWkshTemplateName, WhseWkshName, LocationCode);
@@ -52,6 +56,7 @@ report 85005 "Calculate _Bin Replenishment"
                         Caption = 'Template Name';
                         TableRelation = "Whse. Worksheet Template";
                         ToolTip = 'Specifies the name of the template that applies to the movement lines.';
+                        Editable = false;
 
                         trigger OnValidate()
                         begin
@@ -63,12 +68,14 @@ report 85005 "Calculate _Bin Replenishment"
                     {
                         ApplicationArea = Warehouse;
                         Caption = 'Batch Name';
+                        Editable = false;
                     }
                     field(LocCode; LocationCode)
                     {
                         ApplicationArea = Warehouse;
                         Caption = 'Location Code';
                         TableRelation = Location;
+                        Editable = false;
                     }
                 }
             }
@@ -155,14 +162,19 @@ report 85005 "Calculate _Bin Replenishment"
         QtyAvailToTakeBase: Decimal;
         MovementQtyBase: Decimal;
     begin
+        //Calculate RemainQtyToReplenishBase Qty+++
+        Clear(RemainQtyToReplenishBase);
+        RemainQtyToReplenishBase := ToBinContent."Min. Qty." - ToBinContent.CalcQtyAvailToTakeUOM();
+        RemainQtyToReplenishBase := ToBinContent."Max. Qty." - RemainQtyToReplenishBase;
+
+
         FromBinContent.Reset();
-        FromBinContent.SetCurrentKey("Location Code", "Item No.", "Variant Code");
-        FromBinContent.Ascending(true);
-        //FromBinContent.SetRange("Location Code", ToBinContent."Location Code");
         FromBinContent.SetRange("Item No.", ToBinContent."Item No.");
         FromBinContent.SetRange("Variant Code", ToBinContent."Variant Code");
         FromBinContent.SetRange("Qty. per Unit of Measure", ToBinContent."Qty. per Unit of Measure");
         FromBinContent.SetFilter("Location Code", '%1|%2', 'IP3', 'IP4');
+        FromBinContent.SetCurrentKey("Location Code");
+        FromBinContent.Ascending(true);
         if FromBinContent.Find('-') then begin
             ReplenishmentWorksheet2.Copy(TempReplenishmentWorksheet);
             TempReplenishmentWorksheet.SetCurrentKey("Item No.", "From Bin Code", "Location Code", "Variant Code");
@@ -171,7 +183,7 @@ report 85005 "Calculate _Bin Replenishment"
             TempReplenishmentWorksheet.SetRange("Variant Code", FromBinContent."Variant Code");
             repeat
                 if UseForReplenishment(FromBinContent) then begin
-                    QtyAvailToTakeBase := FromBinContent.CalcQtyAvailToTake(0);
+                    QtyAvailToTakeBase := FromBinContent.CalcQtyAvailToTakeUOM();
                     TempReplenishmentWorksheet.SetRange("From Bin Code", FromBinContent."Bin Code");
                     TempReplenishmentWorksheet.SetRange("Unit of Measure Code", FromBinContent."Unit of Measure Code");
                     TempReplenishmentWorksheet.CalcSums("System Quantity");
@@ -215,7 +227,7 @@ report 85005 "Calculate _Bin Replenishment"
         end;
     end;
 
-    local procedure UseForReplenishment(FromBinContent: Record "Bin Content"): Boolean
+    procedure UseForReplenishment(FromBinContent: Record "Bin Content"): Boolean
     begin
         if FromBinContent."Block Movement" in
            [FromBinContent."Block Movement"::Outbound,
@@ -223,22 +235,38 @@ report 85005 "Calculate _Bin Replenishment"
         then
             exit(false);
 
-        GetBinType(FromBinContent."Bin Type Code");
-        exit(not (BinType.Receive or BinType.Ship));
+        // GetBinType(FromBinContent."Bin Type Code");
+        // exit(not (BinType.Receive or BinType.Ship));
+        exit(CheckExcludeBin(FromBinContent));
     end;
 
-    procedure GetBinType(BinTypeCode: Code[10])
+    // procedure GetBinType(BinTypeCode: Code[10])
+    // begin
+    //     if BinTypeCode = '' then
+    //         BinType.Init()
+    //     else
+    //         if BinType.Code <> BinTypeCode then
+    //             BinType.Get(BinTypeCode);
+    // end;
+
+    procedure CheckExcludeBin(FromBinContent: Record "Bin Content"): Boolean
+    var
+        L_Bin: Record Bin;
     begin
-        if BinTypeCode = '' then
-            BinType.Init()
-        else
-            if BinType.Code <> BinTypeCode then
-                BinType.Get(BinTypeCode);
+        L_Bin.Reset();
+        L_Bin.SetRange("Location Code", FromBinContent."Location Code");
+        L_Bin.SetRange(Code, FromBinContent."Bin Code");
+        if L_Bin.FindFirst() then
+            if L_Bin."Exclude from free Qty." = true then
+                exit(false)
+            else
+                exit(true)
     end;
 
     procedure CreateReplenishmentWorksheet(ToBinContent: Record "Bin Content"; FromBinContent: Record "Bin Content"; MovementQtyBase: Decimal)
     var
         L_Item: Record Item;
+        L_DemandQty: Decimal;
     begin
         ToBinContent.CalcFields("Quantity (Base)");
         TempReplenishmentWorksheet.Init();
@@ -257,9 +285,13 @@ report 85005 "Calculate _Bin Replenishment"
         if L_Item.FindFirst() then
             TempReplenishmentWorksheet.Description := L_Item.Description;
         TempReplenishmentWorksheet."Variant Code" := ToBinContent."Variant Code";
+        TempReplenishmentWorksheet."Min. Qty." := ToBinContent."Min. Qty.";
         TempReplenishmentWorksheet."Max. Qty." := ToBinContent."Max. Qty.";
-        TempReplenishmentWorksheet."System Quantity" := ToBinContent."Quantity (Base)";
-        TempReplenishmentWorksheet."Demand Quantity" := ToBinContent."Max. Qty." - ToBinContent."Quantity (Base)";
+        TempReplenishmentWorksheet."System Quantity" := ToBinContent.CalcQtyAvailToTakeUOM();
+        Clear(L_DemandQty);
+        L_DemandQty := ToBinContent."Min. Qty." - ToBinContent.CalcQtyAvailToTakeUOM();
+        L_DemandQty := ToBinContent."Max. Qty." - L_DemandQty;
+        TempReplenishmentWorksheet."Demand Quantity" := L_DemandQty;
         TempReplenishmentWorksheet."Qty to Move" := MovementQtyBase;
         TempReplenishmentWorksheet.Insert();
 
