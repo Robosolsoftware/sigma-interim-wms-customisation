@@ -111,6 +111,10 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+            field("Job Run"; Rec."Job Run")
+            {
+                ApplicationArea = All;
+            }
 
         }
     }

@@ -76,555 +76,556 @@ codeunit 85011 "Customer Price Group Changes"
         L_PriceFound: Boolean;
     begin
         //Get Sales Header++
-        If L_SalesHeader.Get(Rec."Document Type", Rec."Document No.") then;
+        If L_SalesHeader.Get(Rec."Document Type"::Order, Rec."Document No.") then begin
 
-        //If Special Product (DT) +++
-        L_Item.Reset();
-        IF L_Item.Get(Rec."No.") then begin
-            if L_Item."Special Product" = true then begin
-                if L_SalesHeader."Currency Factor" > 0 then
-                    Rec.Validate("Unit Price", L_Item."Unit Price" / L_SalesHeader."Currency Factor")
-                else
-                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                exit;
-            end;
-        end;
-
-
-        //Finding Best Price++
-        Clear(L_PriceFound);
-        If L_Customer.Get(L_SalesHeader."Bill-to Customer No.") then begin
-            //1st Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end;
-            end;
-
-            //2nd Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 2");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //3rd Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 3");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //4th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 4");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //5th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 5");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //6th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 6");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //7th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 7");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //8th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 8");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //9th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 9");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //10th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 10");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-
-            //If Price List not found
-            if L_PriceFound = false then begin
-                L_Item.Reset();
-                IF L_Item.Get(Rec."No.") then begin
+            //If Special Product (DT) +++
+            L_Item.Reset();
+            IF L_Item.Get(Rec."No.") then begin
+                if L_Item."Special Product" = true then begin
                     if L_SalesHeader."Currency Factor" > 0 then
                         Rec.Validate("Unit Price", L_Item."Unit Price" / L_SalesHeader."Currency Factor")
                     else
-                        Rec.Validate("Unit Price", L_Item."Unit Price")
+                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                    exit;
                 end;
             end;
 
-            Clear(G_CalledByFieldNo);
+
+            //Finding Best Price++
+            Clear(L_PriceFound);
+            If L_Customer.Get(L_SalesHeader."Bill-to Customer No.") then begin
+                //1st Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end;
+                end;
+
+                //2nd Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 2");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //3rd Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 3");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //4th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 4");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //5th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 5");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //6th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 6");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //7th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 7");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //8th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 8");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //9th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 9");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //10th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 10");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+
+                //If Price List not found
+                if L_PriceFound = false then begin
+                    L_Item.Reset();
+                    IF L_Item.Get(Rec."No.") then begin
+                        if L_SalesHeader."Currency Factor" > 0 then
+                            Rec.Validate("Unit Price", L_Item."Unit Price" / L_SalesHeader."Currency Factor")
+                        else
+                            Rec.Validate("Unit Price", L_Item."Unit Price")
+                    end;
+                end;
+
+                Clear(G_CalledByFieldNo);
+            end;
         end;
     end;
 
@@ -662,648 +663,649 @@ codeunit 85011 "Customer Price Group Changes"
         Clear(CustomerPriceGroupText);
 
         //Get Sales Header++
-        If L_SalesHeader.Get(Rec."Document Type", Rec."Document No.") then;
+        If L_SalesHeader.Get(Rec."Document Type"::Order, Rec."Document No.") then begin
 
-        //If Special Product (DT) +++
-        L_Item.Reset();
-        IF L_Item.Get(Rec."No.") then begin
-            if L_Item."Special Product" = true then begin
-                if Customer2.get(Rec."Bill-to Customer No.") then begin
-                    if Customer2."Customer Price Group" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + Customer2."Customer Price Group";
-                    if Customer2."Customer Price Group 2" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 2";
-                    if Customer2."Customer Price Group 3" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 3";
-                    if Customer2."Customer Price Group 4" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 4";
-                    if Customer2."Customer Price Group 5" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 5";
-                    if Customer2."Customer Price Group 6" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 6";
-                    if Customer2."Customer Price Group 7" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 7";
-                    if Customer2."Customer Price Group 8" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 8";
-                    if Customer2."Customer Price Group 9" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 9";
-                    if Customer2."Customer Price Group 10" <> '' then
-                        CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 10";
+            //If Special Product (DT) +++
+            L_Item.Reset();
+            IF L_Item.Get(Rec."No.") then begin
+                if L_Item."Special Product" = true then begin
+                    if Customer2.get(Rec."Bill-to Customer No.") then begin
+                        if Customer2."Customer Price Group" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + Customer2."Customer Price Group";
+                        if Customer2."Customer Price Group 2" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 2";
+                        if Customer2."Customer Price Group 3" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 3";
+                        if Customer2."Customer Price Group 4" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 4";
+                        if Customer2."Customer Price Group 5" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 5";
+                        if Customer2."Customer Price Group 6" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 6";
+                        if Customer2."Customer Price Group 7" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 7";
+                        if Customer2."Customer Price Group 8" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 8";
+                        if Customer2."Customer Price Group 9" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 9";
+                        if Customer2."Customer Price Group 10" <> '' then
+                            CustomerPriceGroupText := CustomerPriceGroupText + '|' + Customer2."Customer Price Group 10";
 
-                end;
-
-                if CopyStr(CustomerPriceGroupText, 1, 1) = '|' then
-                    CustomerPriceGroupText := CopyStr(CustomerPriceGroupText, 2);
-
-
-                PriceLineList2.Reset();
-                PriceLineList2.SetRange(Status, PriceLineList2.Status::Active);
-                PriceLineList2.SetRange("Source Type", PriceLineList2."Source Type"::"Customer Price Group");
-                PriceLineList2.SetFilter("Source No.", CustomerPriceGroupText);
-                PriceLineList2.SetRange("Asset Type", PriceLineList2."Asset Type"::Item);
-                PriceLineList2.Setrange("Asset No.", Rec."No.");
-                PriceLineList2.Setrange("Special Product", true);
-                PriceLineList2.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                PriceLineList2.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                PriceLineList2.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                IF PriceLineList2.FindFirst() then begin
-                    if Rec."Unit Volume" > PriceLineList2."Base Volume" then begin
-                        DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
-                        DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
-                        if PriceLineList2."Unit Price" <> 0 then begin
-                            Clear(L_DiscountedUnitPrice);
-                            if PriceLineList2."Line Discount %" > 0 then begin
-                                L_DiscountedUnitPrice := (PriceLineList2."Unit Price") - ((PriceLineList2."Unit Price" * PriceLineList2."Line Discount %") / 100);
-                            end else
-                                L_DiscountedUnitPrice := PriceLineList2."Unit Price";
-
-                            FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
-                        end else begin
-                            L_Item.Reset();
-                            L_Item.SetRange("No.", Rec."No.");
-                            if L_Item.FindFirst() then begin
-                                Clear(L_DiscountedUnitPrice);
-                                if PriceLineList2."Line Discount %" > 0 then begin
-                                    L_DiscountedUnitPrice := (L_Item."Unit Price") - ((L_Item."Unit Price" * PriceLineList2."Line Discount %") / 100);
-                                end else
-                                    L_DiscountedUnitPrice := L_Item."Unit Price";
-
-                                FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
-                            end;
-                        end;
-                        // IF L_SalesHeader."Currency Factor" <> 0 THEN
-                        //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / L_SalesHeader."Currency Factor"
-                        // ELSE
-                        //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
-                    end else begin
-                        if PriceLineList2."Unit Price" <> 0 then begin
-                            Clear(L_DiscountedUnitPrice);
-                            if PriceLineList2."Line Discount %" > 0 then begin
-                                L_DiscountedUnitPrice := (PriceLineList2."Unit Price") - ((PriceLineList2."Unit Price" * PriceLineList2."Line Discount %") / 100);
-                            end else
-                                L_DiscountedUnitPrice := PriceLineList2."Unit Price";
-
-                            FinalPrice := L_DiscountedUnitPrice;
-                        end else begin
-                            L_Item.Reset();
-                            L_Item.SetRange("No.", Rec."No.");
-                            if L_Item.FindFirst() then begin
-                                Clear(L_DiscountedUnitPrice);
-                                if PriceLineList2."Line Discount %" > 0 then begin
-                                    L_DiscountedUnitPrice := (L_Item."Unit Price") - ((L_Item."Unit Price" * PriceLineList2."Line Discount %") / 100);
-                                end else
-                                    L_DiscountedUnitPrice := L_Item."Unit Price";
-
-                                FinalPrice := L_DiscountedUnitPrice;
-                            end;
-                        end;
                     end;
 
-
-                    Rec.Validate("Unit Price", FinalPrice);
-                    Rec.Validate(Rebate, PriceLineList2.Rebate);
-                    //Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
-                    Rec."Discount Applied on BasePrice" := PriceLineList2."Line Discount %";
-                end;
-                exit;
-            end;
-        end;
+                    if CopyStr(CustomerPriceGroupText, 1, 1) = '|' then
+                        CustomerPriceGroupText := CopyStr(CustomerPriceGroupText, 2);
 
 
-        //For Normal Products+++++
-        //Finding Best Price++
-        Clear(L_PriceFound);
-        If L_Customer.Get(L_SalesHeader."Bill-to Customer No.") then begin
-            //1st Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
+                    PriceLineList2.Reset();
+                    PriceLineList2.SetRange(Status, PriceLineList2.Status::Active);
+                    PriceLineList2.SetRange("Source Type", PriceLineList2."Source Type"::"Customer Price Group");
+                    PriceLineList2.SetFilter("Source No.", CustomerPriceGroupText);
+                    PriceLineList2.SetRange("Asset Type", PriceLineList2."Asset Type"::Item);
+                    PriceLineList2.Setrange("Asset No.", Rec."No.");
+                    PriceLineList2.Setrange("Special Product", true);
+                    PriceLineList2.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    PriceLineList2.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    PriceLineList2.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    IF PriceLineList2.FindFirst() then begin
+                        if Rec."Unit Volume" > PriceLineList2."Base Volume" then begin
+                            DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
+                            DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
+                            if PriceLineList2."Unit Price" <> 0 then begin
+                                Clear(L_DiscountedUnitPrice);
+                                if PriceLineList2."Line Discount %" > 0 then begin
+                                    L_DiscountedUnitPrice := (PriceLineList2."Unit Price") - ((PriceLineList2."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                                end else
+                                    L_DiscountedUnitPrice := PriceLineList2."Unit Price";
 
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
+                                FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
+                            end else begin
                                 L_Item.Reset();
                                 L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
+                                if L_Item.FindFirst() then begin
+                                    Clear(L_DiscountedUnitPrice);
+                                    if PriceLineList2."Line Discount %" > 0 then begin
+                                        L_DiscountedUnitPrice := (L_Item."Unit Price") - ((L_Item."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                                    end else
+                                        L_DiscountedUnitPrice := L_Item."Unit Price";
 
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end;
-            end;
-
-            //2nd Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 2");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
                                 end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
                             end;
+                            // IF L_SalesHeader."Currency Factor" <> 0 THEN
+                            //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / L_SalesHeader."Currency Factor"
+                            // ELSE
+                            //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
                         end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
+                            if PriceLineList2."Unit Price" <> 0 then begin
+                                Clear(L_DiscountedUnitPrice);
+                                if PriceLineList2."Line Discount %" > 0 then begin
+                                    L_DiscountedUnitPrice := (PriceLineList2."Unit Price") - ((PriceLineList2."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                                end else
+                                    L_DiscountedUnitPrice := PriceLineList2."Unit Price";
+
+                                FinalPrice := L_DiscountedUnitPrice;
+                            end else begin
                                 L_Item.Reset();
                                 L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
+                                if L_Item.FindFirst() then begin
+                                    Clear(L_DiscountedUnitPrice);
+                                    if PriceLineList2."Line Discount %" > 0 then begin
+                                        L_DiscountedUnitPrice := (L_Item."Unit Price") - ((L_Item."Unit Price" * PriceLineList2."Line Discount %") / 100);
+                                    end else
+                                        L_DiscountedUnitPrice := L_Item."Unit Price";
 
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //3rd Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 3");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    FinalPrice := L_DiscountedUnitPrice;
                                 end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
                             end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
                         end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //4th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 4");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
 
 
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //5th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 5");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //6th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 6");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //7th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 7");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //8th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 8");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //9th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 9");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-            //10th Price++
-            if L_PriceFound = false then begin
-                L_PriceListLine.Reset();
-                L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
-                L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
-                L_PriceListLine.SetRange("Asset No.", Rec."No.");
-                L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
-                L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 10");
-                L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
-                //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
-                L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
-                L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
-                if L_PriceListLine.FindSet() then begin
-                    repeat
-                        if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                            if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
-                                if L_PriceListLine."Unit Price" = 0 then begin
-                                    L_Item.Reset();
-                                    L_Item.SetRange("No.", Rec."No.");
-                                    if L_Item.FindFirst() then
-                                        Rec.Validate("Unit Price", L_Item."Unit Price");
-                                end else begin
-                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                                end;
-
-
-                                if L_PriceListLine."Line Discount %" <> 0 then
-                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                                L_PriceFound := true;
-                            end;
-                        end else begin
-                            if L_PriceListLine."Unit Price" = 0 then begin
-                                L_Item.Reset();
-                                L_Item.SetRange("No.", Rec."No.");
-                                if L_Item.FindFirst() then
-                                    Rec.Validate("Unit Price", L_Item."Unit Price");
-                            end else begin
-                                Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
-                                Rec.Validate(Rebate, L_PriceListLine.Rebate);
-                            end;
-
-
-                            if L_PriceListLine."Line Discount %" <> 0 then
-                                Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
-                            L_PriceFound := true;
-                        end;
-                    until L_PriceListLine.Next() = 0;
-                end
-            end;
-
-
-            //If Price List not found
-            if L_PriceFound = false then begin
-                L_Item.Reset();
-                IF L_Item.Get(Rec."No.") then begin
-                    if L_SalesHeader."Currency Factor" > 0 then
-                        Rec.Validate("Unit Price", L_Item."Unit Price" / L_SalesHeader."Currency Factor")
-                    else
-                        Rec.Validate("Unit Price", L_Item."Unit Price")
+                        Rec.Validate("Unit Price", FinalPrice);
+                        Rec.Validate(Rebate, PriceLineList2.Rebate);
+                        //Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
+                        Rec."Discount Applied on BasePrice" := PriceLineList2."Line Discount %";
+                    end;
+                    exit;
                 end;
             end;
 
-            Clear(G_CalledByFieldNo);
+
+            //For Normal Products+++++
+            //Finding Best Price++
+            Clear(L_PriceFound);
+            If L_Customer.Get(L_SalesHeader."Bill-to Customer No.") then begin
+                //1st Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end;
+                end;
+
+                //2nd Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 2");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //3rd Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 3");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //4th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 4");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //5th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 5");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //6th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 6");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //7th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 7");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //8th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 8");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //9th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 9");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+                //10th Price++
+                if L_PriceFound = false then begin
+                    L_PriceListLine.Reset();
+                    L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+                    L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+                    L_PriceListLine.SetRange("Asset No.", Rec."No.");
+                    L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+                    L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 10");
+                    L_PriceListLine.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                    L_PriceListLine.SetRange("Currency Code", L_SalesHeader."Currency Code");
+                    //L_PriceListLine.SetRange("Variant Code", Rec."Variant Code");
+                    L_PriceListLine.SetFilter("Ending Date", '>%1|%2', L_SalesHeader."Order Date", 0D);
+                    L_PriceListLine.SetFilter("Starting Date", '<%1|%2', L_SalesHeader."Order Date", 0D);
+                    if L_PriceListLine.FindSet() then begin
+                        repeat
+                            if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                                if L_PriceListLine."Minimum Quantity" <= Rec.Quantity then begin
+                                    if L_PriceListLine."Unit Price" = 0 then begin
+                                        L_Item.Reset();
+                                        L_Item.SetRange("No.", Rec."No.");
+                                        if L_Item.FindFirst() then
+                                            Rec.Validate("Unit Price", L_Item."Unit Price");
+                                    end else begin
+                                        Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                        Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                    end;
+
+
+                                    if L_PriceListLine."Line Discount %" <> 0 then
+                                        Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                    L_PriceFound := true;
+                                end;
+                            end else begin
+                                if L_PriceListLine."Unit Price" = 0 then begin
+                                    L_Item.Reset();
+                                    L_Item.SetRange("No.", Rec."No.");
+                                    if L_Item.FindFirst() then
+                                        Rec.Validate("Unit Price", L_Item."Unit Price");
+                                end else begin
+                                    Rec.Validate("Unit Price", L_PriceListLine."Unit Price");
+                                    Rec.Validate(Rebate, L_PriceListLine.Rebate);
+                                end;
+
+
+                                if L_PriceListLine."Line Discount %" <> 0 then
+                                    Rec.Validate("Line Discount %", L_PriceListLine."Line Discount %");
+                                L_PriceFound := true;
+                            end;
+                        until L_PriceListLine.Next() = 0;
+                    end
+                end;
+
+
+                //If Price List not found
+                if L_PriceFound = false then begin
+                    L_Item.Reset();
+                    IF L_Item.Get(Rec."No.") then begin
+                        if L_SalesHeader."Currency Factor" > 0 then
+                            Rec.Validate("Unit Price", L_Item."Unit Price" / L_SalesHeader."Currency Factor")
+                        else
+                            Rec.Validate("Unit Price", L_Item."Unit Price")
+                    end;
+                end;
+
+                Clear(G_CalledByFieldNo);
+            end;
         end;
     end;
 
@@ -1347,7 +1349,7 @@ codeunit 85011 "Customer Price Group Changes"
             exit;
 
         L_SalesHeader.Reset();
-        IF L_SalesHeader.get(Rec."Document Type", Rec."Document No.") then begin
+        IF L_SalesHeader.get(Rec."Document Type"::Order, Rec."Document No.") then begin
             IF rec."Special Product" then begin
                 if Customer2.get(Rec."Bill-to Customer No.") then begin
                     if Customer2."Customer Price Group" <> '' then
@@ -2685,4 +2687,195 @@ codeunit 85011 "Customer Price Group Changes"
             end;
         end;
     end;
+
+    // [EventSubscriber(ObjectType::Table, Database::"Purchase Line", OnAfterValidateEvent, "Unit Volume", false, false)]
+    // local procedure UnitVol_OnAfterValidateEvent(CurrFieldNo: Integer; var Rec: Record "Purchase Line")
+    // var
+    //     L_PriceListLine: Record "Price List Line";
+
+    //     i: Integer;
+    //     Loop: Integer;
+    //     L_Item: Record Item;
+    //     L_PriceFound: Boolean;
+    //     L_PurchHeader: Record "Purchase Header";
+
+    //     DiffVolume: Decimal;
+    //     DiffVolumePrice: Decimal;
+    //     FinalPrice: Decimal;
+
+    //     statis: page 400;
+
+    //     CustomerPriceGroupText: Text[20000];
+    //     PriceLineList2: Record "Price List Line";
+    //     L_DiscountedUnitPrice: Decimal;
+    // begin
+    //     PriceLineList2.Reset();
+    //     PriceLineList2.SetRange(Status, PriceLineList2.Status::Active);
+    //     PriceLineList2.SetRange("Source Type", PriceLineList2."Source Type"::"All Vendors");
+    //     //PriceLineList2.SetFilter("Source No.", CustomerPriceGroupText);
+    //     PriceLineList2.SetRange("Asset Type", PriceLineList2."Asset Type"::Item);
+    //     PriceLineList2.Setrange("Asset No.", Rec."No.");
+    //     PriceLineList2.Setrange("Special Product", true);
+    //     PriceLineList2.SetFilter("Ending Date", '>%1|%2', L_PurchHeader."Order Date", 0D);
+    //     PriceLineList2.SetFilter("Starting Date", '<%1|%2', L_PurchHeader."Order Date", 0D);
+    //     PriceLineList2.SetRange("Currency Code", L_PurchHeader."Currency Code");
+    //     IF PriceLineList2.FindFirst() then begin
+    //         if Rec."Unit Volume" >= PriceLineList2."Base Volume" then begin
+    //             DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
+    //             DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
+    //             if PriceLineList2."Direct Unit Cost" <> 0 then begin
+    //                 Clear(L_DiscountedUnitPrice);
+    //                 if PriceLineList2."Line Discount %" > 0 then begin
+    //                     L_DiscountedUnitPrice := (PriceLineList2."Direct Unit Cost") - ((PriceLineList2."Direct Unit Cost" * PriceLineList2."Line Discount %") / 100);
+    //                 end else
+    //                     L_DiscountedUnitPrice := PriceLineList2."Direct Unit Cost";
+
+    //                 FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
+    //             end else begin
+    //                 L_Item.Reset();
+    //                 L_Item.SetRange("No.", Rec."No.");
+    //                 if L_Item.FindFirst() then begin
+    //                     Clear(L_DiscountedUnitPrice);
+    //                     if PriceLineList2."Line Discount %" > 0 then begin
+    //                         L_DiscountedUnitPrice := (L_Item."Unit Cost") - ((L_Item."Unit Cost" * PriceLineList2."Line Discount %") / 100);
+    //                     end else
+    //                         L_DiscountedUnitPrice := L_Item."Unit Cost";
+
+
+    //                     FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
+    //                 end;
+    //             end;
+    //             // IF L_SalesHeader."Currency Factor" <> 0 THEN
+    //             //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / L_SalesHeader."Currency Factor"
+    //             // ELSE
+    //             //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
+
+    //         end else begin
+    //             if PriceLineList2."Direct Unit Cost" <> 0 then begin
+    //                 Clear(L_DiscountedUnitPrice);
+    //                 if PriceLineList2."Line Discount %" > 0 then begin
+    //                     L_DiscountedUnitPrice := (PriceLineList2."Direct Unit Cost") - ((PriceLineList2."Direct Unit Cost" * PriceLineList2."Line Discount %") / 100);
+    //                 end else
+    //                     L_DiscountedUnitPrice := PriceLineList2."Direct Unit Cost";
+
+    //                 FinalPrice := L_DiscountedUnitPrice;
+    //             end else begin
+    //                 L_Item.Reset();
+    //                 L_Item.SetRange("No.", Rec."No.");
+    //                 if L_Item.FindFirst() then begin
+    //                     Clear(L_DiscountedUnitPrice);
+    //                     if PriceLineList2."Line Discount %" > 0 then begin
+    //                         L_DiscountedUnitPrice := (L_Item."Unit Cost") - ((L_Item."Unit Cost" * PriceLineList2."Line Discount %") / 100);
+    //                     end else
+    //                         L_DiscountedUnitPrice := L_Item."Unit Cost";
+
+
+    //                     FinalPrice := L_DiscountedUnitPrice;
+    //                 end;
+    //             end;
+    //         end;
+
+    //         Rec.Validate("Direct Unit Cost", FinalPrice);
+
+    //         // Rec.Validate(reb, PriceLineList2.Rebate);
+    //         // //Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
+    //         // Rec."Discount Applied on BasePrice" := PriceLineList2."Line Discount %";
+    //     end;
+
+    // end;
+
+    // [EventSubscriber(ObjectType::Table, Database::"Purchase Line", 'OnAfterValidateEvent', 'Quantity', false, false)]
+    // local procedure Qty_OnAfterValidateEventPurch(CurrFieldNo: Integer; var Rec: Record "Purchase Line")
+    // var
+    //     L_PriceListLine: Record "Price List Line";
+
+    //     i: Integer;
+    //     Loop: Integer;
+    //     L_Item: Record Item;
+    //     L_PriceFound: Boolean;
+    //     L_PurchHeader: Record "Purchase Header";
+
+    //     DiffVolume: Decimal;
+    //     DiffVolumePrice: Decimal;
+    //     FinalPrice: Decimal;
+
+    //     statis: page 400;
+
+    //     CustomerPriceGroupText: Text[20000];
+    //     PriceLineList2: Record "Price List Line";
+    //     L_DiscountedUnitPrice: Decimal;
+    // begin
+    //     PriceLineList2.Reset();
+    //     PriceLineList2.SetRange(Status, PriceLineList2.Status::Active);
+    //     PriceLineList2.SetRange("Source Type", PriceLineList2."Source Type"::"All Vendors");
+    //     //PriceLineList2.SetFilter("Source No.", CustomerPriceGroupText);
+    //     PriceLineList2.SetRange("Asset Type", PriceLineList2."Asset Type"::Item);
+    //     PriceLineList2.Setrange("Asset No.", Rec."No.");
+    //     PriceLineList2.Setrange("Special Product", true);
+    //     PriceLineList2.SetFilter("Ending Date", '>%1|%2', L_PurchHeader."Order Date", 0D);
+    //     PriceLineList2.SetFilter("Starting Date", '<%1|%2', L_PurchHeader."Order Date", 0D);
+    //     PriceLineList2.SetRange("Currency Code", L_PurchHeader."Currency Code");
+    //     IF PriceLineList2.FindFirst() then begin
+    //         if Rec."Unit Volume" >= PriceLineList2."Base Volume" then begin
+    //             DiffVolume := Rec."Unit Volume" - PriceLineList2."Base Volume";
+    //             DiffVolumePrice := DiffVolume * PriceLineList2."Cost Unit Thereafter";
+    //             if PriceLineList2."Direct Unit Cost" <> 0 then begin
+    //                 Clear(L_DiscountedUnitPrice);
+    //                 if PriceLineList2."Line Discount %" > 0 then begin
+    //                     L_DiscountedUnitPrice := (PriceLineList2."Direct Unit Cost") - ((PriceLineList2."Direct Unit Cost" * PriceLineList2."Line Discount %") / 100);
+    //                 end else
+    //                     L_DiscountedUnitPrice := PriceLineList2."Direct Unit Cost";
+
+    //                 FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
+    //             end else begin
+    //                 L_Item.Reset();
+    //                 L_Item.SetRange("No.", Rec."No.");
+    //                 if L_Item.FindFirst() then begin
+    //                     Clear(L_DiscountedUnitPrice);
+    //                     if PriceLineList2."Line Discount %" > 0 then begin
+    //                         L_DiscountedUnitPrice := (L_Item."Unit Cost") - ((L_Item."Unit Cost" * PriceLineList2."Line Discount %") / 100);
+    //                     end else
+    //                         L_DiscountedUnitPrice := L_Item."Unit Cost";
+
+
+    //                     FinalPrice := (DiffVolumePrice + L_DiscountedUnitPrice);
+    //                 end;
+    //             end;
+    //             // IF L_SalesHeader."Currency Factor" <> 0 THEN
+    //             //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price") / L_SalesHeader."Currency Factor"
+    //             // ELSE
+    //             //     FinalPrice := (DiffVolumePrice + PriceLineList2."Unit Price");
+
+    //         end else begin
+    //             if PriceLineList2."Direct Unit Cost" <> 0 then begin
+    //                 Clear(L_DiscountedUnitPrice);
+    //                 if PriceLineList2."Line Discount %" > 0 then begin
+    //                     L_DiscountedUnitPrice := (PriceLineList2."Direct Unit Cost") - ((PriceLineList2."Direct Unit Cost" * PriceLineList2."Line Discount %") / 100);
+    //                 end else
+    //                     L_DiscountedUnitPrice := PriceLineList2."Direct Unit Cost";
+
+    //                 FinalPrice := L_DiscountedUnitPrice;
+    //             end else begin
+    //                 L_Item.Reset();
+    //                 L_Item.SetRange("No.", Rec."No.");
+    //                 if L_Item.FindFirst() then begin
+    //                     Clear(L_DiscountedUnitPrice);
+    //                     if PriceLineList2."Line Discount %" > 0 then begin
+    //                         L_DiscountedUnitPrice := (L_Item."Unit Cost") - ((L_Item."Unit Cost" * PriceLineList2."Line Discount %") / 100);
+    //                     end else
+    //                         L_DiscountedUnitPrice := L_Item."Unit Cost";
+
+
+    //                     FinalPrice := L_DiscountedUnitPrice;
+    //                 end;
+    //             end;
+    //         end;
+
+    //         Rec.Validate("Direct Unit Cost", FinalPrice);
+
+    //         // Rec.Validate(reb, PriceLineList2.Rebate);
+    //         // //Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
+    //         // Rec."Discount Applied on BasePrice" := PriceLineList2."Line Discount %";
+    //     end;
+    // end;
 }

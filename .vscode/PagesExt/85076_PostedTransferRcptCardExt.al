@@ -3,6 +3,14 @@ pageextension 85076 PostedTransfederReceiptCardExt extends "Posted Transfer Rece
     layout
     {
 
+        // addafter("Transfer-to Code")
+        // {
+        //     field("Transfer-To Zone Code"; Rec."Transfer-To Zone Code")
+        //     {
+        //         ApplicationArea = all;
+        //         Editable = false;
+        //     }
+        // }
         addlast(General)
         {
             field("Requested By"; rec."Requested By")

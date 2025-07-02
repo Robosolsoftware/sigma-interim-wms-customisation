@@ -2,6 +2,13 @@ pageextension 85073 TransferOrderCardExt extends "Transfer Order"
 {
     layout
     {
+        // addafter("Transfer-to Code")
+        // {
+        //     field("Transfer-To Zone Code"; Rec."Transfer-To Zone Code")
+        //     {
+        //         ApplicationArea = all;
+        //     }
+        // }
         addlast(General)
         {
             field("Requested By"; rec."Requested By")

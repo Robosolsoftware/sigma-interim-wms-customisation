@@ -147,6 +147,7 @@ tableextension 85030 "SC Customer" extends Customer
                     rec.TestField("Phone No.");
                     rec.TestField(Address);
                     // rec.TestField(Type);
+                    Rec.TestField(City);
                     rec.TestField("Post Code");
                     rec.TestField(Name);
                     rec.TestField("Territory Code");

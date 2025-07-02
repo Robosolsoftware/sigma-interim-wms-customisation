@@ -15,7 +15,12 @@ pageextension 85122 "SC Posted Sales Shipment Lines" extends "Posted Sales Shipm
                 ApplicationArea = All;
                 Editable = false;
             }
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = all;
+            }
         }
+
     }
 
     actions

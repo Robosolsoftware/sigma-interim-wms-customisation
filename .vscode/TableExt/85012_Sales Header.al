@@ -591,6 +591,10 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                 end;
             end;
         }
+        // field(85014; "Invoice No."; Code[20])
+        // {
+        //     DataClassification = ToBeClassified;
+        // }
     }
 
     var

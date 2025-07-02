@@ -13,6 +13,7 @@ codeunit 85007 "Credit & OverDue Check on SO"
         G_CalledFrom: Option " ",Header,Line;
         G_SalesHeadr: Record "Sales Header";
         G_BillToCustomer: Code[20];
+        G_Bulkdelete: Boolean;
 
     //Step1:- Store Order No and Document Type in Global Variable+++[From Header]
     [EventSubscriber(ObjectType::Page, Page::"Check Credit Limit", OnBeforeSalesHeaderShowWarning, '', false, false)]
@@ -55,6 +56,35 @@ codeunit 85007 "Credit & OverDue Check on SO"
             CheckCreditLimit.SalesLineCheck(Rec);
         end;
     end;
+
+    // procedure callfromsalesInvoiceCreditmemo_Fordeleterequest(_Bulkdelete: Boolean)
+    // var
+    // begin
+    //     Clear(G_Bulkdelete);
+    //     G_Bulkdelete := _Bulkdelete;
+    // end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Cust-Check Cr. Limit", 'OnBeforeSalesLineCheck', '', false, false)]
+
+    // local procedure OnBeforeSalesLineCheck(var SalesLine: Record "Sales Line"; var IsHandled: Boolean)
+    // var
+    //     SalesHeader: Record "Sales Header";
+    // begin
+
+    //     if G_Bulkdelete = true then begin
+    //         SalesHeader.Reset();
+    //         SalesHeader.SetRange("No.", SalesLine."Document No.");
+    //         SalesHeader.SetRange("Document Type", SalesLine."Document Type");
+    //         if SalesHeader.FindFirst() then begin
+    //             if (SalesHeader."Document Type" = SalesHeader."Document Type"::Invoice) or (SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo") then
+    //                 IsHandled := true;
+    //         end;
+
+    //     end;
+    //     Clear(G_Bulkdelete);
+    // end;
+
+
 
     //Step3:- Check & Update Creadit & OverDue field on SO++
     [EventSubscriber(ObjectType::Page, Page::"Check Credit Limit", OnShowWarningOnBeforeExitValue, '', false, false)]

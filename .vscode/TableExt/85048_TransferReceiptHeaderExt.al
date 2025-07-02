@@ -38,6 +38,10 @@ tableextension 85048 TransferReceiptHeaderExt extends "Transfer Receipt Header"
         {
             DataClassification = ToBeClassified;
         }
+        // field(85011; "Transfer-To Zone Code"; Code[50])
+        // {
+        //     DataClassification = ToBeClassified;
+        // }
 
 
 

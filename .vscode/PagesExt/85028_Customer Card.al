@@ -168,6 +168,10 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
         {
             ShowMandatory = true;
         }
+        modify("City")
+        {
+            ShowMandatory = true;
+        }
 
 
 

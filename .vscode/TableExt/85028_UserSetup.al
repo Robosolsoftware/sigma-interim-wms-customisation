@@ -107,6 +107,11 @@ tableextension 85028 "SC User Setup" extends "User Setup"
             DataClassification = ToBeClassified;
             OptionMembers = " ",RX,Hospital,Web,Wholesale,Tender,"Special/DropShipment",Export;
         }
+        field(85028; "Job Run"; Boolean)
+        {
+            ToolTip = 'Job run once foreground permission';
+            DataClassification = ToBeClassified;
+        }
 
 
     }

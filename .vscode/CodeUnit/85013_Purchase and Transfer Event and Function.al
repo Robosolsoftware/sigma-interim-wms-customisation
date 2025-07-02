@@ -477,6 +477,7 @@ codeunit 85013 "Purchase Event & Function"
     local procedure OnBeforeInsertTransShptLine(var TransShptLine: Record "Transfer Shipment Line"; TransLine: Record "Transfer Line")
     begin
         TransShptLine."Orignial Transfer Order Qty" := TransLine.Quantity;
+
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", 'OnBeforeInsertTransRcptLine', '', false, false)]
@@ -484,6 +485,20 @@ codeunit 85013 "Purchase Event & Function"
     begin
         TransRcptLine."Orignial Transfer Order Qty" := TransLine.Quantity;
     end;
+
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnBeforeInsertTransShptHeader', '', false, false)]
+    // local procedure OnBeforeInsertTransShptHdr(var TransShptHeader: Record "Transfer Shipment Header"; TransHeader: Record "Transfer Header")
+    // begin
+    //     TransShptHeader."Transfer-To Zone Code" := TransHeader."Transfer-To Zone Code";
+
+    // end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", 'OnBeforeTransRcptHeaderInsert', '', false, false)]
+    // local procedure OnBeforeInsertTransRcptHdr(var TransferReceiptHeader: Record "Transfer Receipt Header"; TransferHeader: Record "Transfer Header")
+    // begin
+    //     TransferReceiptHeader."Transfer-To Zone Code" := TransferHeader."Transfer-To Zone Code";
+    // end;
 
 
 }

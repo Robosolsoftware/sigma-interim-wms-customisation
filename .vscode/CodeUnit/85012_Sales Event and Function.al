@@ -922,6 +922,70 @@ codeunit 85012 "Sales Event & Function"
     //             ApprovalEntry."Running Total Achieved" := true;
     //     end;
     // end;
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", 'OnBeforePerformManualReleaseProcedure', '', false, false)]
+    // local procedure PreventReleaseIfChargeQuantityZero(var SalesHeader: Record "Sales Header"; var IsHandled: Boolean)
+    // var
+    //     SalesLine: Record "Sales Line";
+    // begin
+    //     if SalesHeader."IRP Order" = false then begin
+    //         SalesLine.Reset();
+    //         SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+    //         SalesLine.SetRange("Document No.", SalesHeader."No.");
+    //         SalesLine.SetRange(Type, SalesLine.Type::"Charge (Item)");
+    //         SalesLine.SetRange("Qty. to Assign", 0);
+
+    //         if SalesLine.FindFirst() then begin
+    //             Error('Item charge should be assigned before mannual release');
+    //             //IsHandled := true;
+    //         end;
+    //     end;
+    // end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnAfterCopySalesInvLine', '', false, false)]
+    // local procedure OnAfterGetPstdDocLinesToReverse(var ToSalesHeader: Record "Sales Header"; var FromSalesInvLine: Record "Sales Invoice Line")
+    // var
+
+    // begin
+    //     if ToSalesHeader."Invoice No." = '' then begin
+    //         ToSalesHeader."Invoice No." := FromSalesInvLine."Document No.";
+    //         ToSalesHeader.Modify();
+    //     end;
+    // end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnBeforeCopySalesInvLinesToDoc', '', false, false)]
+    // local procedure OnBeforeCopySalesInvLinesToDoc(var ToSalesHeader: Record "Sales Header"; var FromSalesInvLine: Record "Sales Invoice Line"; var IsHandled: Boolean)
+    // var
+
+    // begin
+    //     if (ToSalesHeader."Invoice No." <> '') and (ToSalesHeader."Invoice No." <> FromSalesInvLine."Document No.") then begin
+    //         Error('You cannot select a different invoice. This return order is linked to invoice %1.', ToSalesHeader."Invoice No.");
+
+    //     end;
+    // end;
+
+    // [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterDeleteEvent', '', false, false)]
+    // local procedure OnAfterSalesLineDelete(var Rec: Record "Sales Line"; RunTrigger: Boolean)
+    // var
+    //     SalesLine: Record "Sales Line";
+    //     SalesHeader: Record "Sales Header";
+    // begin
+    //     if Rec."Document Type" <> Rec."Document Type"::"Return Order" then
+    //         exit;
+
+    //     SalesLine.SetRange("Document Type", Rec."Document Type");
+    //     SalesLine.SetRange("Document No.", Rec."Document No.");
+    //     SalesLine.SetRange(Type, SalesLine.Type::Item);
+    //     if not SalesLine.FindFirst() then begin
+    //         if SalesHeader.Get(Rec."Document Type", Rec."Document No.") then begin
+    //             if SalesHeader."Invoice No." <> '' then begin
+    //                 SalesHeader.Validate("Invoice No.", '');
+    //                 SalesHeader.Modify();
+    //             end;
+    //         end;
+    //     end;
+    // end;
+
+
 
 
     var
