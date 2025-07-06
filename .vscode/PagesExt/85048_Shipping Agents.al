@@ -42,11 +42,6 @@ pageextension 85048 "SC Shipping Agents" extends "Shipping Agents"
             Editable = L_CurrPageEditable;
 
         }
-        modify("Coupled to CRM")
-        {
-            Editable = L_CurrPageEditable;
-
-        }
         addafter("Internet Address")
         {
             field(Status; Rec.Status)
