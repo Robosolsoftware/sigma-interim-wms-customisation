@@ -56,6 +56,8 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
                         Rec."PO Approval required" := L_Vendor."PO Approval required";
                         //Rec."PO Approval Value" := L_Vendor."PO Approval Value";
                     end;
+
+                    Rec."Invoice Received Date" := WorkDate();
                 end;
 
             end;

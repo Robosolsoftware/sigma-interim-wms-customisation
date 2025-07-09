@@ -1,1 +1,1 @@
-﻿{"Added":[],"Modified":[{"Id":85000,"Kind":26,"Name":"SigmaCustomization","Namespace":""},{"Id":85048,"Kind":16,"Name":"SC Shipping Agents","Namespace":""},{"Id":85139,"Kind":16,"Name":"JobQueueEntryExt","Namespace":""}],"Removed":[]}
+﻿{"Added":[],"Modified":[{"Id":85021,"Kind":17,"Name":"SC Purchase Header","Namespace":""},{"Id":85000,"Kind":26,"Name":"SigmaCustomization","Namespace":""},{"Id":85048,"Kind":16,"Name":"SC Shipping Agents","Namespace":""},{"Id":85139,"Kind":16,"Name":"JobQueueEntryExt","Namespace":""}],"Removed":[]}
