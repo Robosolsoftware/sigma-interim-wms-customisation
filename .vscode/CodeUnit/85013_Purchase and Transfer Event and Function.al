@@ -464,7 +464,7 @@ codeunit 85013 "Purchase Event & Function"
     var
         ItemVariant: Record "Item Variant";
     begin
-        if PurchLine."Variant Code" <> '' then begin
+        if (PurchLine."Variant Code" <> '') AND (PurchLine."Qty. to Receive" <> 0) then begin
 
             if ItemVariant.Get(PurchLine."No.", PurchLine."Variant Code") then begin
                 if not ItemVariant."Variant Approval" then
