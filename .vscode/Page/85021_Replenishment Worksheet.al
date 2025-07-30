@@ -35,6 +35,10 @@ page 85021 "Replenishment Worksheet"
             }
             repeater(GroupName)
             {
+                field(Action; Rec.Action)
+                {
+                    ApplicationArea = All;
+                }
                 field("Posting Date"; Rec."Posting Date")
                 {
                     ApplicationArea = All;
@@ -60,11 +64,11 @@ page 85021 "Replenishment Worksheet"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("Bin Code"; Rec."Bin Code")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
+                // field("Bin Code"; Rec."Bin Code")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
                 field("Min. Qty."; Rec."Min. Qty.")
                 {
                     ApplicationArea = All;
@@ -95,10 +99,11 @@ page 85021 "Replenishment Worksheet"
                 {
                     ApplicationArea = All;
                 }
-                field("From Bin Code"; Rec."From Bin Code")
-                {
-                    ApplicationArea = All;
-                }
+                // field("From Bin Code"; Rec."From Bin Code")
+                // {
+                //     ApplicationArea = All;
+                //     Visible = false;
+                // }
                 field("Qty to Move"; Rec."Qty to Move")
                 {
                     ApplicationArea = All;
@@ -118,7 +123,7 @@ page 85021 "Replenishment Worksheet"
         {
             action("Calculate Bin &Replenishment")
             {
-                ApplicationArea = Warehouse;
+                ApplicationArea = all;
                 Caption = 'Calculate Bin &Replenishment';
                 Ellipsis = true;
                 Image = CalculateBinReplenishment;
@@ -126,20 +131,52 @@ page 85021 "Replenishment Worksheet"
                 trigger OnAction()
                 var
                     Location: Record Location;
-                    BinContent: Record "Bin Content";
-                    ReplenishBinContent: Report "Calculate _Bin Replenishment";
+                    ReplenishBinContent: Report "Cal _Bin Replenishment New";
                 begin
+                    Commit();
                     Location.Get('DEPOT1');
                     ReplenishBinContent.InitializeRequest(Rec."Template Name", Rec."Batch Name", Location.Code, false);
-
-                    ReplenishBinContent.SetTableView(BinContent);
                     ReplenishBinContent.Run();
                     Clear(ReplenishBinContent);
+                end;
+            }
+            action(Register)
+            {
+                ApplicationArea = all;
+                Image = Register;
+
+                trigger OnAction()
+                var
+                    L_ReplenishmentWorksheet: Record "Replenishment Worksheet";
+                    L_ReplenishmentWorksheetCode: Codeunit "Replenishment Worksheet";
+                begin
+                    //For Top Category Items only+++
+                    L_ReplenishmentWorksheet.Reset();
+                    L_ReplenishmentWorksheet.SetRange(Action, L_ReplenishmentWorksheet.Action::Accept);
+                    L_ReplenishmentWorksheet.SetRange("Top Category", true);
+                    if L_ReplenishmentWorksheet.FindSet() then begin
+                        if L_ReplenishmentWorksheetCode.CreteTransferOrder(L_ReplenishmentWorksheet, 'SH') then begin
+                            L_ReplenishmentWorksheet.DeleteAll();
+                        end;
+                    end;
+
+                    //For Non Top Category Items only+++
+                    L_ReplenishmentWorksheet.Reset();
+                    L_ReplenishmentWorksheet.SetRange(Action, L_ReplenishmentWorksheet.Action::Accept);
+                    L_ReplenishmentWorksheet.SetRange("Top Category", false);
+                    if L_ReplenishmentWorksheet.FindSet() then begin
+                        if L_ReplenishmentWorksheetCode.CreteTransferOrder(L_ReplenishmentWorksheet, 'HDH') then begin
+                            L_ReplenishmentWorksheet.DeleteAll();
+                        end;
+                    end;
+
+                    //For Unit1 Items Only+++
                 end;
             }
         }
     }
     var
+        tes: Report 1002;
         CurrentJnlBatchName: Code[10];
         ItemJnlMgt: Codeunit ItemJnlManagement;
         Text000: Label '%1 journal';

@@ -167,6 +167,10 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
                 end;
             end;
         }
+        // field(85009; Rebate; Decimal)
+        // {
+        //     DataClassification = ToBeClassified;
+        // }
         modify("Line Discount %")
         {
             trigger OnAfterValidate()

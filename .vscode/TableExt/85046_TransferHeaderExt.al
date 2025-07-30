@@ -46,11 +46,15 @@ tableextension 85046 TransferHeaderExt extends "Transfer Header"
         {
 
         }
-        // field(85011; "Transfer-To Zone Code"; Code[50])
-        // {
-        //     DataClassification = ToBeClassified;
-        //     TableRelation = Zone.Code where("Location Code" = field("Transfer-to Code"));
-        // }
+        field(85011; "Transfer-To Zone Code"; Code[50])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = Zone.Code where("Location Code" = field("Transfer-to Code"));
+        }
+        field(85012; "Replenishment Batch Name"; Code[20])
+        {
+
+        }
     }
 
     var

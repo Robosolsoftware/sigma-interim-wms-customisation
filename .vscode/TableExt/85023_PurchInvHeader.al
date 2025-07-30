@@ -27,8 +27,8 @@ tableextension 85023 "Purch. Inv. Header" extends "Purch. Inv. Header"
         }
         field(85021; "Invoice Type"; Option)
         {
+            //OptionMembers = " ",Opex,Stock,Capex;
             OptionMembers = " ",Opex,Stock;
-
         }
     }
 }

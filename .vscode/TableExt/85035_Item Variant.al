@@ -94,6 +94,14 @@ tableextension 85035 "SC Item Variant" extends "Item Variant"
             DataClassification = ToBeClassified;
         }
     }
+    fieldgroups
+    {
+        addlast(DropDown; Priority)
+        {
+
+        }
+
+    }
 
     var
         myInt: Integer;

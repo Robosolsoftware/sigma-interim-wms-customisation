@@ -39,6 +39,10 @@ pageextension 85070 PurchaseCardExt extends "Purchase Order"
                 ApplicationArea = All;
                 Editable = false;
             }
+            // field("Invoice Type"; Rec."Invoice Type")
+            // {
+            //     ApplicationArea = All;
+            // }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;

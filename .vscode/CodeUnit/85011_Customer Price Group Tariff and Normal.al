@@ -2688,6 +2688,7 @@ codeunit 85011 "Customer Price Group Changes"
         end;
     end;
 
+    // /////////////////////////////////////////////////////////////////////////////////Purchase////////////////////////////////////////////////////
     // [EventSubscriber(ObjectType::Table, Database::"Purchase Line", OnAfterValidateEvent, "Unit Volume", false, false)]
     // local procedure UnitVol_OnAfterValidateEvent(CurrFieldNo: Integer; var Rec: Record "Purchase Line")
     // var
@@ -2712,7 +2713,6 @@ codeunit 85011 "Customer Price Group Changes"
     //     PriceLineList2.Reset();
     //     PriceLineList2.SetRange(Status, PriceLineList2.Status::Active);
     //     PriceLineList2.SetRange("Source Type", PriceLineList2."Source Type"::"All Vendors");
-    //     //PriceLineList2.SetFilter("Source No.", CustomerPriceGroupText);
     //     PriceLineList2.SetRange("Asset Type", PriceLineList2."Asset Type"::Item);
     //     PriceLineList2.Setrange("Asset No.", Rec."No.");
     //     PriceLineList2.Setrange("Special Product", true);
@@ -2776,10 +2776,7 @@ codeunit 85011 "Customer Price Group Changes"
     //         end;
 
     //         Rec.Validate("Direct Unit Cost", FinalPrice);
-
-    //         // Rec.Validate(reb, PriceLineList2.Rebate);
-    //         // //Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
-    //         // Rec."Discount Applied on BasePrice" := PriceLineList2."Line Discount %";
+    //         Rec.Validate(Rebate, PriceLineList2.Rebate);
     //     end;
 
     // end;
@@ -2808,7 +2805,6 @@ codeunit 85011 "Customer Price Group Changes"
     //     PriceLineList2.Reset();
     //     PriceLineList2.SetRange(Status, PriceLineList2.Status::Active);
     //     PriceLineList2.SetRange("Source Type", PriceLineList2."Source Type"::"All Vendors");
-    //     //PriceLineList2.SetFilter("Source No.", CustomerPriceGroupText);
     //     PriceLineList2.SetRange("Asset Type", PriceLineList2."Asset Type"::Item);
     //     PriceLineList2.Setrange("Asset No.", Rec."No.");
     //     PriceLineList2.Setrange("Special Product", true);
@@ -2872,10 +2868,9 @@ codeunit 85011 "Customer Price Group Changes"
     //         end;
 
     //         Rec.Validate("Direct Unit Cost", FinalPrice);
-
-    //         // Rec.Validate(reb, PriceLineList2.Rebate);
-    //         // //Rec.Validate("Line Discount %", PriceLineList2."Line Discount %");
-    //         // Rec."Discount Applied on BasePrice" := PriceLineList2."Line Discount %";
+    //         Rec.Validate(Rebate, PriceLineList2.Rebate);
     //     end;
     // end;
+
+
 }

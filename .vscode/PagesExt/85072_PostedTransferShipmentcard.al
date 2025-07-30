@@ -2,14 +2,14 @@ pageextension 85072 PostedTransferShipmentCard extends "Posted Transfer Shipment
 {
     layout
     {
-        // addafter("Transfer-to Code")
-        // {
-        //     field("Transfer-To Zone Code"; Rec."Transfer-To Zone Code")
-        //     {
-        //         ApplicationArea = all;
-        //         Editable = false;
-        //     }
-        // }
+        addafter("Transfer-to Code")
+        {
+            field("Transfer-To Zone Code"; Rec."Transfer-To Zone Code")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+        }
 
         addafter("Shipment Date")
         {
@@ -54,6 +54,11 @@ pageextension 85072 PostedTransferShipmentCard extends "Posted Transfer Shipment
         }
         addafter("Posting Date")
         {
+            field("Replenishment Batch Name"; Rec."Replenishment Batch Name")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("System CreatedAt"; rec.SystemCreatedAt)
             {
                 ApplicationArea = all;

@@ -46,7 +46,53 @@ table 85012 "Replenishment Worksheet"
         }
         field(9; "Qty to Move"; Decimal)
         {
+            trigger OnValidate()
+            var
+                L_Availabletotake: Decimal;
+                L_BinContent: Record "Bin Content";
+                L_ReplenishmentReport: Report "Cal _Bin Replenishment New";
+                CodeUnit_ReplenishmentWorksheet: Codeunit "Replenishment Worksheet";
+                TransferLineQty: Decimal;
+            begin
+                if Rec."Qty to Move" <> 0 then begin
+                    Rec.TestField("From Location Code");
+                    if Rec."Qty to Move" > Rec."Demand Quantity" then
+                        Error('Qty. to Move should not be greater than Replenishment Qty. %1', Rec."Demand Quantity");
 
+                    //Check Availibility qty++++
+                    Clear(L_Availabletotake);
+                    L_BinContent.Reset();
+                    L_BinContent.SetRange("Location Code", Rec."From Location Code");
+                    L_BinContent.SetRange("Item No.", Rec."Item No.");
+                    L_BinContent.SetRange("Variant Code", Rec."Variant Code");
+                    L_BinContent.SetFilter("Quantity (Base)", '>%1', 0);
+                    //L_BinContent.SetRange("Bin Code", Rec."From Bin Code");
+                    if L_BinContent.FindSet() then begin
+                        repeat
+                            if L_ReplenishmentReport.UseForReplenishment(L_BinContent) then begin
+                                if L_BinContent.CalcQtyAvailToTakeUOM() > 0 then
+                                    L_Availabletotake := L_Availabletotake + L_BinContent.CalcQtyAvailToTakeUOM();
+                            end;
+                        until L_BinContent.Next() = 0;
+                        if L_Availabletotake <= 0 then
+                            L_Availabletotake := 0;
+
+                        //Calculate Last 2 weekday quantity from Transfer line++
+                        Clear(TransferLineQty);
+                        TransferLineQty := CodeUnit_ReplenishmentWorksheet.CheckExitingQtyInTransferLineforFromLocation(Rec."Item No.", Rec."Variant Code", Rec."From Location Code", '');
+                        if TransferLineQty <= 0 then
+                            TransferLineQty := 0;
+
+                        L_Availabletotake := L_Availabletotake - TransferLineQty;
+                        if L_Availabletotake <= 0 then
+                            Error('Quantity not available in Bincotent. Item: "%1", Variant: "%2", Location: "%3"', Rec."Item No.", Rec."Variant Code", Rec."From Location Code");
+
+                        if L_Availabletotake < Rec."Qty to Move" then
+                            Error('You cannot enter more than Available Qty.: "%1"', L_Availabletotake);
+                    end else
+                        Error('The field From Location Code contains a value (%1) that cannot be found in the related table (Bin Content).', Rec."From Location Code");
+                end;
+            end;
         }
         field(10; "Location Code"; Code[20])
         {
@@ -68,10 +114,11 @@ table 85012 "Replenishment Worksheet"
             var
                 L_BinContent: Record "Bin Content";
                 L_Availabletotake: Decimal;
-                L_ReplenishmentReport: Report "Calculate _Bin Replenishment";
+                L_ReplenishmentReport: Report "Cal _Bin Replenishment New";
+                CodeUnit_ReplenishmentWorksheet: Codeunit "Replenishment Worksheet";
+                TransferLineQty: Decimal;
             begin
                 if Rec."From Location Code" <> xRec."From Location Code" then begin
-                    Rec."From Bin Code" := '';
                     Rec."Qty to Move" := 0;
 
                     //Check Availibility qty++++
@@ -80,15 +127,29 @@ table 85012 "Replenishment Worksheet"
                     L_BinContent.SetRange("Location Code", Rec."From Location Code");
                     L_BinContent.SetRange("Item No.", Rec."Item No.");
                     L_BinContent.SetRange("Variant Code", Rec."Variant Code");
+                    L_BinContent.SetFilter("Quantity (Base)", '>%1', 0);
                     if L_BinContent.FindSet() then begin
                         repeat
                             if L_ReplenishmentReport.UseForReplenishment(L_BinContent) then begin
-                                L_Availabletotake := L_Availabletotake + L_BinContent.CalcQtyAvailToPick(0);
+                                if L_BinContent.CalcQtyAvailToTakeUOM() > 0 then
+                                    L_Availabletotake := L_Availabletotake + L_BinContent.CalcQtyAvailToTakeUOM();
                             end;
                         until L_BinContent.Next() = 0;
+                        if L_Availabletotake <= 0 then
+                            L_Availabletotake := 0;
 
-                        if L_Availabletotake = 0 then
-                            Error('Quantity not available in Item= %1, Variant= %2, Location= %3', Rec."Item No.", L_BinContent."Variant Code", L_BinContent."Location Code");
+                        //Calculate Last 2 weekday quantity from Transfer line++
+                        Clear(TransferLineQty);
+                        TransferLineQty := CodeUnit_ReplenishmentWorksheet.CheckExitingQtyInTransferLineforFromLocation(Rec."Item No.", Rec."Variant Code", Rec."From Location Code", '');
+                        if TransferLineQty <= 0 then
+                            TransferLineQty := 0;
+
+                        L_Availabletotake := L_Availabletotake - TransferLineQty;
+                        if L_Availabletotake <= 0 then
+                            Error('Quantity not available in Bincotent. Item: "%1", Variant: "%2", Location: "%3"', Rec."Item No.", Rec."Variant Code", Rec."From Location Code");
+
+                        if L_Availabletotake < Rec."Qty to Move" then
+                            Error('You cannot enter more than Available Qty.: "%1"', L_Availabletotake);
 
                     end else
                         Error('The field From Location Code contains a value (%1) that cannot be found in the related table (Bin Content).', Rec."From Location Code");
@@ -99,36 +160,36 @@ table 85012 "Replenishment Worksheet"
         {
             TableRelation = Bin where("Location Code" = field("From Location Code"));
 
-            trigger OnValidate()
-            var
-                L_BinContent: Record "Bin Content";
-                L_Availabletotake: Decimal;
-                L_ReplenishmentReport: Report "Calculate _Bin Replenishment";
-            begin
-                if Rec."From Bin Code" <> xRec."From Bin Code" then begin
-                    Rec."Qty to Move" := 0;
+            // trigger OnValidate()
+            // var
+            //     L_BinContent: Record "Bin Content";
+            //     L_Availabletotake: Decimal;
+            //     L_ReplenishmentReport: Report "Calculate _Bin Replenishment";
+            // begin
+            //     if Rec."From Bin Code" <> xRec."From Bin Code" then begin
+            //         Rec."Qty to Move" := 0;
 
-                    //Check Availibility qty++++
-                    Clear(L_Availabletotake);
-                    L_BinContent.Reset();
-                    L_BinContent.SetRange("Location Code", Rec."From Location Code");
-                    L_BinContent.SetRange("Item No.", Rec."Item No.");
-                    L_BinContent.SetRange("Variant Code", Rec."Variant Code");
-                    L_BinContent.SetRange("Bin Code", Rec."From Bin Code");
-                    if L_BinContent.FindSet() then begin
-                        repeat
-                            if L_ReplenishmentReport.UseForReplenishment(L_BinContent) then begin
-                                L_Availabletotake := L_Availabletotake + L_BinContent.CalcQtyAvailToPick(0);
-                            end;
-                        until L_BinContent.Next() = 0;
+            //         //Check Availibility qty++++
+            //         Clear(L_Availabletotake);
+            //         L_BinContent.Reset();
+            //         L_BinContent.SetRange("Location Code", Rec."From Location Code");
+            //         L_BinContent.SetRange("Item No.", Rec."Item No.");
+            //         L_BinContent.SetRange("Variant Code", Rec."Variant Code");
+            //         L_BinContent.SetRange("Bin Code", Rec."From Bin Code");
+            //         if L_BinContent.FindSet() then begin
+            //             repeat
+            //                 if L_ReplenishmentReport.UseForReplenishment(L_BinContent) then begin
+            //                     L_Availabletotake := L_Availabletotake + L_BinContent.CalcQtyAvailToTakeUOM();
+            //                 end;
+            //             until L_BinContent.Next() = 0;
 
-                        if L_Availabletotake = 0 then
-                            Error('Quantity not available in Item= %1, Variant= %2, Bin= %3,Location= %4', Rec."Item No.", L_BinContent."Variant Code", L_BinContent."Bin Code", L_BinContent."Location Code");
+            //             if L_Availabletotake = 0 then
+            //                 Error('Quantity not available in Item= %1, Variant= %2, Bin= %3,Location= %4', Rec."Item No.", L_BinContent."Variant Code", L_BinContent."Bin Code", L_BinContent."Location Code");
 
-                    end else
-                        Error('The field From Location Code contains a value (%1) that cannot be found in the related table (Bin Content).', Rec."From Location Code");
-                end;
-            end;
+            //         end else
+            //             Error('The field From Location Code contains a value (%1) that cannot be found in the related table (Bin Content).', Rec."From Location Code");
+            //    end;
+            //end;
         }
         field(15; "Posting Date"; Date)
         {
@@ -147,6 +208,21 @@ table 85012 "Replenishment Worksheet"
         field(18; "Min. Qty."; Decimal)
         {
 
+        }
+        field(19; "Action"; Option)
+        {
+            Caption = 'Action';
+            OptionMembers = " ","Accept","Cancel";
+            Editable = true;
+        }
+        field(20; "Top Category"; Boolean)
+        {
+
+        }
+        field(21; "System-Created Entry"; Boolean)
+        {
+            Caption = 'System-Created Entry';
+            Editable = false;
         }
     }
 

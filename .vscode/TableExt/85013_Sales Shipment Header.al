@@ -188,6 +188,11 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
             OptionMembers = " ",RX,Hospital,Web,Wholesale,Tender,"Special/DropShipment",Export;
             Editable = false;
         }
+        field(85016; "Sales Return Order Invoice No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            //Use for EDI+++
+        }
     }
 
     var

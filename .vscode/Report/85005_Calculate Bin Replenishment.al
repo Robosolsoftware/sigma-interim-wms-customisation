@@ -77,6 +77,7 @@ report 85005 "Calculate _Bin Replenishment"
                         TableRelation = Location;
                         Editable = false;
                     }
+
                 }
             }
         }
@@ -119,25 +120,25 @@ report 85005 "Calculate _Bin Replenishment"
         if BinBlockedInbound(ToBinContent."Location Code", ToBinContent."Bin Code") then
             Bin.FieldError("Block Movement", StrSubstNo(MustNotBeErr, Bin."Block Movement"));
 
-        //Check replenish required or not++
-        if not NeedToReplenish(ToBinContent) then
-            exit;
+        // //Check replenish required or not++
+        // if not NeedToReplenish(ToBinContent) then
+        //     exit;
 
         //Create Temporary record+++
         FindReplenishmtBin(ToBinContent);
     end;
 
-    procedure NeedToReplenish(ToBinContent: Record "Bin Content") Result: Boolean
-    begin
-        Clear(RemainQtyToReplenishBase);
-        ToBinContent.CalcFields("Quantity (Base)");
-        if ToBinContent."Quantity (Base)" < ToBinContent."Max. Qty." then begin
-            RemainQtyToReplenishBase := ToBinContent."Max. Qty." - ToBinContent."Quantity (Base)";
-            exit(true)
-        end else begin
-            exit(false);
-        end;
-    end;
+    // procedure NeedToReplenish(ToBinContent: Record "Bin Content") Result: Boolean
+    // begin
+    //     Clear(RemainQtyToReplenishBase);
+    //     ToBinContent.CalcFields("Quantity (Base)");
+    //     if ToBinContent."Quantity (Base)" < ToBinContent."Max. Qty." then begin
+    //         RemainQtyToReplenishBase := ToBinContent."Max. Qty." - ToBinContent."Quantity (Base)";
+    //         exit(true)
+    //     end else begin
+    //         exit(false);
+    //     end;
+    // end;
 
     local procedure BinBlockedInbound(LocationCode2: Code[10]; BinCode2: Code[20]) Blocked: Boolean
     begin
@@ -164,9 +165,7 @@ report 85005 "Calculate _Bin Replenishment"
     begin
         //Calculate RemainQtyToReplenishBase Qty+++
         Clear(RemainQtyToReplenishBase);
-        RemainQtyToReplenishBase := ToBinContent."Min. Qty." - ToBinContent.CalcQtyAvailToTakeUOM();
-        RemainQtyToReplenishBase := ToBinContent."Max. Qty." - RemainQtyToReplenishBase;
-
+        RemainQtyToReplenishBase := ToBinContent."Max. Qty." - ToBinContent.CalcQtyAvailToTakeUOM();
 
         FromBinContent.Reset();
         FromBinContent.SetRange("Item No.", ToBinContent."Item No.");
@@ -289,8 +288,7 @@ report 85005 "Calculate _Bin Replenishment"
         TempReplenishmentWorksheet."Max. Qty." := ToBinContent."Max. Qty.";
         TempReplenishmentWorksheet."System Quantity" := ToBinContent.CalcQtyAvailToTakeUOM();
         Clear(L_DemandQty);
-        L_DemandQty := ToBinContent."Min. Qty." - ToBinContent.CalcQtyAvailToTakeUOM();
-        L_DemandQty := ToBinContent."Max. Qty." - L_DemandQty;
+        L_DemandQty := ToBinContent."Max. Qty." - ToBinContent.CalcQtyAvailToTakeUOM();
         TempReplenishmentWorksheet."Demand Quantity" := L_DemandQty;
         TempReplenishmentWorksheet."Qty to Move" := MovementQtyBase;
         TempReplenishmentWorksheet.Insert();
@@ -323,13 +321,35 @@ report 85005 "Calculate _Bin Replenishment"
     var
         Replenishmentworksheet: Record "Replenishment Worksheet";
     begin
+        // TempReplenishmentWorksheet.Reset();
+        // TempReplenishmentWorksheet.SetFilter("Demand Quantity", '>0');
+        // if TempReplenishmentWorksheet.Find('-') then begin
+        //     repeat
+        //         Replenishmentworksheet.Init();
+        //         Replenishmentworksheet := TempReplenishmentWorksheet;
+        //         Replenishmentworksheet.Insert();
+        //     until TempReplenishmentWorksheet.Next() = 0;
+        //     exit(true);
+        // end;
+        // exit(false);
         TempReplenishmentWorksheet.Reset();
         TempReplenishmentWorksheet.SetFilter("Demand Quantity", '>0');
+        TempReplenishmentWorksheet.SetCurrentKey("From Location Code");
+        TempReplenishmentWorksheet.Ascending(true);
         if TempReplenishmentWorksheet.Find('-') then begin
             repeat
-                Replenishmentworksheet.Init();
-                Replenishmentworksheet := TempReplenishmentWorksheet;
-                Replenishmentworksheet.Insert();
+                Replenishmentworksheet.Reset();
+                Replenishmentworksheet.SetRange("From Location Code", TempReplenishmentWorksheet."From Location Code");
+                Replenishmentworksheet.SetRange("Posting Date", TempReplenishmentWorksheet."Posting Date");
+                Replenishmentworksheet.SetRange("Item No.", TempReplenishmentWorksheet."Item No.");
+                if not Replenishmentworksheet.FindFirst() then begin
+                    Replenishmentworksheet.Init();
+                    Replenishmentworksheet := TempReplenishmentWorksheet;
+                    Replenishmentworksheet.Insert();
+                end else begin
+                    Replenishmentworksheet."Qty to Move" := Replenishmentworksheet."Qty to Move" + TempReplenishmentWorksheet."Qty to Move";
+                    Replenishmentworksheet.Modify();
+                end;
             until TempReplenishmentWorksheet.Next() = 0;
             exit(true);
         end;

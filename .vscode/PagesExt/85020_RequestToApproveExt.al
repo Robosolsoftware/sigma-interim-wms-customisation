@@ -33,6 +33,11 @@ pageextension 85020 "Ext Request to Approve" extends "Requests to Approve"
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Shipping Agent Code"; Rec."Shipping Agent Code")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
     }
     trigger OnAfterGetRecord()

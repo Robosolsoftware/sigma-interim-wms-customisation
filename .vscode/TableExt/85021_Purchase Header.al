@@ -119,6 +119,7 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
         }
         field(85021; "Invoice Type"; Option)
         {
+            //OptionMembers = " ",Opex,Stock,Capex;
             OptionMembers = " ",Opex,Stock;
 
         }

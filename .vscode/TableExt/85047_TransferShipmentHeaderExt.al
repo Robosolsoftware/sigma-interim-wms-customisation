@@ -38,11 +38,15 @@ tableextension 85047 TransferShipmentHeaderExt extends "Transfer Shipment Header
         {
             DataClassification = ToBeClassified;
         }
-        // field(85011; "Transfer-To Zone Code"; Code[50])
-        // {
-        //     DataClassification = ToBeClassified;
+        field(85011; "Transfer-To Zone Code"; Code[50])
+        {
+            DataClassification = ToBeClassified;
 
-        // }
+        }
+        field(85012; "Replenishment Batch Name"; Code[20])
+        {
+
+        }
 
 
 

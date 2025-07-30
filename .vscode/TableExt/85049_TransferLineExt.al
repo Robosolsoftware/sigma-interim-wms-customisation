@@ -30,6 +30,11 @@ tableextension 85049 TransferLineExt extends "Transfer Line"
             Caption = 'Warehouse Class Code';
             TableRelation = "Warehouse Class";
         }
+        field(85012; "Posting Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Transfer Header"."Posting Date" where("No." = field("Document No.")));
+        }
     }
 
 

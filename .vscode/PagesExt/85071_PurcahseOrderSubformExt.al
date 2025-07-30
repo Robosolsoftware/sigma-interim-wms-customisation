@@ -13,6 +13,10 @@ pageextension 85071 PurcahseOrderSubformExt extends "Purchase Order Subform"
                 ApplicationArea = All;
                 Editable = false;
             }
+            // field(Rebate; Rec.Rebate)
+            // {
+            //     ApplicationArea = All;
+            // }
         }
         modify("Unit Volume")
         {

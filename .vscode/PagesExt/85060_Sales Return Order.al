@@ -5,12 +5,11 @@ pageextension 85060 "SC Sales Return Order" extends "Sales Return Order"
         // Add changes to page layout here
         addlast(General)
         {
-            // field("Invoice No."; Rec."Invoice No.")
-            // {
-            //     ApplicationArea = All;
-            //     Editable = false;
-            //     Visible = false;
-            // }
+            field("Sales Return Order Invoice No."; Rec."Sales Return Order Invoice No.")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field(Rejection; Rec.Rejection)
             {
                 ApplicationArea = All;

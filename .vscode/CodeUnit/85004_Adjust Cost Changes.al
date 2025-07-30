@@ -8,8 +8,10 @@ codeunit 85004 "Adjust Cost Changes"
     var
         myInt: Integer;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Inventory Adjustment", OnMakeSingleLevelAdjmtOnBeforePostAdjmtBuf, '', false, false)]
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Inventory Adjustment", OnMakeSingleLevelAdjmtOnBeforePostAdjmtBuf2, '', false, false)]
     local procedure OnMakeSingleLevelAdjmtOnBeforePostAdjmtBuf(var TempInventoryAdjustmentBuffer: Record "Inventory Adjustment Buffer" temporary; var Item: Record Item)
+    var
+        test: Report 795;
     begin
         if Item."Variant Mandatory if Exists" = Item."Variant Mandatory if Exists"::Yes then begin
             TempInventoryAdjustmentBuffer.Reset();

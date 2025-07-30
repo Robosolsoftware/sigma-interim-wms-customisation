@@ -89,5 +89,13 @@ permissionset 85000 SigmaCustomization
         tabledata "Replenishment Worksheet" = RIMD,
         table "Replenishment Worksheet" = X,
         report "Calculate _Bin Replenishment" = X,
-        page "Replenishment Worksheet" = X;
+        page "Replenishment Worksheet" = X,
+        tabledata "Replenishment Master" = RIMD,
+        tabledata "Unable To Pick" = RIMD,
+        table "Replenishment Master" = X,
+        table "Unable To Pick" = X,
+        report "Cal _Bin Replenishment New" = X,
+        codeunit "Replenishment Worksheet" = X,
+        page "Replenishment Master List" = X,
+        page "Unable To Pick List" = X;
 }

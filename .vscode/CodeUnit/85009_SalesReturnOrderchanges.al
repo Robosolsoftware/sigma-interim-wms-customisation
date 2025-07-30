@@ -137,4 +137,44 @@ codeunit 85009 SalesReturnOrderChanges
         end;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnAfterCopySalesInvLine', '', false, false)]
+    local procedure OnAfterGetPstdDocLinesToReverse(var ToSalesHeader: Record "Sales Header"; var FromSalesInvLine: Record "Sales Invoice Line")
+    begin
+        if (ToSalesHeader."Sales Return Order Invoice No." = '') and (ToSalesHeader."Document Type" = ToSalesHeader."Document Type"::"Return Order") then begin
+            ToSalesHeader."Sales Return Order Invoice No." := FromSalesInvLine."Document No.";
+            ToSalesHeader.Modify();
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnBeforeCopySalesInvLinesToDoc', '', false, false)]
+    local procedure OnBeforeCopySalesInvLinesToDoc(var ToSalesHeader: Record "Sales Header"; var FromSalesInvLine: Record "Sales Invoice Line"; var IsHandled: Boolean)
+    begin
+        if ToSalesHeader."Document Type" = ToSalesHeader."Document Type"::"Return Order" then begin
+            if (ToSalesHeader."Sales Return Order Invoice No." <> '') and (ToSalesHeader."Sales Return Order Invoice No." <> FromSalesInvLine."Document No.") then begin
+                Error('You cannot select a different invoice. This return order is linked to invoice %1.', ToSalesHeader."Sales Return Order Invoice No.");
+            end;
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterDeleteEvent', '', false, false)]
+    local procedure OnAfterSalesLineDelete(var Rec: Record "Sales Line"; RunTrigger: Boolean)
+    var
+        SalesLine: Record "Sales Line";
+        SalesHeader: Record "Sales Header";
+    begin
+        if Rec."Document Type" = Rec."Document Type"::"Return Order" then begin
+            SalesLine.SetRange("Document Type", Rec."Document Type");
+            SalesLine.SetRange("Document No.", Rec."Document No.");
+            SalesLine.SetRange(Type, SalesLine.Type::Item);
+            if not SalesLine.FindFirst() then begin
+                if SalesHeader.Get(Rec."Document Type", Rec."Document No.") then begin
+                    if SalesHeader."Sales Return Order Invoice No." <> '' then begin
+                        SalesHeader."Sales Return Order Invoice No." := '';
+                        SalesHeader.Modify();
+                    end;
+                end;
+            end;
+        end;
+    end;
+
 }

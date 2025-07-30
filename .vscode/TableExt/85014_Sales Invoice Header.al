@@ -206,6 +206,11 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
             FieldClass = FlowField;
             CalcFormula = exist("Shipping Agent" where(Code = field("Shipping Agent Code"), "ePOD ID" = filter(> 0)));
         }
+        field(85016; "Sales Return Order Invoice No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            //Use for EDI+++
+        }
 
     }
 

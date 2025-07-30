@@ -29,5 +29,10 @@ tableextension 85024 "Ext Request To Approve" extends 454
         {
             DataClassification = ToBeClassified;
         }
+        field(85030; "Shipping Agent Code"; Code[10])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Header"."Shipping Agent Code" where("No." = field("Document No.")));
+        }
     }
 }

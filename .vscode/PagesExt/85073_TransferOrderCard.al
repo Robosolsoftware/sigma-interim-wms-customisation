@@ -2,13 +2,13 @@ pageextension 85073 TransferOrderCardExt extends "Transfer Order"
 {
     layout
     {
-        // addafter("Transfer-to Code")
-        // {
-        //     field("Transfer-To Zone Code"; Rec."Transfer-To Zone Code")
-        //     {
-        //         ApplicationArea = all;
-        //     }
-        // }
+        addafter("Transfer-to Code")
+        {
+            field("Transfer-To Zone Code"; Rec."Transfer-To Zone Code")
+            {
+                ApplicationArea = all;
+            }
+        }
         addlast(General)
         {
             field("Requested By"; rec."Requested By")
@@ -66,6 +66,11 @@ pageextension 85073 TransferOrderCardExt extends "Transfer Order"
                 ApplicationArea = all;
                 //Visible = false;
                 Editable = iseditable;
+            }
+            field("Replenishment Batch Name"; Rec."Replenishment Batch Name")
+            {
+                ApplicationArea = All;
+                Editable = false;
             }
             field("System CreatedAt"; rec.SystemCreatedAt)
             {

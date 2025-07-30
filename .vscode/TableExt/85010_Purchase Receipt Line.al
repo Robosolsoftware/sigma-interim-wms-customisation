@@ -72,6 +72,10 @@ tableextension 85010 "SC Purch. Rcpt. Line" extends "Purch. Rcpt. Line"
         {
 
         }
+        // field(85009; Rebate; Decimal)
+        // {
+        //     DataClassification = ToBeClassified;
+        // }
     }
 
     keys

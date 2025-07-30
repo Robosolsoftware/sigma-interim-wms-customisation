@@ -3,14 +3,14 @@ pageextension 85076 PostedTransfederReceiptCardExt extends "Posted Transfer Rece
     layout
     {
 
-        // addafter("Transfer-to Code")
-        // {
-        //     field("Transfer-To Zone Code"; Rec."Transfer-To Zone Code")
-        //     {
-        //         ApplicationArea = all;
-        //         Editable = false;
-        //     }
-        // }
+        addafter("Transfer-to Code")
+        {
+            field("Transfer-To Zone Code"; Rec."Transfer-To Zone Code")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
+        }
         addlast(General)
         {
             field("Requested By"; rec."Requested By")
@@ -67,6 +67,11 @@ pageextension 85076 PostedTransfederReceiptCardExt extends "Posted Transfer Rece
         }
         addafter("Posting Date")
         {
+            field("Replenishment Batch Name"; Rec."Replenishment Batch Name")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("System CreatedAt"; rec.SystemCreatedAt)
             {
                 ApplicationArea = all;

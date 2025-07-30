@@ -487,18 +487,15 @@ codeunit 85013 "Purchase Event & Function"
     end;
 
 
-    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnBeforeInsertTransShptHeader', '', false, false)]
-    // local procedure OnBeforeInsertTransShptHdr(var TransShptHeader: Record "Transfer Shipment Header"; TransHeader: Record "Transfer Header")
-    // begin
-    //     TransShptHeader."Transfer-To Zone Code" := TransHeader."Transfer-To Zone Code";
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Shipment", 'OnBeforeInsertTransShptHeader', '', false, false)]
+    local procedure OnBeforeInsertTransShptHdr(var TransShptHeader: Record "Transfer Shipment Header"; TransHeader: Record "Transfer Header")
+    begin
+        TransShptHeader."Transfer-To Zone Code" := TransHeader."Transfer-To Zone Code";
+    end;
 
-    // end;
-
-    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", 'OnBeforeTransRcptHeaderInsert', '', false, false)]
-    // local procedure OnBeforeInsertTransRcptHdr(var TransferReceiptHeader: Record "Transfer Receipt Header"; TransferHeader: Record "Transfer Header")
-    // begin
-    //     TransferReceiptHeader."Transfer-To Zone Code" := TransferHeader."Transfer-To Zone Code";
-    // end;
-
-
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"TransferOrder-Post Receipt", 'OnBeforeTransRcptHeaderInsert', '', false, false)]
+    local procedure OnBeforeInsertTransRcptHdr(var TransferReceiptHeader: Record "Transfer Receipt Header"; TransferHeader: Record "Transfer Header")
+    begin
+        TransferReceiptHeader."Transfer-To Zone Code" := TransferHeader."Transfer-To Zone Code";
+    end;
 }

@@ -273,6 +273,11 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
                 Editable = L_CreditCheckEditable;
             }
+            // field("Due Date Buffer"; Rec."Due Date Buffer")
+            // {
+            //     ApplicationArea = All;
+            //     Editable = L_CreditCheckEditable;
+            // }
 
             group("Podfather")
             {

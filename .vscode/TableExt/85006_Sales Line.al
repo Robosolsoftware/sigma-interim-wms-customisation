@@ -536,16 +536,17 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                             L_SalesHeader.TestField("Shipping Agent Service Code"); //User Story 18274
 
                             if L_SalesHeader."IRP Order" = false then begin //As discussed with Adesh+++
-                                if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
-                                    L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
-
-
-
-                                    //++Sales Order warning message(15813)
-                                    L_SalesEventandFuncion.SalesOrderWarningMessage(L_SalesHeader, Rec);
+                                if Format(L_SalesHeader."Shipment Date", 0, '<Weekday Text>') <> 'Saturday' then begin
+                                    if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
+                                        L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
+                                    end;
                                 end;
+
+                                //++Sales Order warning message(15813)
+                                L_SalesEventandFuncion.SalesOrderWarningMessage(L_SalesHeader, Rec);
                             end;
                         end;
+
 
 
                         //Upadte Fields from Item++

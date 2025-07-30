@@ -428,6 +428,10 @@ tableextension 85030 "SC Customer" extends Customer
         {
 
         }
+        // field(85015; "Due Date Buffer"; DateFormula)
+        // {
+
+        // }
     }
 
     fieldgroups

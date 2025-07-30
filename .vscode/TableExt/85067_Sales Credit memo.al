@@ -7,10 +7,12 @@ tableextension 85067 "SC Sales Cr.Memo Header" extends "Sales Cr.Memo Header"
         {
 
         }
-        // field(85014; "Invoice No."; Code[20])
-        // {
-        //     DataClassification = ToBeClassified;
-        // }
+        field(85016; "Sales Return Order Invoice No."; Code[20])
+        {
+
+            DataClassification = ToBeClassified;
+            //Use for EDI+++
+        }
     }
 
     keys
