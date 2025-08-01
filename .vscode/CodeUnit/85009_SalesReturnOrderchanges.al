@@ -137,6 +137,42 @@ codeunit 85009 SalesReturnOrderChanges
         end;
     end;
 
+    #Region SBB-335++++++++++++++++++++++++++++++++
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnBeforeCopySalesInvLinesToDoc', '', false, false)]
+    // local procedure OnBeforeCopySalesInvLinesToDoc(var ToSalesHeader: Record "Sales Header"; var FromSalesInvLine: Record "Sales Invoice Line"; var IsHandled: Boolean)
+    // begin
+    //     if ToSalesHeader."Document Type" = ToSalesHeader."Document Type"::"Return Order" then begin
+    //         if (ToSalesHeader."Sales Return Order Invoice No." <> '') and (ToSalesHeader."Sales Return Order Invoice No." <> FromSalesInvLine."Document No.") then begin
+    //             Error('You cannot select a different invoice. This return order is linked to invoice %1.', ToSalesHeader."Sales Return Order Invoice No.");
+    //         end;
+    //     end;
+    // end;
+
+    //Step1++++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnBeforeCopySalesLinesToDoc', '', false, false)]
+    local procedure OnBeforeCopySalesLinesToDoc(FromDocType: Option; var FromSalesInvoiceLine: Record "Sales Invoice Line"; var ToSalesHeader: Record "Sales Header")
+    var
+        L_InvoiceNumber: Code[20];
+    begin
+        //7 mean from sales invoice line+++
+        if FromDocType = 7 then begin
+            if ToSalesHeader."Sales Return Order Invoice No." <> '' then begin
+                if ToSalesHeader."Sales Return Order Invoice No." <> FromSalesInvoiceLine."Document No." then
+                    Error('You cannot select a different invoice. This return order is linked to invoice %1.', ToSalesHeader."Sales Return Order Invoice No.");
+            end else begin
+                if FromSalesInvoiceLine.FindSet() then begin
+                    Clear(L_InvoiceNumber);
+                    L_InvoiceNumber := FromSalesInvoiceLine."Document No.";
+                    repeat
+                        if L_InvoiceNumber <> FromSalesInvoiceLine."Document No." then
+                            Error('You cannot select a multiple invoice');
+                    until FromSalesInvoiceLine.Next() = 0;
+                end;
+            end;
+        end;
+    end;
+
+    //Step2++++++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnAfterCopySalesInvLine', '', false, false)]
     local procedure OnAfterGetPstdDocLinesToReverse(var ToSalesHeader: Record "Sales Header"; var FromSalesInvLine: Record "Sales Invoice Line")
     begin
@@ -145,16 +181,8 @@ codeunit 85009 SalesReturnOrderChanges
             ToSalesHeader.Modify();
         end;
     end;
+    #EndRegion SBB-335++++++++++++++++++++++++++++++++
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnBeforeCopySalesInvLinesToDoc', '', false, false)]
-    local procedure OnBeforeCopySalesInvLinesToDoc(var ToSalesHeader: Record "Sales Header"; var FromSalesInvLine: Record "Sales Invoice Line"; var IsHandled: Boolean)
-    begin
-        if ToSalesHeader."Document Type" = ToSalesHeader."Document Type"::"Return Order" then begin
-            if (ToSalesHeader."Sales Return Order Invoice No." <> '') and (ToSalesHeader."Sales Return Order Invoice No." <> FromSalesInvLine."Document No.") then begin
-                Error('You cannot select a different invoice. This return order is linked to invoice %1.', ToSalesHeader."Sales Return Order Invoice No.");
-            end;
-        end;
-    end;
 
     [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterDeleteEvent', '', false, false)]
     local procedure OnAfterSalesLineDelete(var Rec: Record "Sales Line"; RunTrigger: Boolean)

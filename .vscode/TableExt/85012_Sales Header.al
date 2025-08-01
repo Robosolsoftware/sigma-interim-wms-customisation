@@ -596,34 +596,6 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
             DataClassification = ToBeClassified;
             //Use for EDI+++
         }
-
-        modify("Shipment Date")
-        {
-            trigger OnAfterValidate()
-            var
-                L_Customer: Record Customer;
-            begin
-                if Rec."Shipment Date" <> xRec."Shipment Date" then begin
-                    if Format(Rec."Shipment Date", 0, '<Weekday Text>') = 'Saturday' then begin
-                        L_Customer.Reset();
-                        L_Customer.SetRange("No.", Rec."Sell-to Customer No.");
-                        if L_Customer.FindFirst() then begin
-                            if L_Customer."Weekend Shipping Agent Code" <> '' then begin
-                                Rec.Validate("Weekend Shipping Agent Code", L_Customer."Weekend Shipping Agent Code");
-                                Rec.Validate("Weekend Ship. Agnt. Serv. Code", L_Customer."Weekend Ship. Agnt. Serv. Code");
-                                Rec.Modify();
-                            end;
-                        end;
-                    end else begin
-                        if Rec."Weekend Ship. Agnt. Serv. Code" <> '' then begin
-                            Rec.Validate("Weekend Shipping Agent Code", '');
-                            Rec.Validate("Weekend Ship. Agnt. Serv. Code", '');
-                            Rec.Modify();
-                        end;
-                    end;
-                end;
-            end;
-        }
     }
 
     var
