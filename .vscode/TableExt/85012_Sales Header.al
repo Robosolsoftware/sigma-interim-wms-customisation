@@ -596,6 +596,11 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
             DataClassification = ToBeClassified;
             //Use for EDI+++
         }
+        field(85017; "Approval Exist"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Approval Entry" where("Document Type" = field("Document Type"), "Document No." = field("No.")));
+        }
     }
 
     var

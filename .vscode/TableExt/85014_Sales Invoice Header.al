@@ -211,6 +211,7 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
             DataClassification = ToBeClassified;
             //Use for EDI+++
         }
+        //85017 used
 
     }
 
