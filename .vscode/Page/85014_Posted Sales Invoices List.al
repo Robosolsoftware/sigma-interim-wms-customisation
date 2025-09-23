@@ -270,7 +270,7 @@ page 85014 "Posted Sales Invoices List"
     {
         area(Processing)
         {
-            action("Reset Email Sent")
+            action("untick Email Sent")
             {
                 Image = Process;
                 Promoted = true;
@@ -294,37 +294,64 @@ page 85014 "Posted Sales Invoices List"
                     end;
                 end;
             }
-            action("DO NOT USE")
+
+            action("Tick Email Sent")
             {
+                Image = Process;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
                 ApplicationArea = All;
-                Image = Import;
                 trigger OnAction()
                 var
-                    FileName: Text;
-                    Ins: InStream;
-                    LineNo: Integer;
-                    L_Inveader: Record "Sales Invoice Header";
-                    CSVBuffer: Record "CSV Buffer" temporary;
-                    Line: Integer;
+                    InvHeader: Record "Sales Invoice Header";
                 begin
-                    Clear(Line);
-                    CSVBuffer.DeleteAll();
-                    if UploadIntoStream('Select CSV File', '', '', FileName, Ins) then begin
-                        CSVBuffer.LoadDataFromStream(Ins, ',');
-                        for LineNo := 2 to CSVBuffer.GetNumberOfLines() do begin
-                            L_Inveader.Reset();
-                            L_Inveader.SetRange("No.", CSVBuffer.GetValue(LineNo, 1));
-                            if L_Inveader.FindFirst() then begin
-                                if L_Inveader."Shipping Agent Service Code 2" = '' then begin
-                                    L_Inveader."Shipping Agent Service Code 2" := CSVBuffer.GetValue(LineNo, 2);
-                                    L_Inveader.Modify();
-                                end;
-                            end;
-                        end;
-                        Message('Done');
+                    InvHeader.Reset();
+                    InvHeader := Rec;
+                    CurrPage.SetSelectionFilter(InvHeader);
+                    InvHeader.SetRange("Email Sent", false);
+                    if InvHeader.FindSet() then begin
+                        repeat
+                            InvHeader.Validate("Email Sent", true);
+                            InvHeader.Modify(true);
+                        until InvHeader.Next() = 0;
+                        Message('Process Completed');
                     end;
                 end;
             }
+
+
+            // action("DO NOT USE")
+            // {
+            //     ApplicationArea = All;
+            //     Image = Import;
+            //     trigger OnAction()
+            //     var
+            //         FileName: Text;
+            //         Ins: InStream;
+            //         LineNo: Integer;
+            //         L_Inveader: Record "Sales Invoice Header";
+            //         CSVBuffer: Record "CSV Buffer" temporary;
+            //         Line: Integer;
+            //     begin
+            //         Clear(Line);
+            //         CSVBuffer.DeleteAll();
+            //         if UploadIntoStream('Select CSV File', '', '', FileName, Ins) then begin
+            //             CSVBuffer.LoadDataFromStream(Ins, ',');
+            //             for LineNo := 2 to CSVBuffer.GetNumberOfLines() do begin
+            //                 L_Inveader.Reset();
+            //                 L_Inveader.SetRange("No.", CSVBuffer.GetValue(LineNo, 1));
+            //                 if L_Inveader.FindFirst() then begin
+            //                     if L_Inveader."Shipping Agent Service Code 2" = '' then begin
+            //                         L_Inveader."Shipping Agent Service Code 2" := CSVBuffer.GetValue(LineNo, 2);
+            //                         L_Inveader.Modify();
+            //                     end;
+            //                 end;
+            //             end;
+            //             Message('Done');
+            //         end;
+            //     end;
+            // }
         }
     }
 }
