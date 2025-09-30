@@ -2,6 +2,19 @@ pageextension 85111 "SC Item Ledger Entries" extends "Item Ledger Entries"
 {
     layout
     {
+        addafter("Cost Amount (Actual)")
+        {
+            field("Cost Amount Expected Date Wise"; Rec."Cost Amount Expected Date Wise")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Cost Amount Actual Date Wise"; Rec."Cost Amount Actual Date Wise")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
         // Add changes to page layout here
         modify("Return Reason Code")
         {
@@ -21,25 +34,25 @@ pageextension 85111 "SC Item Ledger Entries" extends "Item Ledger Entries"
     {
         addlast(Processing)
         {
-            action(CreateManualValueEntry)
-            {
-                ApplicationArea = All;
-                Caption = 'Manually Create Value Entry';
-                Image = CreateOrder;
-                trigger OnAction()
-                var
-                    ILE: Record "Item Ledger Entry";
-                    ValueEntry: Record "Value Entry";
-                    LastEntryNo: Integer;
-                    ManualCost: Decimal;
-                    vendor: Record Vendor;
-                    Item: Record Item;
-                    CreateVE: Codeunit CreateValueEntry;
-                begin
-                    ILE.Copy(Rec);
-                    CreateVE.CreatValueEntry(ILE);
-                end;
-            }
+            // action(CreateManualValueEntry)
+            // {
+            //     ApplicationArea = All;
+            //     Caption = 'Manually Create Value Entry';
+            //     Image = CreateOrder;
+            //     trigger OnAction()
+            //     var
+            //         ILE: Record "Item Ledger Entry";
+            //         ValueEntry: Record "Value Entry";
+            //         LastEntryNo: Integer;
+            //         ManualCost: Decimal;
+            //         vendor: Record Vendor;
+            //         Item: Record Item;
+            //         CreateVE: Codeunit CreateValueEntry;
+            //     begin
+            //         ILE.Copy(Rec);
+            //         CreateVE.CreatValueEntry(ILE);
+            //     end;
+            // }
         }
     }
 

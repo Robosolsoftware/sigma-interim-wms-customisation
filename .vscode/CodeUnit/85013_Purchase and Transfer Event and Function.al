@@ -11,6 +11,51 @@ codeunit 85013 "Purchase Event & Function"
         G_LocationCode: Code[20];
         G_PurchaseOrderNo: Code[20];
 
+    #region Customization related for Order date for PO++++++
+    //Step1 
+    [EventSubscriber(ObjectType::Table, Database::"Purchase Header", OnBeforePriceMessageIfPurchLinesExist, '', false, false)]
+    local procedure OnBeforePriceMessageIfPurchLinesExist(var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean)
+    begin
+        if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
+            IsHandled := true;
+
+            if PurchLinesExist(PurchaseHeader) then begin
+                PurchaseHeader.UpdatePurchLinesByFieldNo(PurchaseHeader.FieldNo("Order Date"), false);
+            end;
+        end;
+    end;
+
+    //Step2
+    procedure PurchLinesExist(_PurchaseHeader: Record "Purchase Header"): Boolean
+    var
+        PurchLine: Record "Purchase Line";
+    begin
+        PurchLine.Reset();
+        PurchLine.ReadIsolation := IsolationLevel::ReadUncommitted;
+        PurchLine.SetRange("Document Type", _PurchaseHeader."Document Type");
+        PurchLine.SetRange("Document No.", _PurchaseHeader."No.");
+        exit(not PurchLine.IsEmpty);
+    end;
+    #endregion Customization related for Order date for PO++++++
+
+
+    [EventSubscriber(ObjectType::Table, Database::"Purchase Header", OnBeforeUpdatePurchLinesByFieldNo, '', false, false)]
+    local procedure OnBeforeUpdatePurchLinesByFieldNo(var AskQuestion: Boolean; var PurchaseHeader: Record "Purchase Header"; ChangedFieldNo: Integer; var IsHandled: Boolean)
+    var
+        L_PurchaseLine: Record "Purchase Line";
+    begin
+        if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then begin
+            if ChangedFieldNo = PurchaseHeader.FieldNo("Order Date") then
+                AskQuestion := false
+            else
+                if ChangedFieldNo = PurchaseHeader.FieldNo("Requested Receipt Date") then
+                    IsHandled := true
+                else
+                    if ChangedFieldNo = PurchaseHeader.FieldNo("Promised Receipt Date") then
+                        IsHandled := true;
+        end;
+    end;
+
     #Region Skip to create warehouse Receive GNA purchase line++++
     [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", OnBeforePurchaseLineOnAfterGetRecord, '', false, false)]
     local procedure OnBeforePurchaseLineOnAfterGetRecord(PurchaseLine: Record "Purchase Line"; var IsHandled: Boolean)

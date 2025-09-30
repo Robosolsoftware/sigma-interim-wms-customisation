@@ -54,21 +54,6 @@ page 85021 "Replenishment Worksheet"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("Variant Code"; Rec."Variant Code")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field("Location Code"; Rec."Location Code")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                // field("Bin Code"; Rec."Bin Code")
-                // {
-                //     ApplicationArea = All;
-                //     Editable = false;
-                // }
                 field("Min. Qty."; Rec."Min. Qty.")
                 {
                     ApplicationArea = All;
@@ -81,12 +66,27 @@ page 85021 "Replenishment Worksheet"
                     Editable = false;
                     DecimalPlaces = 0 : 5;
                 }
+                field("Location Code"; Rec."Location Code")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("System Quantity"; Rec."System Quantity")
                 {
                     ApplicationArea = All;
                     DecimalPlaces = 0 : 5;
                     Caption = 'Depot1 Quantity';
                     Editable = false;
+                }
+
+                field("Variant Code"; Rec."Variant Code")
+                {
+                    ApplicationArea = All;
+                    Caption = 'From Variant';
+                }
+                field("From Location Code"; Rec."From Location Code")
+                {
+                    ApplicationArea = All;
                 }
                 field("Demand Quantity"; Rec."Demand Quantity")
                 {
@@ -95,15 +95,6 @@ page 85021 "Replenishment Worksheet"
                     Editable = false;
                     Caption = 'Replenishment Qty.';
                 }
-                field("From Location Code"; Rec."From Location Code")
-                {
-                    ApplicationArea = All;
-                }
-                // field("From Bin Code"; Rec."From Bin Code")
-                // {
-                //     ApplicationArea = All;
-                //     Visible = false;
-                // }
                 field("Qty to Move"; Rec."Qty to Move")
                 {
                     ApplicationArea = All;
@@ -154,8 +145,10 @@ page 85021 "Replenishment Worksheet"
                     L_ReplenishmentWorksheet.Reset();
                     L_ReplenishmentWorksheet.SetRange(Action, L_ReplenishmentWorksheet.Action::Accept);
                     L_ReplenishmentWorksheet.SetRange("Top Category", true);
+                    L_ReplenishmentWorksheet.SetRange("Batch Name", Rec."Batch Name");
+                    L_ReplenishmentWorksheet.SetFilter("Qty to Move", '>0');
                     if L_ReplenishmentWorksheet.FindSet() then begin
-                        if L_ReplenishmentWorksheetCode.CreteTransferOrder(L_ReplenishmentWorksheet, 'SH') then begin
+                        if L_ReplenishmentWorksheetCode.CreateTransferOrder(L_ReplenishmentWorksheet, 'SH') then begin
                             L_ReplenishmentWorksheet.DeleteAll();
                         end;
                     end;
@@ -164,8 +157,10 @@ page 85021 "Replenishment Worksheet"
                     L_ReplenishmentWorksheet.Reset();
                     L_ReplenishmentWorksheet.SetRange(Action, L_ReplenishmentWorksheet.Action::Accept);
                     L_ReplenishmentWorksheet.SetRange("Top Category", false);
+                    L_ReplenishmentWorksheet.SetRange("Batch Name", Rec."Batch Name");
+                    L_ReplenishmentWorksheet.SetFilter("Qty to Move", '>0');
                     if L_ReplenishmentWorksheet.FindSet() then begin
-                        if L_ReplenishmentWorksheetCode.CreteTransferOrder(L_ReplenishmentWorksheet, 'HDH') then begin
+                        if L_ReplenishmentWorksheetCode.CreateTransferOrder(L_ReplenishmentWorksheet, 'HDH') then begin
                             L_ReplenishmentWorksheet.DeleteAll();
                         end;
                     end;

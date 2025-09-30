@@ -8,25 +8,25 @@ report 85006 "Cal _Bin Replenishment New"
         dataitem("Replenishment Master"; "Replenishment Master")
         {
             DataItemTableView = sorting("Item No.", "Variant Code") order(descending);
-            RequestFilterFields = "Item No.", "Variant Code";
+            RequestFilterFields = "Item No.";
 
             trigger OnAfterGetRecord()
             begin
                 //Calculate Available To Take Quantity++
                 Clear(Availabletotake);
-                Availabletotake := CodeUnit_ReplenishmentWorksheet.TotalAvailabletoTake("Replenishment Master"."Item No.", "Replenishment Master"."Variant Code", LocationCode);
+                Availabletotake := CodeUnit_ReplenishmentWorksheet.TotalAvailabletoTake("Replenishment Master"."Item No.", LocationCode);
                 if Availabletotake <= 0 then
                     Availabletotake := 0;
 
                 //Calculate Last 2 weekday quantity from Transfer line++
                 Clear(TransferLineQty);
-                TransferLineQty := CodeUnit_ReplenishmentWorksheet.CheckExitingQtyInTransferLineFromToLocation("Replenishment Master"."Item No.", "Replenishment Master"."Variant Code", LocationCode);
+                TransferLineQty := CodeUnit_ReplenishmentWorksheet.CheckExitingQtyInTransferLineFromToLocation("Replenishment Master"."Item No.", LocationCode);
                 if TransferLineQty <= 0 then
                     TransferLineQty := 0;
 
                 //Check RemainQtyToReplenishBase (Demand Qty)+++
                 Clear(RemainQtyToReplenishBase);
-                RemainQtyToReplenishBase := "Replenishment Master"."Max Depot1 Qty" - Availabletotake - TransferLineQty;
+                RemainQtyToReplenishBase := "Replenishment Master"."Max Depot1 Qty" - (Availabletotake + TransferLineQty);
                 if RemainQtyToReplenishBase <= 0 then
                     RemainQtyToReplenishBase := 0;
 
@@ -158,13 +158,13 @@ report 85006 "Cal _Bin Replenishment New"
         ReplenishmentWorksheet2: Record "Replenishment Worksheet";
         L_TransferLineQty: Decimal;
     begin
+        #Region For Location IP3+++++++++
         FromBinContent.Reset();
         FromBinContent.SetRange("Item No.", _ToReplenishment."Item No.");
-        FromBinContent.SetRange("Variant Code", _ToReplenishment."Variant Code");
+        FromBinContent.SetRange("Daily Priority Exist", true);
         FromBinContent.SetFilter("Quantity (Base)", '>%1', 0);
-        //FromBinContent.SetRange("Location Code", 'IP3');
-        FromBinContent.SetFilter("Location Code", '%1|%2', 'IP3', 'IP4');
-        FromBinContent.SetCurrentKey("Location Code");
+        FromBinContent.SetFilter("Location Code", 'IP3');
+        FromBinContent.SetCurrentKey("Priority From Variant");
         FromBinContent.Ascending(true);
         if FromBinContent.Find('-') then begin
             ReplenishmentWorksheet2.Copy(TempReplenishmentWorksheet);
@@ -209,6 +209,62 @@ report 85006 "Cal _Bin Replenishment New"
             until (FromBinContent.Next() = 0) or (RemainQtyToReplenishBase = 0);
             TempReplenishmentWorksheet.Copy(ReplenishmentWorksheet2);
         end;
+        #EndRegion For Location IP3+++++++++
+
+        #Region For Location IP4+++++++++
+        if RemainQtyToReplenishBase > 0 then begin
+            FromBinContent.Reset();
+            FromBinContent.SetRange("Item No.", _ToReplenishment."Item No.");
+            FromBinContent.SetRange("Daily Priority Exist", true);
+            FromBinContent.SetFilter("Quantity (Base)", '>%1', 0);
+            FromBinContent.SetFilter("Location Code", 'IP4');
+            FromBinContent.SetCurrentKey("Priority From Variant");
+            FromBinContent.Ascending(true);
+            if FromBinContent.Find('-') then begin
+                ReplenishmentWorksheet2.Copy(TempReplenishmentWorksheet);
+                TempReplenishmentWorksheet.SetCurrentKey("Item No.", "From Bin Code", "Location Code", "Variant Code");
+                TempReplenishmentWorksheet.SetRange("Item No.", FromBinContent."Item No.");
+                TempReplenishmentWorksheet.SetRange("From Location Code", FromBinContent."Location Code");
+                TempReplenishmentWorksheet.SetRange("Variant Code", FromBinContent."Variant Code");
+                repeat
+                    //Check Blocke Movemet and Restricted Bin++
+                    if UseForReplenishment(FromBinContent) then begin
+
+                        //Calculate Available Tock Qty from Location per Bin+++
+                        Clear(QtyAvailToTakeBase);
+                        QtyAvailToTakeBase := FromBinContent.CalcQtyAvailToTakeUOM();
+                        if QtyAvailToTakeBase <= 0 then
+                            QtyAvailToTakeBase := 0;
+
+
+                        //Calculate Tranfer Line Qty lat 2 working days+++
+                        Clear(L_TransferLineQty);
+                        L_TransferLineQty := CodeUnit_ReplenishmentWorksheet.CheckExitingQtyInTransferLineforFromLocation("Replenishment Master"."Item No.", "Replenishment Master"."Variant Code", FromBinContent."Location Code", FromBinContent."Bin Code");
+                        if L_TransferLineQty <= 0 then
+                            L_TransferLineQty := 0;
+
+                        //+++
+                        TempReplenishmentWorksheet.SetRange("From Bin Code", FromBinContent."Bin Code");
+                        TempReplenishmentWorksheet.CalcSums("Qty to Move");
+                        QtyAvailToTakeBase := QtyAvailToTakeBase - L_TransferLineQty - TempReplenishmentWorksheet."Qty to Move";
+                        if QtyAvailToTakeBase <= 0 then
+                            QtyAvailToTakeBase := 0;
+
+                        //+++
+                        if QtyAvailToTakeBase > 0 then begin
+                            if QtyAvailToTakeBase < RemainQtyToReplenishBase then
+                                MovementQtyBase := QtyAvailToTakeBase
+                            else
+                                MovementQtyBase := RemainQtyToReplenishBase;
+                            CreateReplenishmentWorksheet(_ToReplenishment, FromBinContent, MovementQtyBase);
+                            RemainQtyToReplenishBase := RemainQtyToReplenishBase - MovementQtyBase;
+                        end;
+                    end;
+                until (FromBinContent.Next() = 0) or (RemainQtyToReplenishBase = 0);
+                TempReplenishmentWorksheet.Copy(ReplenishmentWorksheet2);
+            end;
+        end;
+        #EndRegion For Location IP4+++++++++
     end;
 
     procedure GetVariantSetup(_ItemNo: Code[20]): Boolean
@@ -290,7 +346,7 @@ report 85006 "Cal _Bin Replenishment New"
             TempReplenishmentWorksheet.Description := L_Item.Description;
             TempReplenishmentWorksheet."Top Category" := L_Item."Top Category";
         end;
-        TempReplenishmentWorksheet."Variant Code" := _ToReplenishment."Variant Code";
+        TempReplenishmentWorksheet."Variant Code" := FromBinContent."Variant Code"; //From Variant+++
         TempReplenishmentWorksheet."Min. Qty." := _ToReplenishment."Min Depot1 Qty";
         TempReplenishmentWorksheet."Max. Qty." := _ToReplenishment."Max Depot1 Qty";
         TempReplenishmentWorksheet."System Quantity" := Availabletotake;
@@ -337,6 +393,7 @@ report 85006 "Cal _Bin Replenishment New"
                 Replenishmentworksheet.SetRange("From Location Code", TempReplenishmentWorksheet."From Location Code");
                 Replenishmentworksheet.SetRange("Posting Date", TempReplenishmentWorksheet."Posting Date");
                 Replenishmentworksheet.SetRange("Item No.", TempReplenishmentWorksheet."Item No.");
+                Replenishmentworksheet.SetRange("Variant Code", TempReplenishmentWorksheet."Variant Code");
                 if not Replenishmentworksheet.FindFirst() then begin
                     Replenishmentworksheet.Init();
                     Replenishmentworksheet := TempReplenishmentWorksheet;

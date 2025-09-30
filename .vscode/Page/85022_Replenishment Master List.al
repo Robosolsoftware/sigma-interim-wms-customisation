@@ -19,10 +19,6 @@ page 85022 "Replenishment Master List"
                 {
                     ApplicationArea = All;
                 }
-                field("Variant Code"; Rec."Variant Code")
-                {
-                    ApplicationArea = All;
-                }
                 field("Min Depot1 Qty"; Rec."Min Depot1 Qty")
                 {
                     ApplicationArea = All;

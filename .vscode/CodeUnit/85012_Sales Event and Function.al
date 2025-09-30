@@ -850,6 +850,7 @@ codeunit 85012 "Sales Event & Function"
         RemainingApprovals: Record "Approval Entry";
         L_Date: Record Date;
         RecordRestrictionMgt: Codeunit 1550;
+        L_SalesLine: Record "Sales Line";
     begin
         if ApprovalEntry."Table ID" = 36 then begin
             SalesHeader.Reset();
@@ -863,20 +864,51 @@ codeunit 85012 "Sales Event & Function"
                         L_Date.SetRange(L_Date."Period Start", WorkDate());
                         if L_Date.FindFirst() then begin
                             if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
-                                if SalesHeader."Weekend Ship. Agnt. Serv. Code" <> '' then
+                                if SalesHeader."Weekend Ship. Agnt. Serv. Code" <> '' then begin
                                     //Update Saturday++
-                                    SalesHeader."Shipment Date" := CalcDate('<+1D>', WorkDate())
-                                else begin
+                                    SalesHeader."Shipment Date" := CalcDate('<+1D>', WorkDate());
+                                    L_SalesLine.Reset();
+                                    L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                                    L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+                                    L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                                    if L_SalesLine.FindSet() then begin
+                                        L_SalesLine.ModifyAll("Shipment Date", CalcDate('<+1D>', WorkDate()));
+                                    end;
+                                end else begin
                                     //Update Monday
-                                    SalesHeader."Shipment Date" := CalcDate('<+3D>', WorkDate())
+                                    SalesHeader."Shipment Date" := CalcDate('<+3D>', WorkDate());
+                                    L_SalesLine.Reset();
+                                    L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                                    L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+                                    L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                                    if L_SalesLine.FindSet() then begin
+                                        L_SalesLine.ModifyAll("Shipment Date", CalcDate('<+3D>', WorkDate()));
+                                    end;
                                 end;
-                            end else
+                            end else begin
                                 SalesHeader."Shipment Date" := CalcDate('<+1D>', WorkDate());
+                                L_SalesLine.Reset();
+                                L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                                L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+                                L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                                if L_SalesLine.FindSet() then begin
+                                    L_SalesLine.ModifyAll("Shipment Date", CalcDate('<+1D>', WorkDate()));
+                                end;
+                            end;
                         end;
                         SalesHeader.Modify();
                     end;
                 end;
             end;
+        end;
+    end;
+
+    //For Manual Change from Sales order screen+++
+    [EventSubscriber(ObjectType::Table, Database::"Sales Header", OnBeforeUpdateSalesLinesByFieldNo, '', false, false)]
+    local procedure OnBeforeUpdateSalesLinesByFieldNo(var AskQuestion: Boolean; var SalesHeader: Record "Sales Header")
+    begin
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+            AskQuestion := false;
         end;
     end;
 

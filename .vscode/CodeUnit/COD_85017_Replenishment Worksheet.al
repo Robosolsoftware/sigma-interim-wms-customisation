@@ -64,7 +64,7 @@ codeunit 85017 "Replenishment Worksheet"
     // end;
 
 
-    procedure CreteTransferOrder(Var _ReplenishmentWorksheet: Record "Replenishment Worksheet"; _ToZoneCode: Code[20]): Boolean
+    procedure CreateTransferOrder(Var _ReplenishmentWorksheet: Record "Replenishment Worksheet"; _ToZoneCode: Code[20]): Boolean
     var
         L_TransferHeader: Record "Transfer Header";
         L_TransferLine: Record "Transfer Line";
@@ -87,14 +87,15 @@ codeunit 85017 "Replenishment Worksheet"
         if _ReplenishmentWorksheet.FindSet() then begin
             repeat
                 _ReplenishmentWorksheet.TestField("From Location Code");
+                _ReplenishmentWorksheet.TestField("Variant Code");
                 _ReplenishmentWorksheet.TestField("Qty to Move");
 
                 //Create Temp Record++
                 FindReplenishmtBin(_ReplenishmentWorksheet);
             until _ReplenishmentWorksheet.Next() = 0;
 
-            //Create Transfer Order from Temp Tbale+++
-            exit(CreteTransferOrderFromTemTable())
+            //Create Transfer Order from Temp Table+++
+            exit(CreateTransferOrderFromTempTable())
         end;
     end;
 
@@ -159,7 +160,7 @@ codeunit 85017 "Replenishment Worksheet"
         end;
     end;
 
-    procedure CreteTransferOrderFromTemTable() _HeaderCreated: Boolean
+    procedure CreateTransferOrderFromTempTable() _HeaderCreated: Boolean
     var
         L_TransferHeader: Record "Transfer Header";
         L_TransferLine: Record "Transfer Line";
@@ -391,7 +392,7 @@ codeunit 85017 "Replenishment Worksheet"
     end;
 
 
-    procedure TotalAvailabletoTake(_ItemNo: Code[20]; _VariantCode: Code[10]; _LocationCode: Code[10]): Decimal
+    procedure TotalAvailabletoTake(_ItemNo: Code[20]; _LocationCode: Code[10]): Decimal
     var
         L_BinContent: Record "Bin Content";
         L_Bin: Record Bin;
@@ -401,7 +402,6 @@ codeunit 85017 "Replenishment Worksheet"
         L_BinContent.Reset();
         L_BinContent.SetRange("Location Code", _LocationCode);
         L_BinContent.SetRange("Item No.", _ItemNo);
-        L_BinContent.SetRange("Variant Code", _VariantCode);
         L_BinContent.SetFilter("Exclude from free Qty.", '%1', false);
         if L_BinContent.FindSet() then begin
             repeat
@@ -417,7 +417,7 @@ codeunit 85017 "Replenishment Worksheet"
 
 
     //Last 2 Weekday qty++
-    procedure CheckExitingQtyInTransferLineFromToLocation(_ItemNo: Code[20]; _VariantCode: Code[20]; _Location: Code[10]): Decimal
+    procedure CheckExitingQtyInTransferLineFromToLocation(_ItemNo: Code[20]; _Location: Code[10]): Decimal
     var
         L_TransferLine: Record "Transfer Line";
         L_TotalQty: Decimal;
@@ -440,7 +440,6 @@ codeunit 85017 "Replenishment Worksheet"
         L_TransferLine.SetRange("Transfer-to Code", _Location);
         L_TransferLine.SetRange("Item No.", _ItemNo);
         L_TransferLine.SetFilter("Posting Date", '%1..%2', L_Date, WorkDate());
-        L_TransferLine.SetRange("Variant Code", _VariantCode);
         if L_TransferLine.FindSet() then begin
             L_TransferLine.CalcSums("Outstanding Quantity");
             L_TotalQty := L_TransferLine."Outstanding Quantity";
@@ -476,7 +475,8 @@ codeunit 85017 "Replenishment Worksheet"
         L_TransferLine.SetRange("Transfer-from Code", _Location);
         L_TransferLine.SetRange("Item No.", _ItemNo);
         L_TransferLine.SetFilter("Posting Date", '%1..%2', L_Date, WorkDate());
-        L_TransferLine.SetRange("Variant Code", _VariantCode);
+        if _VariantCode <> '' then
+            L_TransferLine.SetRange("Variant Code", _VariantCode);
         if _BinCode <> '' then
             L_TransferLine.SetRange("Transfer-from Bin Code", _BinCode);
         if L_TransferLine.FindSet() then begin

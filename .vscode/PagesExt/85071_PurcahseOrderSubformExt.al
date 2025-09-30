@@ -2,6 +2,27 @@ pageextension 85071 PurcahseOrderSubformExt extends "Purchase Order Subform"
 {
     layout
     {
+        modify("Order Date")
+        {
+            Editable = false;
+        }
+        modify("Expected Receipt Date")
+        {
+            Editable = false;
+        }
+        modify("Promised Receipt Date")
+        {
+            Editable = false;
+        }
+        modify("Requested Receipt Date")
+        {
+            Editable = false;
+        }
+        modify("Planned Receipt Date")
+        {
+            Editable = false;
+        }
+
         addafter("Direct Unit Cost")
         {
             field("Discount %"; Rec."Discount %")

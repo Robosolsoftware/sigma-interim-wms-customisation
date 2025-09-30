@@ -34,6 +34,26 @@ tableextension 85005 ILE extends "Item Ledger Entry"
             FieldClass = FlowField;
             CalcFormula = lookup("Item Category"."Parent Category" where(Code = field("Child Category")));
         }
+        field(85008; "Posting Date Filter"; Date)
+        {
+            FieldClass = FlowFilter;
+        }
+        field(85009; "Cost Amount Expected Date Wise"; Decimal)
+        {
+            AutoFormatType = 1;
+            CalcFormula = sum("Value Entry"."Cost Amount (Expected)" where("Item Ledger Entry No." = field("Entry No."), "Posting Date" = field("Posting Date Filter")));
+            Caption = 'Cost Amount Expected Date Wise';
+            Editable = false;
+            FieldClass = FlowField;
+        }
+        field(85010; "Cost Amount Actual Date Wise"; Decimal)
+        {
+            AutoFormatType = 1;
+            CalcFormula = sum("Value Entry"."Cost Amount (Actual)" where("Item Ledger Entry No." = field("Entry No."), "Posting Date" = field("Posting Date Filter")));
+            Caption = 'Cost Amount Actual Date Wise';
+            Editable = false;
+            FieldClass = FlowField;
+        }
 
     }
 
