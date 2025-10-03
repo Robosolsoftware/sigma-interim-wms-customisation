@@ -38,6 +38,7 @@ page 85021 "Replenishment Worksheet"
                 field(Action; Rec.Action)
                 {
                     ApplicationArea = All;
+                    ToolTip = 'Specifies the action to be performed on the line. Only Accept action lines can be registered.';
                 }
                 field("Posting Date"; Rec."Posting Date")
                 {
@@ -48,23 +49,27 @@ page 85021 "Replenishment Worksheet"
                 {
                     ApplicationArea = All;
                     Editable = false;
+                    ToolTip = 'Specifies the item number for which replenishment is planned.';
                 }
                 field(Description; Rec.Description)
                 {
                     ApplicationArea = All;
                     Editable = false;
+                    ToolTip = 'Specifies the description of the item.';
                 }
                 field("Min. Qty."; Rec."Min. Qty.")
                 {
                     ApplicationArea = All;
                     Editable = false;
                     DecimalPlaces = 0 : 5;
+                    ToolTip = 'Minimum quantity of the item that comes from the Replenishment Master.';
                 }
                 field("Max. Qty."; Rec."Max. Qty.")
                 {
                     ApplicationArea = All;
                     Editable = false;
                     DecimalPlaces = 0 : 5;
+                    ToolTip = 'Maximum quantity of the item that comes from the Replenishment Master.';
                 }
                 field("Location Code"; Rec."Location Code")
                 {
@@ -77,6 +82,7 @@ page 85021 "Replenishment Worksheet"
                     DecimalPlaces = 0 : 5;
                     Caption = 'Depot1 Quantity';
                     Editable = false;
+                    ToolTip = 'Available to take from bincontent';
                 }
 
                 field("Variant Code"; Rec."Variant Code")
@@ -94,11 +100,13 @@ page 85021 "Replenishment Worksheet"
                     DecimalPlaces = 0 : 5;
                     Editable = false;
                     Caption = 'Replenishment Qty.';
+                    ToolTip = 'Qty required Calculation: Max Qty - Depot1 Qty - Transfer Line Qty Last 2 days';
                 }
                 field("Qty to Move"; Rec."Qty to Move")
                 {
                     ApplicationArea = All;
                     DecimalPlaces = 0 : 5;
+                    ToolTip = 'System suggestion Qty to Move';
                 }
             }
         }

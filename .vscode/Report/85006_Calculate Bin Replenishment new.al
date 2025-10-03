@@ -157,15 +157,23 @@ report 85006 "Cal _Bin Replenishment New"
         MovementQtyBase: Decimal;
         ReplenishmentWorksheet2: Record "Replenishment Worksheet";
         L_TransferLineQty: Decimal;
+        IsvariantSetup: Boolean;
     begin
+        // Check if variant setup exists for the item
+        Clear(IsvariantSetup);
+        IsvariantSetup := GetVariantSetup(_ToReplenishment."Item No.");
+
+
         #Region For Location IP3+++++++++
         FromBinContent.Reset();
         FromBinContent.SetRange("Item No.", _ToReplenishment."Item No.");
-        FromBinContent.SetRange("Daily Priority Exist", true);
         FromBinContent.SetFilter("Quantity (Base)", '>%1', 0);
         FromBinContent.SetFilter("Location Code", 'IP3');
-        FromBinContent.SetCurrentKey("Priority From Variant");
-        FromBinContent.Ascending(true);
+        if IsvariantSetup = true then begin
+            FromBinContent.SetRange("Daily Priority Exist", true);
+            FromBinContent.SetCurrentKey("Priority From Variant");
+            FromBinContent.Ascending(true);
+        end;
         if FromBinContent.Find('-') then begin
             ReplenishmentWorksheet2.Copy(TempReplenishmentWorksheet);
             TempReplenishmentWorksheet.SetCurrentKey("Item No.", "From Bin Code", "Location Code", "Variant Code");
@@ -215,11 +223,13 @@ report 85006 "Cal _Bin Replenishment New"
         if RemainQtyToReplenishBase > 0 then begin
             FromBinContent.Reset();
             FromBinContent.SetRange("Item No.", _ToReplenishment."Item No.");
-            FromBinContent.SetRange("Daily Priority Exist", true);
             FromBinContent.SetFilter("Quantity (Base)", '>%1', 0);
             FromBinContent.SetFilter("Location Code", 'IP4');
-            FromBinContent.SetCurrentKey("Priority From Variant");
-            FromBinContent.Ascending(true);
+            if IsvariantSetup = true then begin
+                FromBinContent.SetRange("Daily Priority Exist", true);
+                FromBinContent.SetCurrentKey("Priority From Variant");
+                FromBinContent.Ascending(true);
+            end;
             if FromBinContent.Find('-') then begin
                 ReplenishmentWorksheet2.Copy(TempReplenishmentWorksheet);
                 TempReplenishmentWorksheet.SetCurrentKey("Item No.", "From Bin Code", "Location Code", "Variant Code");
