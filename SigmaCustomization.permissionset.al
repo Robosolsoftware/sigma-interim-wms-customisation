@@ -97,5 +97,6 @@ permissionset 85000 SigmaCustomization
         report "Cal _Bin Replenishment New" = X,
         codeunit "Replenishment Worksheet" = X,
         page "Replenishment Master List" = X,
-        page "Unable To Pick List" = X;
+        page "Unable To Pick List" = X,
+        codeunit "Cash Flow Worksheet" = X;
 }
