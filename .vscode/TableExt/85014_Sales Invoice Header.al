@@ -212,6 +212,10 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
             //Use for EDI+++
         }
         //85017 used
+        field(85018; "Order Time"; Time)
+        {
+            DataClassification = ToBeClassified;
+        }
 
     }
 

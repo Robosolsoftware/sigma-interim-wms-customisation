@@ -81,6 +81,8 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
                             end;
                         end;
 
+                        Rec."Order Time" := DT2Time(rec.SystemCreatedAt);
+
                         //This code moved into Ochannel Extension [For Manual, and Web Order all process]
                         // L_Date.Reset();
                         // L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
@@ -600,6 +602,10 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         {
             FieldClass = FlowField;
             CalcFormula = exist("Approval Entry" where("Document Type" = field("Document Type"), "Document No." = field("No.")));
+        }
+        field(85018; "Order Time"; Time)
+        {
+            DataClassification = ToBeClassified;
         }
     }
 
