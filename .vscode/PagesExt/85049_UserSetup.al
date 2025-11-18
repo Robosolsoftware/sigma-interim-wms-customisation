@@ -12,6 +12,10 @@ pageextension 85049 UserSetupEst1 extends "User Setup"
             {
                 ApplicationArea = All;
             }
+            field("Allow Purch Inv Edit"; Rec."Allow Purch Inv Edit")
+            {
+                ApplicationArea = All;
+            }
             field("Allow to change unit price"; Rec."Allow to change unit price")
             {
                 ApplicationArea = All;

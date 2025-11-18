@@ -113,8 +113,15 @@ tableextension 85028 "SC User Setup" extends "User Setup"
             DataClassification = ToBeClassified;
         }
 
+        field(85029; "Allow Purch Inv Edit"; Boolean)
+        {
+            Caption = 'Allow Purchase Invoice Edit';
+            DataClassification = ToBeClassified;
+        }
+
 
     }
+
 
     keys
     {
