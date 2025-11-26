@@ -27,8 +27,7 @@ tableextension 85022 "Purch. Rcpt. Header" extends "Purch. Rcpt. Header"
         }
         field(85021; "Invoice Type"; Option)
         {
-            //OptionMembers = " ",Opex,Stock,Capex;
-            OptionMembers = " ",Opex,Stock;
+            OptionMembers = " ",Opex,Stock,Capex;
         }
     }
 

@@ -27,6 +27,10 @@ pageextension 85039 "SC Vendor Card" extends "Vendor Card"
                 {
                     ApplicationArea = All;
                 }
+                field("Invoice Type"; Rec."Invoice Type")
+                {
+                    ApplicationArea = All;
+                }
                 field("Vendor Group"; Rec."Vendor Group")
                 {
                     ApplicationArea = All;

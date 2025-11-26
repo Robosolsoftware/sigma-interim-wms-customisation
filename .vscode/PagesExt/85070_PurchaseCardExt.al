@@ -39,10 +39,12 @@ pageextension 85070 PurchaseCardExt extends "Purchase Order"
                 ApplicationArea = All;
                 Editable = false;
             }
-            // field("Invoice Type"; Rec."Invoice Type")
-            // {
-            //     ApplicationArea = All;
-            // }
+            field("Invoice Type"; Rec."Invoice Type")
+            {
+                ApplicationArea = All;
+                Editable = InvoiceTypeEdit;
+                ToolTip = 'Specifies the type of invoice, such as Opex, Stock, or Capex.';
+            }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = all;
@@ -123,6 +125,14 @@ pageextension 85070 PurchaseCardExt extends "Purchase Order"
     var
         G_MiscellaneousCharges: Codeunit "Miscellaneous Charges";
         G_EditLocation: Boolean;
+        InvoiceTypeEdit: Boolean;
+
+    trigger OnOpenPage()
+    var
+        myInt: Integer;
+    begin
+        InvoiceTypeEditable();
+    end;
 
 
     trigger OnAfterGetRecord()
@@ -137,9 +147,18 @@ pageextension 85070 PurchaseCardExt extends "Purchase Order"
             G_EditLocation := false
         else
             G_EditLocation := true;
+
+        InvoiceTypeEditable();
     end;
 
-
-
+    procedure InvoiceTypeEditable()
+    var
+    begin
+        if Rec.Status <> Rec.Status::Open then begin
+            InvoiceTypeEdit := false
+        end else begin
+            InvoiceTypeEdit := true;
+        end;
+    end;
 
 }

@@ -194,6 +194,10 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
             //Use for EDI+++
         }
         //85017 used
+        field(85018; "Order Time"; Time)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     var

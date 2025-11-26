@@ -54,6 +54,7 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
 
                         Rec."Min Order Value" := L_Vendor."Min Order Value";
                         Rec."PO Approval required" := L_Vendor."PO Approval required";
+                        Rec."Invoice Type" := L_Vendor."Invoice Type";
                         //Rec."PO Approval Value" := L_Vendor."PO Approval Value";
                     end;
 
@@ -79,6 +80,7 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
 
                     Rec."Min Order Value" := L_Vendor."Min Order Value";
                     Rec."PO Approval required" := L_Vendor."PO Approval required";
+                    Rec."Invoice Type" := L_Vendor."Invoice Type";
                     //Rec."PO Approval Value" := L_Vendor."PO Approval Value";
                 end;
             end;
@@ -119,9 +121,7 @@ tableextension 85021 "SC Purchase Header" extends "Purchase Header"
         }
         field(85021; "Invoice Type"; Option)
         {
-            //OptionMembers = " ",Opex,Stock,Capex;
-            OptionMembers = " ",Opex,Stock;
-
+            OptionMembers = " ",Opex,Stock,Capex;
         }
     }
 

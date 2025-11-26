@@ -56,6 +56,10 @@ tableextension 85029 "SC Vendor" extends Vendor
             DataClassification = ToBeClassified;
             OptionMembers = Stock,"Non-Stock";
         }
+        field(85149; "Invoice Type"; Option)
+        {
+            OptionMembers = " ",Opex,Stock,Capex;
+        }
     }
 
     fieldgroups

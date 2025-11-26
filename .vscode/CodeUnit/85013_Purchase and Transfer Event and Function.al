@@ -543,35 +543,4 @@ codeunit 85013 "Purchase Event & Function"
     begin
         TransferReceiptHeader."Transfer-To Zone Code" := TransferHeader."Transfer-To Zone Code";
     end;
-
-
-    [EventSubscriber(ObjectType::Table, Database::"Purchase Header", 'OnBeforeModifyEvent', '', true, true)]
-    local procedure RestrictPurchInvModify(var Rec: Record "Purchase Header"; RunTrigger: Boolean)
-    var
-        UserSetup: Record "User Setup";
-        ErrTxt: Label 'You are not allowed to modify Purchase Invoices. Contact your administrator.';
-    begin
-        if Rec."Document Type" = Rec."Document Type"::Invoice then begin
-            if UserSetup.Get(UserId) then begin
-                if not UserSetup."Allow Purch Inv Edit" then
-                    Error(ErrTxt);
-            end else
-                Error(ErrTxt);
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"Purchase Line", 'OnBeforeModifyEvent', '', true, true)]
-    local procedure RestrictPurchInvLineModify(var Rec: Record "Purchase Line")
-    var
-        UserSetup: Record "User Setup";
-        ErrTxt: Label 'You are not allowed to modify Purchase Invoices. Contact your administrator.';
-    begin
-        if Rec."Document Type" = Rec."Document Type"::Invoice then begin
-            if UserSetup.Get(UserId) then begin
-                if not UserSetup."Allow Purch Inv Edit" then
-                    Error(ErrTxt);
-            end else
-                Error(ErrTxt);
-        end;
-    end;
 }

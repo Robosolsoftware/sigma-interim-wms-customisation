@@ -47,6 +47,11 @@ tableextension 85047 TransferShipmentHeaderExt extends "Transfer Shipment Header
         {
 
         }
+        field(85013; "Transfer Order Printed"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
 
 
 
