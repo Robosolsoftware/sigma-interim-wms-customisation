@@ -33,6 +33,7 @@ codeunit 85002 "Post Item Reclassification"
         L_InventorySetup: Record "Inventory Setup";
         NegativeItemJnlLine: Record "Item Journal Line";
         NegativeItemJnlLine2: Record "Item Journal Line";
+        Post_ItemJournalLine: Record "Item Journal Line";
     begin
         Clear(L_ItemJournalLine);
         L_ItemJournalLine.Reset();
@@ -119,13 +120,22 @@ codeunit 85002 "Post Item Reclassification"
                                                 G_ItemJournalLine.Insert(true);
                                                 Commit();
 
-                                                if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then begin
-                                                    RequiredQuantity := RequiredQuantity - AvailableQuantity;
-                                                    break;
+                                                Post_ItemJournalLine.Reset();
+                                                Post_ItemJournalLine.SetRange("Journal Template Name", G_ItemJournalLine."Journal Template Name");
+                                                Post_ItemJournalLine.SetRange("Journal Batch Name", G_ItemJournalLine."Journal Batch Name");
+                                                Post_ItemJournalLine.SetRange("Line No.", G_ItemJournalLine."Line No.");
+                                                if Post_ItemJournalLine.FindFirst() then begin
+                                                    if Codeunit.Run(Codeunit::"Item Jnl.-Post", Post_ItemJournalLine) then begin
+                                                        RequiredQuantity := RequiredQuantity - AvailableQuantity;
+                                                        break;
+                                                    end else begin
+                                                        //Error(GetLastErrorText());
+                                                        RequiredQuantity := RequiredQuantity - AvailableQuantity;
+                                                        break;
+                                                    end;
                                                 end else
-                                                    Error(GetLastErrorText());
-                                            end
-                                            //  break;
+                                                    break;
+                                            end;
                                         end else begin
                                             if AvailableQuantity > 0 then begin
                                                 //RequiredQuantity := AvailableQuantity;
@@ -153,13 +163,21 @@ codeunit 85002 "Post Item Reclassification"
                                                     G_ItemJournalLine.Insert(true);
                                                     Commit();
 
-                                                    if Codeunit.Run(Codeunit::"Item Jnl.-Post", G_ItemJournalLine) then
-                                                        RequiredQuantity := RequiredQuantity - AvailableQuantity
-                                                    else
-                                                        Error(GetLastErrorText());
+                                                    Post_ItemJournalLine.Reset();
+                                                    Post_ItemJournalLine.SetRange("Journal Template Name", G_ItemJournalLine."Journal Template Name");
+                                                    Post_ItemJournalLine.SetRange("Journal Batch Name", G_ItemJournalLine."Journal Batch Name");
+                                                    Post_ItemJournalLine.SetRange("Line No.", G_ItemJournalLine."Line No.");
+                                                    if Post_ItemJournalLine.FindFirst() then begin
+                                                        if Codeunit.Run(Codeunit::"Item Jnl.-Post", Post_ItemJournalLine) then
+                                                            RequiredQuantity := RequiredQuantity - AvailableQuantity
+                                                        else begin
+                                                            //Error(GetLastErrorText());
+                                                            RequiredQuantity := RequiredQuantity - AvailableQuantity
+                                                        end;
+                                                    end else
+                                                        RequiredQuantity := RequiredQuantity - AvailableQuantity;
 
-                                                end
-                                                //  break;
+                                                end;
                                             end;
                                         end;
                                     until L_BinContent.Next() = 0;
