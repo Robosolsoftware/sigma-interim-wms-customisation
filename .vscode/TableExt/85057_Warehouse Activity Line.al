@@ -7,6 +7,17 @@ tableextension 85057 "SC Warehouse Activity Line" extends "Warehouse Activity Li
         {
 
         }
+        field(85032; "Shipment Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Header"."Shipment Date" where("Document Type" = const("Order"), "No." = field("Source No.")));
+            Editable = false;
+        }
+        field(85013; "Saleable Location"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Location."Saleable Location" where(Code = field("Location Code")));
+        }
     }
 
     keys
