@@ -367,6 +367,17 @@ tableextension 85030 "SC Customer" extends Customer
         field(85000; "Drop Number"; Text[5])
         {
             DataClassification = ToBeClassified;
+
+            trigger OnValidate()
+            var
+                TestInteger: Integer;
+            begin
+                if StrLen(Rec."Drop Number") <> 4 then
+                    Error('Drop Number must be 4 numeric characters.');
+
+                if not Evaluate(TestInteger, Rec."Drop Number") then
+                    Error('Drop Number must be 4 numeric characters.');
+            end;
         }
         field(85001; "Assigned Credit Controller"; Code[50])
         {
@@ -377,6 +388,17 @@ tableextension 85030 "SC Customer" extends Customer
         field(85002; "Weekend Drop Number"; Text[5])
         {
             DataClassification = ToBeClassified;
+
+            trigger OnValidate()
+            var
+                TestInteger: Integer;
+            begin
+                if StrLen(Rec."Weekend Drop Number") <> 4 then
+                    Error('Weekend Drop Number must be 4 numeric characters.');
+
+                if not Evaluate(TestInteger, Rec."Weekend Drop Number") then
+                    Error('Weekend Drop Number must be 4 numeric characters.');
+            end;
         }
         field(85003; "Last Statement Date"; Date)
         {
