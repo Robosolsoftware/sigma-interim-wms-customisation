@@ -607,6 +607,7 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
         {
             DataClassification = ToBeClassified;
         }
+        //85019 used
     }
 
     var

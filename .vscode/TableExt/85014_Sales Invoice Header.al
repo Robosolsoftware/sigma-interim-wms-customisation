@@ -173,23 +173,23 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
         {
 
         }
-        field(85009; "ePOD ID"; Integer)
-        {
+        // field(85009; "ePOD ID"; Integer)
+        // {
 
-        }
+        // }
         field(85010; "ePOD Status"; Option)
         {
             DataClassification = ToBeClassified;
             OptionMembers = " ",Allocated,Unallocated,Pending,Deleted,Cancelled,On_Run,On_Handheld,Completed,Unknown;
         }
-        field(85011; "ePOD RunID"; Integer)
-        {
+        // field(85011; "ePOD RunID"; Integer)
+        // {
 
-        }
-        field(85012; "ePOD Job Consolidated"; Boolean)
-        {
+        // }
+        // field(85012; "ePOD Job Consolidated"; Boolean)
+        // {
 
-        }
+        // }
         field(85013; "Order Category"; Option)
         {
             DataClassification = ToBeClassified;
@@ -215,6 +215,11 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
         field(85018; "Order Time"; Time)
         {
             DataClassification = ToBeClassified;
+        }
+        field(85019; "ePOD Sync"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("ePOD Job Line"."Synced to ePOD" where("BC Invoice Number" = field("No.")));
         }
 
     }
