@@ -17,12 +17,14 @@ page 85015 "ePOD Job List"
             {
                 field("No."; Rec."No.")
                 {
-
+                    ApplicationArea = All;
+                    Editable = false;
                 }
                 field("ePOD ID"; Rec."ePOD ID")
                 {
                     ApplicationArea = All;
                     Editable = false;
+                    ToolTip = 'ePOD ID for Loading job';
                 }
                 field("ePOD RunID"; Rec."ePOD RunID")
                 {
@@ -45,11 +47,6 @@ page 85015 "ePOD Job List"
                     Editable = false;
                 }
                 field("Shipment Date"; Rec."Shipment Date")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field("Consolidated Date & Time"; Rec."Consolidated Date & Time")
                 {
                     ApplicationArea = All;
                     Editable = false;

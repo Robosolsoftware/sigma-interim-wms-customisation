@@ -69,6 +69,11 @@ table 85011 "ePOD Job Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(15; "Consolidated to Loading Job"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
 
     keys

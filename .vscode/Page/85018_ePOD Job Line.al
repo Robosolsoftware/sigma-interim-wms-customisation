@@ -23,10 +23,10 @@ page 85018 "ePOD Job Line"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("ePOD RunID"; Rec."ePOD RunID")
+                field("ePOD ID"; Rec."ePOD ID")
                 {
                     ApplicationArea = All;
-                    Editable = false;
+                    ToolTip = 'ePOD ID for normal job';
                 }
                 field("BC Invoice Number"; Rec."BC Invoice Number")
                 {
@@ -49,6 +49,16 @@ page 85018 "ePOD Job Line"
                     Editable = false;
                 }
                 field(Quantity; Rec.Quantity)
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Synced to ePOD"; Rec."Synced to ePOD")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Consolidated to Loading Job"; Rec."Consolidated to Loading Job")
                 {
                     ApplicationArea = All;
                     Editable = false;

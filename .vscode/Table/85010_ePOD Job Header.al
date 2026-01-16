@@ -53,6 +53,11 @@ table 85010 "ePOD Job Header"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(10; "Depot ID"; Integer)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
 
     keys

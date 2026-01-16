@@ -28,6 +28,15 @@ pageextension 85052 ShippingAgentServices extends "Shipping Agent Services"
         }
         addlast(Control1)
         {
+            field("Driver ePOD ID"; Rec."Driver ePOD ID")
+            {
+                ApplicationArea = All;
+            }
+            field("Driver Name"; Rec."Driver Name")
+            {
+                ApplicationArea = All;
+            }
+
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;

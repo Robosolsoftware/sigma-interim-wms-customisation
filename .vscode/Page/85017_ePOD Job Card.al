@@ -19,6 +19,12 @@ page 85017 "ePOD Job Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("ePOD ID"; Rec."ePOD ID")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    ToolTip = 'ePOD ID for Loading job';
+                }
                 field("Customer PO"; Rec."Customer PO")
                 {
                     ApplicationArea = All;
