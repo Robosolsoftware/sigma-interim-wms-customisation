@@ -19,7 +19,11 @@ table 85014 "Replenishment Master"
                 L_Item.Reset();
                 L_Item.SetRange("No.", Rec."Item No.");
                 if L_Item.FindFirst() then begin
+                    L_Item.CalcFields("Parent Category");
                     Rec.Validate("Item Description", L_Item.Description);
+                    Rec.Validate("Top Category", L_Item."Top Category");
+                    Rec.Validate("Parent Category", L_Item."Parent Category");
+                    Rec.Validate("Warehouse Class Code", L_Item."Warehouse Class Code");
                 end;
             end;
         }
@@ -43,16 +47,19 @@ table 85014 "Replenishment Master"
         {
             TableRelation = Location.Code;
         }
-        // field(6; "Daily Priority Exist"; Boolean)
-        // {
-        //     FieldClass = FlowField;
-        //     CalcFormula = exist("Item Variant" where("Item No." = field("Item No."), Code = field("Variant Code"), Priority = filter(> 0)));
-        // }
-        // field(7; "Variant Priority"; Integer)
-        // {
-        //     FieldClass = FlowField;
-        //     CalcFormula = lookup("Item Variant".Priority where("Item No." = field("Item No."), Code = field("Variant Code")));
-        // }
+        field(9; "Top Category"; Boolean)
+        {
+
+        }
+        field(10; "Parent Category"; Code[20])
+        {
+
+        }
+        field(11; "Warehouse Class Code"; Code[20])
+        {
+
+        }
+        //Field ID 12 used in KNAPP extension+++
     }
 
     keys

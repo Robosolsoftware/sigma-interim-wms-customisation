@@ -19,6 +19,10 @@ tableextension 85066 "SC Sales & Receivables Setup" extends "Sales & Receivables
         {
 
         }
+        field(85070; "Replenishment Date Filter"; DateFormula)
+        {
+
+        }
     }
 
     keys

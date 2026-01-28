@@ -35,6 +35,13 @@ tableextension 85049 TransferLineExt extends "Transfer Line"
             FieldClass = FlowField;
             CalcFormula = lookup("Transfer Header"."Posting Date" where("No." = field("Document No.")));
         }
+        field(85013; "Transfer-from Bin Blocked"; Option)
+        {
+            OptionCaption = ' ,Inbound,Outbound,All';
+            OptionMembers = " ",Inbound,Outbound,All;
+            FieldClass = FlowField;
+            CalcFormula = lookup("Bin Content"."Block Movement" where("Location Code" = field("Transfer-from Code"), "Bin Code" = field("Transfer-from Bin Code")));
+        }
     }
 
 

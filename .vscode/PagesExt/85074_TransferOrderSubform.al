@@ -19,6 +19,11 @@ pageextension 85074 TransferOrderSubformExt extends "Transfer Order Subform"
                 ApplicationArea = all;
                 Editable = false;
             }
+            field("Transfer-from Bin Blocked"; Rec."Transfer-from Bin Blocked")
+            {
+                ApplicationArea = all;
+                Editable = false;
+            }
         }
 
         modify("Variant Code")

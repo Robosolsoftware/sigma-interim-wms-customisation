@@ -15,12 +15,12 @@ page 85016 SipperPalletList
                 field("Item No."; Rec."Item No.")
                 {
                     ApplicationArea = all;
-                    Editable = false;
+                    //Editable = false;
                 }
                 field("Variant Code"; Rec."Variant Code")
                 {
                     ApplicationArea = all;
-                    Editable = false;
+                    //Editable = false;
                 }
                 field("Variant Mandatory"; Rec."Variant Mandatory")
                 {
