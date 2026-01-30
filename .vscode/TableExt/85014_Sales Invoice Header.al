@@ -97,8 +97,9 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
         }
         field(85158; "No of Boxes"; Integer)
         {
-            DataClassification = ToBeClassified;
-
+            //DataClassification = ToBeClassified;
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Shipment Header"."No of Boxes" where("Inv. Pick No." = field("Inv. Pick No.")));
         }
 
         field(85159; "Weekend Shipping Agent Code"; Text[30])

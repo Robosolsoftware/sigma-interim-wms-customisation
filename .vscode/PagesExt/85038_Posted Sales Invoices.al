@@ -8,6 +8,11 @@ pageextension 85038 "SC Posted Sales Invoices" extends "Posted Sales Invoices"
             {
                 ApplicationArea = All;
             }
+            field("No of Boxes"; Rec."No of Boxes")
+            {
+                ApplicationArea = All;
+                Visible = false;
+            }
             // field("ePOD Status"; Rec."ePOD Status")
             // {
             //     ApplicationArea = All;
