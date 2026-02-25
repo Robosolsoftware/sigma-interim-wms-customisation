@@ -628,17 +628,17 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
     var
         myInt: Integer;
 
-    trigger OnAfterDelete()
-    var
-        L_SalesHeader: Record "Sales Header";
-        CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
-    begin
-        L_SalesHeader.Reset();
-        L_SalesHeader.SetRange("No.", Rec."Document No.");
-        L_SalesHeader.SetRange("Document Type", Rec."Document Type");
-        if L_SalesHeader.FindFirst() then begin
-            CheckCreditLimit.SalesLineCheck(Rec);
-        end;
-    end;
+    // trigger OnAfterDelete()
+    // var
+    //     L_SalesHeader: Record "Sales Header";
+    //     CheckCreditLimit: codeunit "Cust-Check Cr. Limit";
+    // begin
+    //     L_SalesHeader.Reset();
+    //     L_SalesHeader.SetRange("No.", Rec."Document No.");
+    //     L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+    //     if L_SalesHeader.FindFirst() then begin
+    //         CheckCreditLimit.SalesLineCheck(Rec);
+    //     end;
+    // end;
 
 }

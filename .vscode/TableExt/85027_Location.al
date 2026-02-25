@@ -94,5 +94,13 @@ tableextension 85027 LocationExt extends Location
         {
             DataClassification = ToBeClassified;
         }
+        field(85009; "Sort by Quantity"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(85010; "Replenishment Ranking"; Integer)
+        {
+
+        }
     }
 }

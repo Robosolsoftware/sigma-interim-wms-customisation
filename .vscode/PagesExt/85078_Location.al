@@ -31,6 +31,14 @@ pageextension 85078 LocationExt extends "Location Card"
             {
                 ApplicationArea = All;
             }
+            field("Sort by Quantity"; Rec."Sort by Quantity")
+            {
+                ApplicationArea = All;
+            }
+            field("Replenishment Ranking"; Rec."Replenishment Ranking")
+            {
+                ApplicationArea = All;
+            }
         }
         addbefore("Home Page")
         {

@@ -25,5 +25,9 @@ tableextension 85071 BinContExt extends "Bin Content"
             CalcFormula = lookup("Item Variant".Priority where("Item No." = field("Item No."), Code = field("Variant Code")));
             Editable = false;
         }
+        field(85004; "Qty For Pick Sorting"; Decimal)
+        {
+            //Sum of Qty. on Pick Sorting Bin for same Item No. and Variant Code in the same Location
+        }
     }
 }

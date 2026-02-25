@@ -51,7 +51,8 @@ codeunit 85007 "Credit & OverDue Check on SO"
     begin
         L_SalesHeader.Reset();
         L_SalesHeader.SetRange("No.", Rec."Document No.");
-        L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+        //L_SalesHeader.SetRange("Document Type", Rec."Document Type");
+        L_SalesHeader.SetRange("Document Type", L_SalesHeader."Document Type"::Order);
         if L_SalesHeader.FindFirst() then begin
             CheckCreditLimit.SalesLineCheck(Rec);
         end;
