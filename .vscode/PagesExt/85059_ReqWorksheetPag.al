@@ -123,7 +123,8 @@ pageextension 85059 "Req. Worksheet" extends "Req. Worksheet"
     local procedure CreateNewPOHeader(var RequisitionLine: Record "Requisition Line")
     var
         PurchasePaybleSetup: Record "Purchases & Payables Setup";
-        NoSeriesManagement: Codeunit NoSeriesManagement;
+        //NoSeriesManagement: Codeunit NoSeriesManagement;
+        NoSeriesManagement: Codeunit "No. Series";
         L_Location: Record Location;
         L_Vendor: Record Vendor;
     begin
