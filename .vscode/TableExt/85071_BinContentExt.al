@@ -29,5 +29,11 @@ tableextension 85071 BinContExt extends "Bin Content"
         {
             //Sum of Qty. on Pick Sorting Bin for same Item No. and Variant Code in the same Location
         }
+        field(85005; "Exclude Qty (Replenishment)"; Boolean)
+        {
+            Caption = 'Exclude from Replenishment worksheet calc';
+            FieldClass = FlowField;
+            CalcFormula = lookup(Bin."Exclude Qty (Replenishment)" where("Location Code" = field("Location Code"), Code = field("Bin Code")));
+        }
     }
 }

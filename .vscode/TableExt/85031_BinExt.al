@@ -11,6 +11,11 @@ tableextension 85031 BinExt extends Bin
             Caption = 'Exclude from free Qty. Calculation';
             DataClassification = ToBeClassified; //Prathamesh++ SBB-291
         }
+        field(85002; "Exclude Qty (Replenishment)"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Exclude from Replenishment worksheet calc';
+        }
         modify(Code)
         {
             trigger OnAfterValidate()

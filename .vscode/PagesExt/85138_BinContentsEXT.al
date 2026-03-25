@@ -11,6 +11,11 @@ pageextension 85138 PAGBinContentsExt extends "Bin Contents"
                 ToolTip = 'Specifies the value of the Exclude from free Qty. Calculation field.', Comment = '%';
                 Editable = false;
             }
+            field("Exclude Qty (Replenishment)"; Rec."Exclude Qty (Replenishment)")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
             field("Daily Priority Exist"; Rec."Daily Priority Exist")
             {
                 ApplicationArea = All;

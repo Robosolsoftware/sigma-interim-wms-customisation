@@ -153,10 +153,19 @@ tableextension 85000 WhseRcptHeaderExt extends "Warehouse Receipt Header"
             CalcFormula = exist("Warehouse Receipt Line" where("Unable to Receive" = const(''), "No." = field("No.")));
             //This field used to filter on tasklet Receive Screen++
         }
+        field(85036; "Source No."; Code[50])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Warehouse Receipt Line"."Source No." where("No." = field("No.")));
+        }
+        field(85037; "Source Location"; Code[50])
+        {
+            DataClassification = ToBeClassified;
+        }
+
 
     }
     var
         myInt: Integer;
-        Test: Record "Posted Whse. Receipt Header";
 
 }

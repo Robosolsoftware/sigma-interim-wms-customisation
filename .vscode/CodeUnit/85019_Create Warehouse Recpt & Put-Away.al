@@ -38,6 +38,20 @@ codeunit 85019 "Create Whs. Recpt & Put-Away"
         end;
     end;
 
+
+    [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", 'OnAfterCreateRcptHeader', '', false, false)]
+    local procedure FillTransferFieldsOnWhseReceipt(WarehouseRequest: Record "Warehouse Request"; var WarehouseReceiptHeader: Record "Warehouse Receipt Header")
+    var
+        TransferHeader: Record "Transfer Header";
+    begin
+        if WarehouseRequest."Source Document" = WarehouseRequest."Source Document"::"Inbound Transfer" then begin
+            if TransferHeader.Get(WarehouseRequest."Source No.") then begin
+                WarehouseReceiptHeader."Source Location" := TransferHeader."Transfer-from Code";
+                WarehouseReceiptHeader.Modify();
+            end;
+        end;
+    end;
+
     procedure SkiErrorMessage(_SkipError: Boolean)
     begin
         Clear(G_SkipError);

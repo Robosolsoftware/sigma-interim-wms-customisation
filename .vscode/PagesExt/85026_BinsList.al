@@ -13,6 +13,10 @@ pageextension 85026 MyExtension extends Bins
             {
                 ApplicationArea = all;
             }
+            field("Exclude Qty (Replenishment)"; Rec."Exclude Qty (Replenishment)")
+            {
+                ApplicationArea = all;
+            }
         }
     }
 
