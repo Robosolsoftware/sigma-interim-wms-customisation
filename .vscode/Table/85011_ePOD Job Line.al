@@ -74,6 +74,11 @@ table 85011 "ePOD Job Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(16; "Collection ePOD ID"; Integer)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
 
     keys

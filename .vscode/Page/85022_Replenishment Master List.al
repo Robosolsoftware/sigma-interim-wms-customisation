@@ -18,6 +18,25 @@ page 85022 "Replenishment Master List"
                 field("Item Description"; Rec."Item Description")
                 {
                     ApplicationArea = All;
+
+                }
+                field("Top Category"; Rec."Top Category")
+                {
+                    Editable = false;
+                    ApplicationArea = All;
+
+                }
+                field("Parent Category"; Rec."Parent Category")
+                {
+                    Editable = false;
+                    ApplicationArea = All;
+
+                }
+                field("Warehouse Class Code"; Rec."Warehouse Class Code")
+                {
+                    Editable = false;
+                    ApplicationArea = All;
+
                 }
                 field("Min Depot1 Qty"; Rec."Min Depot1 Qty")
                 {

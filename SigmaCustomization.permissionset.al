@@ -92,5 +92,13 @@ permissionset 85000 SigmaCustomization
         table "Unable To Pick" = X,
         page "Replenishment Master List" = X,
         page "Unable To Pick List" = X,
-        codeunit "Cash Flow Worksheet" = X;
+        codeunit "Cash Flow Worksheet" = X,
+        tabledata "Market Code" = RIMD,
+        tabledata "Shop Group" = RIMD,
+        table "Market Code" = X,
+        table "Shop Group" = X,
+        page "Market Code" = X,
+        page "Market Code List" = X,
+        page "Shop Group" = X,
+        page "Shop Group List" = X;
 }

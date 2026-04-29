@@ -28,6 +28,11 @@ page 85018 "ePOD Job Line"
                     ApplicationArea = All;
                     ToolTip = 'ePOD ID for normal job';
                 }
+                field("Collection ePOD ID"; Rec."Collection ePOD ID")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'ePOD ID for collection job';
+                }
                 field("BC Invoice Number"; Rec."BC Invoice Number")
                 {
                     ApplicationArea = All;

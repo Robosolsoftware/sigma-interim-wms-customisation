@@ -538,7 +538,13 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                             if L_SalesHeader."IRP Order" = false then begin //As discussed with Adesh+++
                                 if Format(L_SalesHeader."Shipment Date", 0, '<Weekday Text>') <> 'Saturday' then begin
                                     if L_SalesHeader."Shipping Agent Service Code" <> '' then begin
-                                        L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", "Shipping Agent Service Code");
+                                        L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", L_SalesHeader."Shipping Agent Service Code");
+                                    end;
+                                end else begin
+                                    if L_SalesHeader."Weekend Shipping Agent Code" <> '' then begin
+                                        L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Weekend Shipping Agent Code", L_SalesHeader."Weekend Ship. Agnt. Serv. Code");
+                                    end else begin
+                                        L_SalesEventandFuncion.CheckShippingAgentServiceRestriction(Rec."No.", L_SalesHeader."Shipping Agent Code", L_SalesHeader."Shipping Agent Service Code");
                                     end;
                                 end;
 

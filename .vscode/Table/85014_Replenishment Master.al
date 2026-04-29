@@ -21,9 +21,9 @@ table 85014 "Replenishment Master"
                 if L_Item.FindFirst() then begin
                     L_Item.CalcFields("Parent Category");
                     Rec.Validate("Item Description", L_Item.Description);
-                    Rec.Validate("Top Category", L_Item."Top Category");
-                    Rec.Validate("Parent Category", L_Item."Parent Category");
-                    Rec.Validate("Warehouse Class Code", L_Item."Warehouse Class Code");
+                    // Rec.Validate("Top Category", L_Item."Top Category");
+                    // Rec.Validate("Parent Category", L_Item."Parent Category");
+                    // Rec.Validate("Warehouse Class Code", L_Item."Warehouse Class Code");
                 end;
             end;
         }
@@ -49,15 +49,35 @@ table 85014 "Replenishment Master"
         }
         field(9; "Top Category"; Boolean)
         {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Top Category" where("No." = field("Item No.")));
 
         }
         field(10; "Parent Category"; Code[20])
         {
-
+            FieldClass = FlowField;
+            CalcFormula = lookup("Item Category"."Parent Category"
+                where(Code = field("Child Category")));
         }
         field(11; "Warehouse Class Code"; Code[20])
         {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Warehouse Class Code" where("No." = field("Item No.")));
+        }
+        field(7; "Item Category Code"; Code[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item."Item Category Code"
+                where("No." = field("Item No.")));
 
+        }
+
+        field(8; "Child Category"; Code[20])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Item Category"."Parent Category"
+                where(Code = field("Item Category Code")));
+            Editable = false;
         }
         //Field ID 12 used in KNAPP extension+++
     }
