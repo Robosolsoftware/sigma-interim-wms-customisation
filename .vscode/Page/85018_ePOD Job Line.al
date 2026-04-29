@@ -32,6 +32,7 @@ page 85018 "ePOD Job Line"
                 {
                     ApplicationArea = All;
                     ToolTip = 'ePOD ID for collection job';
+                    Visible = false;
                 }
                 field("BC Invoice Number"; Rec."BC Invoice Number")
                 {
