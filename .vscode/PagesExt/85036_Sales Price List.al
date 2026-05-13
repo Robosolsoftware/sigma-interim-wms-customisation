@@ -15,6 +15,14 @@ pageextension 85036 "SC Sales Price List" extends "Sales Price List"
             {
                 ApplicationArea = All;
             }
+            field("Master LifeRay"; Rec."Master LifeRay")
+            {
+                ApplicationArea = All;
+            }
+            field("Master DC"; Rec."Master DC")
+            {
+                ApplicationArea = All;
+            }
             field("Drug Special"; Rec."Drug Special")
             {
                 ApplicationArea = All;

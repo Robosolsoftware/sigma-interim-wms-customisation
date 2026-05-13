@@ -88,6 +88,16 @@ tableextension 85039 "SC Price List Line" extends "Price List Line"
         {
 
         }
+        field(85167; "Master LifeRay"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Price List Header"."Master LifeRay" where(Code = field("Price List Code"), "Price Type" = field("Price Type")));
+        }
+        field(85168; "Master DC"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Price List Header"."Master DC" where(Code = field("Price List Code"), "Price Type" = field("Price Type")));
+        }
     }
 
     keys

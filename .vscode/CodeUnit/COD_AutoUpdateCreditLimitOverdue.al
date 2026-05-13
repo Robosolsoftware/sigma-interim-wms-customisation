@@ -62,4 +62,31 @@ codeunit 85005 "Auto Update Credit/Overdue"
         //CLear Variable++++
         Clear(L_CalledFromCustomer);
     end;
+
+
+    // Update Credit Limit Warning on customer
+    [EventSubscriber(ObjectType::Page, Page::"Check Credit Limit", OnShowWarningOnAfterCalcCreditLimitLCYExitValue, '', false, false)]
+    local procedure OnShowWarningOnAfterCalcCreditLimitLCYExitValue(var CustCreditAmountLCY: Decimal; var Customer: Record Customer)
+    var
+        L_SalesAndReceivablesSetup: Record "Sales & Receivables Setup";
+        TotalCreditlimitBasedOnPercentage: Decimal;
+    begin
+        if L_CalledFromCustomer = true then begin
+            L_SalesAndReceivablesSetup.Get();
+
+            if L_SalesAndReceivablesSetup."Credit Limit Ratio" > 0 then begin
+                Clear(TotalCreditlimitBasedOnPercentage);
+                TotalCreditlimitBasedOnPercentage := Customer."Credit Limit (LCY)" * L_SalesAndReceivablesSetup."Credit Limit Ratio" / 100;
+            end else begin
+                TotalCreditlimitBasedOnPercentage := Customer."Credit Limit (LCY)";
+            end;
+
+            if TotalCreditlimitBasedOnPercentage <= CustCreditAmountLCY then
+                Customer."Credit Limit Warning" := true
+            else
+                Customer."Credit Limit Warning" := false;
+            Customer.Modify();
+        end;
+    end;
+
 }

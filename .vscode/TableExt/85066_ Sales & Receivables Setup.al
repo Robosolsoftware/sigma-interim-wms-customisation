@@ -23,6 +23,10 @@ tableextension 85066 "SC Sales & Receivables Setup" extends "Sales & Receivables
         {
 
         }
+        field(85071; "Credit Limit Ratio"; Decimal)
+        {
+            Caption = 'Credit Limit Ratio (VML)';
+        }
     }
 
     keys

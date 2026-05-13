@@ -11,6 +11,16 @@ pageextension 85037 "SC Sales Price Lists" extends "Sales Price Lists"
                 Editable = false;
                 Caption = 'Daily Promotions';
             }
+            field("Master LifeRay"; Rec."Master LifeRay")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+            field("Master DC"; Rec."Master DC")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
     }
 

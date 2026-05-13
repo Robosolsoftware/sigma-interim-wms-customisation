@@ -26,6 +26,14 @@ tableextension 85041 "SC Price List Header" extends "Price List Header"
 
 
         }
+        field(85139; "Master LifeRay"; Boolean)
+        {
+
+        }
+        field(85140; "Master DC"; Boolean)
+        {
+
+        }
     }
 
     var
