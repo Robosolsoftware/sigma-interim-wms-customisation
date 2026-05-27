@@ -224,6 +224,10 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
             CalcFormula = lookup(Item."Ops Sales Blocked" where("No." = field("No.")));
             //This field is used for skip Line at the time of creating In pick++
         }
+        field(85044; "WebOrder No."; Code[250])
+        {
+
+        }
         modify(Quantity)
         {
             trigger OnAfterValidate()

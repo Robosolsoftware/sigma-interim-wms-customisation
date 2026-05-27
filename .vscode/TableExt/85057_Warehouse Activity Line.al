@@ -18,6 +18,11 @@ tableextension 85057 "SC Warehouse Activity Line" extends "Warehouse Activity Li
             FieldClass = FlowField;
             CalcFormula = lookup(Location."Saleable Location" where(Code = field("Location Code")));
         }
+        field(85014; "WebOrder No."; Code[250])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Line"."WebOrder No." where("Document No." = field("Source No."), "Line No." = field("Source Line No.")));
+        }
     }
 
     keys

@@ -140,4 +140,31 @@ codeunit 85024 "Manage Master Block"
         Clear(G_SkipBlockedValidationForShipment);
     end;
     #EndRegion Posting Sales Invoice+++
+
+
+    //Not linked with IRP orders - SBB-665+++++++++++++++++++++++++++++++++++++++++++
+    #Region Skip Updataion on customer and vendor from contact card+++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"CustVendBank-Update",
+        'OnBeforeUpdateCustomer', '', false, false)]
+    local procedure BlockUpdateCustomer(
+        var Contact: Record Contact;
+        var ContactBusinessRelation: Record "Contact Business Relation";
+        var IsHandled: Boolean)
+    begin
+        if ContactBusinessRelation."Link to Table" = ContactBusinessRelation."Link to Table"::Customer then
+            IsHandled := true;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"CustVendBank-Update",
+        'OnBeforeUpdateVendor', '', false, false)]
+    local procedure BlockUpdateVendor(
+        var Contact: Record Contact;
+       var ContactBusinessRelation: Record "Contact Business Relation";
+        var IsHandled: Boolean)
+    begin
+        if ContactBusinessRelation."Link to Table" = ContactBusinessRelation."Link to Table"::Vendor then
+            IsHandled := true;
+    end;
+    #EndRegion Skip Updataion on customer and vendor from contact card+++
+    //Not linked with IRP orders - SBB-665+++++++++++++++++++++++++++++++++++++++++++
 }
