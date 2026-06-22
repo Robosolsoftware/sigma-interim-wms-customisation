@@ -211,6 +211,11 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
                 Editable = L_EditableQUAApproved;
                 ShowMandatory = IsMandatory;
             }
+            field("Item Configuration"; Rec."Item Configuration")
+            {
+                ApplicationArea = all;
+                Editable = L_CurrPageEditable;
+            }
             field(Status; Rec.Status)
             {
                 ApplicationArea = All;

@@ -100,5 +100,8 @@ permissionset 85000 SigmaCustomization
         page "Market Code" = X,
         page "Market Code List" = X,
         page "Shop Group" = X,
-        page "Shop Group List" = X;
+        page "Shop Group List" = X,
+        tabledata "Item Configuration" = RIMD,
+        table "Item Configuration" = X,
+        page "Item Configuration List" = X;
 }

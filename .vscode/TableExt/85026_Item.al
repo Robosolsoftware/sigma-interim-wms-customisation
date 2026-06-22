@@ -246,6 +246,10 @@ tableextension 85026 "Item_Extension" extends Item
 
             DataClassification = CustomerContent;
         }
+        field(85129; "Item Configuration"; Code[20])
+        {
+            TableRelation = "Item Configuration";
+        }
         modify("Unit Price")
         {
             trigger OnAfterValidate()
