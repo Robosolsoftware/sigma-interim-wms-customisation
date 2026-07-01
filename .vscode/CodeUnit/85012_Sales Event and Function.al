@@ -11,6 +11,18 @@ codeunit 85012 "Sales Event & Function"
         myInt: Integer;
         G_InvePickNo: Code[20]; //It is for Posted Sales Invoice Header++
 
+    #Region SBB-653++++++
+    [EventSubscriber(ObjectType::Table, Database::"Sales Line", OnBeforeGetDefaultBin, '', false, false)]
+    local procedure OnBeforeGetDefaultBin_FromSalesLine(var SalesLine: Record "Sales Line"; var IsHandled: Boolean; CurrentFieldNo: Integer)
+    begin
+        if CurrentFieldNo <> 5403 then begin
+            if SalesLine."Document Type" = SalesLine."Document Type"::Order then begin
+                IsHandled := true; //Skip update Bin Code on sales line Location code validation+
+            end;
+        end;
+    end;
+    #EndRegion SBB-653+++
+
 
 
     #Region Checking Min Order Validation on Sales Order and Return Reason Code on Sales Return Order+++ 
