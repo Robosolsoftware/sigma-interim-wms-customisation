@@ -11,6 +11,16 @@ codeunit 85013 "Purchase Event & Function"
         G_LocationCode: Code[20];
         G_PurchaseOrderNo: Code[20];
 
+
+    #Region SBB-630++
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Create Put-away", 'OnBeforeWhseActivHeaderInsert', '', false, false)]
+    local procedure OnBeforeWhseActivHeaderInsert(var WarehouseActivityHeader: Record "Warehouse Activity Header")
+    begin
+        WarehouseActivityHeader."Assigned User ID" := UserId;
+    end;
+    #EndRegion SBB-630++
+
+
     #region Customization related for Order date for PO++++++
     //Step1 
     [EventSubscriber(ObjectType::Table, Database::"Purchase Header", OnBeforePriceMessageIfPurchLinesExist, '', false, false)]
