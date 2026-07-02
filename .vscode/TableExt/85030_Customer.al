@@ -3,6 +3,15 @@ tableextension 85030 "SC Customer" extends Customer
     fields
     {
         // Add changes to table fields here
+        //SBB-588
+        modify(Address)
+        {
+            trigger OnAfterValidate()
+            begin
+                if StrLen(Rec.Address) > 60 then
+                    Error('Address cannot be greater than 60 characters to avoid issue in PolarSpeed');
+            end;
+        }
 
         modify(Blocked)
         {
@@ -297,11 +306,11 @@ tableextension 85030 "SC Customer" extends Customer
         }
         field(85168; "Market Code"; Text[50])
         {
-
+            TableRelation = "Market Code".Code;
         }
         field(85169; "Shop Group"; Text[50])
         {
-
+            TableRelation = "Shop Group".Code;
         }
         field(85170; Bluechip; Boolean)
         {
@@ -454,6 +463,10 @@ tableextension 85030 "SC Customer" extends Customer
         // {
 
         // }
+        field(85016; "Credit Limit Warning"; Boolean)
+        {
+            Caption = 'Credit Limit Warning';
+        }
     }
 
     fieldgroups
