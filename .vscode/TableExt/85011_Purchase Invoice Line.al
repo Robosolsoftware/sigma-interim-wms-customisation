@@ -72,10 +72,12 @@ tableextension 85011 "SC Purch. Inv. Line" extends "Purch. Inv. Line"
         {
 
         }
-        // field(85009; Rebate; Decimal)
+        //85009 used
+        // field(85010; Rebate; Decimal)
         // {
         //     DataClassification = ToBeClassified;
         // }
+        //85012 Used
     }
 
     keys
