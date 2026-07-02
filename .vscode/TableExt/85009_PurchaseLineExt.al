@@ -158,19 +158,34 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
                         if rec."Discount %" <> xRec."Discount %" then begin
                             if L_PurchaseHeader."Currency Factor" > 0 then begin
                                 UnitPrice := Rec."Unit Price (LCY)" * L_PurchaseHeader."Currency Factor";
-                                if UnitPrice > 0 then
-                                    rec."Direct Unit Cost" := UnitPrice - ((Rec."Discount %" * UnitPrice) / 100);
+                                if UnitPrice > 0 then begin
+                                    //rec."Direct Unit Cost" := UnitPrice - ((Rec."Discount %" * UnitPrice) / 100);
+                                    Rec.Validate("Direct Unit Cost", UnitPrice - ((Rec."Discount %" * UnitPrice) / 100));
+                                end;
                             end else
-                                if rec."Unit Price (LCY)" > 0 then
-                                    rec."Direct Unit Cost" := (Rec."Unit Price (LCY)") - ((Rec."Discount %" * rec."Unit Price (LCY)") / 100);
+                                if rec."Unit Price (LCY)" > 0 then begin
+                                    //rec."Direct Unit Cost" := (Rec."Unit Price (LCY)") - ((Rec."Discount %" * rec."Unit Price (LCY)") / 100);
+                                    Rec.Validate("Direct Unit Cost", (Rec."Unit Price (LCY)") - ((Rec."Discount %" * rec."Unit Price (LCY)") / 100));
+                                end;
                         end;
                 end;
             end;
         }
-        // field(85009; Rebate; Decimal)
+        field(85009; "Custom Order Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Purchase Header"."Order Date" where("Document Type" = field("Document Type"), "No." = field("Document No.")));
+        }
+
+        // field(85010; Rebate; Decimal)
         // {
         //     DataClassification = ToBeClassified;
         // }
+        // field(85011; "Special Product"; Boolean)
+        // {
+
+        // }
+        //85012 Used
         modify("Line Discount %")
         {
             trigger OnAfterValidate()
@@ -250,6 +265,7 @@ tableextension 85009 PurchaseLineExt extends "Purchase Line"
                         Recitem.CalcFields("Parent Category", "Child Category");
                         Rec."Parent Category" := Recitem."Parent Category";
                         Rec."Child Category" := Recitem."Child Category";
+                        //Rec."Special Product" := Recitem."Special Product";
                     end;
 
                     //Update Net Unit Cose++
