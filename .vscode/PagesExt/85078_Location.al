@@ -39,6 +39,10 @@ pageextension 85078 LocationExt extends "Location Card"
             {
                 ApplicationArea = All;
             }
+            field("Liferay Location Ranking"; Rec."Liferay Location Ranking")
+            {
+                ApplicationArea = All;
+            }
         }
         addbefore("Home Page")
         {
