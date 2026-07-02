@@ -102,5 +102,9 @@ tableextension 85027 LocationExt extends Location
         {
 
         }
+        field(85012; "Liferay Location Ranking"; Integer)
+        {
+
+        }
     }
 }
