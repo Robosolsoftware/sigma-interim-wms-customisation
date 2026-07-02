@@ -93,6 +93,17 @@ tableextension 85035 "SC Item Variant" extends "Item Variant"
         {
             DataClassification = ToBeClassified;
         }
+
+
+        modify(Code)
+        {
+            trigger OnAfterValidate()
+            var
+                myInt: Integer;
+            begin
+                CheckVariantCodeExistsOnOtherItems();
+            end;
+        }
     }
     fieldgroups
     {
@@ -102,6 +113,21 @@ tableextension 85035 "SC Item Variant" extends "Item Variant"
         }
 
     }
+
+    local procedure CheckVariantCodeExistsOnOtherItems()
+    var
+        ItemVariant: Record "Item Variant";
+        ErrorMsg: Label 'Variant Code %1 is already used for Item No. %2. The same Variant Code cannot be used across different items.';
+    begin
+        if Rec.Code = '' then
+            exit;
+
+        ItemVariant.Reset();
+        ItemVariant.SetRange(Code, Rec.Code);
+        ItemVariant.SetFilter("Item No.", '<>%1', Rec."Item No.");
+        if ItemVariant.FindFirst() then
+            Error(ErrorMsg, Rec.Code, ItemVariant."Item No.");
+    end;
 
     var
         myInt: Integer;

@@ -222,6 +222,9 @@ tableextension 85014 "SC Sales Invoice Header" extends "Sales Invoice Header"
             FieldClass = FlowField;
             CalcFormula = lookup("ePOD Job Line"."Synced to ePOD" where("BC Invoice Number" = field("No.")));
         }
+        //85020 used
+        //85021 used
+        //85022 Used
 
     }
 

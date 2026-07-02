@@ -79,6 +79,11 @@ table 85011 "ePOD Job Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(17; "Job Type"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = " ",Delivery,Collection;
+        }
     }
 
     keys

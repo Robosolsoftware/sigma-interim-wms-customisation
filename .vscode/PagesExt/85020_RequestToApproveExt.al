@@ -48,7 +48,7 @@ pageextension 85020 "Ext Request to Approve" extends "Requests to Approve"
         salesH.SetRange("Sell-to Customer No.", Rec."Customer No.");
         salesH.SetRange("Document Type", salesH."Document Type"::Order);
         salesH.SetFilter(Status, '%1|%2', salesH.Status::"Pending Approval", salesH.Status::Released);
-        salesH.SetRange("Order Date", WorkDate());
+        //salesH.SetRange("Order Date", WorkDate());
         if salesH.FindSet() then begin
             repeat
                 salesH.CalcFields(Amount);

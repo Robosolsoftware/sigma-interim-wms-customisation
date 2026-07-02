@@ -520,7 +520,8 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             field(Strength; Rec.Strength)
             {
                 ApplicationArea = All;
-                Editable = IsTariffEditable;// AND L_CurrPageEditable;
+                //Editable = IsTariffEditable;// AND L_CurrPageEditable;
+                Editable = L_CurrPageEditable; //SBB-715
             }
         }
 

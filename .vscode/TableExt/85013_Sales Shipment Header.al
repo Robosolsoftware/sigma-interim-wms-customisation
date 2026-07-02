@@ -199,6 +199,9 @@ tableextension 85013 "SC Sales Shipment Header" extends "Sales Shipment Header"
             DataClassification = ToBeClassified;
         }
         //85019 used
+        //85020 used
+        //85021 used
+        //85022 used
     }
 
     var

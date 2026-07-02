@@ -608,6 +608,22 @@ tableextension 85012 "SC Sales Header" extends "Sales Header"
             DataClassification = ToBeClassified;
         }
         //85019 used
+        field(85020; "Sigma Driver Collection"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            //For POD father++
+        }
+        field(85021; "Sigma Driver Collection Instr."; Text[255])
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Sigma Driver Collection Instruction';
+            //For POD father++
+        }
+        field(85022; "ePOD Sync"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("ePOD Job Line"."Synced to ePOD" where("BC Invoice Number" = field("No.")));
+        }
     }
 
     var

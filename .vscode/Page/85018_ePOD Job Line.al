@@ -13,6 +13,11 @@ page 85018 "ePOD Job Line"
         {
             repeater(Control1)
             {
+                field("Job Type"; Rec."Job Type")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("Document No."; Rec."Document No.")
                 {
                     ApplicationArea = All;
