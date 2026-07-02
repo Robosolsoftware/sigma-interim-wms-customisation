@@ -54,6 +54,11 @@ tableextension 85005 ILE extends "Item Ledger Entry"
             Editable = false;
             FieldClass = FlowField;
         }
+        field(85011; "WebOrder No."; Code[250])
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Shipment Line"."WebOrder No." where("Document No." = field("Document No."), "Line No." = field("Document Line No.")));
+        }
 
     }
 
