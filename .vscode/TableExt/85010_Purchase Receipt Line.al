@@ -72,10 +72,19 @@ tableextension 85010 "SC Purch. Rcpt. Line" extends "Purch. Rcpt. Line"
         {
 
         }
-        // field(85009; Rebate; Decimal)
+        field(85009; "Custom Order Date"; Date)
+        {
+            FieldClass = FlowField;
+            CalcFormula = lookup("Purch. Rcpt. Header"."Order Date" where("No." = field("Document No.")));
+        }
+        // field(85010; Rebate; Decimal)
         // {
         //     DataClassification = ToBeClassified;
         // }
+        field(85012; "Budget Receipt Date"; Date)
+        {
+
+        }
     }
 
     keys
