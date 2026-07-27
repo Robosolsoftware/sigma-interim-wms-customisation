@@ -38,9 +38,9 @@ pageextension 85100 "SC Purchase Invoice" extends "Purchase Invoice"
 
         }
 
-        addafter("Attached Documents")
+        addafter("Attached Documents List")
         {
-            part(AttachedDocuments; "Document Attachment Factbox")
+            part(AttachedDocuments; "Doc. Attachment List Factbox")
             {
                 ApplicationArea = All;
                 Caption = 'Attachments';

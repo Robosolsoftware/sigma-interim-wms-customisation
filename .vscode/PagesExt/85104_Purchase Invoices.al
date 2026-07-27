@@ -4,7 +4,7 @@ pageextension 85104 "SC Purchase Invoices" extends "Purchase Invoices"
     {
         // Add changes to page layout here
 
-        modify(AttachedDocuments)
+        modify("Attached Documents List")
         {
             Visible = true;
         }

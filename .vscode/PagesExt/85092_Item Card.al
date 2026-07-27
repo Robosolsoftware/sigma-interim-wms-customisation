@@ -31,14 +31,11 @@ pageextension 85092 "Item Card Extend" extends "Item Card"
             Editable = L_CurrPageEditable;
             ShowMandatory = IsMandatory;
         }
-        addafter("No.")
+        modify("No. 2")
         {
-            field("No. 2"; Rec."No. 2")
-            {
-                Editable = L_CurrPageEditable;
-                ApplicationArea = All;
-            }
-
+            Visible = true;
+            Editable = L_CurrPageEditable;
+            ApplicationArea = All;
         }
         modify(Description)
         {

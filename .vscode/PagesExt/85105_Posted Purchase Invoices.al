@@ -3,7 +3,7 @@ pageextension 85105 "SC Posted Purchase Invoices" extends "Posted Purchase Invoi
     layout
     {
         // Add changes to page layout here
-        modify("Attached Documents")
+        modify("Attached Documents List")
         {
             Visible = true;
         }
