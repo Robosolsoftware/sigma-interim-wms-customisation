@@ -459,10 +459,27 @@ tableextension 85030 "SC Customer" extends Customer
         {
 
         }
-        // field(85015; "Due Date Buffer"; DateFormula)
-        // {
+        field(85015; "Due Date Buffer"; DateFormula)
+        {
+            TableRelation = "Date Buffer".Code;
 
-        // }
+            trigger OnValidate()
+            var
+                L_PaymentMethod: Record "Payment Method";
+                DateFilter: DateFormula;
+            begin
+                Clear(DateFilter); //Blank
+                if Rec."Due Date Buffer" <> DateFilter then begin
+                    L_PaymentMethod.Reset();
+                    L_PaymentMethod.SetRange(Code, Rec."Payment Method Code");
+                    if L_PaymentMethod.FindFirst() then begin
+                        if L_PaymentMethod."Direct Debit" = false then
+                            Error('Due Date Buffer not required for Non-DD customer');
+                    end else
+                        Error('Due Date Buffer not required for Non-DD customer');
+                end;
+            end;
+        }
         field(85016; "Credit Limit Warning"; Boolean)
         {
             Caption = 'Credit Limit Warning';

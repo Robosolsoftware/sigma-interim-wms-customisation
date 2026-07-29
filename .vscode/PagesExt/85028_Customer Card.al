@@ -273,11 +273,28 @@ pageextension 85028 "SC Customer Card" extends "Customer Card"
                 ApplicationArea = All;
                 Editable = L_CreditCheckEditable;
             }
-            // field("Due Date Buffer"; Rec."Due Date Buffer")
-            // {
-            //     ApplicationArea = All;
-            //     Editable = L_CreditCheckEditable;
-            // }
+            field("Due Date Buffer"; Rec."Due Date Buffer")
+            {
+                ApplicationArea = All;
+                Editable = L_CreditCheckEditable;
+
+                trigger OnValidate()
+                var
+                    L_PaymentMethod: Record "Payment Method";
+                    DateFilter: DateFormula;
+                begin
+                    Clear(DateFilter); //Blank
+                    if Rec."Due Date Buffer" <> DateFilter then begin
+                        L_PaymentMethod.Reset();
+                        L_PaymentMethod.SetRange(Code, Rec."Payment Method Code");
+                        if L_PaymentMethod.FindFirst() then begin
+                            if L_PaymentMethod."Direct Debit" = false then
+                                Error('Due Date Buffer not required for Non-DD customer');
+                        end else
+                            Error('Due Date Buffer not required for Non-DD customer');
+                    end;
+                end;
+            }
             field("Credit Limit Warning"; Rec."Credit Limit Warning")
             {
                 ApplicationArea = All;

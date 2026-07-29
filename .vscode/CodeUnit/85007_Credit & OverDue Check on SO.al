@@ -380,17 +380,21 @@ codeunit 85007 "Credit & OverDue Check on SO"
     var
         L_SalesAndRecvSetup: Record "Sales & Receivables Setup";
         DueDateFilter: DateFormula;
+        DueDateBuffer: Date;
     begin
-        L_SalesAndRecvSetup.Get();
-        L_SalesAndRecvSetup.TestField("Due Date Buffer");
-        Customer.SetRange("Date Filter");
-        Customer.SetFilter("Date Filter", '..%1', CalcDate(Format(L_SalesAndRecvSetup."Due Date Buffer"), WorkDate()));
+        // L_SalesAndRecvSetup.Get();
+        // L_SalesAndRecvSetup.TestField("Due Date Buffer");
+        // Customer.SetRange("Date Filter");
+        // Customer.SetFilter("Date Filter", '..%1', CalcDate(Format(L_SalesAndRecvSetup."Due Date Buffer"), WorkDate()));
+        Clear(DueDateFilter);
+        if Customer."Due Date Buffer" <> DueDateFilter then begin
+            Clear(DueDateBuffer);
+            DueDateBuffer := CalcDate(Format(Customer."Due Date Buffer"), WorkDate());
+            DueDateBuffer := CalcDate('-1D', DueDateBuffer);
 
-        // Clear(DueDateFilter);
-        // if Customer."Due Date Buffer" <> DueDateFilter then begin
-        //     Customer.SetRange("Date Filter");
-        //     Customer.SetFilter("Date Filter", '..%1', CalcDate(Format(Customer."Due Date Buffer"), WorkDate()));
-        // end;
+            Customer.SetRange("Date Filter");
+            Customer.SetFilter("Date Filter", '..%1', DueDateBuffer);
+        end;
     end;
 
 }

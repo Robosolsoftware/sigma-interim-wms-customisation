@@ -103,5 +103,8 @@ permissionset 85000 SigmaCustomization
         page "Shop Group List" = X,
         tabledata "Item Configuration" = RIMD,
         table "Item Configuration" = X,
-        page "Item Configuration List" = X;
+        page "Item Configuration List" = X,
+        tabledata "Date Buffer" = RIMD,
+        table "Date Buffer" = X,
+        page "Date Buffer List" = X;
 }
