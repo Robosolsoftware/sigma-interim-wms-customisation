@@ -165,6 +165,7 @@ tableextension 85030 "SC Customer" extends Customer
                     rec.TestField("Shipping Agent Code");
                     rec.TestField("Shipping Agent Service Code");
                     rec.TestField("Location Code");
+                    rec.TestField("Due Date Buffer");
 
 
                     L_Dimension.Reset();
@@ -468,16 +469,16 @@ tableextension 85030 "SC Customer" extends Customer
                 L_PaymentMethod: Record "Payment Method";
                 DateFilter: DateFormula;
             begin
-                Clear(DateFilter); //Blank
-                if Rec."Due Date Buffer" <> DateFilter then begin
-                    L_PaymentMethod.Reset();
-                    L_PaymentMethod.SetRange(Code, Rec."Payment Method Code");
-                    if L_PaymentMethod.FindFirst() then begin
-                        if L_PaymentMethod."Direct Debit" = false then
-                            Error('Due Date Buffer not required for Non-DD customer');
-                    end else
-                        Error('Due Date Buffer not required for Non-DD customer');
-                end;
+                // Clear(DateFilter); //Blank
+                // if Rec."Due Date Buffer" <> DateFilter then begin
+                //     L_PaymentMethod.Reset();
+                //     L_PaymentMethod.SetRange(Code, Rec."Payment Method Code");
+                //     if L_PaymentMethod.FindFirst() then begin
+                //         if L_PaymentMethod."Direct Debit" = false then
+                //             Error('Due Date Buffer not required for Non-DD customer');
+                //     end else
+                //         Error('Due Date Buffer not required for Non-DD customer');
+                // end;
             end;
         }
         field(85016; "Credit Limit Warning"; Boolean)
