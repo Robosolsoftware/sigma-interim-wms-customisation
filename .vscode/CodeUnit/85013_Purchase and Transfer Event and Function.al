@@ -11,6 +11,18 @@ codeunit 85013 "Purchase Event & Function"
         G_LocationCode: Code[20];
         G_PurchaseOrderNo: Code[20];
 
+    #Region SBB-735++
+    [EventSubscriber(ObjectType::Table, DataBase::"Item Journal Line", OnBeforeDisplayErrorIfItemIsBlocked, '', false, false)]
+    local procedure OnBeforeDisplayErrorIfItemIsBlocked(var IsHandled: Boolean; var ItemJournalLine: Record "Item Journal Line")
+    begin
+        if ItemJournalLine."Entry Type" = ItemJournalLine."Entry Type"::Purchase then begin
+            if ItemJournalLine."Document Type" = ItemJournalLine."Document Type"::"Purchase Invoice" then begin
+                IsHandled := true;
+            end;
+        end;
+    end;
+    #EndRegion SBB-735++
+
 
     #Region SBB-630++
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Create Put-away", 'OnBeforeWhseActivHeaderInsert', '', false, false)]
