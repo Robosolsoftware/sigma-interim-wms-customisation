@@ -3,6 +3,12 @@ pageextension 85029 "SC Sales Order Card" extends "Sales Order"
     layout
     {
         // Add changes to page layout here
+        modify("Sell-to Customer Name")
+        {
+            Editable = false; //Fin-128
+        }
+
+        // Add changes to page layout here
         modify("Shipment Date")
         {
             trigger OnAfterValidate()

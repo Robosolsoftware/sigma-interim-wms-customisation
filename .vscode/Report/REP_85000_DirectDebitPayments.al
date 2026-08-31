@@ -7,7 +7,7 @@ report 85000 "Direct Debit Payments"
     {
         dataitem(Customer; Customer)
         {
-            RequestFilterFields = "No.", Blocked, "Payment Method Code", "Balance Due (LCY)";
+            RequestFilterFields = "No.", Blocked, "Payment Method Code", "Balance Due (LCY)", "Due Date Buffer";
 
             dataitem("Cust. Ledger Entry"; "Cust. Ledger Entry")
             {

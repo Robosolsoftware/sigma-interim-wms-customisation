@@ -485,6 +485,10 @@ tableextension 85030 "SC Customer" extends Customer
         {
             Caption = 'Credit Limit Warning';
         }
+        field(85017; Segment; Option)
+        {
+            OptionMembers = "",Platinum,Gold,Silver;
+        }
     }
 
     fieldgroups
