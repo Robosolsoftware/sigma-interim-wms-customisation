@@ -17,6 +17,10 @@ pageextension 85048 "SC Shipping Agents" extends "Shipping Agents"
             {
                 ApplicationArea = All;
             }
+            field("Cutoff Time"; Rec."Cutoff Time")
+            {
+                ApplicationArea = All;
+            }
         }
         modify(Code)
         {
