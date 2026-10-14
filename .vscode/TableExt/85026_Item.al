@@ -174,10 +174,16 @@ tableextension 85026 "Item_Extension" extends Item
             FieldClass = FlowField;
             //GHST Customization++
         }
-        field(85111; "Top Category"; Boolean)
-        {
+        //SBB-670+++
+        // field(85111; "Top Category"; Boolean)
+        // {
 
+        // }
+        field(85111; "Top Category"; Option)
+        {
+            OptionMembers = " ",Core,Focus,Standard;
         }
+        //SBB-670+++
         field(85112; VMPP; Code[30])
         {
 

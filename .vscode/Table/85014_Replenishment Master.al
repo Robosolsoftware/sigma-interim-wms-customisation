@@ -47,12 +47,20 @@ table 85014 "Replenishment Master"
         {
             TableRelation = Location.Code;
         }
-        field(9; "Top Category"; Boolean)
+        //SBB-670+++
+        // field(9; "Top Category"; Boolean)
+        // {
+        //     FieldClass = FlowField;
+        //     CalcFormula = lookup(Item."Top Category" where("No." = field("Item No.")));
+
+        // }
+        field(9; "Top Category"; Option)
         {
+            OptionMembers = " ",Core,Focus,Standard;
             FieldClass = FlowField;
             CalcFormula = lookup(Item."Top Category" where("No." = field("Item No.")));
-
         }
+        //SBB-670+++
         field(10; "Parent Category"; Code[20])
         {
             FieldClass = FlowField;

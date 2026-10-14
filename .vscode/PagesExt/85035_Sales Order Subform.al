@@ -87,7 +87,7 @@ pageextension 85035 "SC Sales Order Subform" extends "Sales Order Subform"
                         Rec.Modify();
                     end else begin
                         Rec."Original Line Discount" := Rec."Line Discount %";
-                        Rec.Validate("Line Discount %", Rec."Line Discount %" + Rec."MLD %");
+                        Rec.Validate("Line Discount %", Rec."MLD %");
                         Rec.Modify();
                     end;
                 end;

@@ -88,10 +88,16 @@ table 85012 "Replenishment Worksheet"
             OptionMembers = " ","Accept","Cancel";
             Editable = true;
         }
-        field(20; "Top Category"; Boolean)
-        {
+        //SBB-670+++
+        // field(20; "Top Category"; Boolean)
+        // {
 
+        // }
+        field(20; "Top Category"; Option)
+        {
+            OptionMembers = " ",Core,Focus,Standard;
         }
+        //SBB-670+++
         field(21; "System-Created Entry"; Boolean)
         {
             Caption = 'System-Created Entry';
