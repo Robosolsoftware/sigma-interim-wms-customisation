@@ -622,13 +622,13 @@ tableextension 85006 "SC Sales Line" extends "Sales Line"
                             end;
                         end;
 
-                        //Upadte Last Unit Price from Shipment++ 
-                        CH_SShip.Reset();
-                        CH_SShip.SetRange("Sell-to Customer No.", Rec."Sell-to Customer No.");
-                        CH_SShip.SetRange("No.", Rec."No.");
-                        CH_SShip.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
-                        if CH_SShip.FindLast() then
-                            Rec."Last Price" := CH_SShip."Unit Price";
+                        // //Upadte Last Unit Price from Shipment++ 
+                        // CH_SShip.Reset();
+                        // CH_SShip.SetRange("Sell-to Customer No.", Rec."Sell-to Customer No.");
+                        // CH_SShip.SetRange("No.", Rec."No.");
+                        // CH_SShip.SetRange("Unit of Measure Code", Rec."Unit of Measure Code");
+                        // if CH_SShip.FindLast() then
+                        //     Rec."Last Price" := CH_SShip."Unit Price";
                     end;
                 end;
             end;

@@ -106,5 +106,6 @@ permissionset 85000 SigmaCustomization
         page "Item Configuration List" = X,
         tabledata "Date Buffer" = RIMD,
         table "Date Buffer" = X,
-        page "Date Buffer List" = X;
+        page "Date Buffer List" = X,
+        codeunit "Customized Workflow Handler" = X;
 }

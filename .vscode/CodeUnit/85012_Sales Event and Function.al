@@ -869,36 +869,15 @@ codeunit 85012 "Sales Event & Function"
             SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
             SalesHeader.SetRange("No.", ApprovalEntry."Document No.");
             if SalesHeader.FindFirst() then begin
-                if SalesHeader."Shipping Agent Code" <> 'LFE' then begin
-                    if SalesHeader."Shipment Date" <= WorkDate() then begin
-                        if RecordRestrictionMgt.CheckRecordHasUsageRestrictions(SalesHeader) then begin
-                            L_Date.Reset();
-                            L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
-                            L_Date.SetRange(L_Date."Period Start", WorkDate());
-                            if L_Date.FindFirst() then begin
-                                if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
-                                    if SalesHeader."Weekend Ship. Agnt. Serv. Code" <> '' then begin
-                                        //Update Saturday++
-                                        SalesHeader."Shipment Date" := CalcDate('<+1D>', WorkDate());
-                                        L_SalesLine.Reset();
-                                        L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
-                                        L_SalesLine.SetRange("Document No.", SalesHeader."No.");
-                                        L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-                                        if L_SalesLine.FindSet() then begin
-                                            L_SalesLine.ModifyAll("Shipment Date", CalcDate('<+1D>', WorkDate()));
-                                        end;
-                                    end else begin
-                                        //Update Monday
-                                        SalesHeader."Shipment Date" := CalcDate('<+3D>', WorkDate());
-                                        L_SalesLine.Reset();
-                                        L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
-                                        L_SalesLine.SetRange("Document No.", SalesHeader."No.");
-                                        L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-                                        if L_SalesLine.FindSet() then begin
-                                            L_SalesLine.ModifyAll("Shipment Date", CalcDate('<+3D>', WorkDate()));
-                                        end;
-                                    end;
-                                end else begin
+                if SalesHeader."Shipment Date" <= WorkDate() then begin
+                    if RecordRestrictionMgt.CheckRecordHasUsageRestrictions(SalesHeader) then begin
+                        L_Date.Reset();
+                        L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
+                        L_Date.SetRange(L_Date."Period Start", WorkDate());
+                        if L_Date.FindFirst() then begin
+                            if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
+                                if SalesHeader."Weekend Ship. Agnt. Serv. Code" <> '' then begin
+                                    //Update Saturday++
                                     SalesHeader."Shipment Date" := CalcDate('<+1D>', WorkDate());
                                     L_SalesLine.Reset();
                                     L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
@@ -907,10 +886,29 @@ codeunit 85012 "Sales Event & Function"
                                     if L_SalesLine.FindSet() then begin
                                         L_SalesLine.ModifyAll("Shipment Date", CalcDate('<+1D>', WorkDate()));
                                     end;
+                                end else begin
+                                    //Update Monday
+                                    SalesHeader."Shipment Date" := CalcDate('<+3D>', WorkDate());
+                                    L_SalesLine.Reset();
+                                    L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                                    L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+                                    L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                                    if L_SalesLine.FindSet() then begin
+                                        L_SalesLine.ModifyAll("Shipment Date", CalcDate('<+3D>', WorkDate()));
+                                    end;
+                                end;
+                            end else begin
+                                SalesHeader."Shipment Date" := CalcDate('<+1D>', WorkDate());
+                                L_SalesLine.Reset();
+                                L_SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                                L_SalesLine.SetRange("Document No.", SalesHeader."No.");
+                                L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
+                                if L_SalesLine.FindSet() then begin
+                                    L_SalesLine.ModifyAll("Shipment Date", CalcDate('<+1D>', WorkDate()));
                                 end;
                             end;
-                            SalesHeader.Modify();
                         end;
+                        SalesHeader.Modify();
                     end;
                 end;
             end;
@@ -1002,105 +1000,6 @@ codeunit 85012 "Sales Event & Function"
                 Error('Item charge should be assigned before manual release');
             end;
         end;
-    end;
-
-
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", 'OnBeforeReleaseSalesDoc', '', false, false)]
-    local procedure OnbeforeReleaseSalesDoc(var SalesHeader: Record "Sales Header"; PreviewMode: Boolean)
-    var
-        CurrDate: Date;
-        CurrTime: Time;
-        NewShipmentDate: Date;
-    begin
-        if PreviewMode then
-            exit;
-        if SalesHeader."Document Type" <> SalesHeader."Document Type"::Order then
-            exit;
-        // if SalesHeader.Status <> SalesHeader.Status::Released then
-        //     exit;
-        if SalesHeader."Shipping Agent Code" <> 'LFE' then
-            exit;
-
-        GetCurrentDateAndTime(CurrDate, CurrTime);
-
-        if GetDaysToAdd(SalesHeader, CurrDate, CurrTime) > 0 then begin
-            NewShipmentDate := CalcDate(StrSubstNo('<+%1D>', GetDaysToAdd(SalesHeader, CurrDate, CurrTime)), CurrDate);
-            SalesHeader."Shipment Date" := NewShipmentDate;
-            SalesHeader.Modify();
-            UpdateLinesShipmentDate(SalesHeader, NewShipmentDate);
-        end;
-    end;
-
-    local procedure GetCurrentDateAndTime(var CurrDate: Date; var CurrTime: Time)
-    var
-        TypeHelper: Codeunit "Type Helper";
-        CurrDateTime: DateTime;
-    begin
-        CurrDateTime := TypeHelper.GetCurrentDateTimeInUserTimeZone();
-        CurrDate := WorkDate();
-        CurrTime := DT2Time(CurrDateTime);
-    end;
-
-    local procedure GetDaysToAdd(SalesHeader: Record "Sales Header"; CurrDate: Date; CurrTime: Time): Integer
-    var
-        DayOfWeek: Integer;
-        AfterCutoff: Boolean;
-        HasWeekendCode: Boolean;
-    begin
-        DayOfWeek := Date2DWY(CurrDate, 1);
-        AfterCutoff := IsAfterCutoff(SalesHeader, CurrTime);
-        HasWeekendCode := HasWeekendShippingCode(SalesHeader);
-
-        case DayOfWeek of
-            1, 2, 3, 6: // Mon, Tue, Wed, Sat
-                if AfterCutoff then
-                    exit(2);
-
-            4: // Thu
-                if AfterCutoff then begin
-                    if HasWeekendCode then
-                        exit(2)
-                    else
-                        exit(4);
-                end;
-            5: // Fri
-                if AfterCutoff then
-                    exit(3);
-
-        end;
-    end;
-
-    local procedure IsAfterCutoff(SalesHeader: Record "Sales Header"; CurrTime: Time): Boolean
-    var
-        ShippingAgent: Record "Shipping Agent";
-    begin
-        if SalesHeader."Shipping Agent Code" = '' then
-            exit(false);
-        if not ShippingAgent.Get(SalesHeader."Shipping Agent Code") then
-            exit(false);
-        if ShippingAgent."Cutoff Time" = 0T then
-            exit(false);
-        exit(CurrTime > ShippingAgent."Cutoff Time");
-    end;
-
-    local procedure HasWeekendShippingCode(SalesHeader: Record "Sales Header"): Boolean
-    var
-        Customer: Record Customer;
-    begin
-        if not Customer.Get(SalesHeader."Sell-to Customer No.") then
-            exit(false);
-        exit(Customer."Weekend Ship. Agnt. Serv. Code" <> '');
-    end;
-
-    local procedure UpdateLinesShipmentDate(SalesHeader: Record "Sales Header"; NewDate: Date)
-    var
-        SalesLine: Record "Sales Line";
-    begin
-        SalesLine.SetRange("Document Type", SalesHeader."Document Type");
-        SalesLine.SetRange("Document No.", SalesHeader."No.");
-        SalesLine.SetRange(Type, SalesLine.Type::Item);
-        if not SalesLine.IsEmpty() then
-            SalesLine.ModifyAll("Shipment Date", NewDate);
     end;
 
     var

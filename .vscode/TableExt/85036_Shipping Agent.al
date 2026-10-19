@@ -29,12 +29,6 @@ tableextension 85036 "SC Shipping Agent" extends "Shipping Agent"
         {
 
         }
-        field(85155; "Cutoff Time"; Time)
-        {
-            Caption = 'Cutoff Time';
-            DataClassification = ToBeClassified;
-        }
-
 
     }
 
